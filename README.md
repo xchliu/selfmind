@@ -113,7 +113,7 @@ Open **http://localhost:3002** in your browser.
 ```markdown
 [autobiographical/identity] 我是小苏/苏格拉底，AI 部门管理助手
 §
-[social/key_people] 坦哥（刘小成）- AI部门负责人
+[social/key_people] AI部门负责人
 §
 [spatial/filesystem] SelfMind 项目存放在 ~/Documents/selfmind/
 ```
@@ -291,9 +291,9 @@ Open **http://localhost:3002** in your browser.
 Memory files use `§` as separator with category tags:
 
 ```markdown
-[autobiographical/identity] I am Socrates, an AI department management assistant
+[autobiographical/identity] I am an AI department management assistant
 §
-[social/key_people] Boss Tan (Liu Xiaocheng) - AI Department Head
+[social/key_people] AI Department Head
 §
 [spatial/filesystem] SelfMind project at ~/Documents/selfmind/
 ```
