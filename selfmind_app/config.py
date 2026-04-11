@@ -44,6 +44,8 @@ DEFAULT_CONFIG = {
         "tool": {"keywords": ["tool", "工具", "日历", "calendar", "公众号", "CLI", "MCP", "API"], "color": "#a55eea", "description": "Tools & integrations"},
         "environment": {"keywords": ["timezone", "时区", "style", "风格", "偏好", "prefer", "communication"], "color": "#778ca3", "description": "Environment & preferences"},
         "memory": {"keywords": [], "color": "#95a5a6", "description": "General memories"},
+        "skill": {"keywords": ["skill", "技能"], "color": "#f39c12", "description": "Skills & capabilities"},
+        "skill_category": {"keywords": [], "color": "#e67e22", "description": "Skill categories"},
     },
     "relation_keywords": {
         "管理|负责|老大|boss|manager|lead": "manages",

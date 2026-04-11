@@ -246,67 +246,73 @@ body {
 .timeline-ruler {
   position: fixed;
   left: 50%;
-  bottom: 14px;
+  bottom: 12px;
   transform: translateX(-50%);
   z-index: 60;
-  width: min(760px, calc(100vw - 24px));
-  padding: 10px 14px;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(18px);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  width: min(680px, calc(100vw - 48px));
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  pointer-events: auto;
 }
 
 .timeline-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  margin-bottom: 4px;
 }
 
 .timeline-title {
-  font-size: 12px;
-  color: #444;
-  font-weight: 600;
+  font-size: 10px;
+  color: rgba(120,120,140,0.6);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .timeline-current {
-  font-size: 11px;
-  color: #666;
+  font-size: 10px;
+  color: rgba(120,120,140,0.5);
 }
 
 .timeline-clear {
   border: none;
-  background: rgba(0,0,0,0.04);
-  color: #666;
-  border-radius: 6px;
-  font-size: 11px;
+  background: rgba(99,102,241,0.08);
+  color: rgba(99,102,241,0.7);
+  border-radius: 10px;
+  font-size: 10px;
   cursor: pointer;
-  padding: 3px 8px;
+  padding: 2px 8px;
+  transition: all 0.2s;
 }
 
-.timeline-clear:hover { background: rgba(0,0,0,0.08); }
+.timeline-clear:hover {
+  background: rgba(99,102,241,0.15);
+  color: rgba(99,102,241,0.9);
+}
 
 .timeline-axis-wrap {
   position: relative;
-  margin-top: 10px;
-  padding: 8px 0 0;
+  padding: 4px 0 0;
 }
 
 .timeline-axis-line {
   position: absolute;
   left: 0;
   right: 0;
-  top: 18px;
-  height: 2px;
-  background: linear-gradient(90deg, #9ec5ef 0%, #1e90ff 55%, #0d6ddb 100%);
-  border-radius: 2px;
+  top: 14px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.3) 20%, rgba(99,102,241,0.3) 80%, transparent 100%);
 }
 
 .timeline-axis {
   position: relative;
-  height: 30px;
+  height: 24px;
 }
 
 .timeline-tick {
@@ -317,59 +323,69 @@ body {
 }
 
 .timeline-tick-mark {
-  width: 2px;
-  height: 10px;
+  width: 1px;
+  height: 8px;
   margin: 0 auto;
-  background: #1e90ff;
-  border-radius: 2px;
+  background: rgba(99,102,241,0.3);
+  border-radius: 1px;
+  transition: all 0.2s;
 }
 
 .timeline-tick-label {
   margin-top: 2px;
-  font-size: 10px;
-  color: #666;
+  font-size: 9px;
+  color: rgba(120,120,140,0.4);
   white-space: nowrap;
+  transition: all 0.2s;
 }
 
 .timeline-tick.active .timeline-tick-mark {
-  height: 12px;
-  background: #0a5bb8;
+  height: 10px;
+  background: rgba(99,102,241,0.7);
+  box-shadow: 0 0 4px rgba(99,102,241,0.3);
 }
 
 .timeline-tick.active .timeline-tick-label {
-  color: #0a5bb8;
-  font-weight: 600;
+  color: rgba(99,102,241,0.8);
+  font-weight: 500;
 }
 
 .timeline-slider {
   width: 100%;
-  margin-top: 6px;
-  accent-color: #1e90ff;
+  margin-top: 2px;
+  accent-color: rgba(99,102,241,0.6);
+  height: 2px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.timeline-slider:hover {
+  opacity: 1;
 }
 
 .timeline-scale {
-  margin-top: 6px;
+  margin-top: 2px;
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
-  color: #888;
+  font-size: 9px;
+  color: rgba(120,120,140,0.35);
 }
 
 .timeline-stats {
-  margin-top: 6px;
-  font-size: 11px;
-  color: #666;
+  margin-top: 3px;
+  font-size: 10px;
+  color: rgba(120,120,140,0.4);
+  text-align: center;
 }
 
-.delta-add { color: #1aad50; }
-.delta-remove { color: #d64545; }
-.delta-change { color: #1a7de0; }
+.delta-add { color: rgba(34,197,94,0.7); }
+.delta-remove { color: rgba(239,68,68,0.7); }
+.delta-change { color: rgba(99,102,241,0.7); }
 
 @media (max-width: 960px) {
   .timeline-ruler {
-    width: calc(100vw - 16px);
+    width: calc(100vw - 24px);
     bottom: 8px;
-    padding: 8px 10px;
   }
 }
 
@@ -437,6 +453,285 @@ body {
   margin-top: 8px;
   font-size: 11px;
   color: #888;
+}
+
+/* IQ 仪表盘 */
+/* IQ 面板 - 收起时是小圆球 */
+.iq-panel {
+  position: fixed;
+  top: 72px;
+  left: 16px;
+  z-index: 50;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  /* 收起状态：小圆球 */
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e90ff, #a855f7);
+  box-shadow: 0 4px 16px rgba(30, 144, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.iq-panel:hover {
+  box-shadow: 0 6px 24px rgba(30, 144, 255, 0.45);
+  transform: scale(1.08);
+}
+
+.iq-panel.expanded {
+  width: 280px;
+  height: auto;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.iq-panel.expanded:hover {
+  transform: none;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.12);
+}
+
+/* 收起时的圆球内容 */
+.iq-ball {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.iq-ball-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.iq-ball-label {
+  font-size: 8px;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 1.5px;
+  margin-top: 1px;
+}
+
+/* 展开时隐藏球 */
+.iq-panel.expanded .iq-ball {
+  display: none;
+}
+
+/* 展开后的头部 */
+.iq-expand-content {
+  display: none;
+  width: 100%;
+}
+
+.iq-panel.expanded .iq-expand-content {
+  display: block;
+}
+
+.iq-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.iq-gauge {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.iq-gauge svg {
+  width: 64px;
+  height: 64px;
+  transform: rotate(-90deg);
+}
+
+.iq-gauge-bg {
+  fill: none;
+  stroke: rgba(0,0,0,0.06);
+  stroke-width: 5;
+}
+
+.iq-gauge-fill {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s;
+}
+
+.iq-gauge-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.iq-number {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  background: linear-gradient(135deg, #1e90ff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.iq-label {
+  font-size: 8px;
+  color: #aaa;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.iq-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.iq-level {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.iq-subtitle {
+  font-size: 10px;
+  color: #999;
+}
+
+.iq-details {
+  max-height: 0;
+  overflow-y: auto;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.3s;
+  margin-top: 0;
+}
+
+.iq-panel.expanded .iq-details {
+  max-height: 400px;
+  margin-top: 10px;
+}
+
+.iq-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+  margin-bottom: 10px;
+}
+
+.iq-dimension {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.iq-dim-label {
+  font-size: 11px;
+  color: #666;
+  width: 58px;
+  flex-shrink: 0;
+}
+
+.iq-dim-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.iq-dim-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.iq-dim-score {
+  font-size: 10px;
+  color: #888;
+  width: 36px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.iq-tips {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.iq-tip {
+  font-size: 10px;
+  color: #999;
+  padding: 1px 0;
+}
+
+.iq-tip::before {
+  content: '💡';
+  margin-right: 4px;
+}
+
+.iq-scale-table {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.iq-scale-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.iq-scale-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 10px;
+  color: #888;
+  border-radius: 4px;
+  padding-left: 4px;
+  transition: background 0.2s;
+}
+
+.iq-scale-row.current {
+  background: rgba(30, 144, 255, 0.08);
+  color: #333;
+  font-weight: 600;
+}
+
+.iq-scale-row.current .iq-scale-range {
+  color: #1e90ff;
+}
+
+.iq-scale-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.iq-scale-range {
+  width: 50px;
+  font-variant-numeric: tabular-nums;
+}
+
+.iq-scale-name {
+  flex: 1;
 }
 
 /* 提示消息 */
@@ -600,21 +895,97 @@ svg { width: 100%; height: 100%; }
   <div class="detail-connections" id="detailConn"></div>
 </div>
 
+<!-- IQ 仪表盘 -->
+<div class="iq-panel" id="iqPanel" onclick="toggleIqPanel()">
+  <!-- 收起状态：小圆球 -->
+  <div class="iq-ball">
+    <div class="iq-ball-number" id="iqBallNumber">--</div>
+    <div class="iq-ball-label">IQ</div>
+  </div>
+  <!-- 展开状态：详细内容 -->
+  <div class="iq-expand-content">
+    <div class="iq-header">
+      <div class="iq-gauge">
+        <svg viewBox="0 0 64 64">
+          <circle class="iq-gauge-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="iq-gauge-fill" id="iqGaugeFill" cx="32" cy="32" r="26"
+            stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="iq-gauge-text">
+          <div class="iq-number" id="iqNumber">--</div>
+          <div class="iq-label">IQ</div>
+        </div>
+      </div>
+      <div class="iq-info">
+        <div class="iq-level" id="iqLevel">加载中...</div>
+        <div class="iq-subtitle" id="iqSubtitle">点击收起</div>
+      </div>
+    </div>
+    <div class="iq-details" id="iqDetails">
+      <div class="iq-divider"></div>
+      <div id="iqDimensions"></div>
+      <div class="iq-tips" id="iqTips"></div>
+      <div class="iq-scale-table" id="iqScaleTable"></div>
+      <div id="iqSkillSummary"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <div id="graph"></div>
 
 <script>
-const CATEGORIES = {
-  identity:    { name: '核心身份', color: '#ff4757', glow: '#ff475744' },
-  person:      { name: '人物关系', color: '#ffa502', glow: '#ffa50244' },
-  tool:        { name: '能力/工具', color: '#2ed573', glow: '#2ed57344' },
-  project:     { name: '项目/任务', color: '#1e90ff', glow: '#1e90ff44' },
-  principle:   { name: '行为准则', color: '#a855f7', glow: '#a855f744' },
-  environment: { name: '环境配置', color: '#ff6348', glow: '#ff634844' },
-  memory:      { name: '其他记忆', color: '#78909c', glow: '#78909c44' },
+// 认知心理学记忆分类体系 — 8大类颜色 + 节点类型
+const PRIMARY_COLORS = {
+  autobiographical: { name: '自传体记忆', icon: '🧬', color: '#8B5CF6' },
+  semantic:         { name: '语义记忆',   icon: '📚', color: '#3B82F6' },
+  episodic:         { name: '情景记忆',   icon: '📖', color: '#F59E0B' },
+  procedural:       { name: '程序性记忆', icon: '⚙️', color: '#10B981' },
+  social:           { name: '社会认知',   icon: '👥', color: '#EC4899' },
+  working:          { name: '工作记忆',   icon: '💼', color: '#F97316' },
+  spatial:          { name: '空间记忆',   icon: '🗺️', color: '#06B6D4' },
+  emotional:        { name: '情绪记忆',   icon: '❤️', color: '#EF4444' },
 };
+
+// 获取节点颜色：优先用 primary 分类色，回退到节点类型色
+function getNodeColor(d) {
+  if (d.category === 'center') return '#FFD700';
+  if (d.primary && PRIMARY_COLORS[d.primary]) return PRIMARY_COLORS[d.primary].color;
+  return '#78909c';
+}
+
+// 获取节点分类名称
+function getNodeCatName(d) {
+  if (d.category === 'center') return '核心身份';
+  if (d.category === 'primary' && PRIMARY_COLORS[d.primary]) return PRIMARY_COLORS[d.primary].name;
+  if (d.category === 'secondary') {
+    const p = PRIMARY_COLORS[d.primary];
+    return p ? p.name + ' · ' + (d.label || d.secondary) : d.secondary;
+  }
+  if (d.category === 'memory') {
+    const p = PRIMARY_COLORS[d.primary];
+    return p ? p.name : '记忆';
+  }
+  if (d.category === 'skill') return '技能';
+  if (d.category === 'skill_category') return '技能分类';
+  if (d.category === 'skill_subcategory') return '技能子分类';
+  return d.category;
+}
+
+// CATEGORIES 兼容层（用于 filter bar 等）
+const CATEGORIES = {};
+Object.entries(PRIMARY_COLORS).forEach(([k, v]) => {
+  CATEGORIES[k] = { name: v.name, color: v.color, glow: v.color + '44' };
+});
+CATEGORIES.center = { name: '核心身份', color: '#FFD700', glow: '#FFD70044' };
+CATEGORIES.memory = { name: '记忆节点', color: '#78909c', glow: '#78909c44' };
+CATEGORIES.skill = { name: '技能', color: '#10B981', glow: '#10B98144' };
+CATEGORIES.skill_category = { name: '技能分类', color: '#059669', glow: '#05966944' };
+CATEGORIES.skill_subcategory = { name: '技能子分类', color: '#047857', glow: '#04785744' };
+CATEGORIES.primary = { name: '一级分类', color: '#888', glow: '#88888844' };
+CATEGORIES.secondary = { name: '二级分类', color: '#888', glow: '#88888844' };
 
 let graphData = null;
 let currentViewData = null;
@@ -796,6 +1167,7 @@ async function handleRefresh() {
     if (json.status === 'ok') {
       showToast(`✅ 记忆已刷新 — ${json.nodes}个节点, ${json.links}条连线`, 'success');
       await loadData();
+      loadIQ();
     } else {
       showToast(`❌ ${json.message}`, 'error');
     }
@@ -854,22 +1226,30 @@ function buildFilterBar() {
   allChip.style.borderColor = 'rgba(255,255,255,0.2)';
   allChip.onclick = () => {
     activeFilters.clear();
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.filter-chip').forEach(c => {
+      c.classList.remove('active');
+      c.style.background = '';
+      c.style.borderColor = c.dataset.color ? c.dataset.color + '44' : 'rgba(255,255,255,0.2)';
+    });
     allChip.classList.add('active');
     applyFilters();
   };
   bar.appendChild(allChip);
 
-  Object.entries(CATEGORIES).forEach(([key, cat]) => {
+  // 只按 8 大一级分类过滤
+  Object.entries(PRIMARY_COLORS).forEach(([key, cat]) => {
     const chip = document.createElement('div');
     chip.className = 'filter-chip';
-    chip.textContent = cat.name;
+    chip.textContent = cat.icon + ' ' + cat.name;
     chip.dataset.cat = key;
+    chip.dataset.color = cat.color;
     chip.style.borderColor = cat.color + '44';
     chip.onclick = () => {
       if (activeFilters.has(key)) {
         activeFilters.delete(key);
         chip.classList.remove('active');
+        chip.style.background = '';
+        chip.style.borderColor = cat.color + '44';
       } else {
         activeFilters.add(key);
         chip.classList.add('active');
@@ -889,23 +1269,38 @@ function applyFilters() {
     d3.selectAll('.link-group').classed('dimmed', false);
     return;
   }
-  d3.selectAll('.node-group').classed('dimmed', d => !activeFilters.has(d.category));
-  d3.selectAll('.link-group').classed('dimmed', d =>
-    !activeFilters.has(d.source.category) && !activeFilters.has(d.target.category));
+  // 按 primary 字段过滤（每个节点都有 primary 属性）
+  d3.selectAll('.node-group').classed('dimmed', d => {
+    if (d.category === 'center') return false; // 中心节点始终显示
+    return !activeFilters.has(d.primary);
+  });
+  d3.selectAll('.link-group').classed('dimmed', d => {
+    const sp = d.source.primary, tp = d.target.primary;
+    return !activeFilters.has(sp) && !activeFilters.has(tp);
+  });
 }
 
 // 统计面板
 function updateStats(data = currentViewData || graphData) {
   if (!data) return;
-  const cats = {};
-  data.nodes.forEach(n => { cats[n.category] = (cats[n.category] || 0) + 1; });
+  // 按 primary 一级分类统计
+  const primCounts = {};
+  data.nodes.forEach(n => {
+    if (n.primary) primCounts[n.primary] = (primCounts[n.primary] || 0) + 1;
+  });
+  // 统计技能和记忆
+  const skillCount = data.nodes.filter(n => n.category === 'skill').length;
+  const memCount = data.nodes.filter(n => n.category === 'memory').length;
   document.getElementById('statsPanel').innerHTML = `
     <div class="stat-row"><span class="stat-label">节点</span><span class="stat-value">${data.nodes.length}</span></div>
     <div class="stat-row"><span class="stat-label">连线</span><span class="stat-value">${data.links.length}</span></div>
+    <div class="stat-row"><span class="stat-label">记忆</span><span class="stat-value">${memCount}</span></div>
+    <div class="stat-row"><span class="stat-label">技能</span><span class="stat-value">${skillCount}</span></div>
     <div class="divider"></div>
-    ${Object.entries(cats).map(([k, v]) =>
-      `<div class="stat-row"><span class="stat-label" style="color:${CATEGORIES[k]?.color || '#667'}">${CATEGORIES[k]?.name || k}</span><span class="stat-value">${v}</span></div>`
-    ).join('')}
+    ${Object.entries(primCounts).map(([k, v]) => {
+      const p = PRIMARY_COLORS[k];
+      return p ? `<div class="stat-row"><span class="stat-label" style="color:${p.color}">${p.icon} ${p.name}</span><span class="stat-value">${v}</span></div>` : '';
+    }).join('')}
     <div class="divider"></div>
     <div class="stat-row"><span class="stat-label">更新</span><span class="stat-value" style="font-size:10px">${new Date(data.lastUpdated).toLocaleString('zh-CN')}</span></div>
   `;
@@ -917,11 +1312,12 @@ function showDetail(d) {
   if (!data) return;
   selectedNode = d;
   const panel = document.getElementById('detailPanel');
-  const cat = CATEGORIES[d.category] || { name: d.category, color: '#667' };
-  document.getElementById('detailDot').style.background = cat.color;
-  document.getElementById('detailDot').style.boxShadow = `0 0 10px ${cat.color}`;
+  const nodeColor = getNodeColor(d);
+  const catName = getNodeCatName(d);
+  document.getElementById('detailDot').style.background = nodeColor;
+  document.getElementById('detailDot').style.boxShadow = `0 0 10px ${nodeColor}`;
   document.getElementById('detailName').textContent = d.label;
-  document.getElementById('detailCategory').textContent = cat.name;
+  document.getElementById('detailCategory').textContent = catName;
   document.getElementById('detailDesc').textContent = d.description || '暂无描述';
   const createdAt = d.createdAt ? new Date(d.createdAt).toLocaleString('zh-CN') : '--';
   const updatedAt = d.updatedAt ? new Date(d.updatedAt).toLocaleString('zh-CN') : '--';
@@ -944,6 +1340,14 @@ function showDetail(d) {
   });
   d3.selectAll('.node-group').classed('dimmed', n => !connIds.has(n.id)).classed('highlighted', n => n.id === d.id);
   d3.selectAll('.link-group').classed('dimmed', l => (l.source.id || l.source) !== d.id && (l.target.id || l.target) !== d.id);
+
+  // 点击节点时，显示被点击节点及其相连节点的隐藏标签
+  d3.selectAll('.node-group').each(function(n) {
+    const label = d3.select(this).select('.node-label');
+    if (['skill', 'skill_subcategory', 'skill_category', 'memory'].includes(n.category)) {
+      label.attr('display', connIds.has(n.id) ? 'block' : 'none');
+    }
+  });
 }
 
 function hideDetail() {
@@ -951,6 +1355,12 @@ function hideDetail() {
   document.getElementById('detailPanel').classList.remove('show');
   d3.selectAll('.node-group').classed('dimmed', false).classed('highlighted', false);
   d3.selectAll('.link-group').classed('dimmed', false);
+  // 重新隐藏非顶层节点的标签
+  d3.selectAll('.node-group').each(function(n) {
+    if (['skill', 'skill_subcategory', 'skill_category', 'memory'].includes(n.category)) {
+      d3.select(this).select('.node-label').attr('display', 'none');
+    }
+  });
 }
 
 // 加载数据并渲染图谱
@@ -991,9 +1401,10 @@ function renderGraph(data = currentViewData || graphData) {
     .on('zoom', (e) => g.attr('transform', e.transform));
   svg.call(zoom);
 
-  // 定义发光滤镜
+  // 定义发光滤镜（为每个一级分类 + center 创建）
   const defs = svg.append('defs');
-  Object.entries(CATEGORIES).forEach(([key, cat]) => {
+  const glowDefs = { ...PRIMARY_COLORS, center: { color: '#FFD700' } };
+  Object.entries(glowDefs).forEach(([key, cat]) => {
     const filter = defs.append('filter').attr('id', `glow-${key}`).attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
     filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'blur');
     filter.append('feFlood').attr('flood-color', cat.color).attr('flood-opacity', '0.6').attr('result', 'color');
@@ -1009,12 +1420,46 @@ function renderGraph(data = currentViewData || graphData) {
 
   // 力导向
   simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id(d => d.id).distance(120))
-    .force('charge', d3.forceManyBody().strength(-400))
+    .force('link', d3.forceLink(links).id(d => d.id).distance(d => {
+      const src = d.source.category || '', tgt = d.target.category || '';
+      // center → primary
+      if (src === 'center' && tgt === 'primary') return 200;
+      // primary → secondary
+      if (src === 'primary' && tgt === 'secondary') return 120;
+      // secondary → memory
+      if (src === 'secondary' && tgt === 'memory') return 80;
+      // skill hierarchy
+      if (tgt === 'skill_category' || src === 'skill_category') return 60;
+      if (tgt === 'skill_subcategory' || src === 'skill_subcategory') return 45;
+      if (src === 'skill_subcategory' && tgt === 'skill') return 35;
+      if ((src === 'skill_category' || src === 'secondary') && tgt === 'skill') return 45;
+      // skill cross-links
+      if (src === 'skill' && tgt === 'skill') return 25;
+      return 100;
+    }))
+    .force('charge', d3.forceManyBody().strength(d => {
+      if (d.category === 'center') return -600;
+      if (d.category === 'primary') return -300;
+      if (d.category === 'secondary') return -150;
+      if (d.category === 'memory') return -80;
+      if (d.category === 'skill_category') return -80;
+      if (d.category === 'skill_subcategory') return -50;
+      if (d.category === 'skill') return -15;
+      return -100;
+    }))
     .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collision', d3.forceCollide().radius(40))
-    .force('x', d3.forceX(width / 2).strength(0.05))
-    .force('y', d3.forceY(height / 2).strength(0.05));
+    .force('collision', d3.forceCollide().radius(d => {
+      if (d.category === 'center') return 50;
+      if (d.category === 'primary') return 30;
+      if (d.category === 'secondary') return 18;
+      if (d.category === 'memory') return 14;
+      if (d.category === 'skill_category') return 14;
+      if (d.category === 'skill_subcategory') return 10;
+      if (d.category === 'skill') return 5;
+      return 20;
+    }))
+    .force('x', d3.forceX(width / 2).strength(0.04))
+    .force('y', d3.forceY(height / 2).strength(0.04));
 
   // 连线
   const linkGroup = g.selectAll('.link-group')
@@ -1040,37 +1485,92 @@ function renderGraph(data = currentViewData || graphData) {
       .on('end', (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
     );
 
+  // 节点大小函数（层级递减: center > primary > secondary > memory/skill_cat > skill_subcat > skill）
+  function nodeRadius(d) {
+    if (d.category === 'center') return 24;
+    if (d.category === 'primary') return 14;
+    if (d.category === 'secondary') return 9;
+    if (d.category === 'memory') return 7;
+    if (d.category === 'skill_category') return 7;
+    if (d.category === 'skill_subcategory') return 5;
+    if (d.category === 'skill') return 3.5;
+    return 8;
+  }
+  function glowRadius(d) {
+    if (d.category === 'center') return 42;
+    if (d.category === 'primary') return 26;
+    if (d.category === 'secondary') return 16;
+    if (d.category === 'memory') return 12;
+    if (d.category === 'skill_category') return 12;
+    if (d.category === 'skill_subcategory') return 8;
+    if (d.category === 'skill') return 5;
+    return 14;
+  }
+
   // 发光底圈
   nodeGroup.append('circle')
     .attr('class', 'node-glow')
-    .attr('r', d => d.category === 'identity' ? 38 : 26)
-    .attr('fill', d => CATEGORIES[d.category]?.color || '#667')
-    .attr('opacity', 0.15);
+    .attr('r', d => glowRadius(d))
+    .attr('fill', d => getNodeColor(d))
+    .attr('opacity', d => {
+      if (d.category === 'skill') return 0.06;
+      if (d.category === 'skill_subcategory') return 0.08;
+      if (d.category === 'center') return 0.25;
+      if (d.category === 'primary') return 0.18;
+      return 0.12;
+    });
 
   // 主圆
   nodeGroup.append('circle')
     .attr('class', 'node-circle')
-    .attr('r', d => d.category === 'identity' ? 22 : 14)
-    .attr('fill', d => {
-      const c = CATEGORIES[d.category]?.color || '#667';
-      return c;
-    })
-    .attr('stroke', d => {
-      const c = CATEGORIES[d.category]?.color || '#667';
-      return c + '88';
-    })
-    .attr('filter', d => `url(#glow-${d.category})`);
+    .attr('r', d => nodeRadius(d))
+    .attr('fill', d => getNodeColor(d))
+    .attr('stroke', d => getNodeColor(d) + '88')
+    .attr('filter', d => {
+      // 用 primary 分类的 glow 滤镜
+      const key = d.primary || d.category;
+      return `url(#glow-${key})`;
+    });
 
-  // 标签
+  // 标签（skill/skill_subcategory/memory 默认隐藏，点击展开才显示）
   nodeGroup.append('text')
     .attr('class', 'node-label')
-    .attr('dy', d => d.category === 'identity' ? 38 : 28)
-    .text(d => d.label);
+    .attr('dy', d => {
+      if (d.category === 'center') return 40;
+      if (d.category === 'primary') return 28;
+      if (d.category === 'secondary') return 20;
+      if (d.category === 'memory') return 16;
+      if (d.category === 'skill_category') return 16;
+      if (d.category === 'skill_subcategory') return 14;
+      if (d.category === 'skill') return 12;
+      return 20;
+    })
+    .text(d => d.label)
+    .style('font-size', d => {
+      if (d.category === 'center') return '14px';
+      if (d.category === 'primary') return '12px';
+      if (d.category === 'secondary') return '10px';
+      if (d.category === 'memory') return '9px';
+      if (d.category === 'skill_category') return '9px';
+      if (d.category === 'skill_subcategory') return '8px';
+      if (d.category === 'skill') return '7px';
+      return '10px';
+    })
+    .style('fill', d => {
+      if (d.category === 'center') return '#FFD700';
+      if (d.category === 'primary') return getNodeColor(d);
+      return null;
+    })
+    .attr('display', d => {
+      // 默认只显示 center, primary, secondary 的标签
+      if (['center', 'primary', 'secondary'].includes(d.category)) return 'block';
+      return 'none';
+    });
 
-  // Identity 节点脉冲动画
-  nodeGroup.filter(d => d.category === 'identity')
+  // Center 节点脉冲动画
+  nodeGroup.filter(d => d.category === 'center')
     .select('.node-glow')
-    .attr('opacity', 0.25);
+    .attr('opacity', 0.3);
 
   // Tick
   simulation.on('tick', () => {
@@ -1096,9 +1596,156 @@ function renderGraph(data = currentViewData || graphData) {
   }, 1000);
 }
 
+// IQ 仪表盘
+const DIM_COLORS = {
+  capacity: '#1e90ff',
+  density: '#a855f7',
+  coverage: '#2ed573',
+  depth: '#ffa502',
+  network: '#ff4757',
+  skills: '#ff6b6b',
+};
+
+function toggleIqPanel() {
+  const panel = document.getElementById('iqPanel');
+  const isExpanded = panel.classList.toggle('expanded');
+  // 展开时自动展开详情
+  if (isExpanded) {
+    const details = document.getElementById('iqDetails');
+    details.style.maxHeight = '400px';
+    details.style.marginTop = '10px';
+  }
+}
+
+async function loadIQ() {
+  try {
+    const res = await fetch('/api/iq?t=' + Date.now());
+    const data = await res.json();
+    renderIQ(data);
+  } catch (e) {
+    console.error('IQ load error:', e);
+  }
+}
+
+function renderIQ(data) {
+  const { iq, level, breakdown, tips, stats, skills } = data;
+
+  // Animate ball number (小圆球上的数字)
+  const ballEl = document.getElementById('iqBallNumber');
+  animateNumber(ballEl, iq, 1500);
+
+  // Animate gauge number (展开后的数字)
+  const numEl = document.getElementById('iqNumber');
+  animateNumber(numEl, iq, 1500);
+
+  // Level
+  document.getElementById('iqLevel').textContent = level;
+  document.getElementById('iqSubtitle').textContent = '点击收起';
+
+  // Gauge ring (r=26)
+  const circumference = 2 * Math.PI * 26; // r=26
+  const pct = Math.min(1, (iq - 40) / 120); // 40-160 mapped to 0-1
+  const offset = circumference * (1 - pct);
+  const fill = document.getElementById('iqGaugeFill');
+
+  // Color based on IQ (human-scale)
+  let gaugeColor = '#78909c';
+  if (iq >= 140) gaugeColor = '#a855f7';
+  else if (iq >= 120) gaugeColor = '#1e90ff';
+  else if (iq >= 100) gaugeColor = '#2ed573';
+  else if (iq >= 90) gaugeColor = '#ffa502';
+  else if (iq >= 80) gaugeColor = '#ff6348';
+
+  fill.style.stroke = gaugeColor;
+  // Delay to trigger animation
+  requestAnimationFrame(() => {
+    fill.style.strokeDashoffset = offset;
+  });
+
+  // Dimensions
+  const dimEl = document.getElementById('iqDimensions');
+  if (breakdown && typeof breakdown === 'object') {
+    dimEl.innerHTML = Object.entries(breakdown).map(([key, dim]) => {
+      const pct = (dim.score / dim.max * 100).toFixed(0);
+      const color = DIM_COLORS[key] || '#888';
+      return `
+        <div class="iq-dimension">
+          <span class="iq-dim-label">${dim.label}</span>
+          <div class="iq-dim-bar-bg">
+            <div class="iq-dim-bar-fill" style="width:${pct}%;background:${color}"></div>
+          </div>
+          <span class="iq-dim-score">${dim.score}/${dim.max}</span>
+        </div>`;
+    }).join('');
+  }
+
+  // Tips
+  const tipsEl = document.getElementById('iqTips');
+  if (Array.isArray(tips) && tips.length) {
+    tipsEl.innerHTML = tips.map(t => `<div class="iq-tip">${t}</div>`).join('');
+  }
+
+  // IQ Scale Table
+  const scales = [
+    { range: '140~160', name: '天才', emoji: '🧠', color: '#a855f7' },
+    { range: '120~140', name: '非常聪明', emoji: '🌟', color: '#1e90ff' },
+    { range: '110~120', name: '中上水平', emoji: '💡', color: '#2ed573' },
+    { range: '100~110', name: '正常偏上', emoji: '📖', color: '#2ed573' },
+    { range: '90~100', name: '正常水平', emoji: '📖', color: '#ffa502' },
+    { range: '80~90',  name: '发育中',   emoji: '🌱', color: '#ff6348' },
+    { range: '60~80',  name: '刚觉醒',   emoji: '👶', color: '#ff4757' },
+    { range: '40~60',  name: '沉睡中',   emoji: '💤', color: '#78909c' },
+  ];
+  const scaleEl = document.getElementById('iqScaleTable');
+  scaleEl.innerHTML = `<div class="iq-scale-title">📊 智商等级对照</div>` +
+    scales.map(s => {
+      const [lo, hi] = s.range.split('~').map(Number);
+      const isCurrent = iq >= lo && iq < hi;
+      return `<div class="iq-scale-row${isCurrent ? ' current' : ''}">
+        <span class="iq-scale-dot" style="background:${s.color}"></span>
+        <span class="iq-scale-range">${s.range}</span>
+        <span class="iq-scale-name">${s.name} ${s.emoji}</span>
+        ${isCurrent ? '<span style="font-size:10px">◀ 当前</span>' : ''}
+      </div>`;
+    }).join('');
+
+  // Skill summary
+  if (skills && skills.total > 0) {
+    const skillSummary = document.getElementById('iqSkillSummary');
+    if (skillSummary) {
+      skillSummary.innerHTML = `
+        <div class="iq-scale-title">🛠️ 技能概览</div>
+        <div style="display:flex;justify-content:space-between;padding:4px 8px;font-size:11px;color:#b0bec5">
+          <span>已掌握 <b style="color:#ff6b6b">${skills.total}</b> 项技能</span>
+          <span>覆盖 <b style="color:#ff6b6b">${skills.categories}</b> 个领域</span>
+        </div>
+        <div style="padding:2px 8px 6px;font-size:10px;color:#78909c;line-height:1.6">
+          ${skills.category_list.slice(0, 8).map(c => `<span style="background:rgba(255,107,107,0.15);padding:1px 6px;border-radius:8px;margin:2px 2px;display:inline-block">${c}</span>`).join('')}
+          ${skills.category_list.length > 8 ? `<span style="color:#666">+${skills.category_list.length - 8}更多</span>` : ''}
+        </div>`;
+    }
+  }
+}
+
+function animateNumber(el, target, duration) {
+  const start = parseInt(el.textContent) || 0;
+  const diff = target - start;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    el.textContent = Math.round(start + diff * eased);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 // 初始化
 buildFilterBar();
 loadData();
+loadIQ();
 
 // 快捷键
 document.addEventListener('keydown', (e) => {

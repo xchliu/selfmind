@@ -75,6 +75,8 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         clean_path = self.path.split("?")[0]
         if clean_path == "/api/data":
             self._json_response(self._load_data())
+        elif clean_path == "/api/iq":
+            self._json_response(self._compute_iq())
         elif clean_path == "/api/config":
             self._json_response(load_config())
         elif clean_path == "/":
@@ -140,6 +142,240 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                     json.dump(data, f, ensure_ascii=False, indent=2)
             return data
         return refresh_data()
+
+    def _scan_skills(self) -> dict:
+        """Scan ~/.hermes/skills for SKILL.md files and return skill stats."""
+        from pathlib import Path
+        import re
+
+        skills_dir = Path.home() / ".hermes" / "skills"
+        if not skills_dir.exists():
+            return {"total": 0, "categories": 0, "category_list": [], "skills": []}
+
+        skill_files = list(skills_dir.rglob("SKILL.md"))
+        skills = []
+        categories = set()
+
+        for sf in skill_files:
+            try:
+                content = sf.read_text(encoding="utf-8")
+                # Parse YAML frontmatter
+                name = sf.parent.name
+                desc = ""
+                cat = sf.parent.parent.name if sf.parent.parent != skills_dir else ""
+
+                # Extract name and description from frontmatter
+                fm_match = re.match(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
+                if fm_match:
+                    fm = fm_match.group(1)
+                    for line in fm.split("\n"):
+                        if line.startswith("name:"):
+                            name = line.split(":", 1)[1].strip().strip("'\"")
+                        elif line.startswith("description:"):
+                            desc = line.split(":", 1)[1].strip().strip("'\"")
+
+                if cat and cat != ".hermes":
+                    categories.add(cat)
+                elif not cat:
+                    categories.add("uncategorized")
+
+                # Estimate complexity: count steps, code blocks, sections
+                n_steps = len(re.findall(r"^\d+\.", content, re.MULTILINE))
+                n_code_blocks = content.count("```")
+                n_sections = len(re.findall(r"^#{1,3}\s", content, re.MULTILINE))
+                complexity = min(1.0, (n_steps * 0.05 + n_code_blocks * 0.03 + n_sections * 0.04))
+
+                skills.append({
+                    "name": name,
+                    "description": desc[:100],
+                    "category": cat or "uncategorized",
+                    "complexity": round(complexity, 2),
+                    "content_length": len(content),
+                })
+            except (OSError, UnicodeDecodeError):
+                continue
+
+        return {
+            "total": len(skills),
+            "categories": len(categories),
+            "category_list": sorted(categories),
+            "skills": skills,
+            "avg_complexity": round(sum(s["complexity"] for s in skills) / max(len(skills), 1), 2),
+        }
+
+    def _compute_iq(self) -> dict:
+        """Compute an IQ score modeled on human intelligence distribution.
+
+        Human IQ: mean=100, σ=15. This algorithm maps AI brain complexity
+        (memory + skills) to a comparable scale:
+        - 40~60: 沉睡中 (newborn AI, minimal memory & skills)
+        - 60~80: 刚觉醒 (growing, basic structure)
+        - 80~90: 发育中 (decent memory, some skills)
+        - 90~100: 正常水平 (solid memory, decent connections & skills)
+        - 100~110: 正常偏上 (good knowledge + skill breadth)
+        - 110~120: 中上水平 (rich knowledge, good network, many skills)
+        - 120~140: 非常聪明 (extensive, well-connected, skill mastery)
+        - 140~160: 天才 (near impossible without massive memory + skills)
+
+        Benchmarks (approximate):
+        - 17 nodes, 19 links, 20 skills → ~80 IQ (developing)
+        - 50 nodes, 80 links, 50 skills → ~95 IQ (normal)
+        - 100 nodes, 200 links, 100 skills → ~112 IQ (smart)
+        - 200+ nodes, 500+ links, 200+ skills → ~130+ IQ (very smart)
+        """
+        import math
+
+        data = self._load_data()
+        nodes = data.get("nodes", [])
+        links = data.get("links", [])
+        n_nodes = len(nodes)
+        n_links = len(links)
+
+        # Scan skills
+        skill_stats = self._scan_skills()
+        n_skills = skill_stats["total"]
+        n_skill_cats = skill_stats["categories"]
+        avg_skill_complexity = skill_stats.get("avg_complexity", 0)
+
+        if n_nodes == 0 and n_skills == 0:
+            return {"iq": 40, "level": "未觉醒 💤", "breakdown": {}, "tips": ["还没有任何记忆和技能呢"], "skills": skill_stats}
+
+        # --- 6 dimensions, each scored 0.0 ~ 1.0 ---
+
+        # 1. 记忆容量 (weight 25%): logarithmic scale
+        #    1 node → ~0.0, 20 → ~0.33, 50 → ~0.55, 100 → ~0.72, 200 → ~0.86, 500 → 1.0
+        capacity_raw = math.log(n_nodes + 1) / math.log(501) if n_nodes > 0 else 0
+        capacity = min(1.0, capacity_raw)
+
+        # 2. 连接密度 (weight 20%): links-to-nodes ratio with diminishing returns
+        density_ratio = n_links / n_nodes if n_nodes > 0 else 0
+        density = min(1.0, 1 - 1 / (1 + density_ratio / 3))
+
+        # 3. 分类覆盖 (weight 15%): how many of 8 primary cognitive categories are represented
+        #    New taxonomy: autobiographical, semantic, episodic, procedural, social, working, spatial, emotional
+        primary_categories = set(n.get("primary", "") for n in nodes if n.get("primary"))
+        category_count = len(primary_categories)
+        max_categories = 8
+        coverage = min(1.0, category_count / max_categories)
+
+        # 4. 知识深度 (weight 10%): average description richness
+        if n_nodes > 0:
+            avg_desc_len = sum(len(n.get("description", "")) for n in nodes) / n_nodes
+            depth = min(1.0, math.log(avg_desc_len + 1) / math.log(501))
+        else:
+            depth = 0
+
+        # 5. 网络效应 (weight 10%): connectivity quality
+        degree = {}
+        for link in links:
+            s = link.get("source", {})
+            t = link.get("target", {})
+            sid = s.get("id", s) if isinstance(s, dict) else s
+            tid = t.get("id", t) if isinstance(t, dict) else t
+            degree[sid] = degree.get(sid, 0) + 1
+            degree[tid] = degree.get(tid, 0) + 1
+        avg_degree = sum(degree.values()) / max(len(degree), 1) if degree else 0
+        isolated = sum(1 for n in nodes if n.get("id") not in degree)
+        isolation_penalty = isolated / n_nodes if n_nodes > 0 else 0
+        network = min(1.0, (1 - 1 / (1 + avg_degree / 4)) * (1 - isolation_penalty * 0.5)) if n_nodes > 0 else 0
+
+        # 6. 技能掌握 (weight 20%): skill breadth, depth, and complexity
+        #    Combines: total skills (log scale), category diversity, avg complexity
+        #    5 skills → ~0.15, 20 → ~0.35, 50 → ~0.52, 100 → ~0.66, 200 → ~0.80, 500 → 1.0
+        skill_count_score = math.log(n_skills + 1) / math.log(501) if n_skills > 0 else 0
+        skill_diversity = min(1.0, n_skill_cats / 15)  # 15 categories = full coverage
+        skill_quality = avg_skill_complexity  # already 0~1
+        # Weighted sub-composite: count matters most, then diversity, then quality
+        skills_score = min(1.0, skill_count_score * 0.5 + skill_diversity * 0.3 + skill_quality * 0.2)
+
+        # --- Weighted composite score (0.0 ~ 1.0) ---
+        weights = {
+            "capacity": 0.25, "density": 0.20, "coverage": 0.15,
+            "depth": 0.10, "network": 0.10, "skills": 0.20,
+        }
+        scores = {
+            "capacity": capacity, "density": density, "coverage": coverage,
+            "depth": depth, "network": network, "skills": skills_score,
+        }
+        composite = sum(scores[k] * weights[k] for k in weights)
+
+        # --- Map composite to IQ (human-like distribution) ---
+        # Strict curve: mirrors human rarity at high IQ
+        # composite 0.0 → IQ 40, 0.3 → IQ 64, 0.5 → IQ 77, 0.7 → IQ 92, 0.85 → IQ 106, 1.0 → IQ 140
+        iq = int(40 + 100 * (composite ** 1.3))
+        iq = min(160, max(40, iq))
+
+        # Level label (matching human IQ classification)
+        if iq >= 140:
+            level = "天才 🧠"
+        elif iq >= 120:
+            level = "非常聪明 🌟"
+        elif iq >= 110:
+            level = "中上水平 💡"
+        elif iq >= 100:
+            level = "正常偏上 📖"
+        elif iq >= 90:
+            level = "正常水平 📖"
+        elif iq >= 80:
+            level = "发育中 🌱"
+        elif iq >= 60:
+            level = "刚觉醒 👶"
+        else:
+            level = "沉睡中 💤"
+
+        # Tips for improvement (based on weakest dimensions)
+        dim_labels = {
+            "capacity": "记忆容量", "density": "连接密度", "coverage": "分类覆盖",
+            "depth": "知识深度", "network": "网络效应", "skills": "技能掌握",
+        }
+        dim_tips = {
+            "capacity": "多积累记忆节点，扩大知识库规模",
+            "density": "建立更多节点间的关联和连接",
+            "coverage": "拓展更多分类领域的认知",
+            "depth": "丰富每条记忆的描述和细节",
+            "network": "减少孤立节点，增强知识互联",
+            "skills": "学习更多技能，提升实操能力",
+        }
+        tips = []
+        sorted_dims = sorted(scores.items(), key=lambda x: x[1])
+        for dim_key, dim_score in sorted_dims[:2]:
+            if dim_score < 0.7:
+                tips.append(dim_tips[dim_key])
+        if not tips:
+            tips.append("各项指标均衡发展，继续保持！")
+
+        # Format breakdown for frontend
+        max_scores = {
+            "capacity": 25, "density": 20, "coverage": 15,
+            "depth": 10, "network": 10, "skills": 20,
+        }
+        breakdown = {}
+        for k in scores:
+            breakdown[k] = {
+                "score": round(scores[k] * max_scores[k], 1),
+                "max": max_scores[k],
+                "label": dim_labels[k],
+            }
+
+        return {
+            "iq": iq,
+            "level": level,
+            "breakdown": breakdown,
+            "stats": {
+                "nodes": n_nodes,
+                "links": n_links,
+                "categories": category_count,
+                "avg_degree": round(avg_degree, 2),
+                "skills": n_skills,
+                "skill_categories": n_skill_cats,
+            },
+            "tips": tips,
+            "skills": {
+                "total": skill_stats["total"],
+                "categories": skill_stats["categories"],
+                "category_list": skill_stats["category_list"],
+            },
+        }
 
     def _json_response(self, data, code=200):
         self.send_response(code)
