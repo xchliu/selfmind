@@ -1,0 +1,2 @@
+# No third-party runtime dependencies are required.
+# Backend uses Python standard library (http.server, json, pathlib, etc.).
