@@ -2,6 +2,7 @@
   <h1 align="center">🧠 SelfMind</h1>
   <p align="center"><strong>See what your AI really thinks.</strong></p>
   <p align="center">基于认知心理学的 AI 记忆可视化系统 — 把 AI 的大脑变成一张可交互的知识图谱。</p>
+  <p align="center"><a href="#-selfmind--认知记忆图谱">中文</a> | <a href="#-selfmind--cognitive-memory-graph">English</a></p>
 </p>
 
 <p align="center">
@@ -170,6 +171,159 @@ server.py            # 服务入口（默认 3002 端口）
 - [ ] 支持更多 Agent 框架（LangChain, AutoGen 等）
 - [ ] 插件系统（自定义记忆源）
 - [ ] 多 Agent 记忆对比
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+[MIT](LICENSE)
+
+---
+
+<p align="center">
+  Built with 🧠 by <a href="https://github.com/xchliu">xchliu</a>
+</p>
+
+---
+
+<a id="-selfmind--cognitive-memory-graph"></a>
+
+# 🧠 SelfMind — Cognitive Memory Graph
+
+**See what your AI really thinks.**
+
+An AI memory visualization system based on cognitive psychology — turning AI's brain into an interactive knowledge graph.
+
+## What is SelfMind?
+
+AI assistants accumulate memories during work — user preferences, project context, behavioral rules, relationships, skill libraries. But these memories are invisible.
+
+**SelfMind makes AI memory visible and interactive as a knowledge graph.**
+
+Each memory is a node, relationships are links, categories are colors. Based on 8 cognitive memory systems from psychology, giving you a complete picture of the AI's brain.
+
+## Cognitive Memory System
+
+Based on cognitive psychology, AI memory is organized into 8 categories with 24 subcategories:
+
+| # | Category | Brain Region | Content |
+|---|----------|-------------|---------|
+| 1 | 🧬 Autobiographical | Hippocampus + Prefrontal | Identity, growth trajectory, principles |
+| 2 | 📚 Semantic | Temporal Cortex | Domain knowledge, technical concepts, methodologies |
+| 3 | 📖 Episodic | Hippocampus | Successes, failures, key milestones |
+| 4 | ⚙️ Procedural | Basal Ganglia + Cerebellum | 95+ skills in 4-layer hierarchy |
+| 5 | 👥 Social Cognition | Mirror Neurons + Amygdala | Key people, relationships, communication preferences |
+| 6 | 💼 Working Memory | Prefrontal Cortex | Active projects, backlog, archived projects |
+| 7 | 🗺️ Spatial | Place Cells | System environment, file map, service topology |
+| 8 | ❤️ Emotional | Amygdala | User mood, likes/dislikes, trust relationships |
+
+See [MEMORY_TAXONOMY.md](MEMORY_TAXONOMY.md) for the full design document.
+
+## IQ System
+
+SelfMind includes an AI IQ assessment system, referenced against human IQ distribution (mean 100, σ 15), calculated across 6 dimensions:
+
+| Dimension | Weight | Measures |
+|-----------|--------|----------|
+| 📦 Memory Capacity | 30% | Logarithmic growth of total nodes |
+| 🔗 Connection Density | 25% | Links-to-nodes ratio |
+| 🗂️ Category Coverage | 15% | Coverage of 8 major categories |
+| 📚 Knowledge Depth | 10% | Average length of node descriptions |
+| 🌐 Network Effect | 10% | Average connections per node |
+| 🛠️ Skill Mastery | 10% | Skill count and category coverage |
+
+**IQ Scale:**
+
+| IQ Range | Level |
+|----------|-------|
+| 140~160 | Genius 🧠 |
+| 120~140 | Very Smart 🌟 |
+| 110~120 | Above Average 💡 |
+| 100~110 | Slightly Above Normal 📖 |
+| 90~100 | Normal 📖 |
+| 80~90 | Developing 🌱 |
+| 60~80 | Just Awakened 👶 |
+| 40~60 | Dormant 💤 |
+
+## Features
+
+- 🧠 **Cognitive Memory System** — 8 categories, 24 subcategories based on cognitive psychology
+- 🧬 **IQ System** — Human-referenced AI IQ assessment, 6-dimension calculation
+- 🛠️ **Skill Graph** — 95+ skills in 4-layer hierarchy (root → category → subcategory → skill)
+- 🕸️ **Force-Directed Graph** — D3.js powered, physics simulation, hierarchical clustering
+- 🔍 **Search & Filter** — Filter by name, description, or category
+- 🎯 **Category Navigation** — Top nav with 8 category tabs, bottom indicator highlight
+- ⏱️ **Timeline** — Full-width bottom timeline for temporal memory browsing
+- 🎨 **Dark Theme** — Glassmorphism effects, modern minimalist design
+- 💾 **Persistent Cache** — Parse once, load instantly
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.8+
+
+### Install & Run
+
+```bash
+git clone https://github.com/xchliu/selfmind.git
+cd selfmind
+pip install -r requirements.txt
+
+# Launch
+python server.py
+```
+
+Open **http://localhost:3002** in your browser.
+
+### Configuration
+
+| Environment Variable | Default | Description |
+|---------------------|---------|-------------|
+| `HERMES_HOME` | `~/.hermes` | Hermes profile home directory |
+| `SELFMIND_SOURCE_MODE` | `auto` | `auto` reads all profiles, `single` reads one |
+| `SELFMIND_PROFILE` | `hermes` | Active profile name |
+
+### Memory Format
+
+Memory files use `§` as separator with category tags:
+
+```markdown
+[autobiographical/identity] I am Socrates, an AI department management assistant
+§
+[social/key_people] Boss Tan (Liu Xiaocheng) - AI Department Head
+§
+[spatial/filesystem] SelfMind project at ~/Documents/selfmind/
+```
+
+## How It Works
+
+```
+Memory Files              Backend                    Browser
+┌──────────────┐   parse  ┌──────────────────┐ JSON  ┌──────────────┐
+│ MEMORY.md    │ ───────→ │ parser.py        │ ────→ │  index.html  │
+│ USER.md      │          │  - 8-category    │       │  D3.js graph │
+│ Skills/*.md  │          │  - skill hierarchy│      │  IQ dashboard│
+└──────────────┘          │  - IQ algorithm  │       └──────────────┘
+                          │ http_handler.py   │
+                          │ server.py (entry) │
+                          └──────────────────┘
+```
+
+## Interactions
+
+| Action | Effect |
+|--------|--------|
+| **Hover** node | Highlight connected nodes and links |
+| **Click** node | Open detail panel, expand skill labels |
+| **Drag** node | Move and pin position |
+| **Double-click** | Release pinned node |
+| **Scroll** | Zoom in/out |
+| **Drag canvas** | Pan view |
+| **Category tab** | Filter to show that category |
+| **IQ ball** | Click to expand IQ details |
 
 ## Contributing
 
