@@ -27,3 +27,7 @@ data.json
 # OS
 Thumbs.db
 Desktop.ini
+
+# Runtime data
+memories_store.json
+*.bak

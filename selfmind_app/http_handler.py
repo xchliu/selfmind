@@ -1,10 +1,20 @@
 import json
+import logging
+import threading
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 from typing import Optional
 
 from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config
+from selfmind_app.document_importer import DocumentImporter
+from selfmind_app.memory_store import MemoryStore
 from selfmind_app.parser import build_graph
+
+logger = logging.getLogger(__name__)
+
+# Shared instances (created lazily)
+_importer = DocumentImporter()
+_store = MemoryStore()
 
 
 def _node_signature(node: dict) -> str:
@@ -79,6 +89,19 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._json_response(self._compute_iq())
         elif clean_path == "/api/config":
             self._json_response(load_config())
+        elif clean_path == "/api/documents/scan":
+            self._handle_documents_scan()
+        elif clean_path == "/api/memories":
+            self._handle_memories_list()
+        elif clean_path.startswith("/api/memories/stats"):
+            self._json_response(_store.get_stats())
+        elif clean_path.startswith("/api/memories/"):
+            entry_id = clean_path.split("/api/memories/")[1]
+            entry = _store.get_entry(entry_id)
+            if entry:
+                self._json_response(entry)
+            else:
+                self._json_response({"error": "Not found"}, code=404)
         elif clean_path == "/":
             self.path = "/index.html"
             super().do_GET()
@@ -86,7 +109,9 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             super().do_GET()
 
     def do_POST(self):
-        if self.path == "/api/refresh":
+        clean_path = self.path.split("?")[0]
+
+        if clean_path == "/api/refresh":
             data = refresh_data()
             self._json_response(
                 {
@@ -98,7 +123,7 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             )
             return
 
-        if self.path == "/api/save":
+        if clean_path == "/api/save":
             content_length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(content_length)
             try:
@@ -117,7 +142,7 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                 self._json_response({"status": "error", "message": str(exc)}, code=400)
             return
 
-        if self.path == "/api/config":
+        if clean_path == "/api/config":
             content_length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(content_length)
             try:
@@ -129,7 +154,50 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                 self._json_response({"status": "error", "message": str(exc)}, code=400)
             return
 
+        if clean_path == "/api/documents/extract":
+            self._handle_documents_extract()
+            return
+
+        if clean_path == "/api/memories":
+            self._handle_memories_add()
+            return
+
+        if clean_path == "/api/memories/sync":
+            self._handle_memories_sync()
+            return
+
+        if clean_path == "/api/memories/bulk-status":
+            self._handle_memories_bulk_status()
+            return
+
         self._json_response({"error": "Not found"}, code=404)
+
+    def do_PUT(self):
+        clean_path = self.path.split("?")[0]
+        if clean_path.startswith("/api/memories/"):
+            entry_id = clean_path.split("/api/memories/")[1]
+            self._handle_memory_update(entry_id)
+        else:
+            self._json_response({"error": "Not found"}, code=404)
+
+    def do_DELETE(self):
+        clean_path = self.path.split("?")[0]
+        if clean_path.startswith("/api/memories/"):
+            entry_id = clean_path.split("/api/memories/")[1]
+            if _store.delete_entry(entry_id):
+                self._json_response({"status": "ok", "message": "Entry deleted"})
+            else:
+                self._json_response({"error": "Not found"}, code=404)
+        else:
+            self._json_response({"error": "Not found"}, code=404)
+
+    def do_OPTIONS(self):
+        """Handle CORS preflight."""
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
 
     def _load_data(self):
         if DATA_FILE.exists():
@@ -376,6 +444,203 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                 "category_list": skill_stats["category_list"],
             },
         }
+
+    # ── New API handler methods ──────────────────────────────────────
+
+    def _read_body(self) -> dict:
+        """Read and parse JSON request body."""
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length)
+        return json.loads(body) if body else {}
+
+    def _handle_documents_scan(self):
+        """GET /api/documents/scan?dir=... — Scan directory for documents."""
+        from urllib.parse import parse_qs, urlparse
+        parsed = urlparse(self.path)
+        params = parse_qs(parsed.query)
+        dir_path = params.get("dir", [""])[0]
+
+        if not dir_path:
+            config = load_config()
+            dir_path = config.get("documents", {}).get("watch_dir", "")
+
+        if not dir_path:
+            self._json_response(
+                {"error": "No directory specified. Use ?dir=/path or set documents.watch_dir in config."},
+                code=400,
+            )
+            return
+
+        files = _importer.scan_directory(dir_path)
+        self._json_response({"dir": dir_path, "files": files, "count": len(files)})
+
+    def _handle_documents_extract(self):
+        """POST /api/documents/extract — Extract memories from documents.
+
+        Body: {"dir": "/path/to/docs"} or {"file": "/path/to/file.md"}
+        """
+        try:
+            body = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+
+        config = load_config()
+        llm_config = config.get("llm", {})
+
+        if not llm_config.get("api_key"):
+            self._json_response(
+                {"error": "LLM API key not configured. Set llm.api_key in config or LLM_API_KEY env var."},
+                code=400,
+            )
+            return
+
+        file_path = body.get("file")
+        dir_path = body.get("dir")
+
+        if file_path:
+            # Single file extraction
+            content = _importer.read_document(file_path)
+            if not content.strip():
+                self._json_response({"error": f"Could not read file: {file_path}"}, code=400)
+                return
+            source_name = file_path.split("/")[-1] if "/" in file_path else file_path
+            memories = _importer.extract_memories(content, source_name, config)
+            # Store extracted memories
+            if memories:
+                ids = _store.add_entries(memories)
+                self._json_response({
+                    "status": "ok",
+                    "extracted": len(memories),
+                    "ids": ids,
+                    "memories": _store.get_entries({"status": "pending"}),
+                })
+            else:
+                self._json_response({"status": "ok", "extracted": 0, "ids": [], "memories": []})
+
+        elif dir_path:
+            # Batch extraction from directory
+            memories = _importer.batch_extract(dir_path, config)
+            if memories:
+                ids = _store.add_entries(memories)
+                self._json_response({
+                    "status": "ok",
+                    "extracted": len(memories),
+                    "ids": ids,
+                    "memories": _store.get_entries({"status": "pending"}),
+                })
+            else:
+                self._json_response({"status": "ok", "extracted": 0, "ids": [], "memories": []})
+        else:
+            self._json_response({"error": "Provide 'dir' or 'file' in request body"}, code=400)
+
+    def _handle_memories_list(self):
+        """GET /api/memories?status=...&primary=... — List memories with filters."""
+        from urllib.parse import parse_qs, urlparse
+        parsed = urlparse(self.path)
+        params = parse_qs(parsed.query)
+
+        filters = {}
+        for key in ("status", "primary", "secondary", "source_file"):
+            if key in params:
+                val = params[key]
+                filters[key] = val[0] if len(val) == 1 else val
+
+        entries = _store.get_entries(filters if filters else None)
+        self._json_response({"entries": entries, "total": len(entries)})
+
+    def _handle_memories_add(self):
+        """POST /api/memories — Add memory entries manually."""
+        try:
+            body = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+
+        entries = body.get("entries", [])
+        if not entries:
+            # Single entry
+            if body.get("text"):
+                entries = [body]
+            else:
+                self._json_response({"error": "Provide 'entries' array or a single entry object"}, code=400)
+                return
+
+        ids = _store.add_entries(entries)
+        self._json_response({"status": "ok", "ids": ids, "count": len(ids)})
+
+    def _handle_memory_update(self, entry_id: str):
+        """PUT /api/memories/:id — Update a memory entry."""
+        try:
+            updates = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+
+        result = _store.update_entry(entry_id, updates)
+        if result:
+            self._json_response({"status": "ok", "entry": result})
+        else:
+            self._json_response({"error": "Not found"}, code=404)
+
+    def _handle_memories_sync(self):
+        """POST /api/memories/sync — Sync memories to an agent system.
+
+        Body: {"ids": [...], "agent": "hermes"} or {"ids": [...], "agent": "openclaw"}
+        """
+        try:
+            body = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+
+        entry_ids = body.get("ids", [])
+        agent = body.get("agent", "hermes")
+        config = load_config()
+
+        if not entry_ids:
+            self._json_response({"error": "Provide 'ids' array"}, code=400)
+            return
+
+        profiles = config.get("source", {}).get("profiles", {})
+        if agent not in profiles:
+            self._json_response({"error": f"Unknown agent: {agent}. Available: {list(profiles.keys())}"}, code=400)
+            return
+
+        agent_home = profiles[agent].get("home", "")
+
+        if agent == "hermes":
+            result = _store.sync_to_hermes(entry_ids, agent_home)
+        elif agent == "openclaw":
+            result = _store.sync_to_openclaw(entry_ids, agent_home)
+        else:
+            result = _store.sync_to_hermes(entry_ids, agent_home)
+
+        self._json_response({"status": "ok", **result})
+
+    def _handle_memories_bulk_status(self):
+        """POST /api/memories/bulk-status — Bulk update memory entry status.
+
+        Body: {"ids": [...], "status": "approved"}
+        """
+        try:
+            body = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+
+        entry_ids = body.get("ids", [])
+        status = body.get("status", "")
+
+        if not entry_ids or not status:
+            self._json_response({"error": "Provide 'ids' array and 'status'"}, code=400)
+            return
+
+        try:
+            count = _store.bulk_update_status(entry_ids, status)
+            self._json_response({"status": "ok", "updated": count})
+        except ValueError as exc:
+            self._json_response({"error": str(exc)}, code=400)
 
     def _json_response(self, data, code=200):
         self.send_response(code)

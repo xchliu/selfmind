@@ -816,6 +816,574 @@ svg { width: 100%; height: 100%; }
   stroke-width: 3;
   filter: brightness(1.3);
 }
+
+/* ========== 记忆管理面板 ========== */
+.btn-memory {
+  border-color: rgba(139, 92, 246, 0.4);
+}
+.btn-memory:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+}
+
+.memory-overlay {
+  position: fixed;
+  top: 56px; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.memory-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.memory-panel {
+  position: fixed;
+  top: 56px;
+  right: 0;
+  width: 480px;
+  height: calc(100vh - 56px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,250,252,0.97) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(0,0,0,0.08);
+  box-shadow: -8px 0 30px rgba(0,0,0,0.08);
+  z-index: 200;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.memory-panel.open {
+  transform: translateX(0);
+}
+
+.memory-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.memory-panel-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+.memory-panel-close {
+  width: 28px; height: 28px;
+  border: none;
+  background: rgba(0,0,0,0.05);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.memory-panel-close:hover {
+  background: rgba(0,0,0,0.1);
+  color: #333;
+}
+
+.memory-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 0 20px;
+  gap: 0;
+}
+.memory-tab {
+  flex: 1;
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #999;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.memory-tab:hover {
+  color: #666;
+}
+.memory-tab.active {
+  color: #8b5cf6;
+  border-bottom-color: #8b5cf6;
+}
+
+.memory-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+.memory-content::-webkit-scrollbar {
+  width: 5px;
+}
+.memory-content::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.12);
+  border-radius: 3px;
+}
+
+/* 文档导入 */
+.memory-input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.memory-input-group input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  font-size: 13px;
+  background: rgba(255,255,255,0.9);
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+.memory-input-group input:focus {
+  border-color: #8b5cf6;
+}
+.memory-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.memory-btn-primary {
+  background: #8b5cf6;
+  color: #fff;
+}
+.memory-btn-primary:hover {
+  background: #7c3aed;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+.memory-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.memory-btn-secondary {
+  background: rgba(0,0,0,0.05);
+  color: #555;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.memory-btn-secondary:hover {
+  background: rgba(0,0,0,0.08);
+}
+.memory-btn-success {
+  background: #2ed573;
+  color: #fff;
+}
+.memory-btn-success:hover {
+  background: #26bf65;
+  box-shadow: 0 4px 12px rgba(46, 213, 115, 0.3);
+}
+.memory-btn-danger {
+  background: #ff4757;
+  color: #fff;
+}
+.memory-btn-danger:hover {
+  background: #e8414f;
+}
+
+.doc-file-list {
+  margin-bottom: 12px;
+}
+.doc-file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,0.7);
+  transition: all 0.2s ease;
+}
+.doc-file-item:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.03);
+}
+.doc-file-item input[type="checkbox"] {
+  accent-color: #8b5cf6;
+  width: 16px; height: 16px;
+  cursor: pointer;
+}
+.doc-file-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.doc-file-meta {
+  font-size: 11px;
+  color: #999;
+}
+.doc-file-type {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.05);
+  color: #666;
+}
+.doc-select-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #888;
+}
+.doc-select-bar label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #555;
+}
+.memory-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 0;
+  gap: 12px;
+}
+.memory-progress-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(139, 92, 246, 0.15);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.memory-progress-text {
+  font-size: 13px;
+  color: #888;
+}
+.memory-result-count {
+  text-align: center;
+  padding: 12px;
+  font-size: 13px;
+  color: #2ed573;
+  font-weight: 500;
+}
+.memory-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #bbb;
+  font-size: 13px;
+}
+.memory-empty-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+/* 记忆列表 */
+.memory-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.memory-filter select {
+  padding: 6px 10px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 6px;
+  font-size: 12px;
+  background: #fff;
+  color: #555;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.memory-filter select:focus {
+  border-color: #8b5cf6;
+}
+
+.memory-bulk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(139, 92, 246, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.memory-bulk label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  font-weight: 500;
+}
+.memory-bulk .memory-btn {
+  padding: 5px 12px;
+  font-size: 11px;
+}
+.memory-entry-count {
+  font-size: 11px;
+  color: #aaa;
+  margin-left: auto;
+}
+
+.memory-card {
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.8);
+  transition: all 0.25s ease;
+  position: relative;
+}
+.memory-card:hover {
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.memory-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.memory-card-check {
+  margin-top: 2px;
+  accent-color: #8b5cf6;
+  width: 15px; height: 15px;
+  cursor: pointer;
+}
+.memory-card-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+.memory-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.memory-badge-primary {
+  background: rgba(30, 144, 255, 0.1);
+  color: #1e90ff;
+}
+.memory-badge-secondary {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+.memory-badge-status {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.memory-badge-pending {
+  background: rgba(255, 165, 0, 0.1);
+  color: #f0932b;
+}
+.memory-badge-approved {
+  background: rgba(46, 213, 115, 0.1);
+  color: #2ed573;
+}
+.memory-badge-synced {
+  background: rgba(30, 144, 255, 0.1);
+  color: #1e90ff;
+}
+.memory-badge-rejected {
+  background: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
+}
+.memory-card-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.memory-card-desc {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.memory-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aaa;
+}
+.memory-card-source {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
+}
+.memory-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+}
+.memory-action-btn {
+  padding: 4px 10px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.9);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #666;
+}
+.memory-action-btn:hover {
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.memory-action-btn.approve:hover { border-color: #2ed573; color: #2ed573; }
+.memory-action-btn.reject:hover { border-color: #ff4757; color: #ff4757; }
+.memory-action-btn.delete:hover { border-color: #ff4757; color: #ff4757; }
+.memory-action-btn.edit:hover { border-color: #1e90ff; color: #1e90ff; }
+
+/* 同步管理 */
+.memory-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.memory-stat-card {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.8);
+  text-align: center;
+}
+.memory-stat-card-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.memory-stat-card-label {
+  font-size: 11px;
+  color: #999;
+  font-weight: 500;
+}
+.memory-stat-card.purple .memory-stat-card-number { color: #8b5cf6; }
+.memory-stat-card.orange .memory-stat-card-number { color: #f0932b; }
+.memory-stat-card.green .memory-stat-card-number { color: #2ed573; }
+.memory-stat-card.blue .memory-stat-card-number { color: #1e90ff; }
+.memory-stat-card.red .memory-stat-card-number { color: #ff4757; }
+
+.memory-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.memory-agent-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.memory-agent-card {
+  padding: 16px;
+  border-radius: 10px;
+  border: 2px solid rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.8);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.memory-agent-card:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.03);
+}
+.memory-agent-card.selected {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.06);
+  box-shadow: 0 2px 12px rgba(139, 92, 246, 0.15);
+}
+.memory-agent-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+.memory-agent-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.memory-agent-desc {
+  font-size: 11px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.memory-sync-list {
+  margin-bottom: 16px;
+}
+.memory-sync-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 6px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #555;
+  background: rgba(255,255,255,0.7);
+}
+.memory-sync-item input[type="checkbox"] {
+  accent-color: #8b5cf6;
+  cursor: pointer;
+}
+.memory-sync-item-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .memory-panel {
+    width: 100%;
+  }
+}
+@media (max-width: 900px) and (min-width: 601px) {
+  .memory-panel {
+    width: 380px;
+  }
+}
 </style>
 </head>
 <body>
@@ -845,6 +1413,10 @@ svg { width: 100%; height: 100%; }
       <span class="btn-icon">💾</span>
       <span class="spinner"></span>
       保存快照
+    </button>
+    <button class="btn btn-memory" onclick="toggleMemoryPanel()" id="btnMemory">
+      <span class="btn-icon">🧠</span>
+      记忆管理
     </button>
   </div>
 </div>
@@ -928,6 +1500,23 @@ svg { width: 100%; height: 100%; }
       <div class="iq-scale-table" id="iqScaleTable"></div>
       <div id="iqSkillSummary"></div>
     </div>
+  </div>
+</div>
+
+<!-- 记忆管理面板 -->
+<div class="memory-overlay" id="memoryOverlay" onclick="toggleMemoryPanel()"></div>
+<div class="memory-panel" id="memoryPanel">
+  <div class="memory-panel-header">
+    <h3>🧠 记忆管理</h3>
+    <button class="memory-panel-close" onclick="toggleMemoryPanel()">✕</button>
+  </div>
+  <div class="memory-tabs">
+    <button class="memory-tab active" id="memTabImport" onclick="switchMemoryTab('import')">📥 文档导入</button>
+    <button class="memory-tab" id="memTabList" onclick="switchMemoryTab('list')">📋 记忆列表</button>
+    <button class="memory-tab" id="memTabSync" onclick="switchMemoryTab('sync')">🔄 同步管理</button>
+  </div>
+  <div class="memory-content" id="memoryContentArea">
+    <!-- Dynamic content rendered by JS -->
   </div>
 </div>
 
@@ -1759,6 +2348,523 @@ document.addEventListener('keydown', (e) => {
 // 窗口大小变化
 window.addEventListener('resize', () => {
   if (currentViewData || graphData) renderGraph(currentViewData || graphData);
+});
+
+// ========== 记忆管理模块 ==========
+let memoryPanelOpen = false;
+let currentMemoryTab = 'import';
+let memoryEntries = [];
+let scannedFiles = [];
+let selectedMemoryIds = new Set();
+let selectedSyncIds = new Set();
+let selectedFileIndices = new Set();
+let memoryFilters = { status: 'all', primary: 'all' };
+let memoryStats = null;
+let syncTargetAgent = 'hermes';
+let memoryExtracting = false;
+let memoryScanning = false;
+let extractResultCount = null;
+
+const MEMORY_PRIMARY_CATEGORIES = [
+  'autobiographical', 'semantic', 'episodic', 'procedural',
+  'social', 'working', 'spatial', 'emotional'
+];
+const MEMORY_STATUS_LABELS = {
+  'all': '全部', 'pending': '待审核', 'approved': '已通过',
+  'synced': '已同步', 'rejected': '已拒绝'
+};
+const MEMORY_PRIMARY_LABELS = {
+  'autobiographical': '自传体', 'semantic': '语义', 'episodic': '情景',
+  'procedural': '程序性', 'social': '社交', 'working': '工作',
+  'spatial': '空间', 'emotional': '情感'
+};
+
+function toggleMemoryPanel() {
+  memoryPanelOpen = !memoryPanelOpen;
+  document.getElementById('memoryPanel').classList.toggle('open', memoryPanelOpen);
+  document.getElementById('memoryOverlay').classList.toggle('open', memoryPanelOpen);
+  if (memoryPanelOpen) {
+    renderCurrentMemoryTab();
+  }
+}
+
+function switchMemoryTab(tab) {
+  currentMemoryTab = tab;
+  document.querySelectorAll('.memory-tab').forEach(t => t.classList.remove('active'));
+  const tabMap = { 'import': 'memTabImport', 'list': 'memTabList', 'sync': 'memTabSync' };
+  document.getElementById(tabMap[tab]).classList.add('active');
+  renderCurrentMemoryTab();
+}
+
+function renderCurrentMemoryTab() {
+  if (currentMemoryTab === 'import') renderImportTab();
+  else if (currentMemoryTab === 'list') { loadMemories(); }
+  else if (currentMemoryTab === 'sync') { loadMemoryStats(); }
+}
+
+// ===== Tab 1: 文档导入 =====
+function renderImportTab() {
+  const area = document.getElementById('memoryContentArea');
+  let html = `
+    <div class="memory-input-group">
+      <input type="text" id="memDocDir" placeholder="输入文档目录路径，如 /path/to/docs" value="">
+      <button class="memory-btn memory-btn-primary" onclick="scanDocuments()" ${memoryScanning ? 'disabled' : ''}>
+        ${memoryScanning ? '⏳' : '🔍'} 扫描
+      </button>
+    </div>`;
+
+  if (memoryScanning) {
+    html += `<div class="memory-progress">
+      <div class="memory-progress-spinner"></div>
+      <div class="memory-progress-text">正在扫描目录...</div>
+    </div>`;
+  } else if (scannedFiles.length === 0) {
+    html += `<div class="memory-empty">
+      <div class="memory-empty-icon">📂</div>
+      <div>输入目录路径后点击扫描，发现可导入的文档</div>
+    </div>`;
+  } else {
+    html += `<div class="doc-select-bar">
+      <label>
+        <input type="checkbox" id="memSelectAllFiles"
+          onchange="toggleAllFiles(this.checked)"
+          ${selectedFileIndices.size === scannedFiles.length && scannedFiles.length > 0 ? 'checked' : ''}>
+        全选
+      </label>
+      <span>共 ${scannedFiles.length} 个文件，已选 ${selectedFileIndices.size} 个</span>
+    </div>
+    <div class="doc-file-list">`;
+    scannedFiles.forEach((f, i) => {
+      const checked = selectedFileIndices.has(i) ? 'checked' : '';
+      const sizeStr = f.size ? formatFileSize(f.size) : '';
+      const typeStr = f.type || f.name.split('.').pop() || '';
+      html += `<div class="doc-file-item">
+        <input type="checkbox" ${checked} onchange="toggleFileSelect(${i}, this.checked)">
+        <div class="doc-file-name" title="${escapeHtml(f.path || f.name)}">${escapeHtml(f.name)}</div>
+        ${sizeStr ? `<span class="doc-file-meta">${sizeStr}</span>` : ''}
+        ${typeStr ? `<span class="doc-file-type">${escapeHtml(typeStr)}</span>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+
+    if (memoryExtracting) {
+      html += `<div class="memory-progress">
+        <div class="memory-progress-spinner"></div>
+        <div class="memory-progress-text">正在提取记忆... 这可能需要一些时间</div>
+      </div>`;
+    } else {
+      html += `<button class="memory-btn memory-btn-success" onclick="extractMemories()"
+        style="width:100%;padding:10px" ${selectedFileIndices.size === 0 ? 'disabled' : ''}>
+        🧬 提取记忆 (${selectedFileIndices.size} 个文件)
+      </button>`;
+    }
+
+    if (extractResultCount !== null) {
+      html += `<div class="memory-result-count">✅ 成功提取 ${extractResultCount} 条记忆</div>`;
+    }
+  }
+
+  area.innerHTML = html;
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function toggleAllFiles(checked) {
+  if (checked) {
+    scannedFiles.forEach((_, i) => selectedFileIndices.add(i));
+  } else {
+    selectedFileIndices.clear();
+  }
+  renderImportTab();
+}
+
+function toggleFileSelect(index, checked) {
+  if (checked) selectedFileIndices.add(index);
+  else selectedFileIndices.delete(index);
+  renderImportTab();
+}
+
+async function scanDocuments() {
+  const dirInput = document.getElementById('memDocDir');
+  const dir = dirInput ? dirInput.value.trim() : '';
+  if (!dir) { showToast('请输入目录路径', 'error'); return; }
+  memoryScanning = true;
+  scannedFiles = [];
+  selectedFileIndices.clear();
+  extractResultCount = null;
+  renderImportTab();
+  try {
+    const res = await fetch(`/api/documents/scan?dir=${encodeURIComponent(dir)}`);
+    const json = await res.json();
+    scannedFiles = json.files || json.data || [];
+    if (scannedFiles.length === 0) {
+      showToast('未找到可导入的文档', 'info');
+    } else {
+      showToast(`发现 ${scannedFiles.length} 个文档`, 'success');
+    }
+  } catch (e) {
+    showToast(`扫描失败: ${e.message}`, 'error');
+  }
+  memoryScanning = false;
+  renderImportTab();
+}
+
+async function extractMemories() {
+  if (selectedFileIndices.size === 0) return;
+  memoryExtracting = true;
+  extractResultCount = null;
+  renderImportTab();
+  try {
+    const files = Array.from(selectedFileIndices).map(i => scannedFiles[i].path || scannedFiles[i].name);
+    let totalExtracted = 0;
+    for (const file of files) {
+      const res = await fetch('/api/documents/extract', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file })
+      });
+      const json = await res.json();
+      totalExtracted += (json.count || json.extracted || (json.memories ? json.memories.length : 0));
+    }
+    extractResultCount = totalExtracted;
+    showToast(`✅ 成功提取 ${totalExtracted} 条记忆`, 'success');
+  } catch (e) {
+    showToast(`提取失败: ${e.message}`, 'error');
+  }
+  memoryExtracting = false;
+  renderImportTab();
+}
+
+// ===== Tab 2: 记忆列表 =====
+async function loadMemories() {
+  const area = document.getElementById('memoryContentArea');
+  area.innerHTML = `<div class="memory-progress">
+    <div class="memory-progress-spinner"></div>
+    <div class="memory-progress-text">加载记忆列表...</div>
+  </div>`;
+  try {
+    let url = '/api/memories?t=' + Date.now();
+    if (memoryFilters.status !== 'all') url += `&status=${memoryFilters.status}`;
+    if (memoryFilters.primary !== 'all') url += `&primary=${memoryFilters.primary}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    memoryEntries = json.entries || json.data || json.memories || json || [];
+    if (Array.isArray(json)) memoryEntries = json;
+  } catch (e) {
+    showToast(`加载失败: ${e.message}`, 'error');
+    memoryEntries = [];
+  }
+  renderMemoryList();
+}
+
+function renderMemoryList() {
+  const area = document.getElementById('memoryContentArea');
+  let html = `<div class="memory-filter">
+    <select id="memFilterStatus" onchange="memoryFilters.status=this.value; loadMemories()">
+      ${Object.entries(MEMORY_STATUS_LABELS).map(([k,v]) =>
+        `<option value="${k}" ${memoryFilters.status===k?'selected':''}>${v}</option>`
+      ).join('')}
+    </select>
+    <select id="memFilterPrimary" onchange="memoryFilters.primary=this.value; loadMemories()">
+      <option value="all" ${memoryFilters.primary==='all'?'selected':''}>全部分类</option>
+      ${MEMORY_PRIMARY_CATEGORIES.map(c =>
+        `<option value="${c}" ${memoryFilters.primary===c?'selected':''}>${MEMORY_PRIMARY_LABELS[c] || c}</option>`
+      ).join('')}
+    </select>
+  </div>`;
+
+  html += `<div class="memory-bulk">
+    <label>
+      <input type="checkbox" id="memSelectAll" onchange="toggleAllMemories(this.checked)"
+        ${selectedMemoryIds.size > 0 && selectedMemoryIds.size === memoryEntries.length ? 'checked' : ''}>
+      全选
+    </label>
+    <button class="memory-btn memory-btn-success" onclick="bulkAction('approved')">✅ 通过</button>
+    <button class="memory-btn memory-btn-danger" onclick="bulkAction('rejected')">❌ 拒绝</button>
+    <button class="memory-btn memory-btn-secondary" onclick="bulkAction('delete')">🗑️ 删除</button>
+    <span class="memory-entry-count">共 ${memoryEntries.length} 条</span>
+  </div>`;
+
+  if (memoryEntries.length === 0) {
+    html += `<div class="memory-empty">
+      <div class="memory-empty-icon">📭</div>
+      <div>暂无记忆条目</div>
+    </div>`;
+  } else {
+    memoryEntries.forEach(m => {
+      const checked = selectedMemoryIds.has(m.id) ? 'checked' : '';
+      const statusClass = `memory-badge-${m.status || 'pending'}`;
+      const statusText = MEMORY_STATUS_LABELS[m.status] || m.status || '待审核';
+      const primaryLabel = MEMORY_PRIMARY_LABELS[m.primary] || m.primary || '';
+      const date = m.createdAt ? new Date(m.createdAt).toLocaleDateString('zh-CN') : '';
+      html += `<div class="memory-card">
+        <div class="memory-card-header">
+          <input type="checkbox" class="memory-card-check" ${checked}
+            onchange="toggleMemorySelect('${m.id}', this.checked)">
+          <div class="memory-card-label">${escapeHtml(m.label || m.text || '')}</div>
+          <span class="memory-badge memory-badge-status ${statusClass}">${statusText}</span>
+        </div>
+        <div class="memory-card-badges">
+          ${primaryLabel ? `<span class="memory-badge memory-badge-primary">${primaryLabel}</span>` : ''}
+          ${m.secondary ? `<span class="memory-badge memory-badge-secondary">${escapeHtml(m.secondary)}</span>` : ''}
+        </div>
+        ${m.description ? `<div class="memory-card-desc">${escapeHtml(m.description)}</div>` : ''}
+        <div class="memory-card-meta">
+          <span class="memory-card-source" title="${escapeHtml(m.source_file || '')}">📄 ${escapeHtml(m.source_file || '未知来源')}</span>
+          <span>${date}</span>
+        </div>
+        <div class="memory-actions">
+          <button class="memory-action-btn approve" onclick="approveMemory('${m.id}')">✅ 通过</button>
+          <button class="memory-action-btn reject" onclick="rejectMemory('${m.id}')">❌ 拒绝</button>
+          <button class="memory-action-btn delete" onclick="deleteMemory('${m.id}')">🗑️ 删除</button>
+        </div>
+      </div>`;
+    });
+  }
+  area.innerHTML = html;
+}
+
+function toggleAllMemories(checked) {
+  selectedMemoryIds.clear();
+  if (checked) {
+    memoryEntries.forEach(m => selectedMemoryIds.add(m.id));
+  }
+  renderMemoryList();
+}
+
+function toggleMemorySelect(id, checked) {
+  if (checked) selectedMemoryIds.add(id);
+  else selectedMemoryIds.delete(id);
+  // Don't re-render the whole list, just let the checkbox state remain
+}
+
+async function approveMemory(id) {
+  try {
+    await fetch(`/api/memories/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'approved' })
+    });
+    showToast('✅ 已通过', 'success');
+    loadMemories();
+  } catch (e) {
+    showToast(`操作失败: ${e.message}`, 'error');
+  }
+}
+
+async function rejectMemory(id) {
+  try {
+    await fetch(`/api/memories/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'rejected' })
+    });
+    showToast('❌ 已拒绝', 'success');
+    loadMemories();
+  } catch (e) {
+    showToast(`操作失败: ${e.message}`, 'error');
+  }
+}
+
+async function deleteMemory(id) {
+  if (!confirm('确定要删除这条记忆吗？')) return;
+  try {
+    await fetch(`/api/memories/${id}`, { method: 'DELETE' });
+    showToast('🗑️ 已删除', 'success');
+    selectedMemoryIds.delete(id);
+    loadMemories();
+  } catch (e) {
+    showToast(`删除失败: ${e.message}`, 'error');
+  }
+}
+
+async function bulkAction(action) {
+  if (selectedMemoryIds.size === 0) {
+    showToast('请先选择条目', 'info');
+    return;
+  }
+  const ids = Array.from(selectedMemoryIds);
+  if (action === 'delete') {
+    if (!confirm(`确定删除 ${ids.length} 条记忆？`)) return;
+    try {
+      for (const id of ids) {
+        await fetch(`/api/memories/${id}`, { method: 'DELETE' });
+      }
+      showToast(`🗑️ 已删除 ${ids.length} 条`, 'success');
+    } catch (e) {
+      showToast(`批量删除失败: ${e.message}`, 'error');
+    }
+  } else {
+    try {
+      await fetch('/api/memories/bulk-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids, status: action })
+      });
+      showToast(`✅ 已批量${action === 'approved' ? '通过' : '拒绝'} ${ids.length} 条`, 'success');
+    } catch (e) {
+      showToast(`批量操作失败: ${e.message}`, 'error');
+    }
+  }
+  selectedMemoryIds.clear();
+  loadMemories();
+}
+
+// ===== Tab 3: 同步管理 =====
+async function loadMemoryStats() {
+  const area = document.getElementById('memoryContentArea');
+  area.innerHTML = `<div class="memory-progress">
+    <div class="memory-progress-spinner"></div>
+    <div class="memory-progress-text">加载统计数据...</div>
+  </div>`;
+  try {
+    const res = await fetch('/api/memories/stats?t=' + Date.now());
+    memoryStats = await res.json();
+  } catch (e) {
+    memoryStats = { total: 0, pending: 0, approved: 0, synced: 0, rejected: 0 };
+  }
+  // Also load approved entries for sync list
+  try {
+    const res2 = await fetch('/api/memories?status=approved&t=' + Date.now());
+    const json2 = await res2.json();
+    const approved = json2.entries || json2.data || json2.memories || json2 || [];
+    memoryStats._approvedEntries = Array.isArray(approved) ? approved : [];
+  } catch (e) {
+    memoryStats._approvedEntries = [];
+  }
+  renderSyncTab();
+}
+
+function renderSyncTab() {
+  const area = document.getElementById('memoryContentArea');
+  const s = memoryStats || { total: 0, pending: 0, approved: 0, synced: 0, rejected: 0 };
+  const approvedEntries = s._approvedEntries || [];
+
+  let html = `<div class="memory-section-title">📊 记忆统计</div>
+  <div class="memory-stat-grid">
+    <div class="memory-stat-card purple">
+      <div class="memory-stat-card-number">${s.total || 0}</div>
+      <div class="memory-stat-card-label">总记忆数</div>
+    </div>
+    <div class="memory-stat-card orange">
+      <div class="memory-stat-card-number">${s.pending || 0}</div>
+      <div class="memory-stat-card-label">待审核</div>
+    </div>
+    <div class="memory-stat-card green">
+      <div class="memory-stat-card-number">${s.approved || 0}</div>
+      <div class="memory-stat-card-label">已通过</div>
+    </div>
+    <div class="memory-stat-card blue">
+      <div class="memory-stat-card-number">${s.synced || 0}</div>
+      <div class="memory-stat-card-label">已同步</div>
+    </div>
+  </div>`;
+
+  html += `<div class="memory-section-title">🤖 同步目标</div>
+  <div class="memory-agent-grid">
+    <div class="memory-agent-card ${syncTargetAgent === 'hermes' ? 'selected' : ''}" onclick="selectSyncAgent('hermes')">
+      <div class="memory-agent-icon">🏛️</div>
+      <div class="memory-agent-name">Hermes</div>
+      <div class="memory-agent-desc">通用智能助手</div>
+    </div>
+    <div class="memory-agent-card ${syncTargetAgent === 'openclaw' ? 'selected' : ''}" onclick="selectSyncAgent('openclaw')">
+      <div class="memory-agent-icon">🦀</div>
+      <div class="memory-agent-name">OpenClaw</div>
+      <div class="memory-agent-desc">专业编程助手</div>
+    </div>
+  </div>`;
+
+  html += `<div class="memory-section-title">📋 待同步条目 (已通过)</div>`;
+  if (approvedEntries.length === 0) {
+    html += `<div class="memory-empty">
+      <div class="memory-empty-icon">✨</div>
+      <div>没有待同步的条目，请先审核记忆</div>
+    </div>`;
+  } else {
+    html += `<div class="doc-select-bar">
+      <label>
+        <input type="checkbox" onchange="toggleAllSyncItems(this.checked)"
+          ${selectedSyncIds.size === approvedEntries.length && approvedEntries.length > 0 ? 'checked' : ''}>
+        全选
+      </label>
+      <span>已选 ${selectedSyncIds.size} / ${approvedEntries.length}</span>
+    </div>
+    <div class="memory-sync-list">`;
+    approvedEntries.forEach(m => {
+      const checked = selectedSyncIds.has(m.id) ? 'checked' : '';
+      html += `<div class="memory-sync-item">
+        <input type="checkbox" ${checked} onchange="toggleSyncItem('${m.id}', this.checked)">
+        <span class="memory-sync-item-label">${escapeHtml(m.label || m.text || '')}</span>
+        <span class="memory-badge memory-badge-primary">${MEMORY_PRIMARY_LABELS[m.primary] || m.primary || ''}</span>
+      </div>`;
+    });
+    html += `</div>
+    <button class="memory-btn memory-btn-primary" onclick="syncMemories()"
+      style="width:100%;padding:10px" ${selectedSyncIds.size === 0 ? 'disabled' : ''}>
+      🚀 同步到 ${syncTargetAgent === 'hermes' ? 'Hermes' : 'OpenClaw'} (${selectedSyncIds.size} 条)
+    </button>`;
+  }
+
+  area.innerHTML = html;
+}
+
+function selectSyncAgent(agent) {
+  syncTargetAgent = agent;
+  renderSyncTab();
+}
+
+function toggleAllSyncItems(checked) {
+  selectedSyncIds.clear();
+  if (checked && memoryStats && memoryStats._approvedEntries) {
+    memoryStats._approvedEntries.forEach(m => selectedSyncIds.add(m.id));
+  }
+  renderSyncTab();
+}
+
+function toggleSyncItem(id, checked) {
+  if (checked) selectedSyncIds.add(id);
+  else selectedSyncIds.delete(id);
+  renderSyncTab();
+}
+
+async function syncMemories() {
+  if (selectedSyncIds.size === 0) {
+    showToast('请先选择要同步的条目', 'info');
+    return;
+  }
+  const ids = Array.from(selectedSyncIds);
+  try {
+    const res = await fetch('/api/memories/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids, agent: syncTargetAgent })
+    });
+    const json = await res.json();
+    const syncedCount = json.synced || json.count || ids.length;
+    showToast(`🚀 已同步 ${syncedCount} 条记忆到 ${syncTargetAgent === 'hermes' ? 'Hermes' : 'OpenClaw'}`, 'success');
+    selectedSyncIds.clear();
+    loadMemoryStats();
+  } catch (e) {
+    showToast(`同步失败: ${e.message}`, 'error');
+  }
+}
+
+// Escape key also closes memory panel
+const _origKeydown = document.onkeydown;
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && memoryPanelOpen) {
+    toggleMemoryPanel();
+  }
 });
 </script>
 

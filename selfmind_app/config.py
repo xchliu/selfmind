@@ -54,6 +54,15 @@ DEFAULT_CONFIG = {
         "遵守|规则|原则|follow|rule": "follows",
         "关注|执行|分析|参与|work|focus": "works on",
     },
+    "llm": {
+        "base_url": os.environ.get("LLM_BASE_URL", "https://api.openai.com/v1"),
+        "api_key": os.environ.get("LLM_API_KEY", ""),
+        "model": os.environ.get("LLM_MODEL", "gpt-4o-mini"),
+        "max_tokens": 4096,
+    },
+    "documents": {
+        "watch_dir": os.environ.get("SELFMIND_DOCS_DIR", ""),
+    },
 }
 
 
