@@ -26,7 +26,7 @@ body {
     linear-gradient(90deg, rgba(30, 144, 255, 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
   z-index: 0;
-  animation: gridPulse 8s ease-in-out infinite;
+  /* animation removed — static grid for better readability */
 }
 
 @keyframes gridPulse {
@@ -61,8 +61,8 @@ body {
   height: 32px;
   border-radius: 50%;
   background: radial-gradient(circle, #ff4757 0%, #ff475744 70%);
-  box-shadow: 0 0 20px #ff475766;
-  animation: corePulse 3s ease-in-out infinite;
+  /* animation removed — static glow for cleaner look */
+  box-shadow: 0 0 15px #ff475744;
 }
 
 @keyframes corePulse {
@@ -1425,6 +1425,10 @@ svg { width: 100%; height: 100%; }
       <span class="spinner"></span>
       保存快照
     </button>
+    <button class="btn" onclick="toggleAllNodes()" id="btnToggleAll" style="border-color: rgba(16,185,129,0.4); color: #10B981;">
+      <span class="btn-icon" id="toggleAllIcon">📂</span>
+      <span id="toggleAllText">展开全部</span>
+    </button>
     <button class="btn btn-memory" onclick="toggleMemoryPanel()" id="btnMemory">
       <span class="btn-icon">🧠</span>
       记忆管理
@@ -1697,6 +1701,47 @@ function toggleNodeExpansion(node) {
   // 重新渲染
   renderGraph();
   updateStats();
+  updateToggleAllButton();
+  updateTimelineRuler();
+}
+
+// 全部展开/全部折叠
+function toggleAllNodes() {
+  const data = currentViewData || graphData;
+  if (!data) return;
+  
+  // 找出所有可折叠节点
+  const collapsibleNodes = data.nodes.filter(n => isCollapsible(n, data.links));
+  
+  // 如果有任何已展开的，就全部折叠；否则全部展开
+  const anyExpanded = collapsibleNodes.some(n => expandedNodes.has(n.id));
+  
+  if (anyExpanded) {
+    // 全部折叠
+    expandedNodes.clear();
+  } else {
+    // 全部展开
+    collapsibleNodes.forEach(n => expandedNodes.add(n.id));
+  }
+  
+  renderGraph();
+  updateStats();
+  updateToggleAllButton();
+  updateTimelineRuler();
+}
+
+// 更新按钮文字
+function updateToggleAllButton() {
+  const data = currentViewData || graphData;
+  if (!data) return;
+  const collapsibleNodes = data.nodes.filter(n => isCollapsible(n, data.links));
+  const anyExpanded = collapsibleNodes.some(n => expandedNodes.has(n.id));
+  const icon = document.getElementById('toggleAllIcon');
+  const text = document.getElementById('toggleAllText');
+  if (icon && text) {
+    icon.textContent = anyExpanded ? '📁' : '📂';
+    text.textContent = anyExpanded ? '折叠全部' : '展开全部';
+  }
 }
 
 function parseTs(ts) {
@@ -1800,9 +1845,11 @@ function updateTimelineRuler() {
   endLabel.textContent = `终点 ${formatDate(last)}`;
   currentLabel.textContent = `当前：${formatDateTime(current)}`;
 
-  const visibleNodes = (currentViewData?.nodes || []).length;
-  const visibleLinks = (currentViewData?.links || []).length;
-  stats.innerHTML = `节点 ${visibleNodes} · 连线 ${visibleLinks}`;
+  const visibleData = getVisibleData(currentViewData);
+  const visibleNodes = visibleData ? visibleData.nodes.length : 0;
+  const visibleLinks = visibleData ? visibleData.links.length : 0;
+  const totalNodes = (currentViewData?.nodes || []).length;
+  stats.innerHTML = `节点 ${visibleNodes}<span style="font-size:10px;color:#999">/${totalNodes}</span> · 连线 ${visibleLinks}`;
   renderTimelineAxis();
 }
 
@@ -1987,17 +2034,23 @@ function applyFilters() {
 // 统计面板
 function updateStats(data = currentViewData || graphData) {
   if (!data) return;
-  // 按 primary 一级分类统计
+  // 获取折叠后的可见数据
+  const visible = getVisibleData(data);
+  const totalNodes = data.nodes.length;
+  const visibleNodeCount = visible.nodes.length;
+  const totalLinks = data.links.length;
+  const visibleLinkCount = visible.links.length;
+  // 按 primary 一级分类统计（全量）
   const primCounts = {};
   data.nodes.forEach(n => {
     if (n.primary) primCounts[n.primary] = (primCounts[n.primary] || 0) + 1;
   });
-  // 统计技能和记忆
+  // 统计技能和记忆（全量）
   const skillCount = data.nodes.filter(n => n.category === 'skill').length;
   const memCount = data.nodes.filter(n => n.category === 'memory').length;
   document.getElementById('statsPanel').innerHTML = `
-    <div class="stat-row"><span class="stat-label">节点</span><span class="stat-value">${data.nodes.length}</span></div>
-    <div class="stat-row"><span class="stat-label">连线</span><span class="stat-value">${data.links.length}</span></div>
+    <div class="stat-row"><span class="stat-label">节点</span><span class="stat-value">${visibleNodeCount}<span style="font-size:9px;color:#999">/${totalNodes}</span></span></div>
+    <div class="stat-row"><span class="stat-label">连线</span><span class="stat-value">${visibleLinkCount}<span style="font-size:9px;color:#999">/${totalLinks}</span></span></div>
     <div class="stat-row"><span class="stat-label">记忆</span><span class="stat-value">${memCount}</span></div>
     <div class="stat-row"><span class="stat-label">技能</span><span class="stat-value">${skillCount}</span></div>
     <div class="divider"></div>
@@ -2129,8 +2182,9 @@ function renderGraph(data = currentViewData || graphData) {
 
   // 力导向
   simulation = d3.forceSimulation(nodes)
-    .alphaDecay(0.03)        // 更快衰减，默认0.0228
-    .velocityDecay(0.45)     // 更高阻尼，减少抖动
+    .alphaDecay(0.05)        // 快速衰减，尽快稳定
+    .alphaMin(0.01)          // 较高阈值，更早停止
+    .velocityDecay(0.55)     // 高阻尼，大幅减少抖动
     .force('link', d3.forceLink(links).id(d => d.id).distance(d => {
       const src = d.source.category || '', tgt = d.target.category || '';
       // center → primary
