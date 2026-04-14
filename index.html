@@ -1600,6 +1600,17 @@ let timelinePoints = [];
 let activeTimelineIndex = -1;
 let expandedNodes = new Set(); // 已展开的可折叠节点ID
 
+// 持久化的 D3 选择集和容器（避免重建）
+let _svg = null;
+let _g = null;
+let _zoom = null;
+let _linkGroup = null;
+let _nodeGroup = null;
+let _graphWidth = 0;
+let _graphHeight = 0;
+// 保存节点位置映射（id -> {x, y}）用于增量更新时保留位置
+let _nodePositions = {};
+
 // 判断节点是否可折叠（有子节点的中间层级）
 function isCollapsible(node, allLinks) {
   const cats = ['secondary', 'skill_category', 'skill_subcategory'];
@@ -1698,8 +1709,8 @@ function toggleNodeExpansion(node) {
   } else {
     expandedNodes.add(node.id);
   }
-  // 重新渲染
-  renderGraph();
+  // 增量更新（不重建整个图）
+  updateVisibleGraph();
   updateStats();
   updateToggleAllButton();
   updateTimelineRuler();
@@ -1724,7 +1735,7 @@ function toggleAllNodes() {
     collapsibleNodes.forEach(n => expandedNodes.add(n.id));
   }
   
-  renderGraph();
+  updateVisibleGraph();
   updateStats();
   updateToggleAllButton();
   updateTimelineRuler();
@@ -2134,158 +2145,70 @@ async function loadData() {
   applyTimepoint(timelinePoints.length - 1);
 }
 
-function renderGraph(data = currentViewData || graphData) {
-  if (!data) return;
+// 节点大小函数（层级递减: center > primary > secondary > memory/skill_cat > skill_subcat > skill）
+function nodeRadius(d) {
+  if (d.category === 'center') return 24;
+  if (d.category === 'primary') return 14;
+  if (d.category === 'secondary') return 9;
+  if (d.category === 'memory') return 7;
+  if (d.category === 'skill_category') return 7;
+  if (d.category === 'skill_subcategory') return 5;
+  if (d.category === 'skill') return 3.5;
+  return 8;
+}
+function glowRadius(d) {
+  if (d.category === 'center') return 42;
+  if (d.category === 'primary') return 26;
+  if (d.category === 'secondary') return 16;
+  if (d.category === 'memory') return 12;
+  if (d.category === 'skill_category') return 12;
+  if (d.category === 'skill_subcategory') return 8;
+  if (d.category === 'skill') return 5;
+  return 14;
+}
 
-  // 应用折叠过滤
-  const visibleData = getVisibleData(data);
+// 力距离配置
+function linkDistance(d) {
+  const src = d.source.category || '', tgt = d.target.category || '';
+  if (src === 'center' && tgt === 'primary') return 200;
+  if (src === 'primary' && tgt === 'secondary') return 120;
+  if (src === 'secondary' && tgt === 'memory') return 80;
+  if (tgt === 'skill_category' || src === 'skill_category') return 60;
+  if (tgt === 'skill_subcategory' || src === 'skill_subcategory') return 45;
+  if (src === 'skill_subcategory' && tgt === 'skill') return 35;
+  if ((src === 'skill_category' || src === 'secondary') && tgt === 'skill') return 45;
+  if (src === 'skill' && tgt === 'skill') return 25;
+  return 100;
+}
 
-  const container = document.getElementById('graph');
-  container.innerHTML = '';
+// 力斥力配置
+function chargeStrength(d) {
+  if (d.category === 'center') return -600;
+  if (d.category === 'primary') return -300;
+  if (d.category === 'secondary') return -150;
+  if (d.category === 'memory') return -80;
+  if (d.category === 'skill_category') return -80;
+  if (d.category === 'skill_subcategory') return -50;
+  if (d.category === 'skill') return -15;
+  return -100;
+}
 
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+// 碰撞半径
+function collisionRadius(d) {
+  if (d.category === 'center') return 50;
+  if (d.category === 'primary') return 30;
+  if (d.category === 'secondary') return 18;
+  if (d.category === 'memory') return 14;
+  if (d.category === 'skill_category') return 14;
+  if (d.category === 'skill_subcategory') return 10;
+  if (d.category === 'skill') return 5;
+  return 20;
+}
 
-  const svg = d3.select('#graph').append('svg')
-    .attr('width', width)
-    .attr('height', height);
-
-  // 背景点击取消选中
-  svg.on('click', (e) => {
-    if (e.target.tagName === 'svg' || e.target.tagName === 'rect') hideDetail();
-  });
-
-  const g = svg.append('g');
-
-  // Zoom
-  const zoom = d3.zoom()
-    .scaleExtent([0.3, 4])
-    .on('zoom', (e) => g.attr('transform', e.transform));
-  svg.call(zoom);
-
-  // 定义发光滤镜（为每个一级分类 + center 创建）
-  const defs = svg.append('defs');
-  const glowDefs = { ...PRIMARY_COLORS, center: { color: '#FFD700' } };
-  Object.entries(glowDefs).forEach(([key, cat]) => {
-    const filter = defs.append('filter').attr('id', `glow-${key}`).attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
-    filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'blur');
-    filter.append('feFlood').attr('flood-color', cat.color).attr('flood-opacity', '0.6').attr('result', 'color');
-    filter.append('feComposite').attr('in', 'color').attr('in2', 'blur').attr('operator', 'in').attr('result', 'glow');
-    const merge = filter.append('feMerge');
-    merge.append('feMergeNode').attr('in', 'glow');
-    merge.append('feMergeNode').attr('in', 'SourceGraphic');
-  });
-
-  // 深拷贝数据避免 D3 修改原始数据
-  const nodes = visibleData.nodes.map(d => ({ ...d }));
-  const links = visibleData.links.map(d => ({ ...d }));
-
-  // 力导向
-  simulation = d3.forceSimulation(nodes)
-    .alphaDecay(0.05)        // 快速衰减，尽快稳定
-    .alphaMin(0.01)          // 较高阈值，更早停止
-    .velocityDecay(0.55)     // 高阻尼，大幅减少抖动
-    .force('link', d3.forceLink(links).id(d => d.id).distance(d => {
-      const src = d.source.category || '', tgt = d.target.category || '';
-      // center → primary
-      if (src === 'center' && tgt === 'primary') return 200;
-      // primary → secondary
-      if (src === 'primary' && tgt === 'secondary') return 120;
-      // secondary → memory
-      if (src === 'secondary' && tgt === 'memory') return 80;
-      // skill hierarchy
-      if (tgt === 'skill_category' || src === 'skill_category') return 60;
-      if (tgt === 'skill_subcategory' || src === 'skill_subcategory') return 45;
-      if (src === 'skill_subcategory' && tgt === 'skill') return 35;
-      if ((src === 'skill_category' || src === 'secondary') && tgt === 'skill') return 45;
-      // skill cross-links
-      if (src === 'skill' && tgt === 'skill') return 25;
-      return 100;
-    }))
-    .force('charge', d3.forceManyBody().strength(d => {
-      if (d.category === 'center') return -600;
-      if (d.category === 'primary') return -300;
-      if (d.category === 'secondary') return -150;
-      if (d.category === 'memory') return -80;
-      if (d.category === 'skill_category') return -80;
-      if (d.category === 'skill_subcategory') return -50;
-      if (d.category === 'skill') return -15;
-      return -100;
-    }))
-    .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collision', d3.forceCollide().radius(d => {
-      if (d.category === 'center') return 50;
-      if (d.category === 'primary') return 30;
-      if (d.category === 'secondary') return 18;
-      if (d.category === 'memory') return 14;
-      if (d.category === 'skill_category') return 14;
-      if (d.category === 'skill_subcategory') return 10;
-      if (d.category === 'skill') return 5;
-      return 20;
-    }))
-    .force('x', d3.forceX(width / 2).strength(0.04))
-    .force('y', d3.forceY(height / 2).strength(0.04));
-
-  // 连线
-  const linkGroup = g.selectAll('.link-group')
-    .data(links)
-    .join('g')
-    .attr('class', 'link-group');
-
-  linkGroup.append('line').attr('class', 'link-line');
-
-  linkGroup.append('text')
-    .attr('class', 'link-label')
-    .text(d => d.label || '');
-
-  // 节点组
-  const nodeGroup = g.selectAll('.node-group')
-    .data(nodes)
-    .join('g')
-    .attr('class', 'node-group')
-    .on('click', (e, d) => {
-      e.stopPropagation();
-      const fullData = currentViewData || graphData;
-      if (isCollapsible(d, fullData ? fullData.links : [])) {
-        toggleNodeExpansion(d);
-      } else {
-        showDetail(d);
-      }
-    })
-    .on('dblclick', (e, d) => {
-      e.stopPropagation();
-      showDetail(d);
-    })
-    .call(d3.drag()
-      .on('start', (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-      .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
-      .on('end', (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
-    );
-
-  // 节点大小函数（层级递减: center > primary > secondary > memory/skill_cat > skill_subcat > skill）
-  function nodeRadius(d) {
-    if (d.category === 'center') return 24;
-    if (d.category === 'primary') return 14;
-    if (d.category === 'secondary') return 9;
-    if (d.category === 'memory') return 7;
-    if (d.category === 'skill_category') return 7;
-    if (d.category === 'skill_subcategory') return 5;
-    if (d.category === 'skill') return 3.5;
-    return 8;
-  }
-  function glowRadius(d) {
-    if (d.category === 'center') return 42;
-    if (d.category === 'primary') return 26;
-    if (d.category === 'secondary') return 16;
-    if (d.category === 'memory') return 12;
-    if (d.category === 'skill_category') return 12;
-    if (d.category === 'skill_subcategory') return 8;
-    if (d.category === 'skill') return 5;
-    return 14;
-  }
-
+// 为节点组设置内部 DOM 元素（发光圈、主圆、标签、折叠指示器）
+function setupNodeDOM(sel) {
   // 发光底圈
-  nodeGroup.append('circle')
+  sel.append('circle')
     .attr('class', 'node-glow')
     .attr('r', d => glowRadius(d))
     .attr('fill', d => getNodeColor(d))
@@ -2298,19 +2221,18 @@ function renderGraph(data = currentViewData || graphData) {
     });
 
   // 主圆
-  nodeGroup.append('circle')
+  sel.append('circle')
     .attr('class', 'node-circle')
     .attr('r', d => nodeRadius(d))
     .attr('fill', d => getNodeColor(d))
     .attr('stroke', d => getNodeColor(d) + '88')
     .attr('filter', d => {
-      // 用 primary 分类的 glow 滤镜
       const key = d.primary || d.category;
       return `url(#glow-${key})`;
     });
 
-  // 标签（skill/skill_subcategory/memory 默认隐藏，点击展开才显示）
-  nodeGroup.append('text')
+  // 标签
+  sel.append('text')
     .attr('class', 'node-label')
     .attr('dy', d => {
       if (d.category === 'center') return 40;
@@ -2338,23 +2260,28 @@ function renderGraph(data = currentViewData || graphData) {
       if (d.category === 'primary') return getNodeColor(d);
       return null;
     })
-    .attr('display', d => {
-      // 默认只显示 center, primary, secondary 的标签
-      if (['center', 'primary', 'secondary'].includes(d.category)) return 'block';
-      return 'none';
-    });
+    .attr('display', 'block')
+    .style('opacity', d => d.category === 'skill' ? 0.7 : 1);
 
-  // 折叠/展开指示器（+/- 标记和子节点数量）
+  return sel;
+}
+
+// 更新折叠指示器（无需重建节点）
+function updateCollapseIndicators() {
   const fullData = currentViewData || graphData;
-  nodeGroup.filter(d => {
-    return isCollapsible(d, fullData ? fullData.links : []);
-  }).each(function(d) {
+  if (!fullData) return;
+
+  d3.selectAll('.node-group').each(function(d) {
     const g = d3.select(this);
+    // 删除旧指示器
+    g.selectAll('.collapse-indicator, .collapse-indicator-text').remove();
+
+    if (!isCollapsible(d, fullData.links)) return;
+
     const isExpanded = expandedNodes.has(d.id);
-    const descendantCount = fullData ? getDescendantIds(d.id, fullData.nodes, fullData.links).size : 0;
+    const descendantCount = getDescendantIds(d.id, fullData.nodes, fullData.links).size;
     const r = nodeRadius(d);
 
-    // 展开/折叠标记（右上角小圆）
     g.append('circle')
       .attr('class', 'collapse-indicator')
       .attr('cx', r + 2)
@@ -2377,47 +2304,275 @@ function renderGraph(data = currentViewData || graphData) {
       .attr('pointer-events', 'none')
       .text(isExpanded ? '−' : descendantCount);
   });
+}
 
-  // 显示所有可见节点的标签（包括展开后的子节点）
-  nodeGroup.each(function(d) {
-    const label = d3.select(this).select('.node-label');
-    if (['center', 'primary', 'secondary', 'skill_category'].includes(d.category)) {
-      label.attr('display', 'block');
-    } else if (d.category === 'skill_subcategory' || d.category === 'memory') {
-      // 如果节点可见，也显示标签
-      label.attr('display', 'block');
-    } else if (d.category === 'skill') {
-      label.attr('display', 'block').style('font-size', '7px').style('opacity', 0.7);
-    }
+// ========== renderGraph: 首次完整渲染 ==========
+function renderGraph(data = currentViewData || graphData) {
+  if (!data) return;
+
+  const visibleData = getVisibleData(data);
+  const container = document.getElementById('graph');
+  container.innerHTML = '';
+
+  _graphWidth = container.clientWidth;
+  _graphHeight = container.clientHeight;
+
+  _svg = d3.select('#graph').append('svg')
+    .attr('width', _graphWidth)
+    .attr('height', _graphHeight);
+
+  _svg.on('click', (e) => {
+    if (e.target.tagName === 'svg' || e.target.tagName === 'rect') hideDetail();
   });
 
-  // Center 节点脉冲动画
-  nodeGroup.filter(d => d.category === 'center')
+  _g = _svg.append('g');
+
+  _zoom = d3.zoom()
+    .scaleExtent([0.3, 4])
+    .on('zoom', (e) => _g.attr('transform', e.transform));
+  _svg.call(_zoom);
+
+  // 发光滤镜（只创建一次）
+  const defs = _svg.append('defs');
+  const glowDefs = { ...PRIMARY_COLORS, center: { color: '#FFD700' } };
+  Object.entries(glowDefs).forEach(([key, cat]) => {
+    const filter = defs.append('filter').attr('id', `glow-${key}`).attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+    filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'blur');
+    filter.append('feFlood').attr('flood-color', cat.color).attr('flood-opacity', '0.6').attr('result', 'color');
+    filter.append('feComposite').attr('in', 'color').attr('in2', 'blur').attr('operator', 'in').attr('result', 'glow');
+    const merge = filter.append('feMerge');
+    merge.append('feMergeNode').attr('in', 'glow');
+    merge.append('feMergeNode').attr('in', 'SourceGraphic');
+  });
+
+  // 连线层和节点层分组（连线在下，节点在上）
+  _g.append('g').attr('class', 'links-layer');
+  _g.append('g').attr('class', 'nodes-layer');
+
+  // 深拷贝数据
+  const nodes = visibleData.nodes.map(d => ({ ...d }));
+  const links = visibleData.links.map(d => ({ ...d }));
+
+  // 力导向
+  simulation = d3.forceSimulation(nodes)
+    .alphaDecay(0.05)
+    .alphaMin(0.01)
+    .velocityDecay(0.55)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(linkDistance))
+    .force('charge', d3.forceManyBody().strength(chargeStrength))
+    .force('center', d3.forceCenter(_graphWidth / 2, _graphHeight / 2))
+    .force('collision', d3.forceCollide().radius(collisionRadius))
+    .force('x', d3.forceX(_graphWidth / 2).strength(0.04))
+    .force('y', d3.forceY(_graphHeight / 2).strength(0.04));
+
+  // 用 D3 data-join 渲染连线
+  _linkGroup = _g.select('.links-layer').selectAll('.link-group')
+    .data(links, d => `${d.source.id || d.source}-${d.target.id || d.target}`)
+    .join(enter => {
+      const lg = enter.append('g').attr('class', 'link-group');
+      lg.append('line').attr('class', 'link-line');
+      lg.append('text').attr('class', 'link-label').text(d => d.label || '');
+      return lg;
+    });
+
+  // 用 D3 data-join 渲染节点
+  _nodeGroup = _g.select('.nodes-layer').selectAll('.node-group')
+    .data(nodes, d => d.id)
+    .join(enter => {
+      const ng = enter.append('g')
+        .attr('class', 'node-group');
+      setupNodeDOM(ng);
+      return ng;
+    });
+
+  // 事件绑定
+  _nodeGroup
+    .on('click', (e, d) => {
+      e.stopPropagation();
+      const fullData = currentViewData || graphData;
+      if (isCollapsible(d, fullData ? fullData.links : [])) {
+        toggleNodeExpansion(d);
+      } else {
+        showDetail(d);
+      }
+    })
+    .on('dblclick', (e, d) => {
+      e.stopPropagation();
+      showDetail(d);
+    })
+    .call(d3.drag()
+      .on('start', (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+      .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
+      .on('end', (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+    );
+
+  // 折叠指示器
+  updateCollapseIndicators();
+
+  // Center 节点光晕
+  _nodeGroup.filter(d => d.category === 'center')
     .select('.node-glow')
     .attr('opacity', 0.3);
 
-  // Tick
+  // Tick — 保存位置到全局映射
   simulation.on('tick', () => {
-    linkGroup.select('.link-line')
+    _g.select('.links-layer').selectAll('.link-group').select('.link-line')
       .attr('x1', d => d.source.x)
       .attr('y1', d => d.source.y)
       .attr('x2', d => d.target.x)
       .attr('y2', d => d.target.y);
 
-    linkGroup.select('.link-label')
+    _g.select('.links-layer').selectAll('.link-group').select('.link-label')
       .attr('x', d => (d.source.x + d.target.x) / 2)
       .attr('y', d => (d.source.y + d.target.y) / 2);
 
-    nodeGroup.attr('transform', d => `translate(${d.x},${d.y})`);
+    _g.select('.nodes-layer').selectAll('.node-group')
+      .attr('transform', d => `translate(${d.x},${d.y})`);
+
+    // 持续保存位置
+    nodes.forEach(n => { _nodePositions[n.id] = { x: n.x, y: n.y }; });
   });
 
   // 初始居中
   setTimeout(() => {
-    svg.transition().duration(800).call(
-      zoom.transform,
-      d3.zoomIdentity.translate(width / 2, height / 2).scale(0.85).translate(-width / 2, -height / 2)
+    _svg.transition().duration(800).call(
+      _zoom.transform,
+      d3.zoomIdentity.translate(_graphWidth / 2, _graphHeight / 2).scale(0.85).translate(-_graphWidth / 2, -_graphHeight / 2)
     );
   }, 1000);
+}
+
+// ========== updateVisibleGraph: 增量更新（展开/折叠时调用） ==========
+function updateVisibleGraph() {
+  const data = currentViewData || graphData;
+  if (!data || !_g) return;
+
+  const visibleData = getVisibleData(data);
+
+  // 保存当前力模拟中所有节点的位置
+  if (simulation) {
+    simulation.nodes().forEach(n => {
+      _nodePositions[n.id] = { x: n.x, y: n.y };
+    });
+    simulation.stop();
+  }
+
+  // 准备新数据，复用已有位置
+  const nodes = visibleData.nodes.map(d => {
+    const pos = _nodePositions[d.id];
+    if (pos) {
+      return { ...d, x: pos.x, y: pos.y };
+    }
+    // 新节点：从父节点位置出发（或画面中心）
+    const parentLink = visibleData.links.find(l => {
+      const tid = l.target.id || l.target;
+      return tid === d.id;
+    });
+    if (parentLink) {
+      const parentId = parentLink.source.id || parentLink.source;
+      const parentPos = _nodePositions[parentId];
+      if (parentPos) {
+        // 加一点随机偏移避免重叠
+        return { ...d, x: parentPos.x + (Math.random() - 0.5) * 40, y: parentPos.y + (Math.random() - 0.5) * 40 };
+      }
+    }
+    return { ...d, x: _graphWidth / 2 + (Math.random() - 0.5) * 100, y: _graphHeight / 2 + (Math.random() - 0.5) * 100 };
+  });
+  const links = visibleData.links.map(d => ({ ...d }));
+
+  // 增量更新连线（D3 data-join: enter/update/exit）
+  _g.select('.links-layer').selectAll('.link-group')
+    .data(links, d => `${d.source.id || d.source}-${d.target.id || d.target}`)
+    .join(
+      enter => {
+        const lg = enter.append('g').attr('class', 'link-group').style('opacity', 0);
+        lg.append('line').attr('class', 'link-line');
+        lg.append('text').attr('class', 'link-label').text(d => d.label || '');
+        lg.transition().duration(300).style('opacity', 1);
+        return lg;
+      },
+      update => update,
+      exit => exit.transition().duration(200).style('opacity', 0).remove()
+    );
+
+  // 增量更新节点（D3 data-join: enter/update/exit）
+  _g.select('.nodes-layer').selectAll('.node-group')
+    .data(nodes, d => d.id)
+    .join(
+      enter => {
+        const ng = enter.append('g')
+          .attr('class', 'node-group')
+          .style('opacity', 0)
+          .attr('transform', d => `translate(${d.x},${d.y})`);
+        setupNodeDOM(ng);
+        // 淡入动画
+        ng.transition().duration(300).style('opacity', 1);
+        return ng;
+      },
+      update => update,  // 保持不动
+      exit => exit.transition().duration(200).style('opacity', 0).remove()
+    );
+
+  // 重新绑定事件（因为新节点需要）
+  _g.select('.nodes-layer').selectAll('.node-group')
+    .on('click', (e, d) => {
+      e.stopPropagation();
+      const fullData = currentViewData || graphData;
+      if (isCollapsible(d, fullData ? fullData.links : [])) {
+        toggleNodeExpansion(d);
+      } else {
+        showDetail(d);
+      }
+    })
+    .on('dblclick', (e, d) => {
+      e.stopPropagation();
+      showDetail(d);
+    })
+    .call(d3.drag()
+      .on('start', (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+      .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
+      .on('end', (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+    );
+
+  // 更新折叠指示器
+  updateCollapseIndicators();
+
+  // Center 光晕
+  _g.select('.nodes-layer').selectAll('.node-group')
+    .filter(d => d.category === 'center')
+    .select('.node-glow')
+    .attr('opacity', 0.3);
+
+  // 更新力模拟（不重建，只替换数据）
+  simulation = d3.forceSimulation(nodes)
+    .alphaDecay(0.05)
+    .alphaMin(0.01)
+    .velocityDecay(0.55)
+    .alpha(0.15)  // 低 alpha：轻微调整位置，不大幅重排
+    .force('link', d3.forceLink(links).id(d => d.id).distance(linkDistance))
+    .force('charge', d3.forceManyBody().strength(chargeStrength))
+    .force('center', d3.forceCenter(_graphWidth / 2, _graphHeight / 2))
+    .force('collision', d3.forceCollide().radius(collisionRadius))
+    .force('x', d3.forceX(_graphWidth / 2).strength(0.04))
+    .force('y', d3.forceY(_graphHeight / 2).strength(0.04));
+
+  simulation.on('tick', () => {
+    _g.select('.links-layer').selectAll('.link-group').select('.link-line')
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    _g.select('.links-layer').selectAll('.link-group').select('.link-label')
+      .attr('x', d => (d.source.x + d.target.x) / 2)
+      .attr('y', d => (d.source.y + d.target.y) / 2);
+
+    _g.select('.nodes-layer').selectAll('.node-group')
+      .attr('transform', d => `translate(${d.x},${d.y})`);
+
+    // 持续保存位置
+    nodes.forEach(n => { _nodePositions[n.id] = { x: n.x, y: n.y }; });
+  });
 }
 
 // IQ 仪表盘
