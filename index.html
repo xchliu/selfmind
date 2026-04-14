@@ -1896,7 +1896,13 @@ function applyTimepoint(index) {
   hideDetail();
   updateTimelineRuler();
   updateStats(currentViewData);
-  renderGraph(currentViewData);
+
+  // 增量更新：如果已初始化过 SVG，用增量模式避免整页重建
+  if (_svg) {
+    updateVisibleGraph();
+  } else {
+    renderGraph(currentViewData);
+  }
 
   const q = document.getElementById('searchInput')?.value?.trim();
   if (q) handleSearch(q);
@@ -2479,6 +2485,10 @@ function updateVisibleGraph() {
     return { ...d, x: _graphWidth / 2 + (Math.random() - 0.5) * 100, y: _graphHeight / 2 + (Math.random() - 0.5) * 100 };
   });
   const links = visibleData.links.map(d => ({ ...d }));
+
+  // 取消未完成的 transition（快速切换时间刻度时避免残留）
+  _g.select('.links-layer').selectAll('.link-group').interrupt();
+  _g.select('.nodes-layer').selectAll('.node-group').interrupt();
 
   // 增量更新连线（D3 data-join: enter/update/exit）
   _g.select('.links-layer').selectAll('.link-group')
