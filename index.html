@@ -296,6 +296,50 @@ body {
   color: rgba(99,102,241,0.9);
 }
 
+.timeline-play {
+  border: none;
+  background: rgba(52,211,153,0.08);
+  color: rgba(52,211,153,0.7);
+  border-radius: 10px;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px 8px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.timeline-play:hover {
+  background: rgba(52,211,153,0.15);
+  color: rgba(52,211,153,0.9);
+}
+
+.timeline-play.playing {
+  background: rgba(251,146,60,0.1);
+  color: rgba(251,146,60,0.8);
+}
+
+.timeline-play.playing:hover {
+  background: rgba(251,146,60,0.18);
+  color: rgba(251,146,60,1);
+}
+
+.timeline-play .play-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.timeline-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(52,211,153,0.6), rgba(99,102,241,0.6));
+  border-radius: 0 0 16px 16px;
+  transition: width 0.3s ease;
+}
+
 .timeline-axis-wrap {
   position: relative;
   padding: 4px 0 0;
@@ -1447,8 +1491,12 @@ svg { width: 100%; height: 100%; }
   <div class="timeline-row">
     <div class="timeline-title">记忆时间刻度</div>
     <div class="timeline-current" id="timelineCurrent">当前：--</div>
-    <button class="timeline-clear" onclick="jumpToLatest()">最新</button>
+    <button class="timeline-play" id="btnTimelinePlay" onclick="toggleTimelinePlay()">
+      <span class="play-icon">▶</span><span id="playLabel">播放</span>
+    </button>
+    <button class="timeline-clear" onclick="stopTimelinePlay(); jumpToLatest()">最新</button>
   </div>
+  <div class="timeline-progress" id="timelineProgress" style="width:0%"></div>
   <div class="timeline-axis-wrap">
     <div class="timeline-axis-line"></div>
     <div class="timeline-axis" id="timelineAxis"></div>
@@ -1461,7 +1509,7 @@ svg { width: 100%; height: 100%; }
     max="0"
     value="0"
     step="1"
-    oninput="handleTimelineInput(this.value)"
+    oninput="handleTimelineInputWithStop(this.value)"
   >
   <div class="timeline-scale">
     <span id="timelineStart">起点 --</span>
@@ -1915,6 +1963,80 @@ function handleTimelineInput(value) {
 function jumpToLatest() {
   if (!timelinePoints.length) return;
   applyTimepoint(timelinePoints.length - 1);
+}
+
+// ── 时间轴播放 ──
+let _playTimer = null;
+let _isPlaying = false;
+let _playSpeed = 800; // 每帧间隔 ms
+
+function toggleTimelinePlay() {
+  if (_isPlaying) {
+    stopTimelinePlay();
+  } else {
+    startTimelinePlay();
+  }
+}
+
+function startTimelinePlay() {
+  if (!timelinePoints.length) return;
+
+  const slider = document.getElementById('timelineSlider');
+  let current = Number(slider.value);
+  const max = timelinePoints.length - 1;
+
+  // 如果已在最新，从头开始播放
+  if (current >= max) {
+    current = 0;
+    applyTimepoint(current);
+    slider.value = current;
+  }
+
+  _isPlaying = true;
+  const btn = document.getElementById('btnTimelinePlay');
+  btn.classList.add('playing');
+  btn.querySelector('.play-icon').textContent = '⏸';
+  document.getElementById('playLabel').textContent = '暂停';
+
+  _playTimer = setInterval(() => {
+    current++;
+    if (current > max) {
+      stopTimelinePlay();
+      return;
+    }
+    slider.value = current;
+    applyTimepoint(current);
+
+    // 更新进度条
+    const pct = max > 0 ? (current / max) * 100 : 100;
+    document.getElementById('timelineProgress').style.width = pct + '%';
+  }, _playSpeed);
+}
+
+function stopTimelinePlay() {
+  _isPlaying = false;
+  if (_playTimer) {
+    clearInterval(_playTimer);
+    _playTimer = null;
+  }
+
+  const btn = document.getElementById('btnTimelinePlay');
+  btn.classList.remove('playing');
+  btn.querySelector('.play-icon').textContent = '▶';
+  document.getElementById('playLabel').textContent = '播放';
+
+  // 进度条渐隐
+  setTimeout(() => {
+    if (!_isPlaying) {
+      document.getElementById('timelineProgress').style.width = '0%';
+    }
+  }, 1500);
+}
+
+// 手动拖动滑块时停止播放
+function handleTimelineInputWithStop(value) {
+  if (_isPlaying) stopTimelinePlay();
+  handleTimelineInput(value);
 }
 
 // 显示 Toast
