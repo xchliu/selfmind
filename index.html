@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>苏格拉底 · 记忆图谱</title>
+<title>苏格拉底 · SelfMind</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -84,6 +84,46 @@ body {
   color: #999;
   margin-left: 4px;
   letter-spacing: 1px;
+}
+
+/* 视图 Tab 切换 */
+.view-tabs {
+  display: flex;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 2px;
+  margin-left: 16px;
+}
+
+.view-tab {
+  padding: 5px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #888;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+.view-tab:hover {
+  color: #555;
+  background: rgba(255,255,255,0.5);
+}
+
+.view-tab.active {
+  background: #fff;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 600;
+}
+
+.view-tab .tab-icon {
+  margin-right: 4px;
 }
 
 /* 操作按钮 */
@@ -1140,6 +1180,103 @@ svg { width: 100%; height: 100%; }
   color: #2ed573;
   font-weight: 500;
 }
+
+/* 一键导入进度 */
+.auto-import-progress {
+  padding: 16px;
+  background: rgba(116, 185, 255, 0.05);
+  border: 1px solid rgba(116, 185, 255, 0.15);
+  border-radius: 10px;
+  margin-top: 8px;
+}
+.auto-import-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.auto-import-status {
+  font-size: 13px;
+  font-weight: 600;
+  color: #74b9ff;
+}
+.auto-import-counter {
+  font-size: 12px;
+  color: #aaa;
+}
+.auto-import-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.auto-import-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #74b9ff, #a29bfe);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.auto-import-file {
+  font-size: 12px;
+  color: #ddd;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.auto-import-extracted {
+  font-size: 13px;
+  color: #2ed573;
+  margin-bottom: 8px;
+}
+.auto-import-extracted strong {
+  font-size: 18px;
+}
+.auto-import-log {
+  max-height: 160px;
+  overflow-y: auto;
+  font-size: 11px;
+  font-family: 'SF Mono', 'Menlo', monospace;
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  padding: 8px;
+  margin-top: 8px;
+}
+.auto-import-log-line {
+  padding: 2px 0;
+  line-height: 1.5;
+}
+.auto-import-log-line.success { color: #2ed573; }
+.auto-import-log-line.warn { color: #ffa502; }
+.auto-import-log-line.error { color: #ff4757; }
+.auto-import-log-line.info { color: #74b9ff; }
+
+.auto-import-result {
+  text-align: center;
+  padding: 30px 16px;
+}
+.auto-import-result-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.auto-import-result-text {
+  font-size: 14px;
+  color: #ddd;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.auto-import-result-text strong {
+  color: #2ed573;
+  font-size: 16px;
+}
+.auto-import-result-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
 .memory-empty {
   text-align: center;
   padding: 40px 20px;
@@ -1449,8 +1586,16 @@ svg { width: 100%; height: 100%; }
 <div class="top-bar">
   <div class="title-section">
     <div class="title-icon"></div>
-    <span class="title-text">苏格拉底 · 记忆图谱</span>
+    <span class="title-text">苏格拉底 · SelfMind</span>
     <span class="title-sub">SELFMIND</span>
+    <div class="view-tabs">
+      <button class="view-tab active" id="tabMemory" onclick="switchView('memory')">
+        <span class="tab-icon">🧠</span>记忆图谱
+      </button>
+      <button class="view-tab" id="tabWiki" onclick="switchView('wiki')">
+        <span class="tab-icon">📖</span>知识图谱
+      </button>
+    </div>
   </div>
 
   <div class="search-box">
@@ -1604,6 +1749,12 @@ const PRIMARY_COLORS = {
 // 获取节点颜色：优先用 primary 分类色，回退到节点类型色
 function getNodeColor(d) {
   if (d.category === 'center') return '#FFD700';
+  // Wiki 视图的节点颜色
+  if (currentView === 'wiki') {
+    if (d.category === 'wiki_center') return WIKI_COLORS.wiki_center.color;
+    if (WIKI_COLORS[d.category]) return WIKI_COLORS[d.category].color;
+    return '#78909c';
+  }
   if (d.primary && PRIMARY_COLORS[d.primary]) return PRIMARY_COLORS[d.primary].color;
   return '#78909c';
 }
@@ -1611,6 +1762,11 @@ function getNodeColor(d) {
 // 获取节点分类名称
 function getNodeCatName(d) {
   if (d.category === 'center') return '核心身份';
+  // Wiki 视图
+  if (currentView === 'wiki') {
+    if (WIKI_COLORS[d.category]) return WIKI_COLORS[d.category].name;
+    return d.category;
+  }
   if (d.category === 'primary' && PRIMARY_COLORS[d.primary]) return PRIMARY_COLORS[d.primary].name;
   if (d.category === 'secondary') {
     const p = PRIMARY_COLORS[d.primary];
@@ -1647,6 +1803,22 @@ let selectedNode = null;
 let timelinePoints = [];
 let activeTimelineIndex = -1;
 let expandedNodes = new Set(); // 已展开的可折叠节点ID
+
+// ========== 视图切换状态 ==========
+let currentView = 'memory'; // 'memory' | 'wiki'
+let wikiGraphData = null;
+let wikiCurrentViewData = null;
+
+// Wiki 分类颜色
+const WIKI_COLORS = {
+  wiki_center: { name: '知识中心', icon: '🌐', color: '#e67e22' },
+  entity:      { name: '实体',     icon: '🏢', color: '#e74c3c' },
+  concept:     { name: '概念',     icon: '💡', color: '#3498db' },
+  comparison:  { name: '对比分析', icon: '⚖️', color: '#2ecc71' },
+  query:       { name: '查询结果', icon: '🔍', color: '#f39c12' },
+  summary:     { name: '摘要',     icon: '📝', color: '#9b59b6' },
+  wiki_tag:    { name: '标签',     icon: '🏷️', color: '#95a5a6' },
+};
 
 // 持久化的 D3 选择集和容器（避免重建）
 let _svg = null;
@@ -1749,7 +1921,7 @@ function toggleNodeExpansion(node) {
   if (expandedNodes.has(node.id)) {
     // 折叠：同时折叠所有子节点
     expandedNodes.delete(node.id);
-    const data = currentViewData || graphData;
+    const data = getActiveData();
     if (data) {
       const descendants = getDescendantIds(node.id, data.nodes, data.links);
       descendants.forEach(id => expandedNodes.delete(id));
@@ -1766,7 +1938,7 @@ function toggleNodeExpansion(node) {
 
 // 全部展开/全部折叠
 function toggleAllNodes() {
-  const data = currentViewData || graphData;
+  const data = getActiveData();
   if (!data) return;
   
   // 找出所有可折叠节点
@@ -1791,7 +1963,7 @@ function toggleAllNodes() {
 
 // 更新按钮文字
 function updateToggleAllButton() {
-  const data = currentViewData || graphData;
+  const data = getActiveData();
   if (!data) return;
   const collapsibleNodes = data.nodes.filter(n => isCollapsible(n, data.links));
   const anyExpanded = collapsibleNodes.some(n => expandedNodes.has(n.id));
@@ -2049,6 +2221,7 @@ function showToast(msg, type = 'info') {
 
 // 刷新 — 调用后端 API
 async function handleRefresh() {
+  if (currentView === 'wiki') return handleWikiRefresh();
   const btn = document.getElementById('btnRefresh');
   btn.classList.add('loading');
   try {
@@ -2075,7 +2248,7 @@ async function handleSave() {
     const res = await fetch('/api/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(currentViewData || graphData),
+      body: JSON.stringify(currentView === 'wiki' ? (wikiCurrentViewData || wikiGraphData) : (currentViewData || graphData)),
     });
     const json = await res.json();
     if (json.status === 'ok') {
@@ -2091,7 +2264,7 @@ async function handleSave() {
 
 // 搜索
 function handleSearch(query) {
-  const data = currentViewData || graphData;
+  const data = getActiveData();
   if (!data) return;
   const q = query.trim().toLowerCase();
   d3.selectAll('.node-group')
@@ -2159,19 +2332,21 @@ function applyFilters() {
     d3.selectAll('.link-group').classed('dimmed', false);
     return;
   }
-  // 按 primary 字段过滤（每个节点都有 primary 属性）
+  const isWiki = currentView === 'wiki';
+  // 记忆视图按 primary，Wiki 视图按 category
   d3.selectAll('.node-group').classed('dimmed', d => {
-    if (d.category === 'center') return false; // 中心节点始终显示
-    return !activeFilters.has(d.primary);
+    if (d.category === 'center' || d.category === 'wiki_center') return false;
+    return !activeFilters.has(isWiki ? d.category : d.primary);
   });
   d3.selectAll('.link-group').classed('dimmed', d => {
-    const sp = d.source.primary, tp = d.target.primary;
-    return !activeFilters.has(sp) && !activeFilters.has(tp);
+    const sField = isWiki ? d.source.category : d.source.primary;
+    const tField = isWiki ? d.target.category : d.target.primary;
+    return !activeFilters.has(sField) && !activeFilters.has(tField);
   });
 }
 
 // 统计面板
-function updateStats(data = currentViewData || graphData) {
+function updateStats(data = getActiveData()) {
   if (!data) return;
   // 获取折叠后的可见数据
   const visible = getVisibleData(data);
@@ -2179,32 +2354,48 @@ function updateStats(data = currentViewData || graphData) {
   const visibleNodeCount = visible.nodes.length;
   const totalLinks = data.links.length;
   const visibleLinkCount = visible.links.length;
-  // 按 primary 一级分类统计（全量）
-  const primCounts = {};
-  data.nodes.forEach(n => {
-    if (n.primary) primCounts[n.primary] = (primCounts[n.primary] || 0) + 1;
-  });
-  // 统计技能和记忆（全量）
-  const skillCount = data.nodes.filter(n => n.category === 'skill').length;
-  const memCount = data.nodes.filter(n => n.category === 'memory').length;
+
+  let categoryHtml = '';
+  if (currentView === 'wiki') {
+    // Wiki 视图：按 category 统计
+    const catCounts = {};
+    data.nodes.forEach(n => {
+      if (n.category && n.category !== 'wiki_center') catCounts[n.category] = (catCounts[n.category] || 0) + 1;
+    });
+    categoryHtml = Object.entries(catCounts).map(([k, v]) => {
+      const w = WIKI_COLORS[k];
+      return w ? `<div class="stat-row"><span class="stat-label" style="color:${w.color}">${w.icon} ${w.name}</span><span class="stat-value">${v}</span></div>` : '';
+    }).join('');
+  } else {
+    // 记忆视图：按 primary 一级分类统计
+    const primCounts = {};
+    data.nodes.forEach(n => {
+      if (n.primary) primCounts[n.primary] = (primCounts[n.primary] || 0) + 1;
+    });
+    const skillCount = data.nodes.filter(n => n.category === 'skill').length;
+    const memCount = data.nodes.filter(n => n.category === 'memory').length;
+    categoryHtml = `
+      <div class="stat-row"><span class="stat-label">记忆</span><span class="stat-value">${memCount}</span></div>
+      <div class="stat-row"><span class="stat-label">技能</span><span class="stat-value">${skillCount}</span></div>
+      <div class="divider"></div>
+      ${Object.entries(primCounts).map(([k, v]) => {
+        const p = PRIMARY_COLORS[k];
+        return p ? `<div class="stat-row"><span class="stat-label" style="color:${p.color}">${p.icon} ${p.name}</span><span class="stat-value">${v}</span></div>` : '';
+      }).join('')}`;
+  }
+
   document.getElementById('statsPanel').innerHTML = `
     <div class="stat-row"><span class="stat-label">节点</span><span class="stat-value">${visibleNodeCount}<span style="font-size:9px;color:#999">/${totalNodes}</span></span></div>
     <div class="stat-row"><span class="stat-label">连线</span><span class="stat-value">${visibleLinkCount}<span style="font-size:9px;color:#999">/${totalLinks}</span></span></div>
-    <div class="stat-row"><span class="stat-label">记忆</span><span class="stat-value">${memCount}</span></div>
-    <div class="stat-row"><span class="stat-label">技能</span><span class="stat-value">${skillCount}</span></div>
+    ${categoryHtml}
     <div class="divider"></div>
-    ${Object.entries(primCounts).map(([k, v]) => {
-      const p = PRIMARY_COLORS[k];
-      return p ? `<div class="stat-row"><span class="stat-label" style="color:${p.color}">${p.icon} ${p.name}</span><span class="stat-value">${v}</span></div>` : '';
-    }).join('')}
-    <div class="divider"></div>
-    <div class="stat-row"><span class="stat-label">更新</span><span class="stat-value" style="font-size:10px">${new Date(data.lastUpdated).toLocaleString('zh-CN')}</span></div>
+    <div class="stat-row"><span class="stat-label">更新</span><span class="stat-value" style="font-size:10px">${data.lastUpdated ? new Date(data.lastUpdated).toLocaleString('zh-CN') : '--'}</span></div>
   `;
 }
 
 // 节点详情
 function showDetail(d) {
-  const data = currentViewData || graphData;
+  const data = getActiveData();
   if (!data) return;
   selectedNode = d;
   const panel = document.getElementById('detailPanel');
@@ -2396,7 +2587,7 @@ function setupNodeDOM(sel) {
 
 // 更新折叠指示器（无需重建节点）
 function updateCollapseIndicators() {
-  const fullData = currentViewData || graphData;
+  const fullData = getActiveData();
   if (!fullData) return;
 
   d3.selectAll('.node-group').each(function(d) {
@@ -2435,7 +2626,7 @@ function updateCollapseIndicators() {
 }
 
 // ========== renderGraph: 首次完整渲染 ==========
-function renderGraph(data = currentViewData || graphData) {
+function renderGraph(data = getActiveData()) {
   if (!data) return;
 
   const visibleData = getVisibleData(data);
@@ -2517,7 +2708,7 @@ function renderGraph(data = currentViewData || graphData) {
   _nodeGroup
     .on('click', (e, d) => {
       e.stopPropagation();
-      const fullData = currentViewData || graphData;
+      const fullData = getActiveData();
       if (isCollapsible(d, fullData ? fullData.links : [])) {
         toggleNodeExpansion(d);
       } else {
@@ -2572,7 +2763,7 @@ function renderGraph(data = currentViewData || graphData) {
 
 // ========== updateVisibleGraph: 增量更新（展开/折叠时调用） ==========
 function updateVisibleGraph() {
-  const data = currentViewData || graphData;
+  const data = getActiveData();
   if (!data || !_g) return;
 
   const visibleData = getVisibleData(data);
@@ -2649,7 +2840,7 @@ function updateVisibleGraph() {
   _g.select('.nodes-layer').selectAll('.node-group')
     .on('click', (e, d) => {
       e.stopPropagation();
-      const fullData = currentViewData || graphData;
+      const fullData = getActiveData();
       if (isCollapsible(d, fullData ? fullData.links : [])) {
         toggleNodeExpansion(d);
       } else {
@@ -2853,6 +3044,167 @@ function animateNumber(el, target, duration) {
   requestAnimationFrame(step);
 }
 
+// ========== 视图切换 ==========
+function switchView(view) {
+  if (view === currentView) return;
+
+  // 保存当前视图状态
+  if (currentView === 'memory') {
+    // Memory 状态已在 graphData/currentViewData 中
+  } else {
+    // Wiki 状态已在 wikiGraphData/wikiCurrentViewData 中
+  }
+
+  currentView = view;
+
+  // 更新 Tab 样式
+  document.getElementById('tabMemory').classList.toggle('active', view === 'memory');
+  document.getElementById('tabWiki').classList.toggle('active', view === 'wiki');
+
+  // 更新标题图标颜色
+  const titleIcon = document.querySelector('.title-icon');
+  if (view === 'wiki') {
+    titleIcon.style.background = 'radial-gradient(circle, #3498db 0%, #3498db44 70%)';
+    titleIcon.style.boxShadow = '0 0 15px #3498db44';
+  } else {
+    titleIcon.style.background = '';
+    titleIcon.style.boxShadow = '';
+  }
+
+  // 切换刷新按钮文字
+  const refreshBtn = document.getElementById('btnRefresh');
+  refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新知识' : '刷新记忆'}`;
+
+  // 切换记忆管理按钮可见性（仅记忆视图显示）
+  const memBtn = document.getElementById('btnMemory');
+  if (memBtn) memBtn.style.display = view === 'wiki' ? 'none' : '';
+
+  // 切换时间刻度线可见性（仅记忆视图显示）
+  const timelineRuler = document.getElementById('timelineRuler');
+  if (timelineRuler) timelineRuler.style.display = view === 'wiki' ? 'none' : '';
+
+  // 重置筛选
+  activeFilters.clear();
+
+  // 重置展开状态
+  expandedNodes.clear();
+  _nodePositions = {};
+
+  if (view === 'wiki') {
+    buildWikiFilterBar();
+    if (wikiGraphData) {
+      wikiCurrentViewData = { ...wikiGraphData };
+      updateStats(wikiCurrentViewData);
+      renderGraph(wikiCurrentViewData);
+    } else {
+      loadWikiData();
+    }
+  } else {
+    buildFilterBar();
+    if (graphData) {
+      currentViewData = { ...graphData };
+      updateStats(currentViewData);
+      renderGraph(currentViewData);
+      // 重建时间轴
+      timelinePoints = buildTimelinePoints(graphData);
+      applyTimepoint(timelinePoints.length - 1);
+    } else {
+      loadData();
+    }
+    loadIQ();
+  }
+}
+
+async function loadWikiData() {
+  try {
+    const res = await fetch('/api/wiki/data?t=' + Date.now());
+    wikiGraphData = await res.json();
+  } catch (e) {
+    showToast('❌ 无法加载知识图谱数据', 'error');
+    return;
+  }
+  wikiCurrentViewData = { ...wikiGraphData };
+  updateStats(wikiCurrentViewData);
+  renderGraph(wikiCurrentViewData);
+}
+
+async function handleWikiRefresh() {
+  const btn = document.getElementById('btnRefresh');
+  btn.classList.add('loading');
+  try {
+    const res = await fetch('/api/wiki/refresh', { method: 'POST' });
+    const json = await res.json();
+    if (json.status === 'ok') {
+      showToast(`✅ 知识图谱已刷新 — ${json.nodes}个节点, ${json.links}条连线`, 'success');
+      await loadWikiData();
+    } else {
+      showToast(`❌ ${json.message}`, 'error');
+    }
+  } catch (e) {
+    showToast(`❌ 网络错误: ${e.message}`, 'error');
+  }
+  btn.classList.remove('loading');
+}
+
+function buildWikiFilterBar() {
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = '';
+
+  // 全部
+  const allChip = document.createElement('div');
+  allChip.className = 'filter-chip active';
+  allChip.textContent = '全部';
+  allChip.style.borderColor = 'rgba(0,0,0,0.12)';
+  allChip.onclick = () => {
+    activeFilters.clear();
+    document.querySelectorAll('.filter-chip').forEach(c => {
+      c.classList.remove('active');
+      c.style.background = '';
+      c.style.borderColor = c.dataset.color ? c.dataset.color + '44' : 'rgba(0,0,0,0.12)';
+    });
+    allChip.classList.add('active');
+    applyFilters();
+  };
+  bar.appendChild(allChip);
+
+  // Wiki 分类
+  const wikiFilterCats = ['entity', 'concept', 'comparison', 'query', 'summary', 'wiki_tag'];
+  wikiFilterCats.forEach(key => {
+    const cat = WIKI_COLORS[key];
+    if (!cat) return;
+    const chip = document.createElement('div');
+    chip.className = 'filter-chip';
+    chip.textContent = cat.icon + ' ' + cat.name;
+    chip.dataset.cat = key;
+    chip.dataset.color = cat.color;
+    chip.style.borderColor = cat.color + '44';
+    chip.onclick = () => {
+      if (activeFilters.has(key)) {
+        activeFilters.delete(key);
+        chip.classList.remove('active');
+        chip.style.background = '';
+        chip.style.borderColor = cat.color + '44';
+      } else {
+        activeFilters.add(key);
+        chip.classList.add('active');
+        chip.style.background = cat.color + '22';
+        chip.style.borderColor = cat.color;
+      }
+      // 取消"全部"高亮
+      const allC = bar.querySelector('.filter-chip:first-child');
+      allC.classList.toggle('active', activeFilters.size === 0);
+      applyFilters();
+    };
+    bar.appendChild(chip);
+  });
+}
+
+// 获取当前活跃的数据（根据视图）
+function getActiveData() {
+  if (currentView === 'wiki') return wikiCurrentViewData || wikiGraphData;
+  return currentViewData || graphData;
+}
+
 // 初始化
 buildFilterBar();
 loadData();
@@ -2869,7 +3221,7 @@ document.addEventListener('keydown', (e) => {
 
 // 窗口大小变化
 window.addEventListener('resize', () => {
-  if (currentViewData || graphData) renderGraph(currentViewData || graphData);
+  if (getActiveData()) renderGraph(getActiveData());
 });
 
 // ========== 记忆管理模块 ==========
@@ -2886,6 +3238,9 @@ let syncTargetAgent = 'hermes';
 let memoryExtracting = false;
 let memoryScanning = false;
 let extractResultCount = null;
+let autoImporting = false;
+let autoImportProgress = null; // { current, total, file, totalExtracted, log }
+let autoImportEventSource = null;
 
 const MEMORY_PRIMARY_CATEGORIES = [
   'autobiographical', 'semantic', 'episodic', 'procedural',
@@ -2930,22 +3285,60 @@ function renderImportTab() {
   let html = `
     <div class="memory-input-group">
       <input type="text" id="memDocDir" placeholder="输入文档目录路径，如 /path/to/docs" value="">
-      <button class="memory-btn memory-btn-primary" onclick="scanDocuments()" ${memoryScanning ? 'disabled' : ''}>
-        ${memoryScanning ? '⏳' : '🔍'} 扫描
+      <button class="memory-btn memory-btn-primary" onclick="startAutoImport()" ${autoImporting ? 'disabled' : ''}>
+        ${autoImporting ? '⏳ 导入中...' : '🚀 一键导入'}
+      </button>
+      <button class="memory-btn memory-btn-secondary" onclick="scanDocuments()" ${memoryScanning || autoImporting ? 'disabled' : ''} title="手动扫描并选择文件">
+        ${memoryScanning ? '⏳' : '🔍'}
       </button>
     </div>`;
 
-  if (memoryScanning) {
+  // Auto import progress
+  if (autoImporting && autoImportProgress) {
+    const p = autoImportProgress;
+    const pct = p.total > 0 ? Math.round((p.current / p.total) * 100) : 0;
+    html += `<div class="auto-import-progress">
+      <div class="auto-import-header">
+        <span class="auto-import-status">${p.phase || '处理中...'}</span>
+        <span class="auto-import-counter">${p.current || 0}/${p.total || 0} 文件</span>
+      </div>
+      <div class="auto-import-bar-wrap">
+        <div class="auto-import-bar" style="width:${pct}%"></div>
+      </div>
+      <div class="auto-import-file">${p.file ? `📄 ${escapeHtml(p.file)}` : ''}</div>
+      <div class="auto-import-extracted">已提取 <strong>${p.totalExtracted || 0}</strong> 条记忆</div>
+      ${p.log && p.log.length > 0 ? `<div class="auto-import-log">${p.log.map(l => `<div class="auto-import-log-line ${l.type}">${escapeHtml(l.text)}</div>`).join('')}</div>` : ''}
+      <button class="memory-btn memory-btn-danger" onclick="stopAutoImport()" style="margin-top:8px">
+        ⏹ 停止导入
+      </button>
+    </div>`;
+  } else if (autoImportProgress && autoImportProgress.done) {
+    const p = autoImportProgress;
+    html += `<div class="auto-import-result">
+      <div class="auto-import-result-icon">✅</div>
+      <div class="auto-import-result-text">
+        导入完成！共处理 <strong>${p.processed || 0}</strong> 个文件，
+        提取 <strong>${p.totalExtracted || 0}</strong> 条记忆
+        ${p.skipped ? `，跳过 ${p.skipped} 个` : ''}
+      </div>
+      <div class="auto-import-result-actions">
+        <button class="memory-btn memory-btn-primary" onclick="switchMemoryTab('list')">📋 查看记忆</button>
+        <button class="memory-btn memory-btn-secondary" onclick="autoImportProgress=null;renderImportTab()">↩ 重新导入</button>
+      </div>
+    </div>`;
+  } else if (memoryScanning) {
     html += `<div class="memory-progress">
       <div class="memory-progress-spinner"></div>
       <div class="memory-progress-text">正在扫描目录...</div>
     </div>`;
-  } else if (scannedFiles.length === 0) {
+  } else if (scannedFiles.length === 0 && !autoImporting) {
     html += `<div class="memory-empty">
       <div class="memory-empty-icon">📂</div>
-      <div>输入目录路径后点击扫描，发现可导入的文档</div>
+      <div>输入目录路径，点击「🚀 一键导入」自动扫描并提取记忆</div>
+      <div style="margin-top:8px;font-size:12px;opacity:0.6">或点击 🔍 手动扫描选择文件</div>
     </div>`;
-  } else {
+  } else if (scannedFiles.length > 0) {
+    // Manual mode: file list with checkboxes
     html += `<div class="doc-select-bar">
       <label>
         <input type="checkbox" id="memSelectAllFiles"
@@ -2987,6 +3380,103 @@ function renderImportTab() {
   }
 
   area.innerHTML = html;
+}
+
+function startAutoImport() {
+  const dirInput = document.getElementById('memDocDir');
+  const dir = dirInput ? dirInput.value.trim() : '';
+  if (!dir) { showToast('请输入目录路径', 'error'); return; }
+  if (autoImporting) return;
+
+  autoImporting = true;
+  autoImportProgress = { current: 0, total: 0, file: '', totalExtracted: 0, phase: '🔍 扫描目录...', log: [], done: false };
+  renderImportTab();
+
+  const url = `/api/documents/extract-stream?dir=${encodeURIComponent(dir)}`;
+  autoImportEventSource = new EventSource(url);
+
+  autoImportEventSource.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      const p = autoImportProgress;
+
+      switch (data.type) {
+        case 'scanning':
+          p.phase = '🔍 扫描目录...';
+          break;
+        case 'scan_done':
+          p.total = data.total_files;
+          p.phase = `📦 发现 ${data.total_files} 个文件，开始提取...`;
+          p.log.push({ type: 'info', text: `发现 ${data.total_files} 个文件: ${data.files.join(', ')}` });
+          break;
+        case 'extracting':
+          p.current = data.current;
+          p.total = data.total;
+          p.file = data.file;
+          p.phase = `🧬 提取中 (${data.current}/${data.total})`;
+          break;
+        case 'file_done':
+          p.current = data.current;
+          p.totalExtracted = data.total_extracted;
+          p.log.push({ type: 'success', text: `✅ ${data.file} → ${data.extracted} 条记忆` });
+          break;
+        case 'file_skipped':
+          p.current = data.current;
+          p.log.push({ type: 'warn', text: `⏭ ${data.file} — ${data.reason}` });
+          break;
+        case 'file_error':
+          p.current = data.current;
+          p.log.push({ type: 'error', text: `❌ ${data.file} — ${data.error}` });
+          break;
+        case 'error':
+          p.phase = `❌ ${data.message}`;
+          p.log.push({ type: 'error', text: data.message });
+          stopAutoImport();
+          showToast(data.message, 'error');
+          return;
+        case 'done':
+          p.current = p.total;
+          p.totalExtracted = data.total_extracted;
+          p.processed = data.processed;
+          p.skipped = data.skipped;
+          p.done = true;
+          autoImporting = false;
+          if (autoImportEventSource) { autoImportEventSource.close(); autoImportEventSource = null; }
+          showToast(`✅ 导入完成！提取 ${data.total_extracted} 条记忆`, 'success');
+          break;
+      }
+      renderImportTab();
+
+      // Auto-scroll log to bottom
+      const logEl = document.querySelector('.auto-import-log');
+      if (logEl) logEl.scrollTop = logEl.scrollHeight;
+    } catch (e) {
+      console.error('SSE parse error:', e);
+    }
+  };
+
+  autoImportEventSource.onerror = () => {
+    if (autoImporting) {
+      autoImporting = false;
+      if (autoImportProgress) autoImportProgress.phase = '连接中断';
+      renderImportTab();
+      showToast('导入连接中断', 'error');
+    }
+    if (autoImportEventSource) { autoImportEventSource.close(); autoImportEventSource = null; }
+  };
+}
+
+function stopAutoImport() {
+  if (autoImportEventSource) {
+    autoImportEventSource.close();
+    autoImportEventSource = null;
+  }
+  autoImporting = false;
+  if (autoImportProgress) {
+    autoImportProgress.phase = '⏹ 已停止';
+    autoImportProgress.done = true;
+  }
+  renderImportTab();
 }
 
 function formatFileSize(bytes) {

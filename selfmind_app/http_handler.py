@@ -9,6 +9,7 @@ from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_confi
 from selfmind_app.document_importer import DocumentImporter
 from selfmind_app.memory_store import MemoryStore
 from selfmind_app.parser import build_graph
+from selfmind_app.wiki_parser import build_wiki_graph
 
 logger = logging.getLogger(__name__)
 
@@ -85,12 +86,16 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         clean_path = self.path.split("?")[0]
         if clean_path == "/api/data":
             self._json_response(self._load_data())
+        elif clean_path == "/api/wiki/data":
+            self._json_response(self._load_wiki_data())
         elif clean_path == "/api/iq":
             self._json_response(self._compute_iq())
         elif clean_path == "/api/config":
             self._json_response(load_config())
         elif clean_path == "/api/documents/scan":
             self._handle_documents_scan()
+        elif clean_path == "/api/documents/extract-stream":
+            self._handle_extract_stream()
         elif clean_path == "/api/memories":
             self._handle_memories_list()
         elif clean_path.startswith("/api/memories/stats"):
@@ -121,6 +126,16 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                     "message": "Memory data refreshed",
                 }
             )
+            return
+
+        if clean_path == "/api/wiki/refresh":
+            data = self._refresh_wiki_data()
+            self._json_response({
+                "status": "ok",
+                "nodes": len(data.get("nodes", [])),
+                "links": len(data.get("links", [])),
+                "message": "Wiki data refreshed",
+            })
             return
 
         if clean_path == "/api/save":
@@ -474,6 +489,117 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         files = _importer.scan_directory(dir_path)
         self._json_response({"dir": dir_path, "files": files, "count": len(files)})
 
+    def _handle_extract_stream(self):
+        """GET /api/documents/extract-stream?dir=... — SSE stream: scan + extract with progress."""
+        from urllib.parse import parse_qs, urlparse
+        parsed = urlparse(self.path)
+        params = parse_qs(parsed.query)
+        dir_path = params.get("dir", [""])[0]
+
+        if not dir_path:
+            config = load_config()
+            dir_path = config.get("documents", {}).get("watch_dir", "")
+
+        # Set up SSE response headers
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "keep-alive")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+
+        def send_event(data: dict):
+            try:
+                payload = json.dumps(data, ensure_ascii=False)
+                self.wfile.write(f"data: {payload}\n\n".encode("utf-8"))
+                self.wfile.flush()
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+
+        if not dir_path:
+            send_event({"type": "error", "message": "未指定目录路径"})
+            return
+
+        # Phase 1: Scan
+        send_event({"type": "scanning", "dir": dir_path})
+        files = _importer.scan_directory(dir_path)
+
+        if not files:
+            send_event({"type": "done", "total_files": 0, "total_extracted": 0,
+                        "message": "未找到可导入的文档"})
+            return
+
+        send_event({"type": "scan_done", "total_files": len(files),
+                    "files": [f["name"] for f in files]})
+
+        # Phase 2: Extract file by file
+        config = load_config()
+        llm_config = config.get("llm", {})
+
+        if not llm_config.get("api_key"):
+            send_event({"type": "error", "message": "LLM API Key 未配置"})
+            return
+
+        total_extracted = 0
+        processed = 0
+        skipped = 0
+
+        for i, file_info in enumerate(files):
+            file_path = file_info["path"]
+            file_name = file_info["name"]
+
+            send_event({
+                "type": "extracting",
+                "file": file_name,
+                "current": i + 1,
+                "total": len(files),
+            })
+
+            content = _importer.read_document(file_path)
+            if not content.strip():
+                skipped += 1
+                send_event({
+                    "type": "file_skipped",
+                    "file": file_name,
+                    "reason": "文件内容为空",
+                    "current": i + 1,
+                    "total": len(files),
+                })
+                continue
+
+            try:
+                memories = _importer.extract_memories(content, file_name, config)
+                if memories:
+                    ids = _store.add_entries(memories)
+                    total_extracted += len(memories)
+                processed += 1
+
+                send_event({
+                    "type": "file_done",
+                    "file": file_name,
+                    "extracted": len(memories) if memories else 0,
+                    "total_extracted": total_extracted,
+                    "current": i + 1,
+                    "total": len(files),
+                })
+            except Exception as exc:
+                logger.error("Error extracting %s: %s", file_name, exc)
+                send_event({
+                    "type": "file_error",
+                    "file": file_name,
+                    "error": str(exc),
+                    "current": i + 1,
+                    "total": len(files),
+                })
+
+        send_event({
+            "type": "done",
+            "total_files": len(files),
+            "processed": processed,
+            "skipped": skipped,
+            "total_extracted": total_extracted,
+        })
+
     def _handle_documents_extract(self):
         """POST /api/documents/extract — Extract memories from documents.
 
@@ -641,6 +767,26 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._json_response({"status": "ok", "updated": count})
         except ValueError as exc:
             self._json_response({"error": str(exc)}, code=400)
+
+    def _load_wiki_data(self) -> dict:
+        """Load wiki graph data, building from wiki files."""
+        wiki_data_file = SELFMIND_DIR / "wiki_data.json"
+        if wiki_data_file.exists():
+            try:
+                with open(wiki_data_file, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, OSError):
+                pass
+        return self._refresh_wiki_data()
+
+    def _refresh_wiki_data(self) -> dict:
+        """Rebuild wiki graph from wiki markdown files."""
+        config = load_config()
+        data = build_wiki_graph(config)
+        wiki_data_file = SELFMIND_DIR / "wiki_data.json"
+        with open(wiki_data_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        return data
 
     def _json_response(self, data, code=200):
         self.send_response(code)

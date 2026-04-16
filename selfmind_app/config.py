@@ -63,6 +63,19 @@ DEFAULT_CONFIG = {
     "documents": {
         "watch_dir": os.environ.get("SELFMIND_DOCS_DIR", ""),
     },
+    "wiki": {
+        "enabled": True,
+        "path": os.environ.get("SELFMIND_WIKI_PATH", str(Path.home() / "Documents" / "aiworkspace" / "wiki")),
+        "categories": {
+            "entity": {"color": "#e74c3c", "display_name": "实体", "shape": "circle"},
+            "concept": {"color": "#3498db", "display_name": "概念", "shape": "diamond"},
+            "comparison": {"color": "#2ecc71", "display_name": "对比分析", "shape": "square"},
+            "query": {"color": "#f39c12", "display_name": "查询结果", "shape": "triangle"},
+            "summary": {"color": "#9b59b6", "display_name": "摘要", "shape": "hexagon"},
+            "wiki_tag": {"color": "#95a5a6", "display_name": "标签", "shape": "circle"},
+            "wiki_center": {"color": "#e67e22", "display_name": "知识中心", "shape": "circle"},
+        },
+    },
 }
 
 
