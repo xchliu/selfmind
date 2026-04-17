@@ -861,7 +861,8 @@ svg { width: 100%; height: 100%; }
 
 .link-line {
   stroke: rgba(0, 0, 0, 0.12);
-  stroke-width: 1.2;
+  /* stroke-width set dynamically based on link strength */
+  stroke-width: 1;
 }
 
 .link-label {
@@ -1673,6 +1674,7 @@ svg { width: 100%; height: 100%; }
   <div class="detail-desc" id="detailDesc"></div>
   <div class="detail-connections" id="detailTimeline"></div>
   <div class="detail-connections" id="detailConn"></div>
+  <div class="detail-analytics" id="detailAnalytics" style="display:none; margin-top:8px; font-size:12px; color:#666; background:rgba(0,0,0,0.04); padding:6px 10px; border-radius:6px;"></div>
 </div>
 
 <!-- IQ 仪表盘 -->
@@ -1754,6 +1756,17 @@ function getNodeColor(d) {
     if (d.category === 'wiki_center') return WIKI_COLORS.wiki_center.color;
     if (WIKI_COLORS[d.category]) return WIKI_COLORS[d.category].color;
     return '#78909c';
+  }
+  // Memory nodes: blend importance into color (warm = important, cool = routine)
+  if (d.category === 'memory' && d.importance !== undefined) {
+    const imp = d.importance || 0;
+    const baseColor = (d.primary && PRIMARY_COLORS[d.primary]) ? PRIMARY_COLORS[d.primary].color : '#78909c';
+    // High importance → more saturated/brighter; low → more muted
+    // We darken low-importance nodes by mixing with gray
+    if (imp < 0.3) {
+      return d3.interpolate('#b0bec5', baseColor)(imp / 0.3 * 0.5);
+    }
+    return baseColor;
   }
   if (d.primary && PRIMARY_COLORS[d.primary]) return PRIMARY_COLORS[d.primary].color;
   return '#78909c';
@@ -2416,6 +2429,19 @@ function showDetail(d) {
   );
   document.getElementById('detailConn').textContent = `${conns.length} 个连接`;
 
+  // Analytics info for memory nodes
+  const analyticsEl = document.getElementById('detailAnalytics');
+  if (analyticsEl) {
+    if (d.category === 'memory' && (d.access_count !== undefined || d.importance !== undefined)) {
+      const ac = d.access_count || 0;
+      const imp = d.importance !== undefined ? Math.round(d.importance * 100) : '--';
+      analyticsEl.textContent = `📊 引用次数: ${ac} · 重要性: ${imp}%`;
+      analyticsEl.style.display = 'block';
+    } else {
+      analyticsEl.style.display = 'none';
+    }
+  }
+
   panel.classList.add('show');
 
   // 高亮相关
@@ -2466,20 +2492,30 @@ async function loadData() {
 
 // 节点大小函数（层级递减: center > primary > secondary > memory/skill_cat > skill_subcat > skill）
 function nodeRadius(d) {
+  // Base radius by category
+  let base;
   if (d.category === 'center') return 24;
   if (d.category === 'primary') return 14;
   if (d.category === 'secondary') return 9;
-  if (d.category === 'memory') return 7;
   if (d.category === 'skill_category') return 7;
   if (d.category === 'skill_subcategory') return 5;
   if (d.category === 'skill') return 3.5;
+
+  // Memory nodes: scale by access_count
+  if (d.category === 'memory') {
+    base = 5;
+    const ac = d.access_count || 0;
+    // Scale: 5 (never accessed) → 16 (frequently accessed)
+    const boost = Math.min(Math.log1p(ac) * 2.5, 11);
+    return base + boost;
+  }
   return 8;
 }
 function glowRadius(d) {
   if (d.category === 'center') return 42;
   if (d.category === 'primary') return 26;
   if (d.category === 'secondary') return 16;
-  if (d.category === 'memory') return 12;
+  if (d.category === 'memory') return nodeRadius(d) * 1.8;
   if (d.category === 'skill_category') return 12;
   if (d.category === 'skill_subcategory') return 8;
   if (d.category === 'skill') return 5;
@@ -2517,7 +2553,7 @@ function collisionRadius(d) {
   if (d.category === 'center') return 50;
   if (d.category === 'primary') return 30;
   if (d.category === 'secondary') return 18;
-  if (d.category === 'memory') return 14;
+  if (d.category === 'memory') return nodeRadius(d) + 6;
   if (d.category === 'skill_category') return 14;
   if (d.category === 'skill_subcategory') return 10;
   if (d.category === 'skill') return 5;
@@ -2692,6 +2728,27 @@ function renderGraph(data = getActiveData()) {
       lg.append('line').attr('class', 'link-line');
       lg.append('text').attr('class', 'link-label').text(d => d.label || '');
       return lg;
+    });
+
+  // Dynamic link styling based on strength and type
+  _linkGroup.select('.link-line')
+    .attr('stroke-width', d => {
+      const s = d.strength || 1.0;
+      // co_occurs links: thicker based on co-occurrence count
+      if (d.label === 'co_occurs') return Math.max(1, s * 1.2);
+      // mentions links: slightly thicker
+      if (d.label === 'mentions') return 1.5;
+      // hierarchy links: thin
+      return 1;
+    })
+    .attr('stroke', d => {
+      if (d.label === 'co_occurs') return 'rgba(255, 152, 0, 0.35)';
+      if (d.label === 'mentions') return 'rgba(33, 150, 243, 0.25)';
+      return null; // use CSS default
+    })
+    .attr('stroke-dasharray', d => {
+      if (d.label === 'co_occurs') return '4,2';
+      return null;
     });
 
   // 用 D3 data-join 渲染节点

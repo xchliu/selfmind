@@ -18,6 +18,7 @@ from datetime import datetime
 from hashlib import md5
 from pathlib import Path
 
+from selfmind_app.analytics import analyze_memories
 from selfmind_app.config import get_enabled_profiles
 
 # ────────────────────────────────────────────────────────────────────
@@ -498,6 +499,8 @@ def build_graph(config: dict) -> dict:
         primary: str = "",
         secondary: str = "",
         group: str = "",
+        access_count: int = 0,
+        importance: float = 0.0,
     ) -> None:
         if node_id not in node_ids:
             nodes.append({
@@ -508,14 +511,16 @@ def build_graph(config: dict) -> dict:
                 "primary": primary,
                 "secondary": secondary,
                 "group": group or category,
+                "access_count": access_count,
+                "importance": importance,
             })
             node_ids.add(node_id)
 
-    def add_link(source: str, target: str, label: str = "") -> None:
+    def add_link(source: str, target: str, label: str = "", strength: float = 1.0) -> None:
         if source in node_ids and target in node_ids:
             key = f"{source}->{target}"
             if key not in link_keys:
-                links.append({"source": source, "target": target, "label": label})
+                links.append({"source": source, "target": target, "label": label, "strength": strength})
                 link_keys.add(key)
 
     # ── Center node ──
@@ -552,8 +557,12 @@ def build_graph(config: dict) -> dict:
         )
         add_link(center_id, p_id, "has_memory_type")
 
-    # ── Parse memories ──
+    # ── Parse memories & run analytics ──
     entries = parse_memories(config)
+    analytics = analyze_memories(entries)
+    access_counts = analytics.get("access_counts", {})
+    importance_scores = analytics.get("importance", {})
+    co_occurrences = analytics.get("co_occurrences", {})
 
     # Collect which secondaries are actually populated
     populated_secondaries: dict[str, set[str]] = {}
@@ -586,17 +595,20 @@ def build_graph(config: dict) -> dict:
         pk, sk = entry["primary"], entry["secondary"]
         combo_key = f"{pk}/{sk}"
         parent_id = secondary_node_ids.get(combo_key, primary_node_ids.get(pk, center_id))
+        nid = entry["node_id"]
 
         add_node(
-            entry["node_id"],
+            nid,
             entry["label"],
             "memory",
             description=entry["description"],
             primary=pk,
             secondary=sk,
             group=pk,
+            access_count=access_counts.get(nid, 0),
+            importance=importance_scores.get(nid, 0.0),
         )
-        add_link(parent_id, entry["node_id"], "contains")
+        add_link(parent_id, nid, "contains")
 
     # ── Cross-references between memory nodes ──
     for entry in entries:
@@ -610,6 +622,19 @@ def build_graph(config: dict) -> dict:
             other_label = other["label"]
             if len(other_label) >= 2 and other_label in text:
                 add_link(nid, other["node_id"], "mentions")
+
+    # ── Co-occurrence links (from conversation analytics) ──
+    for pair_key, count in co_occurrences.items():
+        if count < 2:  # Only significant co-occurrences
+            continue
+        parts = pair_key.split("->")
+        if len(parts) == 2:
+            a, b = parts
+            if a in node_ids and b in node_ids:
+                # Normalize strength: log scale, cap at 5.0
+                import math
+                strength = min(math.log1p(count), 5.0)
+                add_link(a, b, "co_occurs", strength=strength)
 
     # ── Skill nodes (hierarchical under procedural) ──
     skills = collect_skills(config)
@@ -748,4 +773,9 @@ def build_graph(config: dict) -> dict:
         "sources": used_sources,
         "nodes": nodes,
         "links": links,
+        "analytics": {
+            "db_found": analytics.get("db_found", False),
+            "message_count": analytics.get("message_count", 0),
+            "session_count": analytics.get("session_count", 0),
+        },
     }

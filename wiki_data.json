@@ -1,0 +1,19 @@
+{
+  "lastUpdated": "2026-04-16 09:05:32",
+  "source": "/Users/liuxiaocheng/Documents/aiworkspace/wiki",
+  "nodes": [
+    {
+      "id": "wiki_center",
+      "label": "知识图谱",
+      "category": "wiki_center",
+      "description": "LLM Wiki knowledge graph center",
+      "primary": "wiki_center",
+      "secondary": "",
+      "group": "wiki_center",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    }
+  ],
+  "links": []
+}
