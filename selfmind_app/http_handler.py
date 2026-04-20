@@ -11,6 +11,8 @@ from selfmind_app.document_importer import DocumentImporter
 from selfmind_app.memory_store import MemoryStore
 from selfmind_app.metadata_db import MetadataDB
 from selfmind_app.consolidator import Consolidator
+from selfmind_app.forgetter import ForgetterEngine
+from selfmind_app.analyzer import AnalyzerEngine
 from selfmind_app.parser import build_graph
 from selfmind_app.wiki_parser import build_wiki_graph
 
@@ -20,6 +22,9 @@ logger = logging.getLogger(__name__)
 _importer = DocumentImporter()
 _store = MemoryStore()
 _meta_db = MetadataDB(str(SELFMIND_DIR / "selfmind.db"))
+_consolidator = None
+_forgetter = None
+_analyzer = None
 
 
 def _node_signature(node: dict) -> str:
@@ -203,6 +208,24 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._handle_consolidate_conflicts()
         elif clean_path == "/api/consolidate/distribution":
             self._handle_consolidate_distribution()
+        # 遗忘引擎 API
+        elif clean_path == "/api/forget/analyze":
+            self._handle_forget_analyze()
+        elif clean_path == "/api/forget/execute":
+            self._handle_forget_execute()
+        elif clean_path == "/api/forget/restore":
+            self._handle_forget_restore()
+        # 分析引擎 API
+        elif clean_path == "/api/analyze/patterns":
+            self._handle_analyze_patterns()
+        elif clean_path == "/api/analyze/graph":
+            self._handle_analyze_graph()
+        elif clean_path == "/api/analyze/importance":
+            self._handle_analyze_importance()
+        elif clean_path == "/api/analyze/completeness":
+            self._handle_analyze_completeness()
+        elif clean_path == "/api/analyze/full":
+            self._handle_analyze_full()
         elif clean_path == "/":
             self.path = "/index.html"
             super().do_GET()
@@ -986,20 +1009,37 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
     # ── Consolidation API handler methods ──────────────────────────
 
     def _get_consolidator(self) -> Consolidator:
-        config = load_config()
-        source_cfg = config.get("source", {})
-        active = source_cfg.get("active_profile", "hermes")
-        profile = source_cfg.get("profiles", {}).get(active, {})
-        home = profile.get("home", "")
-        memory_path = user_path = None
-        for f in profile.get("memory_files", []):
-            full = os.path.join(home, f)
-            if os.path.exists(full):
-                if "memory" in f.lower():
-                    memory_path = full
-                elif "user" in f.lower():
-                    user_path = full
-        return Consolidator(_meta_db, memory_path or "", user_path)
+        global _consolidator
+        if _consolidator is None:
+            config = load_config()
+            source_cfg = config.get("source", {})
+            active = source_cfg.get("active_profile", "hermes")
+            profile = source_cfg.get("profiles", {}).get(active, {})
+            home = profile.get("home", "")
+            memory_path = user_path = None
+            for f in profile.get("memory_files", []):
+                full = os.path.join(home, f)
+                if os.path.exists(full):
+                    if "memory" in f.lower():
+                        memory_path = full
+                    elif "user" in f.lower():
+                        user_path = full
+            _consolidator = Consolidator(_meta_db, memory_path or "", user_path)
+        return _consolidator
+
+    def _get_forgetter(self) -> ForgetterEngine:
+        global _forgetter
+        if _forgetter is None:
+            _forgetter = ForgetterEngine()
+        return _forgetter
+
+    def _get_analyzer(self) -> AnalyzerEngine:
+        global _analyzer
+        if _analyzer is None:
+            _analyzer = AnalyzerEngine()
+        return _analyzer
+
+    # 省略原有的 _get_consolidator 方法后半部分...
 
     def _handle_consolidate_scan(self):
         c = self._get_consolidator()
@@ -1039,6 +1079,84 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._json_response(result)
         else:
             self._json_response({"error": "LLM not configured"}, code=400)
+
+    # ── Forgetter API handlers ───────────────────────────────────────
+
+    def _handle_forget_analyze(self):
+        """分析哪些记忆应该被遗忘"""
+        f = self._get_forgetter()
+        to_forget = f.get_memories_to_forget()
+        analysis = f.run_full_cycle()
+        self._json_response({
+            "memories_to_forget": to_forget,
+            "analysis": analysis
+        })
+
+    def _handle_forget_execute(self):
+        """执行遗忘操作"""
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length).decode('utf-8') if content_length > 0 else '{}'
+        try:
+            params = json.loads(body) if body else {}
+        except json.JSONDecodeError:
+            params = {}
+        
+        memory_ids = params.get('memory_ids')
+        dry_run = params.get('dry_run', False)
+        
+        f = self._get_forgetter()
+        result = f.run_forgetting(memory_ids=memory_ids, dry_run=dry_run)
+        self._json_response(result)
+
+    def _handle_forget_restore(self):
+        """恢复已遗忘的记忆"""
+        content_length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(content_length).decode('utf-8') if content_length > 0 else '{}'
+        try:
+            params = json.loads(body) if body else {}
+        except json.JSONDecodeError:
+            params = {}
+        
+        memory_id = params.get('memory_id')
+        if not memory_id:
+            self._json_response({"error": "Provide 'memory_id'"}, code=400)
+            return
+        
+        f = self._get_forgetter()
+        result = f.restore_memory(memory_id)
+        self._json_response({"success": result, "memory_id": memory_id})
+
+    # ── Analyzer API handlers ────────────────────────────────────────
+
+    def _handle_analyze_patterns(self):
+        """分析记忆模式"""
+        a = self._get_analyzer()
+        patterns = a.analyze_patterns()
+        self._json_response(patterns)
+
+    def _handle_analyze_graph(self):
+        """更新知识图谱"""
+        a = self._get_analyzer()
+        graph = a.update_knowledge_graph()
+        self._json_response(graph)
+
+    def _handle_analyze_importance(self):
+        """分析记忆重要性"""
+        a = self._get_analyzer()
+        importance = a.analyze_importance()
+        self._json_response({"rankings": importance})
+
+    def _handle_analyze_completeness(self):
+        """分析知识完整性"""
+        a = self._get_analyzer()
+        completeness = a.analyze_completeness()
+        self._json_response(completeness)
+
+    def _handle_analyze_full(self):
+        """完整分析"""
+        a = self._get_analyzer()
+        result = a.run_full_analysis()
+        self._json_response(result)
 
     def _json_response(self, data, code=200):
         self.send_response(code)
