@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import threading
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
@@ -8,6 +9,8 @@ from typing import Optional
 from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config
 from selfmind_app.document_importer import DocumentImporter
 from selfmind_app.memory_store import MemoryStore
+from selfmind_app.metadata_db import MetadataDB
+from selfmind_app.consolidator import Consolidator
 from selfmind_app.parser import build_graph
 from selfmind_app.wiki_parser import build_wiki_graph
 
@@ -16,6 +19,7 @@ logger = logging.getLogger(__name__)
 # Shared instances (created lazily)
 _importer = DocumentImporter()
 _store = MemoryStore()
+_meta_db = MetadataDB(str(SELFMIND_DIR / "selfmind.db"))
 
 
 def _node_signature(node: dict) -> str:
@@ -66,11 +70,80 @@ def _apply_node_timestamps(new_data: dict, previous_data: Optional[dict]) -> dic
     return new_data
 
 
+def _merge_metadata(data: dict) -> dict:
+    """Merge metadata (decay_score, status, pinned) into nodes."""
+    # Get all metadata entries
+    meta_entries = _meta_db.get_all_entries()
+    
+    # Build lookup by content preview (first 80 chars, normalize ** markers)
+    meta_lookup = {}
+    for entry in meta_entries:
+        preview = entry.get('content_preview', '')[:80]
+        if preview:
+            # Normalize ** markers that parser removes
+            normalized = preview.replace('**', '')
+            meta_lookup[normalized] = entry
+    
+    # Build secondary lookup by category/subcategory for primary entries
+    # metadata category='primary' + subcategory='social' -> node primary='social'
+    meta_by_cat = {}
+    for entry in meta_entries:
+        if entry.get('category') == 'primary' and entry.get('subcategory'):
+            key = f"primary:{entry['subcategory']}"
+            meta_by_cat[key] = entry
+        elif entry.get('category') == 'secondary' and entry.get('subcategory'):
+            key = f"secondary:{entry['subcategory']}"
+            meta_by_cat[key] = entry
+    
+    # Merge into nodes
+    merged_count = 0
+    for node in data.get('nodes', []):
+        node_cat = node.get('category')
+        
+        if node_cat == 'memory':
+            # Try exact match first
+            desc = node.get('description', '')[:80].replace('**', '')
+            if desc in meta_lookup:
+                meta = meta_lookup[desc]
+                node['decay_score'] = meta.get('decay_score', 1.0)
+                node['status'] = meta.get('status', 'active')
+                node['pinned'] = bool(meta.get('pinned', 0))
+                merged_count += 1
+                continue
+            
+            # Fallback: match by primary/secondary
+            primary = node.get('primary', '')
+            secondary = node.get('secondary', '')
+            if primary:
+                key = f"primary:{primary}"
+                if key in meta_by_cat:
+                    meta = meta_by_cat[key]
+                    node['decay_score'] = meta.get('decay_score', 1.0)
+                    node['status'] = meta.get('status', 'active')
+                    node['pinned'] = bool(meta.get('pinned', 0))
+                    merged_count += 1
+                    continue
+            if secondary:
+                key = f"secondary:{secondary}"
+                if key in meta_by_cat:
+                    meta = meta_by_cat[key]
+                    node['decay_score'] = meta.get('decay_score', 1.0)
+                    node['status'] = meta.get('status', 'active')
+                    node['pinned'] = bool(meta.get('pinned', 0))
+                    merged_count += 1
+    
+    if merged_count > 0:
+        logger.info(f"✅ Merged metadata for {merged_count} nodes")
+    return data
+
+
 def refresh_data() -> dict:
     """Rebuild graph from memory files and write to data.json."""
     config = load_config()
     previous = _safe_read_existing_data()
     data = _apply_node_timestamps(build_graph(config), previous)
+    # Merge metadata into nodes
+    data = _merge_metadata(data)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     return data
@@ -107,6 +180,29 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                 self._json_response(entry)
             else:
                 self._json_response({"error": "Not found"}, code=404)
+        elif clean_path == "/api/meta/entries":
+            self._handle_meta_entries()
+        elif clean_path.startswith("/api/meta/entries/"):
+            entry_id = clean_path.split("/api/meta/entries/")[1]
+            entry = _meta_db.get_entry(entry_id)
+            if entry:
+                self._json_response(entry)
+            else:
+                self._json_response({"error": "Not found"}, code=404)
+        elif clean_path == "/api/meta/health":
+            self._json_response(_meta_db.get_health_stats())
+        elif clean_path == "/api/meta/snapshots":
+            self._json_response(_meta_db.get_snapshots())
+        elif clean_path == "/api/meta/operations":
+            self._json_response(_meta_db.get_operations_log())
+        elif clean_path == "/api/consolidate/scan":
+            self._handle_consolidate_scan()
+        elif clean_path == "/api/consolidate/duplicates":
+            self._handle_consolidate_duplicates()
+        elif clean_path == "/api/consolidate/conflicts":
+            self._handle_consolidate_conflicts()
+        elif clean_path == "/api/consolidate/distribution":
+            self._handle_consolidate_distribution()
         elif clean_path == "/":
             self.path = "/index.html"
             super().do_GET()
@@ -183,6 +279,47 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
 
         if clean_path == "/api/memories/bulk-status":
             self._handle_memories_bulk_status()
+            return
+
+        if clean_path == "/api/meta/sync":
+            self._handle_meta_sync()
+            return
+
+        if clean_path == "/api/meta/snapshots":
+            self._handle_meta_create_snapshot()
+            return
+
+        if clean_path == "/api/meta/decay":
+            count = _meta_db.compute_decay_scores()
+            self._json_response({"status": "ok", "updated": count})
+            return
+
+        if clean_path.startswith("/api/meta/entries/") and clean_path.endswith("/pin"):
+            entry_id = clean_path.split("/api/meta/entries/")[1].replace("/pin", "")
+            _meta_db.pin_entry(entry_id)
+            self._json_response({"status": "ok", "pinned": True})
+            return
+
+        if clean_path.startswith("/api/meta/entries/") and clean_path.endswith("/unpin"):
+            entry_id = clean_path.split("/api/meta/entries/")[1].replace("/unpin", "")
+            _meta_db.unpin_entry(entry_id)
+            self._json_response({"status": "ok", "pinned": False})
+            return
+
+        if clean_path.startswith("/api/meta/snapshots/") and clean_path.endswith("/restore"):
+            sid = clean_path.split("/api/meta/snapshots/")[1].replace("/restore", "")
+            try:
+                snap = _meta_db.restore_snapshot(int(sid))
+            except (ValueError, TypeError):
+                snap = None
+            if snap:
+                self._json_response(snap)
+            else:
+                self._json_response({"error": "Snapshot not found"}, code=404)
+            return
+
+        if clean_path == "/api/consolidate/llm":
+            self._handle_consolidate_llm()
             return
 
         self._json_response({"error": "Not found"}, code=404)
@@ -787,6 +924,121 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         with open(wiki_data_file, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         return data
+
+    # ── Meta API handler methods ─────────────────────────────────────
+
+    def _handle_meta_entries(self):
+        from urllib.parse import parse_qs, urlparse
+        parsed = urlparse(self.path)
+        params = parse_qs(parsed.query)
+        status = params.get("status", [None])[0]
+        self._json_response(_meta_db.get_all_entries(status=status))
+
+    def _handle_meta_sync(self):
+        config = load_config()
+        source_cfg = config.get("source", {})
+        active = source_cfg.get("active_profile", "hermes")
+        profile = source_cfg.get("profiles", {}).get(active, {})
+        home = profile.get("home", "")
+        files = profile.get("memory_files", [])
+        memory_path = user_path = None
+        for f in files:
+            full = os.path.join(home, f)
+            if os.path.exists(full):
+                if "MEMORY" in f.upper() or "memory" in f:
+                    memory_path = full
+                elif "USER" in f.upper() or "user" in f:
+                    user_path = full
+        if not memory_path:
+            # Try fallback
+            for f in profile.get("memory_files_fallback", []):
+                full = os.path.join(home, f)
+                if os.path.exists(full):
+                    if "memory" in f.lower():
+                        memory_path = full
+                    elif "user" in f.lower():
+                        user_path = full
+        if not memory_path:
+            self._json_response({"error": "No memory file found"}, code=404)
+            return
+        result = _meta_db.sync_from_memory_files(memory_path, user_path)
+        self._json_response({"status": "ok", **result})
+
+    def _handle_meta_create_snapshot(self):
+        config = load_config()
+        source_cfg = config.get("source", {})
+        active = source_cfg.get("active_profile", "hermes")
+        profile = source_cfg.get("profiles", {}).get(active, {})
+        home = profile.get("home", "")
+        memory_content = user_content = ""
+        for f in profile.get("memory_files", []):
+            full = os.path.join(home, f)
+            if os.path.exists(full):
+                with open(full, "r", encoding="utf-8") as fh:
+                    content = fh.read()
+                if "MEMORY" in f.upper() or "memory" in f:
+                    memory_content = content
+                elif "USER" in f.upper() or "user" in f:
+                    user_content = content
+        sid = _meta_db.create_snapshot(memory_content, user_content, "manual")
+        self._json_response({"status": "ok", "snapshot_id": sid})
+
+    # ── Consolidation API handler methods ──────────────────────────
+
+    def _get_consolidator(self) -> Consolidator:
+        config = load_config()
+        source_cfg = config.get("source", {})
+        active = source_cfg.get("active_profile", "hermes")
+        profile = source_cfg.get("profiles", {}).get(active, {})
+        home = profile.get("home", "")
+        memory_path = user_path = None
+        for f in profile.get("memory_files", []):
+            full = os.path.join(home, f)
+            if os.path.exists(full):
+                if "memory" in f.lower():
+                    memory_path = full
+                elif "user" in f.lower():
+                    user_path = full
+        return Consolidator(_meta_db, memory_path or "", user_path)
+
+    def _handle_consolidate_scan(self):
+        c = self._get_consolidator()
+        self._json_response(c.run_full_scan())
+
+    def _handle_consolidate_duplicates(self):
+        c = self._get_consolidator()
+        self._json_response(c.find_duplicates())
+
+    def _handle_consolidate_conflicts(self):
+        c = self._get_consolidator()
+        self._json_response(c.find_conflicts())
+
+    def _handle_consolidate_distribution(self):
+        c = self._get_consolidator()
+        self._json_response(c.analyze_distribution())
+
+    def _handle_consolidate_llm(self):
+        try:
+            body = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+        entry_ids = body.get("entry_ids", [])
+        task = body.get("task", "merge")
+        if not entry_ids:
+            self._json_response({"error": "Provide 'entry_ids' array"}, code=400)
+            return
+        entries = [_meta_db.get_entry(eid) for eid in entry_ids]
+        entries = [e for e in entries if e]
+        if not entries:
+            self._json_response({"error": "No valid entries found"}, code=404)
+            return
+        c = self._get_consolidator()
+        result = c.llm_consolidate(entries, task)
+        if result:
+            self._json_response(result)
+        else:
+            self._json_response({"error": "LLM not configured"}, code=400)
 
     def _json_response(self, data, code=200):
         self.send_response(code)

@@ -1577,6 +1577,143 @@ svg { width: 100%; height: 100%; }
     width: 380px;
   }
 }
+/* ========== 记忆健康仪表盘 ========== */
+
+/* ---- Consolidation Panel ---- */
+.consolidate-panel { padding: 16px 0; }
+.consolidate-toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.consolidate-btn { padding: 8px 16px; border: 1px solid #ddd; border-radius: 8px; background: #f8f9fa; cursor: pointer; font-size: 13px; transition: all .2s; }
+.consolidate-btn:hover { background: #e8f0fe; border-color: #4285f4; color: #4285f4; }
+.consolidate-summary { margin-bottom: 16px; }
+.consolidate-summary .cs-card { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; margin: 0 8px 8px 0; font-size: 13px; }
+.consolidate-summary .cs-healthy { background: #e8f5e9; color: #2e7d32; }
+.consolidate-summary .cs-warning { background: #fff8e1; color: #f57f17; }
+.consolidate-summary .cs-danger { background: #ffebee; color: #c62828; }
+.consolidate-results { }
+.cr-section { margin-bottom: 20px; }
+.cr-section h4 { font-size: 14px; color: #555; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+.cr-item { padding: 12px 16px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 8px; background: #fafafa; }
+.cr-item:hover { border-color: #4285f4; background: #f0f7ff; }
+.cr-pair { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; }
+.cr-entry { flex: 1; font-size: 12px; color: #666; background: #fff; padding: 8px 10px; border-radius: 6px; border: 1px solid #e8e8e8; }
+.cr-entry .cr-id { font-weight: 600; color: #333; margin-bottom: 2px; }
+.cr-sim { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.cr-sim.high { background: #ffcdd2; color: #b71c1c; }
+.cr-sim.medium { background: #fff9c4; color: #f57f17; }
+.cr-suggestion { font-size: 12px; color: #666; margin-top: 6px; font-style: italic; }
+.cr-actions { margin-top: 8px; display: flex; gap: 6px; }
+.cr-action-btn { padding: 4px 12px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; font-size: 11px; }
+.cr-action-btn:hover { background: #e8f0fe; border-color: #4285f4; }
+.cr-action-btn.primary { background: #4285f4; color: #fff; border-color: #4285f4; }
+.cr-action-btn.primary:hover { background: #3367d6; }
+.cr-dist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.cr-dist-card { padding: 12px; border-radius: 8px; background: #f5f5f5; border: 1px solid #e8e8e8; }
+.cr-dist-card .cat-name { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.cr-dist-card .cat-stats { font-size: 12px; color: #777; }
+.cr-dist-card .cat-bar { height: 6px; border-radius: 3px; background: #e0e0e0; margin-top: 6px; overflow: hidden; }
+.cr-dist-card .cat-bar-inner { height: 100%; border-radius: 3px; background: #4285f4; transition: width .3s; }
+.cr-warning-list { list-style: none; padding: 0; margin: 10px 0 0; }
+.cr-warning-list li { padding: 6px 10px; font-size: 12px; color: #e65100; background: #fff3e0; border-radius: 6px; margin-bottom: 4px; }
+.cr-loading { text-align: center; padding: 40px; color: #999; font-size: 14px; }
+#healthDashboard { display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif; }
+.health-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+.health-header h2 { margin:0; font-size:20px; font-weight:700; color:#2d3436; }
+.health-header h2 span { color:#6c5ce7; }
+.health-toolbar { display:flex; gap:8px; flex-wrap:wrap; }
+.health-toolbar button { padding:8px 16px; border:1px solid #e0e0e0; border-radius:8px; background:#fff; cursor:pointer; font-size:13px; font-weight:500; transition:all .2s; display:flex; align-items:center; gap:5px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.health-toolbar button:hover { background:#f0f4ff; border-color:#1e90ff; color:#1e90ff; transform:translateY(-1px); box-shadow:0 2px 8px rgba(30,144,255,0.12); }
+.health-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:14px; margin-bottom:22px; }
+.health-card { background:#fff; border:1px solid #eee; border-radius:12px; padding:18px 16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); transition:transform .2s, box-shadow .2s; position:relative; overflow:hidden; }
+.health-card:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+.health-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.health-card.card-total::before { background:linear-gradient(90deg,#1e90ff,#00cec9); }
+.health-card.card-active::before { background:linear-gradient(90deg,#2ed573,#7bed9f); }
+.health-card.card-decay::before { background:linear-gradient(90deg,#f0932b,#f39c12); }
+.health-card.card-pinned::before { background:linear-gradient(90deg,#6c5ce7,#a29bfe); }
+.health-card.card-fading::before { background:linear-gradient(90deg,#ff4757,#ff6b81); }
+.health-card.card-dup::before { background:linear-gradient(90deg,#636e72,#b2bec3); }
+.health-card.card-snap::before { background:linear-gradient(90deg,#0984e3,#74b9ff); }
+.hc-icon { font-size:28px; margin-bottom:6px; }
+.hc-value { font-size:30px; font-weight:800; color:#2d3436; line-height:1.1; }
+.hc-label { font-size:11px; color:#999; margin-top:6px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+.health-filter-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+.health-search { flex:1; min-width:200px; padding:9px 14px 9px 36px; border:1px solid #e0e0e0; border-radius:8px; font-size:13px; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242.656a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") 12px center no-repeat; transition:border-color .2s; }
+.health-search:focus { outline:none; border-color:#1e90ff; box-shadow:0 0 0 3px rgba(30,144,255,0.1); }
+.health-filter-select { padding:9px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:13px; background:#fff; cursor:pointer; }
+.health-sections { display:flex; gap:8px; margin-bottom:16px; }
+.health-tab { padding:8px 18px; border:none; border-radius:8px; background:#e8e8e8; cursor:pointer; font-size:13px; font-weight:600; color:#666; transition:all .2s; }
+.health-tab.active { background:#1e90ff; color:#fff; box-shadow:0 2px 8px rgba(30,144,255,0.25); }
+.health-tab:hover:not(.active) { background:#d5d5d5; }
+.health-section { display:none; }
+.health-section.active { display:block; }
+.health-table-wrap { background:#fff; border:1px solid #eee; border-radius:12px; padding:0; margin-bottom:22px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+.health-table { width:100%; border-collapse:collapse; font-size:13px; }
+.health-table th { text-align:left; padding:12px 12px; border-bottom:2px solid #f0f0f0; color:#888; font-weight:700; cursor:pointer; user-select:none; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; background:#fafbfc; transition:color .2s; white-space:nowrap; }
+.health-table th:hover { color:#1e90ff; }
+.health-table th.sorted { color:#1e90ff; }
+.health-table td { padding:10px 12px; border-bottom:1px solid #f5f5f5; vertical-align:middle; }
+.health-table tr:hover td { background:#f8f9ff; }
+.health-table tr:last-child td { border-bottom:none; }
+.decay-bar-wrap { display:flex; align-items:center; gap:8px; }
+.decay-bar { width:60px; height:8px; border-radius:4px; background:#eee; overflow:hidden; display:inline-block; }
+.decay-bar-inner { height:100%; border-radius:4px; transition:width .3s; }
+.decay-green { background:linear-gradient(90deg,#2ed573,#7bed9f); }
+.decay-yellow { background:linear-gradient(90deg,#f0932b,#fdcb6e); }
+.decay-red { background:linear-gradient(90deg,#ff4757,#ff6b81); }
+.decay-pct { font-size:11px; font-weight:600; min-width:32px; }
+.decay-pct.green { color:#2ed573; }
+.decay-pct.yellow { color:#f0932b; }
+.decay-pct.red { color:#ff4757; }
+.imp-bar { width:60px; height:8px; border-radius:4px; background:#f0f0f0; display:inline-block; position:relative; overflow:hidden; }
+.imp-bar-inner { height:100%; border-radius:4px; background:linear-gradient(90deg,#6c5ce7,#a29bfe); transition:width .3s; }
+.pin-btn { border:none; background:none; cursor:pointer; font-size:18px; transition:transform .2s; padding:2px 6px; border-radius:4px; }
+.pin-btn:hover { transform:scale(1.2); background:#f0f0f0; }
+.pin-btn.pinned { color:#f0932b; }
+.cat-tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; background:#f0f4ff; color:#1e90ff; }
+.preview-text { max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; color:#555; }
+.health-ops { background:#fff; border:1px solid #eee; border-radius:12px; padding:20px; box-shadow:0 2px 12px rgba(0,0,0,0.06); margin-bottom:22px; }
+.health-ops h3 { margin:0 0 14px; font-size:15px; color:#2d3436; font-weight:700; display:flex; align-items:center; gap:8px; }
+.health-ops-list { max-height:280px; overflow-y:auto; }
+.health-ops-item { padding:10px 12px; border-radius:8px; margin-bottom:6px; background:#fafbfc; border:1px solid #f0f0f0; display:flex; align-items:flex-start; gap:10px; font-size:12px; transition:background .2s; }
+.health-ops-item:hover { background:#f0f4ff; }
+.ops-time { color:#999; font-size:11px; white-space:nowrap; font-weight:500; min-width:130px; }
+.ops-action { font-weight:700; color:#2d3436; }
+.ops-badge { display:inline-block; padding:1px 7px; border-radius:4px; font-size:10px; font-weight:700; text-transform:uppercase; }
+.ops-badge.auto { background:#e8f8f5; color:#2ed573; }
+.ops-badge.manual { background:#fef3e2; color:#f0932b; }
+.ops-detail { color:#888; font-size:11px; }
+.health-snapshots { background:#fff; border:1px solid #eee; border-radius:12px; padding:20px; box-shadow:0 2px 12px rgba(0,0,0,0.06); margin-bottom:22px; }
+.health-snapshots h3 { margin:0 0 14px; font-size:15px; color:#2d3436; font-weight:700; display:flex; align-items:center; gap:8px; }
+.snap-list { display:grid; gap:8px; }
+.snap-item { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-radius:8px; background:#fafbfc; border:1px solid #f0f0f0; transition:background .2s; }
+.snap-item:hover { background:#f0f4ff; }
+.snap-info { display:flex; flex-direction:column; gap:2px; }
+.snap-time { font-size:13px; font-weight:600; color:#2d3436; }
+.snap-meta { font-size:11px; color:#999; }
+.snap-restore-btn { padding:5px 12px; border:1px solid #6c5ce7; border-radius:6px; background:#fff; color:#6c5ce7; font-size:11px; font-weight:600; cursor:pointer; transition:all .2s; }
+.snap-restore-btn:hover { background:#6c5ce7; color:#fff; }
+.snap-create-btn { padding:8px 16px; border:none; border-radius:8px; background:linear-gradient(135deg,#6c5ce7,#a29bfe); color:#fff; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; box-shadow:0 2px 8px rgba(108,92,231,0.25); }
+.snap-create-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(108,92,231,0.35); }
+.health-entry-count { font-size:12px; color:#999; margin-bottom:8px; padding:0 4px; }
+@media (max-width: 768px) {
+  #healthDashboard { padding:16px 12px; }
+  .health-header { flex-direction:column; align-items:flex-start; }
+  .health-cards { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .health-card { padding:12px 10px; }
+  .hc-value { font-size:22px; }
+  .health-filter-bar { flex-direction:column; }
+  .health-search { min-width:auto; width:100%; }
+  .health-table { font-size:12px; }
+  .health-table th, .health-table td { padding:8px 6px; }
+  .preview-text { max-width:120px; }
+  .health-ops-item { flex-direction:column; gap:4px; }
+  .snap-item { flex-direction:column; gap:8px; align-items:flex-start; }
+}
+@media (max-width: 480px) {
+  .health-cards { grid-template-columns:repeat(2,1fr); }
+  .health-sections { overflow-x:auto; flex-wrap:nowrap; }
+  .health-tab { white-space:nowrap; flex-shrink:0; }
+}
 </style>
 </head>
 <body>
@@ -1595,6 +1732,9 @@ svg { width: 100%; height: 100%; }
       </button>
       <button class="view-tab" id="tabWiki" onclick="switchView('wiki')">
         <span class="tab-icon">📖</span>知识图谱
+      </button>
+      <button class="view-tab" id="tabHealth" onclick="switchView('health')">
+        <span class="tab-icon">💊</span>记忆健康
       </button>
     </div>
   </div>
@@ -1734,6 +1874,69 @@ svg { width: 100%; height: 100%; }
 <div class="toast" id="toast"></div>
 
 <div id="graph"></div>
+<div id="healthDashboard">
+  <div class="health-header">
+    <h2>🧠 <span>记忆健康</span> 仪表盘</h2>
+    <div class="health-toolbar">
+      <button onclick="healthSync()">🔄 同步元数据</button>
+      <button onclick="healthDecay()">📉 重算衰减</button>
+      <button onclick="loadHealthData()">♻️ 刷新数据</button>
+    </div>
+  </div>
+  <div class="health-cards" id="healthCards"></div>
+  <div class="health-sections">
+    <button class="health-tab active" onclick="healthSwitchTab('entries',this)">📊 记忆条目</button>
+    <button class="health-tab" onclick="healthSwitchTab('consolidate',this)">🧹 巩固整理</button>
+    <button class="health-tab" onclick="healthSwitchTab('snapshots',this)">💾 快照管理</button>
+    <button class="health-tab" onclick="healthSwitchTab('ops',this)">📋 操作日志</button>
+  </div>
+  <div id="healthSectionEntries" class="health-section active">
+    <div class="health-filter-bar">
+      <input type="text" class="health-search" id="healthSearch" placeholder="搜索记忆内容、分类..." oninput="healthFilter()">
+      <select class="health-filter-select" id="healthCatFilter" onchange="healthFilter()">
+        <option value="">全部分类</option>
+      </select>
+      <select class="health-filter-select" id="healthStatusFilter" onchange="healthFilter()">
+        <option value="">全部状态</option>
+        <option value="healthy">🟢 健康</option>
+        <option value="fading">🟡 衰减中</option>
+        <option value="danger">🔴 危险</option>
+        <option value="pinned">📌 已固定</option>
+      </select>
+    </div>
+    <div class="health-entry-count" id="healthEntryCount"></div>
+    <div class="health-table-wrap">
+      <table class="health-table">
+        <thead id="healthTHead"></thead>
+        <tbody id="healthTBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="healthSectionConsolidate" class="health-section">
+    <div class="consolidate-panel">
+      <div class="consolidate-toolbar">
+        <button class="consolidate-btn" onclick="runConsolidateScan()">🔍 全面扫描</button>
+        <button class="consolidate-btn" onclick="loadConsolidateDupes()">🔗 查找重复</button>
+        <button class="consolidate-btn" onclick="loadConsolidateConflicts()">⚡ 检测冲突</button>
+        <button class="consolidate-btn" onclick="loadConsolidateDist()">📊 分布分析</button>
+      </div>
+      <div id="consolidateSummary" class="consolidate-summary"></div>
+      <div id="consolidateResults" class="consolidate-results"></div>
+    </div>
+  </div>
+  <div id="healthSectionSnapshots" class="health-section">
+    <div class="health-snapshots">
+      <h3>💾 快照管理 <button class="snap-create-btn" onclick="healthCreateSnapshot()">+ 创建快照</button></h3>
+      <div class="snap-list" id="healthSnapList"></div>
+    </div>
+  </div>
+  <div id="healthSectionOps" class="health-section">
+    <div class="health-ops">
+      <h3>📋 操作日志</h3>
+      <div class="health-ops-list" id="healthOps"></div>
+    </div>
+  </div>
+</div>
 
 <script>
 // 认知心理学记忆分类体系 — 8大类颜色 + 节点类型
@@ -1818,7 +2021,7 @@ let activeTimelineIndex = -1;
 let expandedNodes = new Set(); // 已展开的可折叠节点ID
 
 // ========== 视图切换状态 ==========
-let currentView = 'memory'; // 'memory' | 'wiki'
+let currentView = 'memory'; // 'memory' | 'wiki' | 'health'
 let wikiGraphData = null;
 let wikiCurrentViewData = null;
 
@@ -1831,6 +2034,7 @@ const WIKI_COLORS = {
   query:       { name: '查询结果', icon: '🔍', color: '#f39c12' },
   summary:     { name: '摘要',     icon: '📝', color: '#9b59b6' },
   wiki_tag:    { name: '标签',     icon: '🏷️', color: '#95a5a6' },
+  uncategorized: { name: '未分类', icon: '📄', color: '#78909c' },
 };
 
 // 持久化的 D3 选择集和容器（避免重建）
@@ -2490,10 +2694,9 @@ async function loadData() {
   applyTimepoint(timelinePoints.length - 1);
 }
 
-// 节点大小函数（层级递减: center > primary > secondary > memory/skill_cat > skill_subcat > skill）
+// 节点大小函数（层级递减 + V2重要性增强: center > primary > secondary > memory/skill_cat > skill_subcat > skill）
 function nodeRadius(d) {
   // Base radius by category
-  let base;
   if (d.category === 'center') return 24;
   if (d.category === 'primary') return 14;
   if (d.category === 'secondary') return 9;
@@ -2501,13 +2704,19 @@ function nodeRadius(d) {
   if (d.category === 'skill_subcategory') return 5;
   if (d.category === 'skill') return 3.5;
 
-  // Memory nodes: scale by access_count
+  // Memory nodes: scale by access_count + importance (V2)
   if (d.category === 'memory') {
-    base = 5;
+    const base = 5;
     const ac = d.access_count || 0;
-    // Scale: 5 (never accessed) → 16 (frequently accessed)
-    const boost = Math.min(Math.log1p(ac) * 2.5, 11);
-    return base + boost;
+    const imp = d.importance || 0.5;
+    
+    // Access count boost: 0 → 11px (log scale)
+    const acBoost = Math.min(Math.log1p(ac) * 2.5, 11);
+    
+    // Importance boost: 0 → 5px (linear scale from 0.3 to 1.0)
+    const impBoost = Math.max(0, (imp - 0.3) * 8.3);
+    
+    return base + acBoost + impBoost;
   }
   return 8;
 }
@@ -2568,6 +2777,10 @@ function setupNodeDOM(sel) {
     .attr('r', d => glowRadius(d))
     .attr('fill', d => getNodeColor(d))
     .attr('opacity', d => {
+      // V2: 应用衰减分数到透明度
+      if (d.category === 'memory' && d.decay_score !== undefined) {
+        return 0.12 * d.decay_score;
+      }
       if (d.category === 'skill') return 0.06;
       if (d.category === 'skill_subcategory') return 0.08;
       if (d.category === 'center') return 0.25;
@@ -2580,7 +2793,34 @@ function setupNodeDOM(sel) {
     .attr('class', 'node-circle')
     .attr('r', d => nodeRadius(d))
     .attr('fill', d => getNodeColor(d))
-    .attr('stroke', d => getNodeColor(d) + '88')
+    .attr('opacity', d => {
+      // V2: 衰减分数影响主圆透明度
+      if (d.category === 'memory' && d.decay_score !== undefined) {
+        return Math.max(0.3, d.decay_score);
+      }
+      return 1;
+    })
+    .attr('stroke', d => {
+      // V2: 根据状态显示不同边框颜色
+      if (d.category === 'memory') {
+        // 固定节点：金色边框
+        if (d.pinned) return '#FFD700';
+        // 根据衰减状态
+        const decay = d.decay_score;
+        if (decay !== undefined) {
+          if (decay < 0.3) return '#FF4444';  // 危险：红色
+          if (decay < 0.6) return '#FFaa00';  // 衰减中：橙色
+          if (decay > 0.95) return '#44FF88'; // 健康：绿色
+        }
+      }
+      return getNodeColor(d) + '88';
+    })
+    .attr('stroke-width', d => {
+      if (d.category === 'memory' && (d.pinned || d.decay_score < 0.6)) {
+        return 2; // 重要状态节点加粗边框
+      }
+      return 1;
+    })
     .attr('filter', d => {
       const key = d.primary || d.category;
       return `url(#glow-${key})`;
@@ -3117,6 +3357,12 @@ function switchView(view) {
   // 更新 Tab 样式
   document.getElementById('tabMemory').classList.toggle('active', view === 'memory');
   document.getElementById('tabWiki').classList.toggle('active', view === 'wiki');
+  document.getElementById('tabHealth').classList.toggle('active', view === 'health');
+
+  // 健康仪表盘显隐
+  document.getElementById('healthDashboard').style.display = view === 'health' ? 'block' : 'none';
+  document.getElementById('graph').style.display = view === 'health' ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel').forEach(el => el.style.display = view === 'health' ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
@@ -3131,14 +3377,15 @@ function switchView(view) {
   // 切换刷新按钮文字
   const refreshBtn = document.getElementById('btnRefresh');
   refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新知识' : '刷新记忆'}`;
+  refreshBtn.style.display = view === 'health' ? 'none' : '';
 
   // 切换记忆管理按钮可见性（仅记忆视图显示）
   const memBtn = document.getElementById('btnMemory');
-  if (memBtn) memBtn.style.display = view === 'wiki' ? 'none' : '';
+  if (memBtn) memBtn.style.display = view === 'memory' ? '' : 'none';
 
   // 切换时间刻度线可见性（仅记忆视图显示）
   const timelineRuler = document.getElementById('timelineRuler');
-  if (timelineRuler) timelineRuler.style.display = view === 'wiki' ? 'none' : '';
+  if (timelineRuler) timelineRuler.style.display = view === 'memory' ? '' : 'none';
 
   // 重置筛选
   activeFilters.clear();
@@ -3146,6 +3393,11 @@ function switchView(view) {
   // 重置展开状态
   expandedNodes.clear();
   _nodePositions = {};
+
+  if (view === 'health') {
+    loadHealthData();
+    return;
+  }
 
   if (view === 'wiki') {
     buildWikiFilterBar();
@@ -3935,6 +4187,310 @@ document.addEventListener('keydown', (e) => {
     toggleMemoryPanel();
   }
 });
+
+// ========== 记忆健康仪表盘 ==========
+let healthSortKey = 'decay_score', healthSortAsc = true, healthEntries = [];
+let healthFilteredEntries = [];
+
+function healthSwitchTab(tab, btn) {
+  document.querySelectorAll('.health-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.health-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('healthSection' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'snapshots') loadHealthSnapshots();
+}
+
+async function loadHealthData() {
+  try {
+    const [hRes, eRes, oRes] = await Promise.all([
+      fetch('/api/meta/health'), fetch('/api/meta/entries?status=active'), fetch('/api/meta/operations?limit=20')
+    ]);
+    const health = await hRes.json(), entries = await eRes.json(), ops = await oRes.json();
+    healthEntries = entries;
+    healthFilteredEntries = [...entries];
+    renderHealthCards(health);
+    populateCategoryFilter();
+    healthFilter();
+    renderHealthOps(ops);
+    showToast('健康数据已加载', 'success');
+  } catch(e) { console.error('Health load error', e); showToast('加载失败: ' + e.message, 'error'); }
+}
+
+function renderHealthCards(h) {
+  const active = h.by_status?.active || 0;
+  const avgDecay = typeof h.avg_decay === 'number' ? (h.avg_decay * 100).toFixed(1) : '0.0';
+  const cards = [
+    { icon:'📦', value:h.total||0, label:'总条目', cls:'card-total' },
+    { icon:'✅', value:active, label:'活跃条目', cls:'card-active' },
+    { icon:'📉', value:avgDecay+'%', label:'平均衰减', cls:'card-decay' },
+    { icon:'📌', value:h.pinned||0, label:'已固定', cls:'card-pinned' },
+    { icon:'⚠️', value:h.fading_candidates||0, label:'衰减预警', cls:'card-fading' },
+    { icon:'🔁', value:h.potential_duplicates||0, label:'疑似重复', cls:'card-dup' },
+    { icon:'💾', value:h.snapshots||0, label:'快照数', cls:'card-snap' }
+  ];
+  document.getElementById('healthCards').innerHTML = cards.map(c =>
+    `<div class="health-card ${c.cls}"><div class="hc-icon">${c.icon}</div><div class="hc-value">${c.value}</div><div class="hc-label">${c.label}</div></div>`
+  ).join('');
+}
+
+function populateCategoryFilter() {
+  const cats = [...new Set(healthEntries.map(e => e.category).filter(Boolean))].sort();
+  const sel = document.getElementById('healthCatFilter');
+  sel.innerHTML = '<option value="">全部分类</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+function healthFilter() {
+  const q = (document.getElementById('healthSearch')?.value || '').toLowerCase();
+  const cat = document.getElementById('healthCatFilter')?.value || '';
+  const status = document.getElementById('healthStatusFilter')?.value || '';
+  healthFilteredEntries = healthEntries.filter(e => {
+    if (q && !(e.content_preview||'').toLowerCase().includes(q) && !(e.category||'').toLowerCase().includes(q) && !(e.subcategory||'').toLowerCase().includes(q)) return false;
+    if (cat && e.category !== cat) return false;
+    if (status === 'healthy' && e.decay_score <= 0.5) return false;
+    if (status === 'fading' && (e.decay_score <= 0.2 || e.decay_score > 0.5)) return false;
+    if (status === 'danger' && e.decay_score > 0.2) return false;
+    if (status === 'pinned' && !e.pinned) return false;
+    return true;
+  });
+  renderHealthTable();
+}
+
+function renderHealthTable() {
+  const sorted = [...healthFilteredEntries].sort((a, b) => {
+    let va = a[healthSortKey], vb = b[healthSortKey];
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    let v = va > vb ? 1 : va < vb ? -1 : 0;
+    return healthSortAsc ? v : -v;
+  });
+  const cols = [
+    ['content_preview','内容预览'],['category','分类'],['importance','重要度'],
+    ['decay_score','衰减分'],['access_count','访问次数'],['pinned','固定'],['created_at','创建时间']
+  ];
+  document.getElementById('healthTHead').innerHTML = '<tr>' + cols.map(c =>
+    `<th class="${healthSortKey===c[0]?'sorted':''}" onclick="healthSort('${c[0]}')">${c[1]} ${healthSortKey===c[0]?(healthSortAsc?'↑':'↓'):''}</th>`
+  ).join('') + '</tr>';
+
+  document.getElementById('healthEntryCount').textContent = `显示 ${sorted.length} / ${healthEntries.length} 条记忆`;
+
+  document.getElementById('healthTBody').innerHTML = sorted.map(e => {
+    const ds = e.decay_score || 0;
+    const dcClass = ds > 0.5 ? 'green' : ds > 0.2 ? 'yellow' : 'red';
+    const preview = (e.content_preview||'').slice(0,50) + ((e.content_preview||'').length>50?'…':'');
+    const catLabel = [e.category, e.subcategory].filter(Boolean).join('/');
+    return `<tr>
+      <td><div class="preview-text" title="${(e.content_preview||'').replace(/"/g,'&quot;')}">${preview}</div></td>
+      <td><span class="cat-tag">${catLabel||'未分类'}</span></td>
+      <td><div class="imp-bar"><div class="imp-bar-inner" style="width:${(e.importance||0)*100}%"></div></div></td>
+      <td><div class="decay-bar-wrap"><div class="decay-bar"><div class="decay-bar-inner decay-${dcClass}" style="width:${Math.max(ds*100,5)}%"></div></div><span class="decay-pct ${dcClass}">${(ds*100).toFixed(0)}%</span></div></td>
+      <td style="text-align:center">${e.access_count||0}</td>
+      <td><button class="pin-btn ${e.pinned?'pinned':''}" onclick="healthPin('${e.id}')">${e.pinned?'📌':'○'}</button></td>
+      <td style="font-size:11px;color:#999">${(e.created_at||'').slice(0,10)}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:#ccc;padding:30px">暂无数据</td></tr>';
+}
+
+function healthSort(key) {
+  if (healthSortKey === key) healthSortAsc = !healthSortAsc;
+  else { healthSortKey = key; healthSortAsc = true; }
+  renderHealthTable();
+}
+
+function renderHealthOps(ops) {
+  const list = Array.isArray(ops) ? ops : [];
+  document.getElementById('healthOps').innerHTML = list.length ? list.map(o => {
+    const badge = o.auto_or_manual === 'auto' ? '<span class="ops-badge auto">自动</span>' : '<span class="ops-badge manual">手动</span>';
+    return `<div class="health-ops-item">
+      <span class="ops-time">🕐 ${(o.timestamp||'').slice(0,19).replace('T',' ')}</span>
+      <span class="ops-action">${o.operation||o.action||''}</span>
+      ${badge}
+      <span class="ops-detail">${o.target_ids ? '目标: '+JSON.stringify(o.target_ids) : (o.target_id||'')}</span>
+    </div>`;
+  }).join('') : '<div style="color:#ccc;text-align:center;padding:20px">暂无操作记录</div>';
+}
+
+async function loadHealthSnapshots() {
+  try {
+    const res = await fetch('/api/meta/snapshots');
+    const snaps = await res.json();
+    const list = Array.isArray(snaps) ? snaps : [];
+    document.getElementById('healthSnapList').innerHTML = list.length ? list.map(s =>
+      `<div class="snap-item">
+        <div class="snap-info">
+          <span class="snap-time">💾 ${(s.timestamp||'').slice(0,19).replace('T',' ')}</span>
+          <span class="snap-meta">触发: ${s.trigger||'unknown'} · 记忆: ${s.memory_size||'?'} · 用户: ${s.user_size||'?'}</span>
+        </div>
+        <button class="snap-restore-btn" onclick="healthRestoreSnapshot('${s.id}')">恢复此快照</button>
+      </div>`
+    ).join('') : '<div style="color:#ccc;text-align:center;padding:20px">暂无快照</div>';
+  } catch(e) { console.error(e); }
+}
+
+async function healthCreateSnapshot() {
+  try {
+    await fetch('/api/meta/snapshot', {method:'POST'});
+    showToast('快照创建成功', 'success');
+    loadHealthSnapshots();
+    loadHealthData();
+  } catch(e) { showToast('创建失败', 'error'); }
+}
+
+async function healthRestoreSnapshot(id) {
+  if (!confirm('确定要恢复此快照？当前数据将被覆盖。')) return;
+  try {
+    await fetch('/api/meta/snapshot/restore', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id})});
+    showToast('快照恢复成功', 'success');
+    loadHealthData();
+  } catch(e) { showToast('恢复失败', 'error'); }
+}
+
+async function healthSync() {
+  try { await fetch('/api/meta/sync',{method:'POST'}); showToast('同步完成','success'); loadHealthData(); } catch(e){ showToast('同步失败','error'); }
+}
+async function healthDecay() {
+  try { await fetch('/api/meta/decay',{method:'POST'}); showToast('衰减重算完成','success'); loadHealthData(); } catch(e){ showToast('重算失败','error'); }
+}
+async function healthPin(id) {
+  try { await fetch('/api/meta/pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})}); loadHealthData(); } catch(e){ showToast('操作失败','error'); }
+}
+
+// ========== 巩固引擎 ==========
+
+async function runConsolidateScan() {
+  const results = document.getElementById('consolidateResults');
+  const summary = document.getElementById('consolidateSummary');
+  results.innerHTML = '<div class="cr-loading">🔍 正在扫描记忆...</div>';
+  summary.innerHTML = '';
+  try {
+    const res = await fetch('/api/consolidate/scan');
+    const data = await res.json();
+    renderConsolidateSummary(data.summary);
+    renderConsolidateResults(data);
+    showToast('扫描完成', 'success');
+  } catch(e) { results.innerHTML = '<div class="cr-loading">扫描失败: '+e.message+'</div>'; }
+}
+
+async function loadConsolidateDupes() {
+  const results = document.getElementById('consolidateResults');
+  results.innerHTML = '<div class="cr-loading">🔗 查找重复...</div>';
+  try {
+    const res = await fetch('/api/consolidate/duplicates');
+    const dupes = await res.json();
+    results.innerHTML = renderDuplicates(dupes);
+  } catch(e) { results.innerHTML = '<div class="cr-loading">查找失败</div>'; }
+}
+
+async function loadConsolidateConflicts() {
+  const results = document.getElementById('consolidateResults');
+  results.innerHTML = '<div class="cr-loading">⚡ 检测冲突...</div>';
+  try {
+    const res = await fetch('/api/consolidate/conflicts');
+    const conflicts = await res.json();
+    results.innerHTML = renderConflicts(conflicts);
+  } catch(e) { results.innerHTML = '<div class="cr-loading">检测失败</div>'; }
+}
+
+async function loadConsolidateDist() {
+  const results = document.getElementById('consolidateResults');
+  results.innerHTML = '<div class="cr-loading">📊 分析分布...</div>';
+  try {
+    const res = await fetch('/api/consolidate/distribution');
+    const dist = await res.json();
+    results.innerHTML = renderDistribution(dist);
+  } catch(e) { results.innerHTML = '<div class="cr-loading">分析失败</div>'; }
+}
+
+function renderConsolidateSummary(s) {
+  if (!s) return;
+  const el = document.getElementById('consolidateSummary');
+  const cls = s.health.includes('🟢') ? 'cs-healthy' : s.health.includes('🟡') ? 'cs-warning' : 'cs-danger';
+  let html = `<span class="cs-card ${cls}">${s.health}</span>`;
+  if (s.actions && s.actions.length) {
+    html += s.actions.map(a => `<span class="cs-card cs-warning">${a}</span>`).join('');
+  }
+  el.innerHTML = html;
+}
+
+function renderConsolidateResults(data) {
+  let html = '';
+  if (data.duplicates && data.duplicates.length) html += renderDuplicates(data.duplicates);
+  if (data.conflicts && data.conflicts.length) html += renderConflicts(data.conflicts);
+  if (data.distribution) html += renderDistribution(data.distribution);
+  if (!html) html = '<div class="cr-loading">✨ 记忆状态良好，暂无需要整理的内容</div>';
+  document.getElementById('consolidateResults').innerHTML = html;
+}
+
+function renderDuplicates(dupes) {
+  if (!dupes || !dupes.length) return '<div class="cr-section"><h4>🔗 重复检测</h4><div class="cr-loading">未发现重复</div></div>';
+  return `<div class="cr-section"><h4>🔗 疑似重复 (${dupes.length} 对)</h4>` +
+    dupes.map(d => {
+      const simCls = d.similarity >= 0.8 ? 'high' : 'medium';
+      const e1 = d.entries?.[0] || {}, e2 = d.entries?.[1] || {};
+      return `<div class="cr-item">
+        <div class="cr-pair">
+          <div class="cr-entry"><div class="cr-id">${d.pair[0]}</div>${(e1.content_preview||'').slice(0,80)}</div>
+          <div class="cr-entry"><div class="cr-id">${d.pair[1]}</div>${(e2.content_preview||'').slice(0,80)}</div>
+        </div>
+        <span class="cr-sim ${simCls}">相似度 ${(d.similarity*100).toFixed(0)}%</span>
+        <div class="cr-suggestion">💡 ${d.suggestion}</div>
+        <div class="cr-actions">
+          <button class="cr-action-btn primary" onclick="llmMerge('${d.pair[0]}','${d.pair[1]}')">🤖 AI合并建议</button>
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+}
+
+function renderConflicts(conflicts) {
+  if (!conflicts || !conflicts.length) return '<div class="cr-section"><h4>⚡ 冲突检测</h4><div class="cr-loading">未发现冲突</div></div>';
+  return `<div class="cr-section"><h4>⚡ 可能冲突 (${conflicts.length} 对)</h4>` +
+    conflicts.map(c => {
+      const e1 = c.entries?.[0] || {}, e2 = c.entries?.[1] || {};
+      return `<div class="cr-item">
+        <div class="cr-pair">
+          <div class="cr-entry"><div class="cr-id">${c.pair[0]}</div>${(e1.content_preview||'').slice(0,80)}</div>
+          <div class="cr-entry"><div class="cr-id">${c.pair[1]}</div>${(e2.content_preview||'').slice(0,80)}</div>
+        </div>
+        <div class="cr-suggestion">💡 ${c.suggestion}</div>
+      </div>`;
+    }).join('') + '</div>';
+}
+
+function renderDistribution(dist) {
+  if (!dist || !dist.categories) return '';
+  const cats = dist.categories;
+  const maxPct = Math.max(...Object.values(cats).map(c => c.percentage), 1);
+  let html = `<div class="cr-section"><h4>📊 记忆分布 (共 ${dist.total} 条)</h4><div class="cr-dist-grid">`;
+  for (const [name, info] of Object.entries(cats).sort((a,b) => b[1].count - a[1].count)) {
+    html += `<div class="cr-dist-card">
+      <div class="cat-name">${name}</div>
+      <div class="cat-stats">${info.count} 条 · ${info.percentage}% · 📌${info.pinned} · 衰减 ${(info.avg_decay*100).toFixed(0)}%</div>
+      <div class="cat-bar"><div class="cat-bar-inner" style="width:${info.percentage/maxPct*100}%"></div></div>
+    </div>`;
+  }
+  html += '</div>';
+  if (dist.warnings && dist.warnings.length) {
+    html += '<ul class="cr-warning-list">' + dist.warnings.map(w => `<li>${w}</li>`).join('') + '</ul>';
+  }
+  return html + '</div>';
+}
+
+async function llmMerge(id1, id2) {
+  const results = document.getElementById('consolidateResults');
+  const orig = results.innerHTML;
+  showToast('正在请求 AI 合并建议...', 'info');
+  try {
+    const res = await fetch('/api/consolidate/llm', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({entry_ids: [id1, id2], task: 'merge'})
+    });
+    const data = await res.json();
+    if (data.error) { showToast('AI 合并失败: ' + data.error, 'error'); return; }
+    const merged = data.merged || data.compressed || JSON.stringify(data);
+    const reasoning = data.reasoning || '';
+    alert(`🤖 AI 合并建议:\n\n${merged}\n\n理由: ${reasoning}`);
+  } catch(e) { showToast('请求失败: ' + e.message, 'error'); }
+}
 </script>
 
 </body>

@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-16 09:05:32",
+  "lastUpdated": "2026-04-20 15:36:16",
   "source": "/Users/liuxiaocheng/Documents/aiworkspace/wiki",
   "nodes": [
     {
@@ -13,7 +13,199 @@
       "tags": [],
       "created": "",
       "updated": ""
+    },
+    {
+      "id": "w_d41d8cd9",
+      "label": "",
+      "category": "uncategorized",
+      "description": "",
+      "primary": "uncategorized",
+      "secondary": "",
+      "group": "uncategorized",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "w_66cb21a1",
+      "label": "LLM vs 传统ML",
+      "category": "comparison",
+      "description": "大语言模型 vs 传统机器学习\n\n## 共同点\n- 都基于统计学习\n- 需要数据训练\n\n## 差异\n- LLM 使用 Transformer 架构\n- 传统ML 需要手工特征工程\n- LLM 泛化能力更强\n\n相关：[[机器学习]], [[AI]]",
+      "primary": "comparison",
+      "secondary": "",
+      "group": "comparison",
+      "tags": [
+        "AI",
+        "LLM",
+        "对比"
+      ],
+      "created": "2026-04-20",
+      "updated": "2026-04-20"
+    },
+    {
+      "id": "w_4921c0e2",
+      "label": "AI",
+      "category": "concept",
+      "description": "Artificial Intelligence - 人工智能是当前最具变革性的技术领域之一。\n\n[[机器学习]] 是 AI 的核心技术。\n\n相关：[[LLM vs 传统ML]]",
+      "primary": "concept",
+      "secondary": "",
+      "group": "concept",
+      "tags": [
+        "人工智能",
+        "技术"
+      ],
+      "created": "2026-04-20",
+      "updated": "2026-04-20"
+    },
+    {
+      "id": "w_b75959c9",
+      "label": "机器学习",
+      "category": "concept",
+      "description": "Machine Learning - 机器学习是人工智能的一个分支，使计算机能够从数据中学习。\n\n核心概念：[[AI]]\n\n与[[LLM vs 传统ML]]相关。",
+      "primary": "concept",
+      "secondary": "",
+      "group": "concept",
+      "tags": [
+        "AI",
+        "技术",
+        "算法"
+      ],
+      "created": "2026-04-20",
+      "updated": "2026-04-20"
+    },
+    {
+      "id": "wt_0a40e3c9",
+      "label": "AI",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "wt_b8cc08c1",
+      "label": "LLM",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "wt_f5deaa17",
+      "label": "对比",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "wt_f068f0da",
+      "label": "人工智能",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "wt_a95dd3e1",
+      "label": "技术",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "wt_046a899e",
+      "label": "算法",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
     }
   ],
-  "links": []
+  "links": [
+    {
+      "source": "wiki_center",
+      "target": "w_d41d8cd9",
+      "label": "contains"
+    },
+    {
+      "source": "wiki_center",
+      "target": "w_66cb21a1",
+      "label": "contains"
+    },
+    {
+      "source": "wiki_center",
+      "target": "w_4921c0e2",
+      "label": "contains"
+    },
+    {
+      "source": "wiki_center",
+      "target": "w_b75959c9",
+      "label": "contains"
+    },
+    {
+      "source": "w_66cb21a1",
+      "target": "wt_0a40e3c9",
+      "label": "tagged"
+    },
+    {
+      "source": "w_66cb21a1",
+      "target": "wt_b8cc08c1",
+      "label": "tagged"
+    },
+    {
+      "source": "w_66cb21a1",
+      "target": "wt_f5deaa17",
+      "label": "tagged"
+    },
+    {
+      "source": "w_4921c0e2",
+      "target": "wt_f068f0da",
+      "label": "tagged"
+    },
+    {
+      "source": "w_4921c0e2",
+      "target": "wt_a95dd3e1",
+      "label": "tagged"
+    },
+    {
+      "source": "w_b75959c9",
+      "target": "wt_0a40e3c9",
+      "label": "tagged"
+    },
+    {
+      "source": "w_b75959c9",
+      "target": "wt_a95dd3e1",
+      "label": "tagged"
+    },
+    {
+      "source": "w_b75959c9",
+      "target": "wt_046a899e",
+      "label": "tagged"
+    }
+  ]
 }

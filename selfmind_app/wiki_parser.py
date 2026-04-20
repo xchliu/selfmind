@@ -133,6 +133,7 @@ def scan_wiki_pages(wiki_path: str) -> list[dict]:
     """Scan the wiki directory for .md files in recognised subdirectories.
 
     Returns a list of page dicts with metadata extracted from frontmatter and content.
+    Also scans root-level .md files.
     """
     root = Path(wiki_path)
     if not root.is_dir():
@@ -140,6 +141,36 @@ def scan_wiki_pages(wiki_path: str) -> list[dict]:
 
     pages: list[dict] = []
 
+    # First scan root-level .md files
+    for md_file in sorted(root.glob("*.md")):
+        if md_file.name in _SKIP_FILES:
+            continue
+        try:
+            content = md_file.read_text(encoding="utf-8")
+        except OSError:
+            continue
+
+        fm = parse_frontmatter(content)
+        wikilinks = extract_wikilinks(content)
+        
+        # Determine category from frontmatter or filename
+        page_type = fm.get("type", "")
+        if not page_type:
+            # Use filename (without .md) as name, no specific category
+            page_type = "uncategorized"
+        
+        pages.append({
+            "name": fm.get("title", md_file.stem),
+            "path": str(md_file.relative_to(root)),
+            "type": page_type,
+            "tags": fm.get("tags", []),
+            "content": content,
+            "wikilinks": wikilinks,
+            "created": fm.get("created", ""),
+            "updated": fm.get("updated", ""),
+        })
+
+    # Then scan subdirectories
     for subdir_name in sorted(_SCAN_DIRS):
         subdir = root / subdir_name
         if not subdir.is_dir():
@@ -232,15 +263,15 @@ def build_wiki_graph(config: dict) -> dict:
         node_id = name_to_id[page["name"]]
         nodes.append({
             "id": node_id,
-            "label": page["title"],
+            "label": page.get("title") or page["name"],  # 支持 title 或 name
             "category": page["type"],
-            "description": page["content_preview"],
+            "description": page.get("content_preview", page.get("content", "")[:200]),
             "primary": page["type"],
             "secondary": "",
             "group": page["type"],
             "tags": page["tags"],
-            "created": page["created"],
-            "updated": page["updated"],
+            "created": page.get("created", ""),
+            "updated": page.get("updated", ""),
         })
 
         # Center → page

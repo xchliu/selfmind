@@ -6,6 +6,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.1.0] — 2026-04-20
+
+### Added (V2: Agent 睡眠系统)
+- 🆕 **ARCHITECTURE_V2.md** — V2 架构设计文档（三大引擎：巩固/遗忘/分析）
+- 🆕 **Consolidator (巩固引擎)** — 去重检测、冲突检测、可压缩条目识别、LLM 驱动的智能合并
+- 🆕 **MetadataDB (元数据库)** — SQLite 持久化存储，支持记忆状态管理、版本快照、操作日志
+- 🆕 **Wiki 数据解析增强** — wiki_data.json 结构化数据，wiki_parser.py 优化
+
+### Changed
+- `index.html` — 增强前端交互（节点状态可视化、健康度展示）
+- `http_handler.py` — 扩展 API 端点支持 V2 功能
+- `wiki_parser.py` — 优化 Wiki 知识图谱构建逻辑
+
+### Data
+- `wiki_data.json` — Wiki 知识库的结构化缓存
+- `selfmind.db` — SQLite 元数据数据库
+- `selfmind_meta.db` — 元数据管理数据库
+
+---
+
 ## [2.0.0] — 2026-04-11
 
 ### Added
