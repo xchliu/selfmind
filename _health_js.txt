@@ -1,0 +1,165 @@
+// ========== 记忆健康仪表盘 ==========
+let healthSortKey = 'decay_score', healthSortAsc = true, healthEntries = [];
+let healthFilteredEntries = [];
+
+function healthSwitchTab(tab, btn) {
+  document.querySelectorAll('.health-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.health-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('healthSection' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'snapshots') loadHealthSnapshots();
+}
+
+async function loadHealthData() {
+  try {
+    const [hRes, eRes, oRes] = await Promise.all([
+      fetch('/api/meta/health'), fetch('/api/meta/entries?status=active'), fetch('/api/meta/operations?limit=20')
+    ]);
+    const health = await hRes.json(), entries = await eRes.json(), ops = await oRes.json();
+    healthEntries = entries;
+    healthFilteredEntries = [...entries];
+    renderHealthCards(health);
+    populateCategoryFilter();
+    healthFilter();
+    renderHealthOps(ops);
+    showToast('健康数据已加载', 'success');
+  } catch(e) { console.error('Health load error', e); showToast('加载失败: ' + e.message, 'error'); }
+}
+
+function renderHealthCards(h) {
+  const active = h.by_status?.active || 0;
+  const avgDecay = typeof h.avg_decay === 'number' ? (h.avg_decay * 100).toFixed(1) : '0.0';
+  const cards = [
+    { icon:'📦', value:h.total||0, label:'总条目', cls:'card-total' },
+    { icon:'✅', value:active, label:'活跃条目', cls:'card-active' },
+    { icon:'📉', value:avgDecay+'%', label:'平均衰减', cls:'card-decay' },
+    { icon:'📌', value:h.pinned||0, label:'已固定', cls:'card-pinned' },
+    { icon:'⚠️', value:h.fading_candidates||0, label:'衰减预警', cls:'card-fading' },
+    { icon:'🔁', value:h.potential_duplicates||0, label:'疑似重复', cls:'card-dup' },
+    { icon:'💾', value:h.snapshots||0, label:'快照数', cls:'card-snap' }
+  ];
+  document.getElementById('healthCards').innerHTML = cards.map(c =>
+    `<div class="health-card ${c.cls}"><div class="hc-icon">${c.icon}</div><div class="hc-value">${c.value}</div><div class="hc-label">${c.label}</div></div>`
+  ).join('');
+}
+
+function populateCategoryFilter() {
+  const cats = [...new Set(healthEntries.map(e => e.category).filter(Boolean))].sort();
+  const sel = document.getElementById('healthCatFilter');
+  sel.innerHTML = '<option value="">全部分类</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+function healthFilter() {
+  const q = (document.getElementById('healthSearch')?.value || '').toLowerCase();
+  const cat = document.getElementById('healthCatFilter')?.value || '';
+  const status = document.getElementById('healthStatusFilter')?.value || '';
+  healthFilteredEntries = healthEntries.filter(e => {
+    if (q && !(e.content_preview||'').toLowerCase().includes(q) && !(e.category||'').toLowerCase().includes(q) && !(e.subcategory||'').toLowerCase().includes(q)) return false;
+    if (cat && e.category !== cat) return false;
+    if (status === 'healthy' && e.decay_score <= 0.5) return false;
+    if (status === 'fading' && (e.decay_score <= 0.2 || e.decay_score > 0.5)) return false;
+    if (status === 'danger' && e.decay_score > 0.2) return false;
+    if (status === 'pinned' && !e.pinned) return false;
+    return true;
+  });
+  renderHealthTable();
+}
+
+function renderHealthTable() {
+  const sorted = [...healthFilteredEntries].sort((a, b) => {
+    let va = a[healthSortKey], vb = b[healthSortKey];
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    let v = va > vb ? 1 : va < vb ? -1 : 0;
+    return healthSortAsc ? v : -v;
+  });
+  const cols = [
+    ['content_preview','内容预览'],['category','分类'],['importance','重要度'],
+    ['decay_score','衰减分'],['access_count','访问次数'],['pinned','固定'],['created_at','创建时间']
+  ];
+  document.getElementById('healthTHead').innerHTML = '<tr>' + cols.map(c =>
+    `<th class="${healthSortKey===c[0]?'sorted':''}" onclick="healthSort('${c[0]}')">${c[1]} ${healthSortKey===c[0]?(healthSortAsc?'↑':'↓'):''}</th>`
+  ).join('') + '</tr>';
+
+  document.getElementById('healthEntryCount').textContent = `显示 ${sorted.length} / ${healthEntries.length} 条记忆`;
+
+  document.getElementById('healthTBody').innerHTML = sorted.map(e => {
+    const ds = e.decay_score || 0;
+    const dcClass = ds > 0.5 ? 'green' : ds > 0.2 ? 'yellow' : 'red';
+    const preview = (e.content_preview||'').slice(0,50) + ((e.content_preview||'').length>50?'…':'');
+    const catLabel = [e.category, e.subcategory].filter(Boolean).join('/');
+    return `<tr>
+      <td><div class="preview-text" title="${(e.content_preview||'').replace(/"/g,'&quot;')}">${preview}</div></td>
+      <td><span class="cat-tag">${catLabel||'未分类'}</span></td>
+      <td><div class="imp-bar"><div class="imp-bar-inner" style="width:${(e.importance||0)*100}%"></div></div></td>
+      <td><div class="decay-bar-wrap"><div class="decay-bar"><div class="decay-bar-inner decay-${dcClass}" style="width:${Math.max(ds*100,5)}%"></div></div><span class="decay-pct ${dcClass}">${(ds*100).toFixed(0)}%</span></div></td>
+      <td style="text-align:center">${e.access_count||0}</td>
+      <td><button class="pin-btn ${e.pinned?'pinned':''}" onclick="healthPin('${e.id}')">${e.pinned?'📌':'○'}</button></td>
+      <td style="font-size:11px;color:#999">${(e.created_at||'').slice(0,10)}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:#ccc;padding:30px">暂无数据</td></tr>';
+}
+
+function healthSort(key) {
+  if (healthSortKey === key) healthSortAsc = !healthSortAsc;
+  else { healthSortKey = key; healthSortAsc = true; }
+  renderHealthTable();
+}
+
+function renderHealthOps(ops) {
+  const list = Array.isArray(ops) ? ops : [];
+  document.getElementById('healthOps').innerHTML = list.length ? list.map(o => {
+    const badge = o.auto_or_manual === 'auto' ? '<span class="ops-badge auto">自动</span>' : '<span class="ops-badge manual">手动</span>';
+    return `<div class="health-ops-item">
+      <span class="ops-time">🕐 ${(o.timestamp||'').slice(0,19).replace('T',' ')}</span>
+      <span class="ops-action">${o.operation||o.action||''}</span>
+      ${badge}
+      <span class="ops-detail">${o.target_ids ? '目标: '+JSON.stringify(o.target_ids) : (o.target_id||'')}</span>
+    </div>`;
+  }).join('') : '<div style="color:#ccc;text-align:center;padding:20px">暂无操作记录</div>';
+}
+
+async function loadHealthSnapshots() {
+  try {
+    const res = await fetch('/api/meta/snapshots');
+    const snaps = await res.json();
+    const list = Array.isArray(snaps) ? snaps : [];
+    document.getElementById('healthSnapList').innerHTML = list.length ? list.map(s =>
+      `<div class="snap-item">
+        <div class="snap-info">
+          <span class="snap-time">💾 ${(s.timestamp||'').slice(0,19).replace('T',' ')}</span>
+          <span class="snap-meta">触发: ${s.trigger||'unknown'} · 记忆: ${s.memory_size||'?'} · 用户: ${s.user_size||'?'}</span>
+        </div>
+        <button class="snap-restore-btn" onclick="healthRestoreSnapshot('${s.id}')">恢复此快照</button>
+      </div>`
+    ).join('') : '<div style="color:#ccc;text-align:center;padding:20px">暂无快照</div>';
+  } catch(e) { console.error(e); }
+}
+
+async function healthCreateSnapshot() {
+  try {
+    await fetch('/api/meta/snapshot', {method:'POST'});
+    showToast('快照创建成功', 'success');
+    loadHealthSnapshots();
+    loadHealthData();
+  } catch(e) { showToast('创建失败', 'error'); }
+}
+
+async function healthRestoreSnapshot(id) {
+  if (!confirm('确定要恢复此快照？当前数据将被覆盖。')) return;
+  try {
+    await fetch('/api/meta/snapshot/restore', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id})});
+    showToast('快照恢复成功', 'success');
+    loadHealthData();
+  } catch(e) { showToast('恢复失败', 'error'); }
+}
+
+async function healthSync() {
+  try { await fetch('/api/meta/sync',{method:'POST'}); showToast('同步完成','success'); loadHealthData(); } catch(e){ showToast('同步失败','error'); }
+}
+async function healthDecay() {
+  try { await fetch('/api/meta/decay',{method:'POST'}); showToast('衰减重算完成','success'); loadHealthData(); } catch(e){ showToast('重算失败','error'); }
+}
+async function healthPin(id) {
+  try { await fetch('/api/meta/pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})}); loadHealthData(); } catch(e){ showToast('操作失败','error'); }
+}

@@ -1,0 +1,50 @@
+<div id="healthDashboard">
+  <div class="health-header">
+    <h2>🧠 <span>记忆健康</span> 仪表盘</h2>
+    <div class="health-toolbar">
+      <button onclick="healthSync()">🔄 同步元数据</button>
+      <button onclick="healthDecay()">📉 重算衰减</button>
+      <button onclick="loadHealthData()">♻️ 刷新数据</button>
+    </div>
+  </div>
+  <div class="health-cards" id="healthCards"></div>
+  <div class="health-sections">
+    <button class="health-tab active" onclick="healthSwitchTab('entries',this)">📊 记忆条目</button>
+    <button class="health-tab" onclick="healthSwitchTab('snapshots',this)">💾 快照管理</button>
+    <button class="health-tab" onclick="healthSwitchTab('ops',this)">📋 操作日志</button>
+  </div>
+  <div id="healthSectionEntries" class="health-section active">
+    <div class="health-filter-bar">
+      <input type="text" class="health-search" id="healthSearch" placeholder="搜索记忆内容、分类..." oninput="healthFilter()">
+      <select class="health-filter-select" id="healthCatFilter" onchange="healthFilter()">
+        <option value="">全部分类</option>
+      </select>
+      <select class="health-filter-select" id="healthStatusFilter" onchange="healthFilter()">
+        <option value="">全部状态</option>
+        <option value="healthy">🟢 健康</option>
+        <option value="fading">🟡 衰减中</option>
+        <option value="danger">🔴 危险</option>
+        <option value="pinned">📌 已固定</option>
+      </select>
+    </div>
+    <div class="health-entry-count" id="healthEntryCount"></div>
+    <div class="health-table-wrap">
+      <table class="health-table">
+        <thead id="healthTHead"></thead>
+        <tbody id="healthTBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="healthSectionSnapshots" class="health-section">
+    <div class="health-snapshots">
+      <h3>💾 快照管理 <button class="snap-create-btn" onclick="healthCreateSnapshot()">+ 创建快照</button></h3>
+      <div class="snap-list" id="healthSnapList"></div>
+    </div>
+  </div>
+  <div id="healthSectionOps" class="health-section">
+    <div class="health-ops">
+      <h3>📋 操作日志</h3>
+      <div class="health-ops-list" id="healthOps"></div>
+    </div>
+  </div>
+</div>
