@@ -1616,12 +1616,43 @@ svg { width: 100%; height: 100%; }
 .cr-warning-list li { padding: 6px 10px; font-size: 12px; color: #e65100; background: #fff3e0; border-radius: 6px; margin-bottom: 4px; }
 .cr-loading { text-align: center; padding: 40px; color: #999; font-size: 14px; }
 #healthDashboard { display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif; }
+#analyzeDashboard { display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif; }
 .health-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
 .health-header h2 { margin:0; font-size:20px; font-weight:700; color:#2d3436; }
 .health-header h2 span { color:#6c5ce7; }
 .health-toolbar { display:flex; gap:8px; flex-wrap:wrap; }
 .health-toolbar button { padding:8px 16px; border:1px solid #e0e0e0; border-radius:8px; background:#fff; cursor:pointer; font-size:13px; font-weight:500; transition:all .2s; display:flex; align-items:center; gap:5px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .health-toolbar button:hover { background:#f0f4ff; border-color:#1e90ff; color:#1e90ff; transform:translateY(-1px); box-shadow:0 2px 8px rgba(30,144,255,0.12); }
+/* AI分析面板样式 */
+.analyze-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+.analyze-header h2 { margin:0; font-size:20px; font-weight:700; color:#2d3436; }
+.analyze-header h2 span { color:#e17055; }
+.analyze-toolbar { display:flex; gap:8px; flex-wrap:wrap; }
+.analyze-toolbar button { padding:8px 16px; border:1px solid #e0e0e0; border-radius:8px; background:#fff; cursor:pointer; font-size:13px; font-weight:500; transition:all .2s; display:flex; align-items:center; gap:5px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.analyze-toolbar button:hover { background:#fff5f3; border-color:#e17055; color:#e17055; transform:translateY(-1px); }
+.analyze-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.analyze-card { background:#fff; border-radius:12px; padding:16px 20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); border:1px solid #f0f0f0; }
+.analyze-card.ac-highlight { border-color:#e17055; background:linear-gradient(135deg,#fff5f3,#fff); }
+.ac-value { font-size:28px; font-weight:700; color:#2d3436; display:block; margin-bottom:4px; }
+.ac-label { font-size:12px; color:#888; }
+.ac-sub { font-size:11px; color:#aaa; margin-top:4px; }
+.analyze-sections { display:flex; gap:4px; background:#f0f0f0; padding:4px; border-radius:10px; margin-bottom:20px; }
+.analyze-tab { padding:8px 16px; border:none; border-radius:8px; background:transparent; color:#888; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; white-space:nowrap; }
+.analyze-tab:hover { color:#555; background:rgba(255,255,255,0.5); }
+.analyze-tab.active { background:#fff; color:#333; box-shadow:0 1px 3px rgba(0,0,0,0.1); font-weight:600; }
+.analyze-section { display:none; }
+.analyze-section.active { display:block; }
+.analyze-overview, .analyze-importance, .analyze-duplicates, .analyze-forget, .analyze-insights { background:#fff; border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+.analyze-stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:20px; }
+.analyze-stat-item { background:#f8f9fa; padding:16px; border-radius:8px; }
+.analyze-stat-label { font-size:12px; color:#888; margin-bottom:4px; }
+.analyze-stat-value { font-size:24px; font-weight:700; color:#2d3436; }
+.analyze-bar-chart { margin:16px 0; }
+.analyze-bar-row { display:flex; align-items:center; margin:8px 0; }
+.analyze-bar-label { width:100px; font-size:12px; color:#666; }
+.analyze-bar-track { flex:1; height:8px; background:#f0f0f0; border-radius:4px; overflow:hidden; margin:0 12px; }
+.analyze-bar-fill { height:100%; background:linear-gradient(90deg,#e17055,#fdcb6e); border-radius:4px; transition:width .3s; }
+.analyze-bar-value { width:40px; font-size:12px; color:#888; text-align:right; }
 .health-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:14px; margin-bottom:22px; }
 .health-card { background:#fff; border:1px solid #eee; border-radius:12px; padding:18px 16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); transition:transform .2s, box-shadow .2s; position:relative; overflow:hidden; }
 .health-card:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,0,0.1); }
@@ -1735,6 +1766,12 @@ svg { width: 100%; height: 100%; }
       </button>
       <button class="view-tab" id="tabHealth" onclick="switchView('health')">
         <span class="tab-icon">💊</span>记忆健康
+      </button>
+      <button class="view-tab" id="tabAnalyze" onclick="switchView('analyze')">
+        <span class="tab-icon">🔍</span>AI 分析
+      </button>
+      <button class="view-tab" id="tabSettings" onclick="switchToSettings()">
+        <span class="tab-icon">⚙️</span>设置
       </button>
     </div>
   </div>
@@ -1935,6 +1972,89 @@ svg { width: 100%; height: 100%; }
       <h3>📋 操作日志</h3>
       <div class="health-ops-list" id="healthOps"></div>
     </div>
+  </div>
+</div>
+
+<!-- AI分析面板 -->
+<div id="analyzeDashboard" style="display:none;">
+  <div class="analyze-header">
+    <h2>🔍 <span>AI 分析引擎</span></h2>
+    <div class="analyze-toolbar">
+      <button onclick="loadAnalyzeData()">🔄 刷新分析</button>
+    </div>
+  </div>
+  <div class="analyze-cards" id="analyzeCards"></div>
+  <div class="analyze-sections">
+    <button class="analyze-tab active" onclick="analyzeSwitchTab('overview',this)">📊 整体概览</button>
+    <button class="analyze-tab" onclick="analyzeSwitchTab('importance',this)">⭐ 重要性分析</button>
+    <button class="analyze-tab" onclick="analyzeSwitchTab('duplicates',this)">🔄 重复检测</button>
+    <button class="analyze-tab" onclick="analyzeSwitchTab('forget',this)">🗑️ 遗忘分析</button>
+    <button class="analyze-tab" onclick="analyzeSwitchTab('insights',this)">💡 洞察</button>
+  </div>
+  <div id="analyzeSectionOverview" class="analyze-section active">
+    <div class="analyze-overview" id="analyzeOverview"></div>
+  </div>
+  <div id="analyzeSectionImportance" class="analyze-section">
+    <div class="analyze-importance" id="analyzeImportance"></div>
+  </div>
+  <div id="analyzeSectionDuplicates" class="analyze-section">
+    <div class="analyze-duplicates" id="analyzeDuplicates"></div>
+  </div>
+  <div id="analyzeSectionForget" class="analyze-section">
+    <div class="analyze-forget" id="analyzeForget"></div>
+  </div>
+  <div id="analyzeSectionInsights" class="analyze-section">
+    <div class="analyze-insights" id="analyzeInsights"></div>
+  </div>
+</div>
+
+<!-- 设置面板 -->
+<div id="settingsDashboard" style="display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
+  <div class="settings-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+    <h2 style="margin:0; font-size:20px; font-weight:700; color:#2d3436;">⚙️ <span>设置</span></h2>
+    <div class="settings-toolbar" style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button onclick="loadSettingsData()" style="padding:8px 16px; border:1px solid #e0e0e0; border-radius:8px; background:#fff; cursor:pointer; font-size:13px; font-weight:500; display:flex; align-items:center; gap:5px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">🔄 刷新</button>
+    </div>
+  </div>
+  
+  <!-- Agent管理 -->
+  <div class="settings-section" style="background:#fff; border-radius:12px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <h3 style="margin:0 0 16px; font-size:16px; font-weight:600; color:#2d3436;">🤖 Agent 管理</h3>
+    <p style="margin:0 0 16px; font-size:13px; color:#666;">管理多个AI Agent的记忆空间，可切换查看不同Agent的记忆图谱</p>
+    
+    <div id="agentsList" style="display:flex; flex-direction:column; gap:12px;"></div>
+    
+    <button onclick="showAddAgentForm()" style="margin-top:16px; padding:10px 20px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500;">+ 添加 Agent</button>
+  </div>
+  
+  <!-- 添加Agent表单 -->
+  <div id="addAgentForm" class="settings-section" style="display:none; background:#fff; border-radius:12px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <h3 style="margin:0 0 16px; font-size:16px; font-weight:600; color:#2d3436;">➕ 添加新 Agent</h3>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div>
+        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">Agent 名称</label>
+        <input type="text" id="newAgentName" placeholder="例如：Claude Code" style="width:100%; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
+      </div>
+      <div>
+        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">记忆目录路径</label>
+        <input type="text" id="newAgentPath" placeholder="例如：~/Documents/claude-memory" style="width:100%; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button onclick="addAgent()" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500;">保存</button>
+        <button onclick="hideAddAgentForm()" style="padding:10px 20px; background:#e0e0e0; color:#444; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500;">取消</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 导入功能 -->
+  <div class="settings-section" style="background:#fff; border-radius:12px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <h3 style="margin:0 0 16px; font-size:16px; font-weight:600; color:#2d3436;">📥 导入记忆</h3>
+    <p style="margin:0 0 16px; font-size:13px; color:#666;">从外部导入记忆文件到当前Agent空间</p>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <input type="text" id="importPath" placeholder="输入要导入的文件路径" style="flex:1; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
+      <button onclick="importMemory()" style="padding:10px 20px; background:#3b82f6; color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500;">导入</button>
+    </div>
+    <div id="importResult" style="margin-top:12px; font-size:13px;"></div>
   </div>
 </div>
 
@@ -3341,6 +3461,30 @@ function animateNumber(el, target, duration) {
   requestAnimationFrame(step);
 }
 
+function switchToSettings() {
+  currentView = 'settings';
+  
+  // 更新 Tab 样式
+  document.getElementById('tabMemory').classList.remove('active');
+  document.getElementById('tabWiki').classList.remove('active');
+  document.getElementById('tabHealth').classList.remove('active');
+  document.getElementById('tabAnalyze').classList.remove('active');
+  document.getElementById('tabSettings').classList.add('active');
+  
+  // 隐藏其他视图元素
+  document.getElementById('settingsDashboard').style.display = 'block';
+  document.getElementById('healthDashboard').style.display = 'none';
+  document.getElementById('analyzeDashboard').style.display = 'none';
+  document.getElementById('graph').style.display = 'none';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = 'none');
+  if (document.getElementById('btnMemory')) document.getElementById('btnMemory').style.display = 'none';
+  if (document.getElementById('btnRefresh')) document.getElementById('btnRefresh').style.display = 'none';
+  if (document.getElementById('timelineRuler')) document.getElementById('timelineRuler').style.display = 'none';
+  
+  // 加载设置数据
+  loadSettingsData();
+}
+
 // ========== 视图切换 ==========
 function switchView(view) {
   if (view === currentView) return;
@@ -3358,11 +3502,16 @@ function switchView(view) {
   document.getElementById('tabMemory').classList.toggle('active', view === 'memory');
   document.getElementById('tabWiki').classList.toggle('active', view === 'wiki');
   document.getElementById('tabHealth').classList.toggle('active', view === 'health');
+  document.getElementById('tabAnalyze').classList.toggle('active', view === 'analyze');
 
   // 健康仪表盘显隐
   document.getElementById('healthDashboard').style.display = view === 'health' ? 'block' : 'none';
-  document.getElementById('graph').style.display = view === 'health' ? 'none' : '';
-  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel').forEach(el => el.style.display = view === 'health' ? 'none' : '');
+  // AI分析面板显隐
+  document.getElementById('analyzeDashboard').style.display = view === 'analyze' ? 'block' : 'none';
+  // 设置面板显隐
+  document.getElementById('settingsDashboard').style.display = view === 'settings' ? 'block' : 'none';
+  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings') ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings') ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
@@ -3377,7 +3526,7 @@ function switchView(view) {
   // 切换刷新按钮文字
   const refreshBtn = document.getElementById('btnRefresh');
   refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新知识' : '刷新记忆'}`;
-  refreshBtn.style.display = view === 'health' ? 'none' : '';
+  refreshBtn.style.display = (view === 'health' || view === 'settings') ? 'none' : '';
 
   // 切换记忆管理按钮可见性（仅记忆视图显示）
   const memBtn = document.getElementById('btnMemory');
@@ -3396,6 +3545,11 @@ function switchView(view) {
 
   if (view === 'health') {
     loadHealthData();
+    return;
+  }
+  
+  if (view === 'analyze') {
+    loadAnalyzeData();
     return;
   }
 
@@ -4200,6 +4354,145 @@ function healthSwitchTab(tab, btn) {
   if (tab === 'snapshots') loadHealthSnapshots();
 }
 
+// ========== 设置功能 ==========
+async function loadSettingsData() {
+  try {
+    const res = await fetch('/api/agents');
+    const data = await res.json();
+    
+    const listEl = document.getElementById('agentsList');
+    if (!listEl) return;
+    
+    if (!data.agents || data.agents.length === 0) {
+      listEl.innerHTML = '<p style="color:#999; font-size:13px;">暂无Agent，点击添加按钮创建</p>';
+      return;
+    }
+    
+    listEl.innerHTML = data.agents.map(agent => `
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#f8f9fa; border-radius:8px; border:1px solid ${agent.id === data.currentAgent ? '#667eea' : '#e0e0e0'};">
+        <div>
+          <div style="font-size:14px; font-weight:600; color:#2d3436;">${agent.name} ${agent.id === data.currentAgent ? '<span style="color:#667eea; font-size:12px;">(当前)</span>' : ''}</div>
+          <div style="font-size:12px; color:#666; margin-top:4px;">路径: ${agent.path}</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          ${agent.id !== data.currentAgent ? `<button onclick="setDefaultAgent('${agent.id}')" style="padding:6px 12px; background:#667eea; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">设为默认</button>` : ''}
+          <button onclick="switchToAgent('${agent.id}')" style="padding:6px 12px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">切换</button>
+          ${agent.id !== 'hermes' ? `<button onclick="deleteAgent('${agent.id}')" style="padding:6px 12px; background:#ef4444; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">删除</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    console.error('加载设置失败:', e);
+  }
+}
+
+function showAddAgentForm() {
+  document.getElementById('addAgentForm').style.display = 'block';
+}
+
+function hideAddAgentForm() {
+  document.getElementById('addAgentForm').style.display = 'none';
+  document.getElementById('newAgentName').value = '';
+  document.getElementById('newAgentPath').value = '';
+}
+
+async function addAgent() {
+  const name = document.getElementById('newAgentName').value.trim();
+  const path = document.getElementById('newAgentPath').value.trim();
+  
+  if (!name || !path) {
+    alert('请填写名称和路径');
+    return;
+  }
+  
+  try {
+    const res = await fetch('/api/agents', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, path})
+    });
+    
+    if (res.ok) {
+      hideAddAgentForm();
+      loadSettingsData();
+    } else {
+      alert('添加失败');
+    }
+  } catch (e) {
+    alert('添加失败: ' + e.message);
+  }
+}
+
+async function deleteAgent(id) {
+  if (!confirm('确定要删除这个Agent吗？')) return;
+  
+  try {
+    const res = await fetch('/api/agents/' + id, {method: 'DELETE'});
+    if (res.ok) {
+      loadSettingsData();
+    } else {
+      alert('删除失败');
+    }
+  } catch (e) {
+    alert('删除失败: ' + e.message);
+  }
+}
+
+async function setDefaultAgent(id) {
+  try {
+    const res = await fetch('/api/agents/' + id + '/default', {method: 'PUT'});
+    if (res.ok) {
+      loadSettingsData();
+    } else {
+      alert('设置失败');
+    }
+  } catch (e) {
+    alert('设置失败: ' + e.message);
+  }
+}
+
+async function switchToAgent(id) {
+  try {
+    const res = await fetch('/api/agents/' + id + '/switch', {method: 'POST'});
+    if (res.ok) {
+      // 重新加载数据
+      loadData();
+      loadSettingsData();
+      alert('已切换到 ' + id);
+    } else {
+      alert('切换失败');
+    }
+  } catch (e) {
+    alert('切换失败: ' + e.message);
+  }
+}
+
+async function importMemory() {
+  const path = document.getElementById('importPath').value.trim();
+  if (!path) {
+    document.getElementById('importResult').innerHTML = '<span style="color:#ef4444;">请输入路径</span>';
+    return;
+  }
+  
+  try {
+    const res = await fetch('/api/import', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({path})
+    });
+    const data = await res.json();
+    
+    if (res.ok) {
+      document.getElementById('importResult').innerHTML = '<span style="color:#10b981;">✓ 导入成功，导入了 ' + data.imported + ' 条记忆</span>';
+      loadData();
+    } else {
+      document.getElementById('importResult').innerHTML = '<span style="color:#ef4444;">导入失败: ' + (data.error || '未知错误') + '</span>';
+    }
+  } catch (e) {
+    document.getElementById('importResult').innerHTML = '<span style="color:#ef4444;">导入失败: ' + e.message + '</span>';
+  }
+}
+
 async function loadHealthData() {
   try {
     const [hRes, eRes, oRes] = await Promise.all([
@@ -4352,6 +4645,153 @@ async function healthDecay() {
 }
 async function healthPin(id) {
   try { await fetch('/api/meta/pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})}); loadHealthData(); } catch(e){ showToast('操作失败','error'); }
+}
+
+// ========== AI分析引擎 ==========
+
+function analyzeSwitchTab(tab, btn) {
+  document.querySelectorAll('.analyze-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.analyze-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('analyzeSection' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  btn.classList.add('active');
+}
+
+async function loadAnalyzeData() {
+  try {
+    const [distRes, dupRes, forgetRes, impRes] = await Promise.all([
+      fetch('/api/consolidate/distribution'),
+      fetch('/api/consolidate/duplicates'),
+      fetch('/api/forget/analyze'),
+      fetch('/api/analyze/importance')
+    ]);
+    
+    const distribution = await distRes.json();
+    const duplicates = await dupRes.json();
+    const forget = await forgetRes.json();
+    const importance = await impRes.json();
+    
+    // Render cards
+    const totalNodes = distribution.total_memory_nodes || 0;
+    const dupCount = duplicates.duplicates ? duplicates.duplicates.length : 0;
+    const forgetCount = forget.to_forget ? forget.to_forget.length : 0;
+    const highImp = (importance.high_importance || 0) + (importance.importance_distribution?.['0.8-1.0'] || 0);
+    
+    document.getElementById('analyzeCards').innerHTML = `
+      <div class="analyze-card">
+        <span class="ac-value">${totalNodes}</span>
+        <span class="ac-label">总记忆节点</span>
+      </div>
+      <div class="analyze-card ${dupCount > 0 ? 'ac-highlight' : ''}">
+        <span class="ac-value">${dupCount}</span>
+        <span class="ac-label">重复记忆</span>
+        <span class="ac-sub">建议合并</span>
+      </div>
+      <div class="analyze-card ${forgetCount > 0 ? 'ac-highlight' : ''}">
+        <span class="ac-value">${forgetCount}</span>
+        <span class="ac-label">可遗忘项</span>
+        <span class="ac-sub">低价值记忆</span>
+      </div>
+      <div class="analyze-card">
+        <span class="ac-value">${highImp}</span>
+        <span class="ac-label">高重要性</span>
+        <span class="ac-sub">核心记忆</span>
+      </div>
+    `;
+    
+    // Render overview
+    document.getElementById('analyzeOverview').innerHTML = `
+      <div class="analyze-stat-grid">
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">记忆分类分布</div>
+          <div class="analyze-bar-chart">
+            ${Object.entries(distribution.by_primary_category || {}).map(([cat, count]) => `
+              <div class="analyze-bar-row">
+                <span class="analyze-bar-label">${cat}</span>
+                <div class="analyze-bar-track"><div class="analyze-bar-fill" style="width:${totalNodes ? (count/totalNodes*100) : 0}%"></div></div>
+                <span class="analyze-bar-value">${count}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">平均重要性</div>
+          <div class="analyze-stat-value">${(distribution.avg_importance || 0).toFixed(2)}</div>
+          <div style="font-size:12px;color:#888">满分 1.0</div>
+        </div>
+      </div>
+    `;
+    
+    // Render duplicates
+    const dupHtml = duplicates.duplicates && duplicates.duplicates.length > 0 
+      ? duplicates.duplicates.map(g => `
+        <div class="cr-group">
+          <div class="cr-group-title">🔄 相似记忆 (${g.length})</div>
+          <ul class="cr-group-list">
+            ${g.map(m => `<li>${m.content_preview || m.label || '未命名'}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('')
+      : '<div style="color:#ccc;text-align:center;padding:30px">未发现重复记忆 ✓</div>';
+    document.getElementById('analyzeDuplicates').innerHTML = dupHtml;
+    
+    // Render forget
+    document.getElementById('analyzeForget').innerHTML = `
+      <div class="analyze-stat-grid">
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">高风险遗忘</div>
+          <div class="analyze-stat-value" style="color:#ef4444">${forget.score_distribution?.high_risk || 0}</div>
+        </div>
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">中风险遗忘</div>
+          <div class="analyze-stat-value" style="color:#f59e0b">${forget.score_distribution?.medium_risk || 0}</div>
+        </div>
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">低风险遗忘</div>
+          <div class="analyze-stat-value" style="color:#10b981">${forget.score_distribution?.low_risk || 0}</div>
+        </div>
+      </div>
+    `;
+    
+    // Render importance
+    const impDist = importance.importance_distribution || {};
+    const highImpCount = (impDist['0.8-1.0'] || 0);
+    const medImpCount = (impDist['0.4-0.6'] || 0) + (impDist['0.6-0.8'] || 0);
+    const lowImpCount = (impDist['0-0.2'] || 0) + (impDist['0.2-0.4'] || 0);
+    document.getElementById('analyzeImportance').innerHTML = `
+      <div class="analyze-stat-grid">
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">高重要性 (0.8-1.0)</div>
+          <div class="analyze-stat-value" style="color:#8b5cf6">${highImpCount}</div>
+        </div>
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">中重要性 (0.4-0.8)</div>
+          <div class="analyze-stat-value" style="color:#3b82f6">${medImpCount}</div>
+        </div>
+        <div class="analyze-stat-item">
+          <div class="analyze-stat-label">低重要性 (0-0.4)</div>
+          <div class="analyze-stat-value" style="color:#9ca3af">${lowImpCount}</div>
+        </div>
+      </div>
+    `;
+    
+    // Render insights placeholder
+    document.getElementById('analyzeInsights').innerHTML = `
+      <div style="color:#666;line-height:1.8">
+        <h3 style="margin-top:0">💡 分析洞察</h3>
+        <ul style="padding-left:20px">
+          <li>您的记忆库目前有 <strong>${totalNodes}</strong> 个节点</li>
+          <li>其中 <strong>${highImp}</strong> 个是高重要性记忆，值得重点巩固</li>
+          ${dupCount > 0 ? `<li>发现 <strong>${dupCount}</strong> 组相似记忆，建议合并以减少冗余</li>` : ''}
+          ${forgetCount > 0 ? `<li>有 <strong>${forgetCount}</strong> 个记忆衰减严重，可以考虑归档或遗忘</li>` : ''}
+        </ul>
+      </div>
+    `;
+    
+    showToast('分析完成', 'success');
+  } catch(e) {
+    console.error(e);
+    showToast('分析加载失败', 'error');
+  }
 }
 
 // ========== 巩固引擎 ==========

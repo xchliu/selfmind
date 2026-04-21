@@ -1,6 +1,7 @@
 """
 分析引擎 - SelfMind V2
 模式识别、知识图谱更新、洞察生成
+Now supports graph data (nodes/links from data.json).
 """
 
 import json
@@ -10,6 +11,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Set, Tuple
 from dataclasses import dataclass, asdict
+
+from selfmind_app.config import DATA_FILE
 
 
 @dataclass
@@ -28,7 +31,141 @@ class AnalyzerEngine:
         self.data_dir = Path(data_dir) if data_dir else Path(__file__).parent.parent / "data"
         self.data_file = self.data_dir / "data.json"
         self.config = AnalysisConfig()
+    
+    # ── Graph Data Support (nodes/links from data.json) ──────────────
+    
+    def load_graph_data(self) -> Dict:
+        """Load graph data from data.json (nodes/links format)."""
+        if not DATA_FILE.exists():
+            return {"nodes": [], "links": []}
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    
+    def get_nodes_as_memories(self) -> List[Dict]:
+        """Convert graph nodes to memory-like format for analysis."""
+        data = self.load_graph_data()
+        nodes = data.get("nodes", [])
         
+        memories = []
+        for node in nodes:
+            if node.get("category") != "memory":
+                continue
+            
+            memory = {
+                "id": node.get("id", ""),
+                "label": node.get("label", ""),
+                "content": node.get("description", ""),
+                "primary": node.get("primary", ""),
+                "secondary": node.get("secondary", ""),
+                "group": node.get("group", ""),
+                "importance": node.get("importance", 0),
+                "access_count": node.get("access_count", 0),
+                "created_at": node.get("createdAt", ""),
+                "updated_at": node.get("updatedAt", ""),
+            }
+            memories.append(memory)
+        return memories
+    
+    def analyze_importance_from_graph(self) -> Dict:
+        """Analyze importance distribution from graph nodes."""
+        memories = self.get_nodes_as_memories()
+        
+        if not memories:
+            return {"message": "No memory nodes found", "analysis": {}}
+        
+        # Calculate importance statistics
+        importances = [m.get("importance", 0) for m in memories]
+        avg_importance = sum(importances) / len(importances)
+        max_importance = max(importances) if importances else 0
+        min_importance = min(importances) if importances else 0
+        
+        # Find high/low importance memories
+        high_importance = [m for m in memories if m.get("importance", 0) >= 0.7]
+        low_importance = [m for m in memories if m.get("importance", 0) < 0.3]
+        
+        # By primary category
+        by_category = defaultdict(list)
+        for m in memories:
+            by_category[m.get("primary", "unknown")].append(m.get("importance", 0))
+        
+        category_avg = {
+            cat: sum(imps) / len(imps) if imps else 0
+            for cat, imps in by_category.items()
+        }
+        
+        return {
+            "total_memories": len(memories),
+            "statistics": {
+                "avg_importance": round(avg_importance, 3),
+                "max_importance": round(max_importance, 3),
+                "min_importance": round(min_importance, 3),
+                "high_importance_count": len(high_importance),
+                "low_importance_count": len(low_importance),
+            },
+            "by_category": {k: round(v, 3) for k, v in category_avg.items()},
+            "top_memories": [
+                {"id": m["id"], "label": m.get("label", "")[:30], "importance": m.get("importance", 0)}
+                for m in sorted(memories, key=lambda x: x.get("importance", 0), reverse=True)[:10]
+            ]
+        }
+    
+    def extract_insights_from_graph(self) -> Dict:
+        """Extract insights from graph data."""
+        data = self.load_graph_data()
+        nodes = data.get("nodes", [])
+        links = data.get("links", [])
+        
+        # Filter memory nodes
+        memory_nodes = [n for n in nodes if n.get("category") == "memory"]
+        
+        insights = {
+            "total_memories": len(memory_nodes),
+            "total_connections": len(links),
+            "categories": list(set(n.get("primary", "unknown") for n in memory_nodes)),
+            "insights": []
+        }
+        
+        # Insight: Orphan memories (no connections)
+        connected_ids = set()
+        for link in links:
+            connected_ids.add(link.get("source"))
+            connected_ids.add(link.get("target"))
+        
+        orphans = [n for n in memory_nodes if n.get("id") not in connected_ids]
+        if orphans:
+            insights["insights"].append({
+                "type": "orphan_memories",
+                "message": f"发现 {len(orphans)} 条孤立记忆（无关联）",
+                "count": len(orphans)
+            })
+        
+        # Insight: Over-connected nodes
+        connection_counts = Counter()
+        for link in links:
+            connection_counts[link.get("source")] += 1
+            connection_counts[link.get("target")] += 1
+        
+        hub_nodes = [n for n in memory_nodes if connection_counts.get(n.get("id"), 0) >= 5]
+        if hub_nodes:
+            insights["insights"].append({
+                "type": "hub_nodes",
+                "message": f"发现 {len(hub_nodes)} 个枢纽记忆（5+关联）",
+                "count": len(hub_nodes)
+            })
+        
+        # Insight: Category imbalance
+        category_counts = Counter(n.get("primary", "unknown") for n in memory_nodes)
+        if len(category_counts) > 0:
+            max_cat = max(category_counts.values())
+            min_cat = min(category_counts.values())
+            if max_cat > min_cat * 3:
+                insights["insights"].append({
+                    "type": "category_imbalance",
+                    "message": "记忆分布不均衡，部分类别过于集中",
+                    "distribution": dict(category_counts)
+                })
+        
+        return insights
     def _load_data(self) -> Dict:
         """加载记忆数据"""
         if not self.data_file.exists():

@@ -4,6 +4,7 @@ import os
 import threading
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
+from pathlib import Path
 from typing import Optional
 
 from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config
@@ -226,7 +227,23 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._handle_analyze_completeness()
         elif clean_path == "/api/analyze/full":
             self._handle_analyze_full()
-        elif clean_path == "/":
+        elif clean_path == "/api/agents":
+            self._json_response(self._get_agents())
+        elif clean_path.startswith("/api/agents/"):
+            # Handle /api/agents/{id}/default, /api/agents/{id}/switch
+            parts = clean_path.split("/")
+            if len(parts) >= 4:
+                agent_id = parts[3]
+                if clean_path.endswith("/default"):
+                    self._set_default_agent(agent_id)
+                elif clean_path.endswith("/switch"):
+                    self._switch_agent(agent_id)
+                else:
+                    self._send_error(404, "Not found")
+            else:
+                self._send_error(404, "Not found")
+        elif clean_path == "/api/import":
+            self._json_response({"error": "Use POST"})
             self.path = "/index.html"
             super().do_GET()
         else:
@@ -345,6 +362,19 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._handle_consolidate_llm()
             return
 
+        if clean_path == "/api/agents":
+            self._add_agent()
+            return
+
+        if clean_path == "/api/import":
+            self._import_memory()
+            return
+
+        if clean_path.startswith("/api/agents/") and clean_path.endswith("/switch"):
+            agent_id = clean_path.split("/api/agents/")[1].replace("/switch", "")
+            self._switch_agent(agent_id)
+            return
+
         self._json_response({"error": "Not found"}, code=404)
 
     def do_PUT(self):
@@ -352,8 +382,19 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         if clean_path.startswith("/api/memories/"):
             entry_id = clean_path.split("/api/memories/")[1]
             self._handle_memory_update(entry_id)
-        else:
-            self._json_response({"error": "Not found"}, code=404)
+            return
+
+        if clean_path.startswith("/api/agents/") and clean_path.endswith("/default"):
+            agent_id = clean_path.split("/api/agents/")[1].replace("/default", "")
+            self._set_default_agent(agent_id)
+            return
+
+        if clean_path.startswith("/api/agents/") and clean_path.endswith("/switch"):
+            agent_id = clean_path.split("/api/agents/")[1].replace("/switch", "")
+            self._switch_agent(agent_id)
+            return
+
+        self._json_response({"error": "Not found"}, code=404)
 
     def do_DELETE(self):
         clean_path = self.path.split("?")[0]
@@ -363,8 +404,14 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                 self._json_response({"status": "ok", "message": "Entry deleted"})
             else:
                 self._json_response({"error": "Not found"}, code=404)
-        else:
-            self._json_response({"error": "Not found"}, code=404)
+            return
+
+        if clean_path.startswith("/api/agents/"):
+            agent_id = clean_path.split("/api/agents/")[1]
+            self._delete_agent(agent_id)
+            return
+
+        self._json_response({"error": "Not found"}, code=404)
 
     def do_OPTIONS(self):
         """Handle CORS preflight."""
@@ -1047,15 +1094,18 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
 
     def _handle_consolidate_duplicates(self):
         c = self._get_consolidator()
-        self._json_response(c.find_duplicates())
+        # Use graph data (nodes/links) instead of metadataDB
+        self._json_response(c.find_duplicates_from_graph())
 
     def _handle_consolidate_conflicts(self):
         c = self._get_consolidator()
-        self._json_response(c.find_conflicts())
+        # TODO: Implement conflict detection for graph data
+        self._json_response({"conflicts": [], "message": "Conflict detection from graph data not yet implemented"})
 
     def _handle_consolidate_distribution(self):
         c = self._get_consolidator()
-        self._json_response(c.analyze_distribution())
+        # Use graph data for distribution analysis
+        self._json_response(c.analyze_distribution_from_graph())
 
     def _handle_consolidate_llm(self):
         try:
@@ -1085,12 +1135,8 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
     def _handle_forget_analyze(self):
         """分析哪些记忆应该被遗忘"""
         f = self._get_forgetter()
-        to_forget = f.get_memories_to_forget()
-        analysis = f.run_full_cycle()
-        self._json_response({
-            "memories_to_forget": to_forget,
-            "analysis": analysis
-        })
+        # Use graph data for analysis
+        self._json_response(f.analyze_forget_from_graph())
 
     def _handle_forget_execute(self):
         """执行遗忘操作"""
@@ -1131,32 +1177,221 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
     def _handle_analyze_patterns(self):
         """分析记忆模式"""
         a = self._get_analyzer()
-        patterns = a.analyze_patterns()
-        self._json_response(patterns)
+        # TODO: Implement pattern analysis for graph data
+        self._json_response({"patterns": [], "message": "Pattern analysis from graph data not yet implemented"})
 
     def _handle_analyze_graph(self):
         """更新知识图谱"""
         a = self._get_analyzer()
-        graph = a.update_knowledge_graph()
-        self._json_response(graph)
+        # Use graph data insights
+        self._json_response(a.extract_insights_from_graph())
 
     def _handle_analyze_importance(self):
         """分析记忆重要性"""
         a = self._get_analyzer()
-        importance = a.analyze_importance()
-        self._json_response({"rankings": importance})
+        # Use graph data for importance analysis
+        self._json_response(a.analyze_importance_from_graph())
 
     def _handle_analyze_completeness(self):
         """分析知识完整性"""
         a = self._get_analyzer()
-        completeness = a.analyze_completeness()
-        self._json_response(completeness)
+        # Use graph data insights for completeness
+        self._json_response(a.extract_insights_from_graph())
 
     def _handle_analyze_full(self):
         """完整分析"""
         a = self._get_analyzer()
         result = a.run_full_analysis()
         self._json_response(result)
+
+    # ========== Agent管理API ==========
+    def _get_agents(self):
+        """获取所有Agent"""
+        config = load_config()
+        
+        # 从source.profiles构建agents列表
+        profiles = config.get("source", {}).get("profiles", {})
+        agents = []
+        for pid, pdata in profiles.items():
+            agents.append({
+                "id": pid,
+                "name": pdata.get("name", pid.title()),
+                "path": pdata.get("home", "")
+            })
+        
+        # 添加自定义agents（如果有）
+        custom_agents = config.get("agents", [])
+        for ca in custom_agents:
+            if not any(a["id"] == ca["id"] for a in agents):
+                agents.append(ca)
+        
+        current = config.get("source", {}).get("active_profile", "hermes")
+        
+        return {
+            "agents": agents,
+            "currentAgent": current
+        }
+
+    def _add_agent(self):
+        """添加新Agent"""
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length)
+        try:
+            data = json.loads(body)
+        except:
+            self._json_response({"error": "Invalid JSON"}, code=400)
+            return
+
+        name = data.get("name", "").strip()
+        path = data.get("path", "").strip()
+
+        if not name or not path:
+            self._json_response({"error": "Name and path required"}, code=400)
+            return
+
+        # 展开路径
+        path = str(Path(path).expanduser())
+
+        config = load_config()
+        profiles = config.setdefault("source", {}).setdefault("profiles", {})
+        agent_id = name.lower().replace(" ", "-")
+
+        # 检查是否已存在
+        if agent_id in profiles:
+            self._json_response({"error": "Agent already exists"}, code=400)
+            return
+
+        # 添加到profiles
+        profiles[agent_id] = {
+            "name": name,
+            "home": path,
+            "memory_files": ["memories/MEMORY.md", "memories/USER.md"],
+            "memory_files_fallback": ["memory.md", "user.md"]
+        }
+
+        # 保存配置
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
+
+        self._json_response({"status": "ok", "agent": {"id": agent_id, "name": name, "path": path}})
+
+    def _delete_agent(self, agent_id):
+        """删除Agent"""
+        config = load_config()
+        
+        # 不能删除内置的agent
+        if agent_id in ["hermes", "openclaw", "honcho"]:
+            self._json_response({"error": "Cannot delete built-in agent"}, code=400)
+            return
+
+        profiles = config.get("source", {}).get("profiles", {})
+        
+        if agent_id not in profiles:
+            self._json_response({"error": "Agent not found"}, code=404)
+            return
+
+        del profiles[agent_id]
+
+        # 如果删除的是当前agent，切换到hermes
+        current = config.get("source", {}).get("active_profile", "hermes")
+        if current == agent_id:
+            config.setdefault("source", {})["active_profile"] = "hermes"
+
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
+
+        self._json_response({"status": "ok", "message": "Agent deleted"})
+
+    def _set_default_agent(self, agent_id):
+        """设置默认Agent"""
+        config = load_config()
+        profiles = config.get("source", {}).get("profiles", {})
+
+        # 验证agent存在
+        if agent_id not in profiles:
+            self._json_response({"error": "Agent not found"}, code=404)
+            return
+
+        config.setdefault("source", {})["active_profile"] = agent_id
+
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
+
+        self._json_response({"status": "ok", "message": "Default agent set to " + agent_id})
+
+    def _switch_agent(self, agent_id):
+        """切换当前Agent"""
+        config = load_config()
+        profiles = config.get("source", {}).get("profiles", {})
+
+        # 验证agent存在
+        if agent_id not in profiles:
+            self._json_response({"error": "Agent not found"}, code=404)
+            return
+
+        config.setdefault("source", {})["active_profile"] = agent_id
+
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
+
+        self._json_response({"status": "ok", "message": "Switched to " + agent_id})
+
+    def _import_memory(self):
+        """导入记忆文件"""
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length)
+        try:
+            data = json.loads(body)
+        except:
+            self._json_response({"error": "Invalid JSON"}, code=400)
+            return
+
+        import_path = data.get("path", "").strip()
+        if not import_path:
+            self._json_response({"error": "Path required"}, code=400)
+            return
+
+        import_path = str(Path(import_path).expanduser())
+
+        if not os.path.exists(import_path):
+            self._json_response({"error": "File not found"}, code=404)
+            return
+
+        # 读取文件内容
+        try:
+            with open(import_path, "r", encoding="utf-8") as f:
+                content = f.read()
+        except Exception as e:
+            self._json_response({"error": str(e)}, code=500)
+            return
+
+        # 简单处理：解析为节点
+        from selfmind_app.parser import parse_memory_file
+        nodes, links = parse_memory_file(import_path, content)
+
+        # 保存到当前agent的memory目录
+        config = load_config()
+        memory_path = config.get("memory_path", str(Path.home() / ".hermes" / "memories"))
+
+        # 追加到现有数据
+        existing = _safe_read_existing_data() or {"nodes": [], "links": []}
+        existing["nodes"].extend(nodes)
+        existing["links"].extend(links)
+
+        # 去重
+        node_ids = set()
+        unique_nodes = []
+        for n in existing["nodes"]:
+            if n.get("id") not in node_ids:
+                node_ids.add(n.get("id"))
+                unique_nodes.append(n)
+
+        existing["nodes"] = unique_nodes
+
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(existing, f, indent=2, ensure_ascii=False)
+
+        self._json_response({"status": "ok", "imported": len(nodes), "message": f"Imported {len(nodes)} nodes"})
 
     def _json_response(self, data, code=200):
         self.send_response(code)

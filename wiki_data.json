@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-20 15:36:16",
+  "lastUpdated": "2026-04-21 10:06:36",
   "source": "/Users/liuxiaocheng/Documents/aiworkspace/wiki",
   "nodes": [
     {
@@ -53,6 +53,23 @@
       "tags": [
         "人工智能",
         "技术"
+      ],
+      "created": "2026-04-20",
+      "updated": "2026-04-20"
+    },
+    {
+      "id": "w_febc97fe",
+      "label": "商业银行AI Agent",
+      "category": "concept",
+      "description": "# 商业银行人工智能体(AI Agent)应用调研\n\n> 更新时间：2025年4月 | 调研人：苏格拉底\n\n## 一、背景与概述\n\n### 1.1 什么是AI Agent\n\nAI Agent（人工智能体）是基于[[AI]]大语言模型(LLM)的智能系统，能够：\n- **自主规划**：将复杂任务分解为步骤\n- **工具调用**：调用API、搜索知识库、执行代码\n- **记忆与反思**：保持对话上下文",
+      "primary": "concept",
+      "secondary": "",
+      "group": "concept",
+      "tags": [
+        "人工智能",
+        "金融科技",
+        "Agent",
+        "商业银行"
       ],
       "created": "2026-04-20",
       "updated": "2026-04-20"
@@ -134,6 +151,42 @@
       "updated": ""
     },
     {
+      "id": "wt_bd593ebe",
+      "label": "金融科技",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "wt_7446050b",
+      "label": "Agent",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
+      "id": "wt_4addb145",
+      "label": "商业银行",
+      "category": "wiki_tag",
+      "description": "",
+      "primary": "wiki_tag",
+      "secondary": "",
+      "group": "wiki_tag",
+      "tags": [],
+      "created": "",
+      "updated": ""
+    },
+    {
       "id": "wt_046a899e",
       "label": "算法",
       "category": "wiki_tag",
@@ -164,6 +217,11 @@
     },
     {
       "source": "wiki_center",
+      "target": "w_febc97fe",
+      "label": "contains"
+    },
+    {
+      "source": "wiki_center",
       "target": "w_b75959c9",
       "label": "contains"
     },
@@ -190,6 +248,26 @@
     {
       "source": "w_4921c0e2",
       "target": "wt_a95dd3e1",
+      "label": "tagged"
+    },
+    {
+      "source": "w_febc97fe",
+      "target": "wt_f068f0da",
+      "label": "tagged"
+    },
+    {
+      "source": "w_febc97fe",
+      "target": "wt_bd593ebe",
+      "label": "tagged"
+    },
+    {
+      "source": "w_febc97fe",
+      "target": "wt_7446050b",
+      "label": "tagged"
+    },
+    {
+      "source": "w_febc97fe",
+      "target": "wt_4addb145",
       "label": "tagged"
     },
     {

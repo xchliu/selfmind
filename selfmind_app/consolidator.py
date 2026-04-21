@@ -2,6 +2,7 @@
 
 Mirrors human sleep consolidation: dedup, compress, extract patterns, detect conflicts.
 Operates on MEMORY.md entries via MetadataDB, generates suggestions for human review.
+Now also supports graph data (nodes/links from data.json).
 """
 
 import difflib
@@ -10,11 +11,12 @@ import json
 import os
 import re
 from datetime import datetime
-from typing import Optional
+from pathlib import Path
+from typing import Optional, List, Dict
 
 import requests
 
-from selfmind_app.config import load_config
+from selfmind_app.config import load_config, DATA_FILE
 
 
 def _similarity(a: str, b: str) -> float:
@@ -40,6 +42,114 @@ class Consolidator:
         self.memory_md_path = memory_md_path
         self.user_md_path = user_md_path
         self._config = load_config()
+    
+    # ── Graph Data Support (nodes/links from data.json) ──────────────
+    
+    def load_graph_data(self) -> Dict:
+        """Load graph data from data.json (nodes/links format)."""
+        if not DATA_FILE.exists():
+            return {"nodes": [], "links": []}
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    
+    def get_nodes_as_entries(self) -> List[Dict]:
+        """Convert graph nodes to entry-like format for consolidation."""
+        data = self.load_graph_data()
+        nodes = data.get("nodes", [])
+        
+        entries = []
+        for node in nodes:
+            # Only process memory-category nodes (not categories/center)
+            if node.get("category") != "memory":
+                continue
+            
+            entry = {
+                "id": node.get("id", ""),
+                "content_preview": node.get("description", "")[:200],
+                "primary": node.get("primary", ""),
+                "secondary": node.get("secondary", ""),
+                "importance": node.get("importance", 0),
+                "access_count": node.get("access_count", 0),
+                "status": node.get("status", "active"),
+                "pinned": node.get("pinned", False),
+                "created_at": node.get("createdAt", ""),
+                "updated_at": node.get("updatedAt", ""),
+            }
+            entries.append(entry)
+        return entries
+    
+    def find_duplicates_from_graph(self) -> List[Dict]:
+        """Find duplicates using graph node data."""
+        entries = self.get_nodes_as_entries()
+        if len(entries) < 2:
+            return []
+        
+        # Strip tags for comparison
+        cleaned = [(e, _strip_tags(e.get("content_preview", ""))) for e in entries]
+        
+        duplicates = []
+        seen = set()
+        
+        for i in range(len(cleaned)):
+            for j in range(i + 1, len(cleaned)):
+                key = (cleaned[i][0]["id"], cleaned[j][0]["id"])
+                if key in seen:
+                    continue
+                
+                sim = _similarity(cleaned[i][1], cleaned[j][1])
+                if sim >= self.DEDUP_THRESHOLD:
+                    seen.add(key)
+                    duplicates.append({
+                        "type": "duplicate",
+                        "pair": [cleaned[i][0]["id"], cleaned[j][0]["id"]],
+                        "entries": [cleaned[i][0], cleaned[j][0]],
+                        "similarity": round(sim, 3),
+                        "suggestion": self._dedup_suggestion(cleaned[i][0], cleaned[j][0], sim),
+                    })
+        
+        duplicates.sort(key=lambda x: x["similarity"], reverse=True)
+        return duplicates
+    
+    def analyze_distribution_from_graph(self) -> Dict:
+        """Analyze memory distribution from graph nodes."""
+        data = self.load_graph_data()
+        nodes = data.get("nodes", [])
+        
+        # By primary category
+        primary_counts = {}
+        # By group
+        group_counts = {}
+        # Importance distribution
+        importance_buckets = {"0-0.2": 0, "0.2-0.4": 0, "0.4-0.6": 0, "0.6-0.8": 0, "0.8-1.0": 0}
+        
+        memory_nodes = [n for n in nodes if n.get("category") == "memory"]
+        
+        for node in memory_nodes:
+            primary = node.get("primary", "unknown")
+            primary_counts[primary] = primary_counts.get(primary, 0) + 1
+            
+            group = node.get("group", "unknown")
+            group_counts[group] = group_counts.get(group, 0) + 1
+            
+            imp = node.get("importance", 0)
+            if imp < 0.2:
+                importance_buckets["0-0.2"] += 1
+            elif imp < 0.4:
+                importance_buckets["0.2-0.4"] += 1
+            elif imp < 0.6:
+                importance_buckets["0.4-0.6"] += 1
+            elif imp < 0.8:
+                importance_buckets["0.6-0.8"] += 1
+            else:
+                importance_buckets["0.8-1.0"] += 1
+        
+        return {
+            "total_memory_nodes": len(memory_nodes),
+            "by_primary_category": primary_counts,
+            "by_group": group_counts,
+            "importance_distribution": importance_buckets,
+            "avg_importance": sum(n.get("importance", 0) for n in memory_nodes) / max(len(memory_nodes), 1),
+        }
 
     # ── 1. Duplicate Detection ──────────────────────────────────
 

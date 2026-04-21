@@ -1,14 +1,18 @@
 """
 遗忘引擎 - SelfMind V2
 决定"什么该遗忘"，实现智能记忆衰减
+Now supports graph data (nodes/links from data.json).
 """
 
 import json
+import math
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, asdict
+
+from selfmind_app.config import DATA_FILE
 
 
 @dataclass
@@ -29,7 +33,103 @@ class ForgetterEngine:
         self.data_dir = Path(data_dir) if data_dir else Path(__file__).parent.parent / "data"
         self.data_file = self.data_dir / "data.json"
         self.config = ForgetConfig()
+    
+    # ── Graph Data Support (nodes/links from data.json) ──────────────
+    
+    def load_graph_data(self) -> Dict:
+        """Load graph data from data.json (nodes/links format)."""
+        if not DATA_FILE.exists():
+            return {"nodes": [], "links": []}
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    
+    def get_nodes_as_memories(self) -> List[Dict]:
+        """Convert graph nodes to memory-like format for forget analysis."""
+        data = self.load_graph_data()
+        nodes = data.get("nodes", [])
         
+        memories = []
+        for node in nodes:
+            # Only process memory-category nodes
+            if node.get("category") != "memory":
+                continue
+            
+            # Calculate access decay based on node metadata
+            created_at = node.get("createdAt", "")
+            updated_at = node.get("updatedAt", "")
+            access_count = node.get("access_count", 0)
+            
+            memory = {
+                "id": node.get("id", ""),
+                "title": node.get("label", ""),
+                "content": node.get("description", ""),
+                "created_at": created_at,
+                "updated_at": updated_at,
+                "last_accessed": updated_at if access_count > 0 else None,
+                "interactions": access_count,
+                "importance": node.get("importance", 0),
+                "status": node.get("status", "active"),
+                "pinned": node.get("pinned", False),
+                "primary": node.get("primary", ""),
+                "secondary": node.get("secondary", ""),
+            }
+            memories.append(memory)
+        return memories
+    
+    def analyze_forget_from_graph(self) -> Dict:
+        """Analyze which memories should be forgotten using graph data."""
+        memories = self.get_nodes_as_memories()
+        
+        if not memories:
+            return {
+                "total_active": 0,
+                "to_forget": [],
+                "score_distribution": {"high_risk": 0, "medium_risk": 0, "low_risk": 0},
+                "message": "No memory nodes found"
+            }
+        
+        analysis = {
+            "total_active": len(memories),
+            "to_forget": [],
+            "score_distribution": {
+                "high_risk": 0,  # > 0.8
+                "medium_risk": 0,  # 0.5 - 0.8
+                "low_risk": 0  # < 0.5
+            }
+        }
+        
+        current_time = datetime.now()
+        
+        for memory in memories:
+            # Skip pinned or already forgotten
+            if memory.get("pinned", False):
+                continue
+            if memory.get("status") == "forgotten":
+                continue
+            
+            score = self.calculate_forget_score(memory, current_time)
+            
+            if score >= 0.8:
+                analysis["score_distribution"]["high_risk"] += 1
+            elif score >= 0.5:
+                analysis["score_distribution"]["medium_risk"] += 1
+            else:
+                analysis["score_distribution"]["low_risk"] += 1
+            
+            if score >= self.config.forget_threshold:
+                analysis["to_forget"].append({
+                    "id": memory["id"],
+                    "title": memory.get("title", "")[:50],
+                    "score": round(score, 3),
+                    "reason": self._get_forget_reason(memory, score),
+                    "importance": memory.get("importance", 0),
+                })
+        
+        # Sort by score descending
+        analysis["to_forget"].sort(key=lambda x: x["score"], reverse=True)
+        
+        return analysis
+    
     def _load_data(self) -> Dict:
         """加载记忆数据"""
         if not self.data_file.exists():
