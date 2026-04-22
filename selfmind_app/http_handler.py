@@ -16,8 +16,23 @@ from selfmind_app.forgetter import ForgetterEngine
 from selfmind_app.analyzer import AnalyzerEngine
 from selfmind_app.parser import build_graph
 from selfmind_app.wiki_parser import build_wiki_graph
+from selfmind_app.providers import FileAdapter, SkillsProvider, AggregationEngine
 
 logger = logging.getLogger(__name__)
+
+# 全局聚合引擎实例
+_aggregation_engine = None
+
+
+def _get_aggregation_engine():
+    """获取或创建聚合引擎"""
+    global _aggregation_engine
+    if _aggregation_engine is None:
+        config = load_config()
+        file_adapter = FileAdapter(config)
+        skills_provider = SkillsProvider(config)
+        _aggregation_engine = AggregationEngine([file_adapter, skills_provider])
+    return _aggregation_engine
 
 # Shared instances (created lazily)
 _importer = DocumentImporter()
@@ -165,10 +180,17 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         clean_path = self.path.split("?")[0]
         if clean_path == "/api/data":
             self._json_response(self._load_data())
+        elif clean_path == "/api/poll":
+            self._handle_poll()
         elif clean_path == "/api/wiki/data":
             self._json_response(self._load_wiki_data())
         elif clean_path == "/api/iq":
             self._json_response(self._compute_iq())
+        elif clean_path == "/api/skills":
+            self._json_response(self._scan_skills())
+        elif clean_path.startswith("/api/skills/"):
+            skill_name = clean_path.split("/api/skills/")[1]
+            self._json_response(self._get_skill_detail(skill_name))
         elif clean_path == "/api/config":
             self._json_response(load_config())
         elif clean_path == "/api/documents/scan":
@@ -229,6 +251,8 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._handle_analyze_full()
         elif clean_path == "/api/agents":
             self._json_response(self._get_agents())
+        elif clean_path.startswith("/api/v1/"):
+            self._handle_v1_api(clean_path)
         elif clean_path.startswith("/api/agents/"):
             # Handle /api/agents/{id}/default, /api/agents/{id}/switch
             parts = clean_path.split("/")
@@ -366,6 +390,10 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             self._add_agent()
             return
 
+        if clean_path.startswith("/api/v1/"):
+            self._handle_v1_api_post(clean_path)
+            return
+
         if clean_path == "/api/import":
             self._import_memory()
             return
@@ -421,6 +449,40 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
 
+    def _handle_poll(self):
+        """轻量轮询接口：返回记忆源文件的修改时间戳，用于前端检测变化。"""
+        import hashlib
+        from pathlib import Path
+        
+        home = Path.home()
+        memory_file = home / ".hermes" / "memories" / "MEMORY.md"
+        user_file = home / ".hermes" / "memories" / "USER.md"
+        
+        files_info = {}
+        total_mtime = 0.0
+        
+        for fname, fpath in [("MEMORY.md", memory_file), ("USER.md", user_file)]:
+            if fpath.exists():
+                stat = fpath.stat()
+                mtime = stat.st_mtime_ns
+                total_mtime += mtime
+                files_info[fname] = {
+                    "mtime_ns": mtime,
+                    "size": stat.st_size,
+                }
+            else:
+                files_info[fname] = {"mtime_ns": 0, "size": 0}
+        
+        # 用所有文件的 mtime 拼接后取 hash，作为单一比较值
+        mtime_str = str(total_mtime)
+        poll_hash = hashlib.md5(mtime_str.encode()).hexdigest()
+        
+        self._json_response({
+            "hash": poll_hash,
+            "files": files_info,
+            "timestamp": datetime.now().isoformat(),
+        })
+
     def _load_data(self):
         if DATA_FILE.exists():
             with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -433,8 +495,12 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             return data
         return refresh_data()
 
-    def _scan_skills(self) -> dict:
-        """Scan ~/.hermes/skills for SKILL.md files and return skill stats."""
+    def _scan_skills(self, include_content: bool = False) -> dict:
+        """Scan ~/.hermes/skills for SKILL.md files and return skill stats.
+        
+        Args:
+            include_content: If True, include full content for each skill
+        """
         from pathlib import Path
         import re
 
@@ -453,6 +519,7 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                 name = sf.parent.name
                 desc = ""
                 cat = sf.parent.parent.name if sf.parent.parent != skills_dir else ""
+                subcat = ""
 
                 # Extract name and description from frontmatter
                 fm_match = re.match(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
@@ -463,6 +530,15 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                             name = line.split(":", 1)[1].strip().strip("'\"")
                         elif line.startswith("description:"):
                             desc = line.split(":", 1)[1].strip().strip("'\"")
+
+                # Determine category and subcategory from path
+                rel_path = sf.parent.relative_to(skills_dir)
+                if len(rel_path.parts) >= 2:
+                    cat = rel_path.parts[0]
+                    subcat = rel_path.parts[1] if len(rel_path.parts) > 1 else ""
+                elif len(rel_path.parts) == 1:
+                    cat = rel_path.parts[0]
+                    subcat = ""
 
                 if cat and cat != ".hermes":
                     categories.add(cat)
@@ -475,13 +551,21 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
                 n_sections = len(re.findall(r"^#{1,3}\s", content, re.MULTILINE))
                 complexity = min(1.0, (n_steps * 0.05 + n_code_blocks * 0.03 + n_sections * 0.04))
 
-                skills.append({
+                skill_entry = {
                     "name": name,
-                    "description": desc[:100],
+                    "description": desc[:100] if desc else content[:100].replace("\n", " "),
                     "category": cat or "uncategorized",
+                    "subcategory": subcat,
                     "complexity": round(complexity, 2),
                     "content_length": len(content),
-                })
+                    "path": str(sf.parent),
+                }
+                
+                # Include full content if requested
+                if include_content:
+                    skill_entry["content"] = content
+                
+                skills.append(skill_entry)
             except (OSError, UnicodeDecodeError):
                 continue
 
@@ -492,6 +576,38 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             "skills": skills,
             "avg_complexity": round(sum(s["complexity"] for s in skills) / max(len(skills), 1), 2),
         }
+
+    def _get_skill_detail(self, skill_name: str) -> dict:
+        """Get detailed info for a specific skill by name or path."""
+        skills = self._scan_skills(include_content=True).get("skills", [])
+        
+        # Try to find by name (partial match)
+        for skill in skills:
+            if skill_name.lower() in skill["name"].lower() or skill["name"].lower() in skill_name.lower():
+                return {
+                    "name": skill["name"],
+                    "description": skill.get("description", ""),
+                    "category": skill.get("category", ""),
+                    "subcategory": skill.get("subcategory", ""),
+                    "complexity": skill.get("complexity", 0),
+                    "content": skill.get("content", ""),
+                    "path": skill.get("path", ""),
+                }
+        
+        # Try to find by exact path match
+        for skill in skills:
+            if skill.get("path", "").endswith(skill_name):
+                return {
+                    "name": skill["name"],
+                    "description": skill.get("description", ""),
+                    "category": skill.get("category", ""),
+                    "subcategory": skill.get("subcategory", ""),
+                    "complexity": skill.get("complexity", 0),
+                    "content": skill.get("content", ""),
+                    "path": skill.get("path", ""),
+                }
+        
+        return {"error": f"Skill '{skill_name}' not found"}
 
     def _compute_iq(self) -> dict:
         """Compute an IQ score modeled on human intelligence distribution.
@@ -1399,6 +1515,130 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
+
+    # ─── v1 API Handlers ────────────────────────────────────────────────
+
+    def _handle_v1_api(self, path: str):
+        """处理 v1 API GET 请求"""
+        from datetime import datetime
+
+        if path == "/api/v1/changes":
+            # 获取聚合变化
+            since_str = self._get_query_param("since")
+            since = None
+            if since_str:
+                try:
+                    since = datetime.fromisoformat(since_str.replace("Z", "+00:00"))
+                except ValueError:
+                    self._json_response({"error": "Invalid since parameter"}, code=400)
+                    return
+
+            engine = _get_aggregation_engine()
+            result = engine.aggregate_changes(since)
+
+            self._json_response({
+                "changes": [
+                    {
+                        "change_id": c.change_id,
+                        "item_id": c.item_id,
+                        "source": c.source,
+                        "change_type": c.change_type,
+                        "timestamp": c.timestamp.isoformat(),
+                        "content": c.after.content[:200] if c.after else None,
+                        "category": c.after.category if c.after else None,
+                    }
+                    for c in result.changes[:50]  # 限制返回数量
+                ],
+                "providers": [
+                    {
+                        "name": p.name,
+                        "status": p.status,
+                        "item_count": p.item_count,
+                    }
+                    for p in result.providers
+                ],
+                "stats": {
+                    "total": result.total_count,
+                    "created": result.created_count,
+                    "updated": result.updated_count,
+                    "deleted": result.deleted_count,
+                }
+            })
+            return
+
+        if path == "/api/v1/status":
+            # 获取 Provider 状态
+            engine = _get_aggregation_engine()
+            status = engine.get_provider_status()
+            self._json_response({
+                "providers": status,
+                "timestamp": datetime.now().isoformat()
+            })
+            return
+
+        if path == "/api/v1/memories":
+            # 获取所有记忆
+            engine = _get_aggregation_engine()
+            items = engine.get_all_memories()
+            self._json_response({
+                "memories": [
+                    {
+                        "id": m.id,
+                        "source": m.source,
+                        "category": m.category,
+                        "content": m.content[:200],
+                        "importance": m.importance,
+                        "tags": m.tags,
+                        "created_at": m.created_at.isoformat(),
+                        "updated_at": m.updated_at.isoformat(),
+                    }
+                    for m in items[:100]
+                ],
+                "total": len(items)
+            })
+            return
+
+        self._json_response({"error": "Not found"}, code=404)
+
+    def _handle_v1_api_post(self, path: str):
+        """处理 v1 API POST 请求"""
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length) if content_length > 0 else b""
+
+        if path == "/api/v1/sync":
+            # 触发同步
+            try:
+                body_json = json.loads(body) if body else {}
+            except json.JSONDecodeError:
+                self._json_response({"error": "Invalid JSON"}, code=400)
+                return
+
+            force = body_json.get("force", False)
+
+            # 刷新数据
+            data = refresh_data()
+            engine = _get_aggregation_engine()
+
+            self._json_response({
+                "status": "ok",
+                "message": "Sync completed",
+                "nodes": len(data.get("nodes", [])),
+                "links": len(data.get("links", [])),
+                "providers": engine.get_provider_status()
+            })
+            return
+
+        self._json_response({"error": "Not found"}, code=404)
+
+    def _get_query_param(self, key: str) -> Optional[str]:
+        """获取 URL 查询参数"""
+        import urllib.parse
+        if "?" in self.path:
+            query = self.path.split("?")[1]
+            params = urllib.parse.parse_qs(query)
+            result = params.get(key, [])
+            return result[0] if result else None
+        return None
 
     def log_message(self, format, *args):
         print(f"  [{datetime.now().strftime('%H:%M:%S')}] {args[0]}")

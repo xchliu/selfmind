@@ -6,6 +6,28 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.2.0] — 2026-04-22
+
+### Added
+- 🕵️ **实时记忆感知系统** — 自动检测 MEMORY.md/USER.md 变化并刷新图谱
+- 📡 **`/api/poll` 接口** — 轻量级源文件 mtime hash 检测（后端新增 `_handle_poll` 方法）
+- 🔄 **前端自动轮询** — 每15秒轮询 `/api/poll`，检测到源文件变化后自动触发 refresh
+- 🎨 **三层次视觉反馈**：
+  - 🌊 **脉冲光效** — 图谱刷新时从中心扩散的3圈波纹动画（`globalCompositeOperation: 'lighter'`）
+  - ✨ **新节点绿色光环** — 新增节点带呼吸动画的绿色光晕（`#4ade80`，持续2秒淡出）
+  - 🚨 **全屏横幅通知** — 顶部滑入式绿色横幅 + 图谱区域3次闪烁
+- 📊 **增强状态栏** — 显示变化详情（"+2 节点 (184→186)"）、轮询状态指示
+
+### Changed
+- `index.html` — 重写轮询逻辑（从 data.json hash 比较改为源文件 mtime hash 比较）
+- `http_handler.py` — 新增 `/api/poll` 路由
+
+### Fixed
+- 修复轮询逻辑的鸡生蛋蛋生鸡问题：前端不再比较 data.json 自身内容，而是比较源文件 mtime
+- 修复 JS 语法错误：`updatePollTime` 函数未闭合导致页面卡在"启动中..."
+
+---
+
 ## [2.1.0] — 2026-04-20
 
 ### Added (V2: Agent 睡眠系统)

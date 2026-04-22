@@ -282,6 +282,394 @@ body {
   margin: 6px 0;
 }
 
+/* 数据源状态面板 */
+.source-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  min-width: 180px;
+  font-size: 12px;
+}
+
+.source-panel .source-title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.source-panel .source-skill-btn {
+  border: none;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.source-panel .source-skill-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  transform: scale(1.1);
+}
+
+.source-panel .source-title::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2ed573;
+  box-shadow: 0 0 6px #2ed57366;
+}
+
+.source-panel .source-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.source-panel .source-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.source-panel .source-item .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.source-panel .source-item .dot.connected {
+  background: #2ed573;
+  box-shadow: 0 0 4px #2ed57366;
+}
+
+.source-panel .source-item .dot.disconnected {
+  background: #ff4757;
+  box-shadow: 0 0 4px #ff475766;
+}
+
+.source-panel .source-item .name {
+  color: #333;
+  font-weight: 500;
+}
+
+.source-panel .source-item .count {
+  color: #888;
+  font-size: 11px;
+  margin-left: auto;
+}
+
+.source-panel .source-skill-item {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px 4px;
+  transition: background 0.15s;
+}
+.source-panel .source-skill-item:hover {
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.source-panel .skill-arrow {
+  font-size: 10px;
+  color: #10b981;
+  transition: transform 0.2s;
+  margin-left: 2px;
+}
+
+/* 技能面板 */
+.skill-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  min-width: 280px;
+  max-width: 360px;
+  max-height: 400px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.skill-panel .skill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.skill-panel .skill-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.skill-panel .skill-refresh-btn {
+  border: none;
+  background: rgba(30, 144, 255, 0.1);
+  color: #1e90ff;
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.skill-panel .skill-refresh-btn:hover {
+  background: rgba(30, 144, 255, 0.2);
+}
+
+.skill-panel .skill-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.skill-panel .skill-category-tab {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  background: rgba(0,0,0,0.04);
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.skill-panel .skill-category-tab:hover {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.skill-panel .skill-category-tab.active {
+  background: #10b981;
+  color: #fff;
+}
+
+.skill-panel .skill-list {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skill-panel .skill-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.02);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.skill-panel .skill-item:hover {
+  background: rgba(16, 185, 129, 0.08);
+  transform: translateX(2px);
+}
+
+.skill-panel .skill-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.skill-panel .skill-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.skill-panel .skill-name {
+  font-weight: 500;
+  color: #333;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skill-panel .skill-desc {
+  font-size: 10px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skill-panel .skill-complexity {
+  font-size: 10px;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* 技能详情弹窗 */
+.skill-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-detail-modal.hidden {
+  display: none;
+}
+
+.skill-detail-content {
+  background: #fff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.skill-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.skill-detail-header .skill-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.skill-detail-close {
+  border: none;
+  background: rgba(0,0,0,0.05);
+  color: #666;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.skill-detail-close:hover {
+  background: rgba(255,71,87,0.1);
+  color: #ff4757;
+}
+
+.skill-detail-meta {
+  display: flex;
+  gap: 16px;
+  padding: 12px 24px;
+  background: rgba(0,0,0,0.02);
+  font-size: 12px;
+  color: #666;
+}
+
+.skill-detail-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.skill-detail-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #333;
+}
+
+.skill-detail-body pre {
+  background: #f5f7fa;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.6;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+}
+
+.skill-detail-body code {
+  background: #f5f7fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 12px;
+}
+
+.skill-detail-body h1, 
+.skill-detail-body h2, 
+.skill-detail-body h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.skill-detail-body h1 { font-size: 18px; }
+.skill-detail-body h2 { font-size: 16px; }
+.skill-detail-body h3 { font-size: 14px; }
+
+.skill-detail-body ul, 
+.skill-detail-body ol {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.skill-detail-body li {
+  margin: 4px 0;
+}
+
 /* 时间刻度线 */
 .timeline-ruler {
   position: fixed;
@@ -1745,6 +2133,66 @@ svg { width: 100%; height: 100%; }
   .health-sections { overflow-x:auto; flex-wrap:nowrap; }
   .health-tab { white-space:nowrap; flex-shrink:0; }
 }
+
+/* ===== 底部轮询状态栏 ===== */
+.poll-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 28px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 200;
+  font-size: 11px;
+  color: #888;
+  user-select: none;
+}
+.poll-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.poll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4CAF50;
+  animation: pollPulse 2s ease-in-out infinite;
+}
+@keyframes pollPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.poll-status {
+  color: #666;
+}
+.poll-status.poll-ok {
+  color: #4CAF50;
+}
+.poll-status.poll-warn {
+  color: #FF9800;
+}
+.poll-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.poll-time {
+  color: #999;
+  min-width: 50px;
+  text-align: right;
+}
+.poll-sep {
+  color: #ddd;
+}
+.poll-interval {
+  color: #bbb;
+}
 </style>
 </head>
 <body>
@@ -1808,6 +2256,37 @@ svg { width: 100%; height: 100%; }
 
 <!-- 统计面板 -->
 <div class="stats-panel" id="statsPanel"></div>
+
+<!-- 数据源状态面板 -->
+<div class="source-panel" id="sourcePanel">
+  <div class="source-title">
+    <span>记忆源</span>
+    <button class="source-skill-btn" onclick="toggleSkillPanel()" title="技能库">⚡</button>
+  </div>
+  <div class="source-list" id="sourceList"></div>
+</div>
+
+<!-- 技能面板 -->
+<div class="skill-panel" id="skillPanel" style="display: none;">
+  <div class="skill-header">
+    <span class="skill-title">技能库</span>
+    <button class="skill-refresh-btn" onclick="refreshSkills()" title="刷新">↻</button>
+  </div>
+  <div class="skill-category-tabs" id="skillCategoryTabs"></div>
+  <div class="skill-list" id="skillList"></div>
+</div>
+
+<!-- 技能详情弹窗 -->
+<div class="skill-detail-modal hidden" id="skillDetailModal">
+  <div class="skill-detail-content">
+    <div class="skill-detail-header">
+      <span class="skill-name" id="skillDetailName">技能名称</span>
+      <button class="skill-detail-close" onclick="closeSkillDetail()">×</button>
+    </div>
+    <div class="skill-detail-meta" id="skillDetailMeta"></div>
+    <div class="skill-detail-body" id="skillDetailBody"></div>
+  </div>
+</div>
 
 <!-- 时间刻度线 -->
 <div class="timeline-ruler" id="timelineRuler">
@@ -2814,6 +3293,35 @@ async function loadData() {
   applyTimepoint(timelinePoints.length - 1);
 }
 
+// 加载数据源状态
+async function loadSourceStatus() {
+  try {
+    const res = await fetch('/api/v1/status');
+    const data = await res.json();
+    renderSourcePanel(data.providers || []);
+  } catch (e) {
+    console.error('加载数据源状态失败:', e);
+  }
+}
+
+// 渲染数据源面板
+function renderSourcePanel(providers) {
+  const container = document.getElementById('sourceList');
+  if (!providers.length) {
+    container.innerHTML = '<div style="color:#888;font-size:11px">暂无数据源</div>';
+    return;
+  }
+  container.innerHTML = providers.map(p => `
+    <div class="source-item ${p.name === 'skills' ? 'source-skill-item' : ''}" 
+         ${p.name === 'skills' ? 'onclick="toggleSkillPanel()" title="点击查看技能库"' : ''}>
+      <span class="dot ${p.status === 'connected' ? 'connected' : 'disconnected'}"></span>
+      <span class="name">${p.name === 'skills' ? '⚡ 技能库' : p.name}</span>
+      <span class="count">${p.item_count || 0} 条</span>
+      ${p.name === 'skills' ? '<span class="skill-arrow" id="skillArrow">▶</span>' : ''}
+    </div>
+  `).join('');
+}
+
 // 节点大小函数（层级递减 + V2重要性增强: center > primary > secondary > memory/skill_cat > skill_subcat > skill）
 function nodeRadius(d) {
   // Base radius by category
@@ -3672,6 +4180,7 @@ function getActiveData() {
 buildFilterBar();
 loadData();
 loadIQ();
+loadSourceStatus();
 
 // 快捷键
 document.addEventListener('keydown', (e) => {
@@ -4931,6 +5440,333 @@ async function llmMerge(id1, id2) {
     alert(`🤖 AI 合并建议:\n\n${merged}\n\n理由: ${reasoning}`);
   } catch(e) { showToast('请求失败: ' + e.message, 'error'); }
 }
+
+// ==================== Skill 动态加载功能 ====================
+
+let currentSkillCategory = 'all';
+let skillsCache = null;
+let skillPanelVisible = false;
+
+// 切换 skill 面板显示
+function toggleSkillPanel() {
+  const panel = document.getElementById('skillPanel');
+  const arrow = document.getElementById('skillArrow');
+  skillPanelVisible = !skillPanelVisible;
+  
+  if (skillPanelVisible) {
+    if (arrow) arrow.textContent = '▼';
+    // 加载 skills
+    if (!skillsCache) {
+      loadSkills();
+    } else {
+      panel.style.display = 'flex';
+    }
+  } else {
+    if (arrow) arrow.textContent = '▶';
+    panel.style.display = 'none';
+  }
+}
+
+// 从 graphData 中提取 skills
+function extractSkills() {
+  if (!graphData || !graphData.nodes) return [];
+  
+  const skillNodes = graphData.nodes.filter(n => n.category === 'skill');
+  
+  return skillNodes.map(skill => {
+    const name = skill.label || skill.name || skill.id;
+    const skillId = skill.id;
+    return {
+      id: skillId,
+      name: name,
+      // 使用 secondary 字段作为分类，如果没有则使用 primary
+      category: skill.secondary || skill.primary || '未分类',
+      description: skill.description || getSkillDescription(name),
+      complexity: skill.complexity || 'simple',
+      content: skill.content || skill.description || ''
+    };
+  });
+}
+
+// 获取技能的描述
+function getSkillDescription(skillName) {
+  const descriptions = {
+    'apple-reminders': '管理 Apple 提醒事项',
+    'imessage': '发送和接收 iMessage/SMS 消息',
+    'findmy': '追踪 Apple 设备和 AirTags',
+    'apple-notes': '管理 Apple Notes 笔记',
+    'llama-cpu': '在 CPU 上运行 LLM 推理',
+    'gguf-quantization': 'GGUF 量化工具',
+    'huggingface-hub': 'Hugging Face CLI',
+    'jupyter-live-kernel': 'Jupyter 实时内核',
+    'arxiv': 'arXiv 论文搜索',
+    'linear': 'Linear 问题管理',
+    'notion': 'Notion API',
+    'powerpoint': 'PPT 生成',
+    'google-workspace': 'Google 工作区',
+    'excalidraw': '手绘风格图表',
+    'ascii-art': 'ASCII 艺术生成',
+    'pixel-art': '像素艺术转换',
+    'manim-video': '数学动画生成',
+    'suno-music': 'AI 音乐生成',
+    'wechat-article-publish': '微信公众号文章发布',
+    'github-pr-workflow': 'GitHub PR 工作流',
+    'github-issues': 'GitHub Issues 管理',
+    'codebase-inspection': '代码库检查分析'
+  };
+  return descriptions[skillName] || '查看详情获取更多信息';
+}
+
+// 获取所有分类
+function getSkillCategories(skills) {
+  const categories = new Set(['all']);
+  skills.forEach(s => categories.add(s.category));
+  return Array.from(categories);
+}
+
+// 加载并显示 skill 面板
+function loadSkills() {
+  const skills = extractSkills();
+  skillsCache = skills;
+  renderSkillCategories(skills);
+  renderSkillList(skills);
+  
+  const panel = document.getElementById('skillPanel');
+  if (panel) {
+    panel.style.display = 'flex';
+  }
+}
+
+// 刷新 skills
+function refreshSkills() {
+  showToast('正在加载技能库...', 'info');
+  // 重新从服务器获取数据
+  fetch('/api/data?t=' + Date.now())
+    .then(res => res.json())
+    .then(data => {
+      if (data.nodes) {
+        graphData = data;
+        loadSkills();
+        showToast('技能库已刷新', 'success');
+      }
+    })
+    .catch(err => {
+      console.error('刷新技能失败:', err);
+      showToast('刷新失败', 'error');
+    });
+}
+
+// 渲染分类标签
+function renderSkillCategories(skills) {
+  const categories = getSkillCategories(skills);
+  const container = document.getElementById('skillCategoryTabs');
+  
+  container.innerHTML = categories.map(cat => `
+    <div class="skill-category-tab ${cat === currentSkillCategory ? 'active' : ''}" 
+         onclick="filterSkills('${cat}')">
+      ${cat === 'all' ? '全部' : cat}
+    </div>
+  `).join('');
+}
+
+// 渲染 skill 列表
+function renderSkillList(skills) {
+  const filtered = currentSkillCategory === 'all' 
+    ? skills 
+    : skills.filter(s => s.category === currentSkillCategory);
+  
+  const container = document.getElementById('skillList');
+  
+  if (!filtered.length) {
+    container.innerHTML = '<div style="color:#888;font-size:11px;text-align:center;padding:20px;">暂无技能</div>';
+    return;
+  }
+  
+  container.innerHTML = filtered.map(skill => `
+    <div class="skill-item" onclick="showSkillDetail('${skill.id}')">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-info">
+        <div class="skill-name">${skill.name}</div>
+        <div class="skill-desc">${skill.description}</div>
+      </div>
+      <div class="skill-complexity">${skill.complexity === 'simple' ? '简单' : skill.complexity === 'medium' ? '中等' : '复杂'}</div>
+    </div>
+  `).join('');
+}
+
+// 过滤 skills
+function filterSkills(category) {
+  currentSkillCategory = category;
+  if (skillsCache) {
+    renderSkillCategories(skillsCache);
+    renderSkillList(skillsCache);
+  }
+}
+
+// 显示 skill 详情弹窗
+function showSkillDetail(skillId) {
+  const skill = skillsCache?.find(s => s.id === skillId);
+  if (!skill) return;
+  
+  document.getElementById('skillDetailName').textContent = skill.name;
+  
+  document.getElementById('skillDetailMeta').innerHTML = `
+    <span>📁 ${skill.category}</span>
+    <span>📊 ${skill.complexity === 'simple' ? '简单' : skill.complexity === 'medium' ? '中等' : '复杂'}</span>
+  `;
+  
+  // 技能内容（可以从 skill.content 或其他地方获取）
+  let content = skill.content;
+  if (!content) {
+    // 尝试从 graphData 中获取完整内容
+    const node = graphData?.nodes?.find(n => (n.id || n.name) === skillId);
+    content = node?.content || node?.description || '暂无详细描述';
+  }
+  
+  document.getElementById('skillDetailBody').innerHTML = `
+    <h3>技能描述</h3>
+    <p>${skill.description}</p>
+    <h3>详细内容</h3>
+    <pre>${content}</pre>
+  `;
+  
+  document.getElementById('skillDetailModal').classList.remove('hidden');
+}
+
+// 关闭 skill 详情弹窗
+function closeSkillDetail() {
+  document.getElementById('skillDetailModal').classList.add('hidden');
+}
+
+// 点击弹窗外部关闭
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('skillDetailModal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeSkillDetail();
+      }
+    });
+  }
+});
+
+// --- 自动轮询（检测记忆源文件变化） ---
+const POLL_INTERVAL_MS = 15000;
+let pollingInterval = null;
+let lastPollHash = null;
+let pollTimerDisplay = Date.now();
+
+function calcDataHash(data) {
+  // 轻量 hash：基于节点数和 lastUpdated
+  const nodes = (data.nodes || []).length;
+  const links = (data.links || []).length;
+  const updated = data.lastUpdated || '';
+  return nodes + '|' + links + '|' + updated;
+}
+
+// 更新状态栏显示
+function updatePollStatus(message, isOk) {
+  const el = document.getElementById('pollStatus');
+  if (!el) return;
+  el.textContent = message;
+  el.className = 'poll-status' + (isOk ? ' poll-ok' : ' poll-warn');
+}
+
+function updatePollTime() {
+  const el = document.getElementById('pollTime');
+  if (!el) return;
+  if (!pollTimerDisplay) {
+    el.textContent = '--';
+    return;
+  }
+  const seconds = Math.floor((Date.now() - pollTimerDisplay) / 1000);
+  if (seconds < 60) {
+    el.textContent = seconds + '秒前';
+  } else {
+    el.textContent = Math.floor(seconds / 60) + '分钟前';
+  }
+}
+
+async function pollCheck() {
+  try {
+    // 轮询 /api/poll 获取源文件 mtime hash
+    const res = await fetch('/api/poll?t=' + Date.now());
+    const pollData = await res.json();
+    const hash = pollData.hash;
+    
+    if (!lastPollHash) {
+      // 首次轮询，记录 hash
+      lastPollHash = hash;
+      pollTimerDisplay = Date.now();
+      updatePollStatus('轮询中', true);
+      return;
+    }
+    
+    if (hash !== lastPollHash) {
+      // 检测到源文件变化！
+      updatePollStatus('🔔 检测到变化，自动刷新...', true);
+      lastPollHash = hash;
+      pollTimerDisplay = Date.now();
+      
+      // 调用后端刷新接口重建图谱
+      try {
+        const refreshRes = await fetch('/api/refresh', { method: 'POST' });
+        const refreshJson = await refreshRes.json();
+        if (refreshJson.status === 'ok') {
+          await loadData();
+          loadIQ();
+          showToast(`🔄 记忆已自动刷新 — ${refreshJson.nodes}个节点`, 'success');
+        }
+      } catch (e) {
+        // refresh 失败时，至少用新数据更新视图
+        graphData = data;
+        timelinePoints = buildTimelinePoints(graphData);
+        applyTimepoint(timelinePoints.length - 1);
+        showToast('🔄 视图已更新', 'info');
+      }
+      
+      updatePollStatus('轮询中', true);
+    } else {
+      // 无变化，更新时间
+      pollTimerDisplay = Date.now();
+      updatePollStatus('轮询中', true);
+    }
+  } catch (e) {
+    updatePollStatus('⚠️ 连接异常', false);
+  }
+}
+
+// 启动轮询
+function startPolling() {
+  if (pollingInterval) clearInterval(pollingInterval);
+  // 先做一次初始化
+  pollCheck();
+  // 定时轮询
+  pollingInterval = setInterval(pollCheck, POLL_INTERVAL_MS);
+  // 更新时间显示（每秒更新）
+  setInterval(updatePollTime, 1000);
+}
+
+</script>
+
+<!-- 底部状态栏 -->
+<div id="pollBar" class="poll-bar">
+  <div class="poll-left">
+    <span class="poll-dot" id="pollDot"></span>
+    <span class="poll-label" id="pollStatus">启动中...</span>
+  </div>
+  <div class="poll-right">
+    <span class="poll-time" id="pollTime">--</span>
+    <span class="poll-sep">|</span>
+    <span class="poll-interval">轮询间隔 15s</span>
+  </div>
+</div>
+
+<script>
+// 确保 DOM 加载完成后启动轮询
+document.addEventListener('DOMContentLoaded', function() {
+  startPolling();
+});
 </script>
 
 </body>
