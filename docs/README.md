@@ -111,12 +111,13 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 
 **目标**：让人直观"看到"记忆的全貌
 
-| 模块 | 功能 | 状态 |
+|| 模块 | 功能 | 状态 |
 |------|------|------|
 | 记忆图谱 | 节点/边关系可视化 | 🔄 边关系修复中 |
 | 知识图谱 | 结构化知识网络 | 🔄 边为0 |
 | 记忆健康 | 遗忘曲线、衰减预警 | 🔄 未激活 |
 | 时间轴 | 记忆时间线播放 | ✅ 基础完成 |
+| **焦点模式** | 时间线播放自动对焦变化区域 | ✅ 已完成 |
 | 主题切换 | 浅色/深色主题 | 🔄 优化中 |
 | **实时感知** | 源文件变化自动检测与图谱刷新 | ✅ 已完成 |
 
@@ -125,6 +126,7 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 - 🕸️ **力导向图谱** — D3.js 驱动，物理模拟，层级自然聚集
 - 🧬 **IQ 智商系统** — 参考人类标准的 AI 智商评估，6 维度计算
 - 📊 **记忆健康仪表盘** — 活跃率、冗余率、冲突率分析
+- 🔍 **焦点模式** — 时间线播放时自动对焦到新增节点，变化高亮（节点✦标记+绿色脉冲光环，连线荧光绿高亮）
 - 🔄 **实时感知** — 自动检测 MEMORY.md/USER.md 变化并刷新图谱，无需手动操作
 
 ---
@@ -321,6 +323,8 @@ server.py                # 服务入口（默认 3002 端口）
 | **拖拽画布** | 平移视图 |
 | **分类标签** | 过滤显示该分类节点 |
 | **IQ 圆球** | 点击展开智商详情 |
+| **时间线播放** | 自动对焦变化区域，新增节点✦标记+绿色脉冲，新增连线荧光绿高亮 |
+| **跳到最新** | 镜头回到全局视角，清除所有变化标记 |
 
 ## Roadmap
 
@@ -331,6 +335,7 @@ server.py                # 服务入口（默认 3002 端口）
 - [x] 记忆/知识双视图切换
 - [x] IQ 智商系统
 - [x] 时间轴功能
+- [x] 时间线焦点模式 — 播放时自动对焦变化区域，变化节点/连线高亮
 - [ ] 修复边关系逻辑（当前0条边）
 - [ ] 激活遗忘引擎访问统计
 - [ ] 浅色主题重写
@@ -440,6 +445,7 @@ SelfMind includes an AI IQ assessment system, referenced against human IQ distri
 - 🧬 **IQ System** — Human-referenced AI IQ assessment, 6-dimension calculation
 - 🛠️ **Skill Graph** — 95+ skills in 4-layer hierarchy (root → category → subcategory → skill)
 - 🕸️ **Force-Directed Graph** — D3.js powered, physics simulation, hierarchical clustering
+- 🔍 **Focus Mode** — Timeline auto-focuses on changed areas, new nodes highlighted with ✦ marker + green pulse, new links in fluorescent green
 - 🔍 **Search & Filter** — Filter by name, description, or category
 - 🎯 **Category Navigation** — Top nav with 8 category tabs, bottom indicator highlight
 - ⏱️ **Timeline** — Full-width bottom timeline for temporal memory browsing
@@ -504,7 +510,7 @@ Memory Files              Backend                    Browser
 
 ## Interactions
 
-| Action | Effect |
+|| Action | Effect |
 |--------|--------|
 | **Hover** node | Highlight connected nodes and links |
 | **Click** node | Open detail panel, expand skill labels |
@@ -514,6 +520,8 @@ Memory Files              Backend                    Browser
 | **Drag canvas** | Pan view |
 | **Category tab** | Filter to show that category |
 | **IQ ball** | Click to expand IQ details |
+| **Timeline play** | Auto-focus on changed areas, new nodes ✦ + green pulse, new links fluorescent green |
+| **Jump to latest** | Reset camera to global view, clear change markers |
 
 ## Contributing
 

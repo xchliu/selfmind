@@ -298,10 +298,20 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-seri
 **力模型参数**：
 | 力 | 参数 | 值 |
 |----|------|-----|
-| `forceLink` | distance | `120` |
-| `forceManyBody` | strength | `-300` |
+| `forceLink` | distance | `150` |
+| `forceManyBody` | strength | `-300 ~ -1200`（按层级） |
 | `forceCenter` | — | 画布中心 |
-| `forceCollide` | radius | `35` |
+| `forceCollide` | radius | `35 ~ 60`（按层级） |
+
+**时间线焦点模式**：
+| 行为 | 说明 |
+|------|------|
+| 播放自动对焦 | 镜头 zoom 平移到新增节点区域，1.2秒丝滑过渡 |
+| 变化节点标记 | ✦ 标识（20px/900粗）+ 绿色脉冲光环 + 光晕填充 |
+| 变化连线高亮 | 荧光绿 `#00ffaa`、3.5px粗；非变化连线淡化到20% |
+| 无变化帧 | 镜头回到全局视角（0.85x） |
+| 播放结束 | 镜头自动复位到全局视角 |
+| 增量 simulation | 不重建 force simulation，alpha=0.15~0.25 增量更新 |
 
 **节点**：
 | 属性 | 规则 |
