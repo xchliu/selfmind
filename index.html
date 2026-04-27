@@ -1270,6 +1270,29 @@ svg { width: 100%; height: 100%; }
   transition: r 0.3s ease;
 }
 
+/* ── 时间线变化标记样式 ── */
+.change-marker-glow {
+  animation: glowPulse 1.2s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%, 100% { fill-opacity: 0.3; }
+  50% { fill-opacity: 0.6; }
+}
+.change-marker-new {
+  animation: changePulse 1.2s ease-in-out infinite;
+}
+@keyframes changePulse {
+  0%, 100% { opacity: 1; stroke-width: 4; }
+  50% { opacity: 0.6; stroke-width: 2.5; }
+}
+.change-marker-text {
+  animation: changeTextPulse 1.2s ease-in-out infinite;
+}
+@keyframes changeTextPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.9); }
+}
+
 .node-label {
   fill: #444;
   font-size: 12px;
@@ -1285,6 +1308,9 @@ svg { width: 100%; height: 100%; }
 .link-group.dimmed .link-line { opacity: 0.05; }
 .link-group.dimmed .link-label { opacity: 0; }
 
+.node-group {
+  transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
 .node-group.highlighted .node-circle {
   stroke-width: 3;
   filter: brightness(1.3);
@@ -2618,6 +2644,7 @@ let selectedNode = null;
 let timelinePoints = [];
 let activeTimelineIndex = -1;
 let expandedNodes = new Set(); // 已展开的可折叠节点ID
+let _timelineChangeInfo = { newNodeIds: new Set(), disappearedIds: new Set() }; // 时间线变化标记
 
 // ========== 视图切换状态 ==========
 let currentView = 'memory'; // 'memory' | 'wiki' | 'health'
@@ -2896,7 +2923,27 @@ function updateTimelineRuler() {
   const visibleNodes = visibleData ? visibleData.nodes.length : 0;
   const visibleLinks = visibleData ? visibleData.links.length : 0;
   const totalNodes = (currentViewData?.nodes || []).length;
-  stats.innerHTML = `节点 ${visibleNodes}<span style="font-size:10px;color:#999">/${totalNodes}</span> · 连线 ${visibleLinks}`;
+
+  // ── 变化摘要 ──
+  let changeHtml = '';
+  const newCount = _timelineChangeInfo.newNodeIds.size;
+  const disCount = _timelineChangeInfo.disappearedIds.size;
+  if (newCount > 0) {
+    // 找出新增节点的名称
+    const newNames = (currentViewData?.nodes || [])
+      .filter(n => _timelineChangeInfo.newNodeIds.has(n.id))
+      .map(n => n.label || n.id)
+      .slice(0, 5);
+    changeHtml += ` · <span style="color:#34d399;font-weight:600">+${newCount}</span>`;
+    if (newNames.length > 0) {
+      changeHtml += `<span style="font-size:9px;color:#34d399;margin-left:2px">${newNames.join(', ')}</span>`;
+    }
+  }
+  if (disCount > 0) {
+    changeHtml += ` · <span style="color:#ef4444;font-weight:600">-${disCount}</span>`;
+  }
+
+  stats.innerHTML = `节点 ${visibleNodes}<span style="font-size:10px;color:#999">/${totalNodes}</span> · 连线 ${visibleLinks}${changeHtml}`;
   renderTimelineAxis();
 }
 
@@ -2906,12 +2953,37 @@ function applyTimepoint(index) {
   activeTimelineIndex = bounded;
   const ts = timelinePoints[bounded].ts;
 
+  // ── 计算当前帧与前一帧的差异 ──
+  const prevTs = bounded > 0 ? timelinePoints[bounded - 1].ts : null;
+  const prevNodeIds = prevTs ? new Set(
+    graphData.nodes
+      .filter(n => {
+        const created = parseTs(n.createdAt) ?? parseTs(graphData.lastUpdated) ?? Date.now();
+        return created <= prevTs;
+      })
+      .map(n => n.id)
+  ) : new Set();
+
   const visibleNodes = graphData.nodes
     .filter(n => {
       const created = parseTs(n.createdAt) ?? parseTs(graphData.lastUpdated) ?? Date.now();
       return created <= ts;
     })
-    .map(n => ({ ...n }));
+    .map(n => {
+      const copy = { ...n };
+      // 标记新增节点
+      if (!prevNodeIds.has(n.id)) {
+        copy._isNew = true;
+      }
+      return copy;
+    });
+
+  // ── 自动展开有变化的分类节点 ──
+  const newNodeIds = new Set(visibleNodes.filter(n => n._isNew).map(n => n.id));
+  // 找出消失的节点：上一帧存在但当前帧不存在
+  const disappearedIds = prevTs ? new Set(
+    [...prevNodeIds].filter(id => !new Set(visibleNodes.map(n => n.id)).has(id))
+  ) : new Set();
 
   const nodeIds = new Set(visibleNodes.map(n => n.id));
   const visibleLinks = graphData.links
@@ -2922,12 +2994,32 @@ function applyTimepoint(index) {
     }))
     .filter(l => nodeIds.has(l.source) && nodeIds.has(l.target));
 
+  // 如果有新增或消失的节点，找到其所属的可折叠分类并自动展开
+  if (newNodeIds.size > 0 || disappearedIds.size > 0) {
+    const allChangedIds = new Set([...newNodeIds, ...disappearedIds]);
+    visibleNodes.forEach(n => {
+      if (isCollapsible(n, visibleLinks)) {
+        // 检查这个分类的子节点是否有变化
+        const descendants = getDescendantIds(n.id, visibleNodes, visibleLinks);
+        for (const did of descendants) {
+          if (allChangedIds.has(did)) {
+            expandedNodes.add(n.id);
+            break;
+          }
+        }
+      }
+    });
+  }
+
   currentViewData = {
     lastUpdated: new Date(ts).toISOString(),
     source: graphData.source,
     nodes: visibleNodes,
     links: visibleLinks,
   };
+
+  // ── 保存变化信息供渲染使用 ──
+  _timelineChangeInfo = { newNodeIds, disappearedIds };
 
   hideDetail();
   updateTimelineRuler();
@@ -2950,13 +3042,15 @@ function handleTimelineInput(value) {
 
 function jumpToLatest() {
   if (!timelinePoints.length) return;
+  // 跳到最新时清除变化标记
+  _timelineChangeInfo = { newNodeIds: new Set(), disappearedIds: new Set() };
   applyTimepoint(timelinePoints.length - 1);
 }
 
 // ── 时间轴播放 ──
 let _playTimer = null;
 let _isPlaying = false;
-let _playSpeed = 800; // 每帧间隔 ms
+let _playSpeed = 2000; // 每帧间隔 ms
 
 function toggleTimelinePlay() {
   if (_isPlaying) {
@@ -3012,6 +3106,14 @@ function stopTimelinePlay() {
   btn.classList.remove('playing');
   btn.querySelector('.play-icon').textContent = '▶';
   document.getElementById('playLabel').textContent = '播放';
+
+  // 播放结束后，镜头平滑回到全局视角
+  if (_zoom) {
+    _svg.transition().duration(1200).ease(d3.easeCubicInOut)
+      .call(_zoom.transform,
+        d3.zoomIdentity.translate(_graphWidth / 2, _graphHeight / 2).scale(0.85).translate(-_graphWidth / 2, -_graphHeight / 2)
+      );
+  }
 
   // 进度条渐隐
   setTimeout(() => {
@@ -3362,39 +3464,39 @@ function glowRadius(d) {
 // 力距离配置
 function linkDistance(d) {
   const src = d.source.category || '', tgt = d.target.category || '';
-  if (src === 'center' && tgt === 'primary') return 200;
-  if (src === 'primary' && tgt === 'secondary') return 120;
-  if (src === 'secondary' && tgt === 'memory') return 80;
-  if (tgt === 'skill_category' || src === 'skill_category') return 60;
-  if (tgt === 'skill_subcategory' || src === 'skill_subcategory') return 45;
-  if (src === 'skill_subcategory' && tgt === 'skill') return 35;
-  if ((src === 'skill_category' || src === 'secondary') && tgt === 'skill') return 45;
-  if (src === 'skill' && tgt === 'skill') return 25;
-  return 100;
+  if (src === 'center' && tgt === 'primary') return 320;
+  if (src === 'primary' && tgt === 'secondary') return 200;
+  if (src === 'secondary' && tgt === 'memory') return 130;
+  if (tgt === 'skill_category' || src === 'skill_category') return 100;
+  if (tgt === 'skill_subcategory' || src === 'skill_subcategory') return 70;
+  if (src === 'skill_subcategory' && tgt === 'skill') return 50;
+  if ((src === 'skill_category' || src === 'secondary') && tgt === 'skill') return 70;
+  if (src === 'skill' && tgt === 'skill') return 45;
+  return 170;
 }
 
-// 力斥力配置
+// 力斥力配置 — 增大斥力让节点更铺开
 function chargeStrength(d) {
-  if (d.category === 'center') return -600;
-  if (d.category === 'primary') return -300;
-  if (d.category === 'secondary') return -150;
-  if (d.category === 'memory') return -80;
-  if (d.category === 'skill_category') return -80;
-  if (d.category === 'skill_subcategory') return -50;
-  if (d.category === 'skill') return -15;
-  return -100;
+  if (d.category === 'center') return -1200;
+  if (d.category === 'primary') return -700;
+  if (d.category === 'secondary') return -400;
+  if (d.category === 'memory') return -180;
+  if (d.category === 'skill_category') return -180;
+  if (d.category === 'skill_subcategory') return -100;
+  if (d.category === 'skill') return -40;
+  return -200;
 }
 
-// 碰撞半径
+// 碰撞半径 — 增大碰撞半径避免重叠
 function collisionRadius(d) {
-  if (d.category === 'center') return 50;
-  if (d.category === 'primary') return 30;
-  if (d.category === 'secondary') return 18;
-  if (d.category === 'memory') return nodeRadius(d) + 6;
-  if (d.category === 'skill_category') return 14;
-  if (d.category === 'skill_subcategory') return 10;
-  if (d.category === 'skill') return 5;
-  return 20;
+  if (d.category === 'center') return 65;
+  if (d.category === 'primary') return 45;
+  if (d.category === 'secondary') return 28;
+  if (d.category === 'memory') return nodeRadius(d) + 14;
+  if (d.category === 'skill_category') return 22;
+  if (d.category === 'skill_subcategory') return 15;
+  if (d.category === 'skill') return 9;
+  return 30;
 }
 
 // 为节点组设置内部 DOM 元素（发光圈、主圆、标签、折叠指示器）
@@ -3453,6 +3555,36 @@ function setupNodeDOM(sel) {
       const key = d.primary || d.category;
       return `url(#glow-${key})`;
     });
+
+  // ── 时间线变化标记：新增节点显示醒目的脉冲光环 + "✦" 标识 ──
+  sel.filter(d => d._isNew && _timelineChangeInfo.newNodeIds.has(d.id))
+    .append('circle')
+    .attr('class', 'change-marker-glow')
+    .attr('r', d => nodeRadius(d) + 22)
+    .attr('fill', '#00ffaa')
+    .attr('fill-opacity', 0.3)
+    .attr('stroke', 'none');
+
+  sel.filter(d => d._isNew && _timelineChangeInfo.newNodeIds.has(d.id))
+    .append('circle')
+    .attr('class', 'change-marker-new')
+    .attr('r', d => nodeRadius(d) + 22)
+    .attr('fill', 'none')
+    .attr('stroke', '#00ffaa')
+    .attr('stroke-width', 4)
+    .attr('stroke-dasharray', '10 5')
+    .style('opacity', 1);
+
+  sel.filter(d => d._isNew && _timelineChangeInfo.newNodeIds.has(d.id))
+    .append('text')
+    .attr('class', 'change-marker-text')
+    .attr('dy', d => -(nodeRadius(d) + 20))
+    .attr('text-anchor', 'middle')
+    .text('✦')
+    .style('font-size', '20px')
+    .style('font-weight', '900')
+    .style('fill', '#00ffaa')
+    .style('opacity', 1);
 
   // 标签
   sel.append('text')
@@ -3576,17 +3708,17 @@ function renderGraph(data = getActiveData()) {
   const nodes = visibleData.nodes.map(d => ({ ...d }));
   const links = visibleData.links.map(d => ({ ...d }));
 
-  // 力导向
+  // 力导向（丝滑参数：慢衰减、低摩擦，让布局渐进收敛）
   simulation = d3.forceSimulation(nodes)
-    .alphaDecay(0.05)
-    .alphaMin(0.01)
-    .velocityDecay(0.55)
+    .alphaDecay(0.02)
+    .alphaMin(0.005)
+    .velocityDecay(0.4)
     .force('link', d3.forceLink(links).id(d => d.id).distance(linkDistance))
     .force('charge', d3.forceManyBody().strength(chargeStrength))
     .force('center', d3.forceCenter(_graphWidth / 2, _graphHeight / 2))
     .force('collision', d3.forceCollide().radius(collisionRadius))
-    .force('x', d3.forceX(_graphWidth / 2).strength(0.04))
-    .force('y', d3.forceY(_graphHeight / 2).strength(0.04));
+    .force('x', d3.forceX(_graphWidth / 2).strength(0.02))
+    .force('y', d3.forceY(_graphHeight / 2).strength(0.02));
 
   // 用 D3 data-join 渲染连线
   _linkGroup = _g.select('.links-layer').selectAll('.link-group')
@@ -3722,28 +3854,87 @@ function updateVisibleGraph() {
     }
     return { ...d, x: _graphWidth / 2 + (Math.random() - 0.5) * 100, y: _graphHeight / 2 + (Math.random() - 0.5) * 100 };
   });
-  const links = visibleData.links.map(d => ({ ...d }));
+  // 确保 source/target 始终是 ID 字符串，避免 D3 forceLink 替换为对象后残留
+  const links = visibleData.links.map(d => ({
+    ...d,
+    source: d.source?.id || d.source,
+    target: d.target?.id || d.target,
+  }));
 
   // 取消未完成的 transition（快速切换时间刻度时避免残留）
   _g.select('.links-layer').selectAll('.link-group').interrupt();
   _g.select('.nodes-layer').selectAll('.node-group').interrupt();
 
   // 增量更新连线（D3 data-join: enter/update/exit）
+  // 确保所有连线数据 source/target 都是 ID 字符串，避免 D3 节点对象引用导致 key 不匹配
+  const linkKeyFn = d => {
+    const sId = typeof d.source === 'object' ? d.source.id : d.source;
+    const tId = typeof d.target === 'object' ? d.target.id : d.target;
+    return `${sId}-${tId}`;
+  };
+
   _g.select('.links-layer').selectAll('.link-group')
-    .data(links, d => `${d.source.id || d.source}-${d.target.id || d.target}`)
+    .data(links, linkKeyFn)
     .join(
       enter => {
         const lg = enter.append('g').attr('class', 'link-group').style('opacity', 0);
         lg.append('line').attr('class', 'link-line');
         lg.append('text').attr('class', 'link-label').text(d => d.label || '');
-        lg.transition().duration(300).style('opacity', 1);
+        lg.transition().duration(600).ease(d3.easeCubicOut).style('opacity', 1);
         return lg;
       },
       update => update,
-      exit => exit.transition().duration(200).style('opacity', 0).remove()
+      exit => exit.transition().duration(400).ease(d3.easeCubicIn).style('opacity', 0).remove()
     );
 
+  // ── 时间线变化时：新增连线高亮，非变化连线淡化 ──
+  const hasChanges = _timelineChangeInfo.newNodeIds.size > 0 || _timelineChangeInfo.disappearedIds.size > 0;
+  if (hasChanges) {
+    // 新增连线：连到新增节点的线 → 绿色高亮
+    _g.select('.links-layer').selectAll('.link-group')
+      .classed('link-new', d => {
+        const sId = d.source.id || d.source;
+        const tId = d.target.id || d.target;
+        return _timelineChangeInfo.newNodeIds.has(sId) || _timelineChangeInfo.newNodeIds.has(tId);
+      })
+      .classed('link-old', d => {
+        const sId = d.source.id || d.source;
+        const tId = d.target.id || d.target;
+        return !_timelineChangeInfo.newNodeIds.has(sId) && !_timelineChangeInfo.newNodeIds.has(tId);
+      });
+    // 新增连线样式：醒目高亮
+    _g.select('.links-layer').selectAll('.link-group.link-new .link-line')
+      .attr('stroke', '#00ffaa')
+      .attr('stroke-width', 3.5)
+      .attr('stroke-opacity', 1);
+    // 新增连线标签也高亮
+    _g.select('.links-layer').selectAll('.link-group.link-new .link-label')
+      .style('fill', '#00ffaa')
+      .style('font-weight', '600')
+      .style('opacity', 0.9);
+    // 非变化连线轻微淡化，保持结构骨架可见
+    _g.select('.links-layer').selectAll('.link-group.link-old .link-line')
+      .attr('stroke-opacity', 0.2);
+  } else {
+    // 清除变化样式
+    _g.select('.links-layer').selectAll('.link-group')
+      .classed('link-new', false)
+      .classed('link-old', false);
+    _g.select('.links-layer').selectAll('.link-group .link-line')
+      .attr('stroke-opacity', null)
+      .attr('stroke', null)
+      .attr('stroke-width', null);
+    _g.select('.links-layer').selectAll('.link-group .link-label')
+      .style('fill', null)
+      .style('opacity', null);
+  }
+
   // 增量更新节点（D3 data-join: enter/update/exit）
+  // 先清除所有残留的变化标记元素（上一帧新增的节点在本帧不再是新增）
+  _g.select('.nodes-layer').selectAll('.node-group .change-marker-glow').remove();
+  _g.select('.nodes-layer').selectAll('.node-group .change-marker-new').remove();
+  _g.select('.nodes-layer').selectAll('.node-group .change-marker-text').remove();
+
   _g.select('.nodes-layer').selectAll('.node-group')
     .data(nodes, d => d.id)
     .join(
@@ -3753,12 +3944,12 @@ function updateVisibleGraph() {
           .style('opacity', 0)
           .attr('transform', d => `translate(${d.x},${d.y})`);
         setupNodeDOM(ng);
-        // 淡入动画
-        ng.transition().duration(300).style('opacity', 1);
+        // 丝滑淡入
+        ng.transition().duration(500).ease(d3.easeCubicOut).style('opacity', 1);
         return ng;
       },
       update => update,  // 保持不动
-      exit => exit.transition().duration(200).style('opacity', 0).remove()
+      exit => exit.transition().duration(400).ease(d3.easeCubicIn).style('opacity', 0).remove()
     );
 
   // 重新绑定事件（因为新节点需要）
@@ -3791,20 +3982,76 @@ function updateVisibleGraph() {
     .select('.node-glow')
     .attr('opacity', 0.3);
 
-  // 更新力模拟（不重建，只替换数据）
-  simulation = d3.forceSimulation(nodes)
-    .alphaDecay(0.05)
-    .alphaMin(0.01)
-    .velocityDecay(0.55)
-    .alpha(0.15)  // 低 alpha：轻微调整位置，不大幅重排
-    .force('link', d3.forceLink(links).id(d => d.id).distance(linkDistance))
-    .force('charge', d3.forceManyBody().strength(chargeStrength))
-    .force('center', d3.forceCenter(_graphWidth / 2, _graphHeight / 2))
-    .force('collision', d3.forceCollide().radius(collisionRadius))
-    .force('x', d3.forceX(_graphWidth / 2).strength(0.04))
-    .force('y', d3.forceY(_graphHeight / 2).strength(0.04));
+  // ── 焦点模式：时间线变化时，镜头对焦到新增节点区域 ──
+  if (hasChanges && _timelineChangeInfo.newNodeIds.size > 0 && _zoom) {
+    // 计算新增节点的中心位置
+    const newNodePositions = nodes.filter(n => _timelineChangeInfo.newNodeIds.has(n.id))
+      .map(n => ({ x: n.x || _nodePositions[n.id]?.x || _graphWidth/2, y: n.y || _nodePositions[n.id]?.y || _graphHeight/2 }));
 
+    if (newNodePositions.length > 0) {
+      const cx = newNodePositions.reduce((s, p) => s + p.x, 0) / newNodePositions.length;
+      const cy = newNodePositions.reduce((s, p) => s + p.y, 0) / newNodePositions.length;
+
+      // 根据新增节点分布范围决定缩放级别
+      const spreadX = Math.max(...newNodePositions.map(p => Math.abs(p.x - cx)), 80);
+      const spreadY = Math.max(...newNodePositions.map(p => Math.abs(p.y - cy)), 80);
+      const focusScale = Math.min(1.5, Math.max(0.8, Math.min(_graphWidth / (spreadX * 4), _graphHeight / (spreadY * 4))));
+
+      // 丝滑 zoom transition 移动镜头到焦点区域
+      _svg.transition().duration(1200).ease(d3.easeCubicInOut)
+        .call(_zoom.transform,
+          d3.zoomIdentity
+            .translate(_graphWidth / 2, _graphHeight / 2)
+            .scale(focusScale)
+            .translate(-cx, -cy)
+        );
+    }
+  } else if (_zoom && isTimelineActive) {
+    // 无变化帧：镜头平滑回到全局视角
+    _svg.transition().duration(1200).ease(d3.easeCubicInOut)
+      .call(_zoom.transform,
+        d3.zoomIdentity.translate(_graphWidth / 2, _graphHeight / 2).scale(0.85).translate(-_graphWidth / 2, -_graphHeight / 2)
+      );
+  }
+
+  // 增量更新力模拟（不重建，保持位置连续性 → 丝滑过渡）
+  const isTimelineActive = activeTimelineIndex >= 0 && activeTimelineIndex < (timelinePoints?.length || 0);
+  const alphaValue = isTimelineActive ? 0.25 : 0.15;
+
+  if (!simulation) {
+    // 首次创建
+    simulation = d3.forceSimulation(nodes)
+      .alphaDecay(0.02)
+      .alphaMin(0.005)
+      .velocityDecay(0.4)
+      .alpha(alphaValue)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(linkDistance))
+      .force('charge', d3.forceManyBody().strength(chargeStrength))
+      .force('center', d3.forceCenter(_graphWidth / 2, _graphHeight / 2))
+      .force('collision', d3.forceCollide().radius(collisionRadius))
+      .force('x', d3.forceX(_graphWidth / 2).strength(0.02))
+      .force('y', d3.forceY(_graphHeight / 2).strength(0.02));
+  } else {
+    // 增量更新：保留已有节点位置，只更新 nodes/links 数据
+    simulation
+      .nodes(nodes)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(linkDistance))
+      .force('charge', d3.forceManyBody().strength(chargeStrength))
+      .force('center', d3.forceCenter(_graphWidth / 2, _graphHeight / 2))
+      .force('collision', d3.forceCollide().radius(collisionRadius))
+      .force('x', d3.forceX(_graphWidth / 2).strength(0.02))
+      .force('y', d3.forceY(_graphHeight / 2).strength(0.02))
+      .alpha(alphaValue)
+      .alphaDecay(0.02)
+      .alphaMin(0.005)
+      .velocityDecay(0.4)
+      .restart();
+  }
+
+  // 平滑 tick 回调：用 requestAnimationFrame 插值，避免硬拉
+  let _lastTickTime = 0;
   simulation.on('tick', () => {
+    // 连线直接更新（线条过渡视觉上不明显，不需要插值）
     _g.select('.links-layer').selectAll('.link-group').select('.link-line')
       .attr('x1', d => d.source.x)
       .attr('y1', d => d.source.y)
@@ -3815,6 +4062,7 @@ function updateVisibleGraph() {
       .attr('x', d => (d.source.x + d.target.x) / 2)
       .attr('y', d => (d.source.y + d.target.y) / 2);
 
+    // 节点位置平滑过渡：利用 SVG transform transition
     _g.select('.nodes-layer').selectAll('.node-group')
       .attr('transform', d => `translate(${d.x},${d.y})`);
 

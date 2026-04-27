@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SelfMind - 记忆树形视图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 25px 40px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .concept-explanation h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .concept-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid;
+        }
+
+        .above-ground {
+            border-left-color: #27ae60;
+        }
+
+        .below-ground {
+            border-left-color: #8B4513;
+        }
+
+        .concept-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .concept-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .concept-item li {
+            padding: 5px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tree-view {
+            display: flex;
+            min-height: 600px;
+            position: relative;
+        }
+
+        .tree-diagram {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 30%, #F5F5F5 100%);
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        .ground-line {
+            position: absolute;
+            bottom: 40%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #8B4513, #A0522D, #8B4513);
+            z-index: 1;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .ground-line::before {
+            content: '地面';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8B4513;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .trunk {
+            position: absolute;
+            bottom: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 200px;
+            background: linear-gradient(to bottom, #8B4513, #A0522D, #8B4513);
+            z-index: 2;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .branches-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 40%;
+            z-index: 3;
+        }
+
+        .roots-container {
+            position: absolute;
+            top: 40%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 3;
+        }
+
+        .node {
+            position: absolute;
+            min-width: 120px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .node-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .node-label {
+            font-size: 0.9em;
+            line-height: 1.2;
+        }
+
+        .node-description {
+            font-size: 0.8em;
+            opacity: 0.9;
+            font-weight: normal;
+            margin-top: 3px;
+        }
+
+        .connection {
+            position: absolute;
+            background: rgba(52, 152, 219, 0.3);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .info-panel {
+            flex: 0 0 400px;
+            background: #f8f9fa;
+            padding: 30px;
+            border-left: 1px solid #dee2e6;
+            overflow-y: auto;
+        }
+
+        .selected-node {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 2px solid #3498db;
+        }
+
+        .selected-node h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .node-meta {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .connections-list {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .connection-item {
+            background: #f8f9fa;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .connection-type {
+            font-size: 0.85em;
+            color: #666;
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .stats h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-refresh {
+            background: #2ecc71;
+        }
+
+        .btn-refresh:hover {
+            background: #27ae60;
+        }
+
+        .btn-toggle {
+            background: #9b59b6;
+        }
+
+        .btn-toggle:hover {
+            background: #8e44ad;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .category-identity { background: linear-gradient(135deg, #ff6b6b, #ff4757); }
+        .category-person { background: linear-gradient(135deg, #ffa502, #ff7f00); }
+        .category-project { background: linear-gradient(135deg, #2ed573, #1dd1a1); }
+        .category-principle { background: linear-gradient(135deg, #1e90ff, #3742fa); }
+        .category-tool { background: linear-gradient(135deg, #a55eea, #7158e2); }
+        .category-environment { background: linear-gradient(135deg, #778ca3, #546de5); }
+        .category-memory { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+
+        @media (max-width: 1024px) {
+            .tree-view {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                flex: none;
+                max-height: 400px;
+            }
+            
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌳 SelfMind - 记忆树形视图</h1>
+            <div class="subtitle">
+                将记忆可视化为树形结构：地上部分代表显性记忆（人物、项目、工具），地下部分代表隐性记忆（原则、配置、深层知识）
+            </div>
+        </div>
+
+        <div class="concept-explanation">
+            <h3>📚 树形隐喻概念</h3>
+            <div class="concept-grid">
+                <div class="concept-item above-ground">
+                    <h4>🌿 地上部分 - 显性记忆</h4>
+                    <ul>
+                        <li>✅ 可见的枝叶和果实</li>
+                        <li>✅ 日常接触的人和事</li>
+                        <li>✅ 正在进行的项目</li>
+                        <li>✅ 使用的工具和技能</li>
+                        <li>✅ 表面层次的知识</li>
+                    </ul>
+                </div>
+                <div class="concept-item below-ground">
+                    <h4>🌱 地下部分 - 隐性记忆</h4>
+                    <ul>
+                        <li>✅ 看不见的根系</li>
+                        <li>✅ 行为准则和原则</li>
+                        <li>✅ 环境配置和偏好</li>
+                        <li>✅ 深层经验和教训</li>
+                        <li>✅ 支撑系统的根基</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="tree-view">
+            <div class="tree-diagram" id="treeDiagram">
+                <div class="ground-line"></div>
+                <div class="trunk"></div>
+                <div class="branches-container" id="branchesContainer"></div>
+                <div class="roots-container" id="rootsContainer"></div>
+            </div>
+
+            <div class="info-panel">
+                <div class="selected-node" id="selectedNodeInfo">
+                    <h3>👆 点击树上的节点</h3>
+                    <p>点击树形图中的任意节点查看详细信息</p>
+                </div>
+
+                <div class="stats">
+                    <h3>📊 记忆统计</h3>
+                    <div class="stat-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="nodeCount">0</div>
+                            <div class="stat-label">总节点数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="connectionCount">0</div>
+                            <div class="stat-label">连接数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="aboveGroundCount">0</div>
+                            <div class="stat-label">地上节点</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="belowGroundCount">0</div>
+                            <div class="stat-label">地下节点</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-refresh" onclick="loadRealData()">
+                        🔄 加载真实数据
+                    </button>
+                    <button class="btn btn-toggle" onclick="toggleLayout()">
+                        🔀 切换布局
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🌳 树形记忆模型 · 地上可见 · 地下隐藏 · 根深叶茂 · 智慧生长 🌱</p>
+            <p>SelfMind 项目 · 基于树形隐喻的认知可视化系统</p>
+        </div>
+    </div>
+
+    <script>
+        // 记忆数据
+        const memoryData = {
+            nodes: [
+                // 地上节点（显性记忆）
+                { 
+                    id: "self", 
+                    label: "我", 
+                    description: "核心身份节点",
+                    category: "identity",
+                    icon: "👤",
+                    isAboveGround: true,
+                    position: { x: 50, y: 20 }
+                },
+                { 
+                    id: "tange", 
+                    label: "坦哥", 
+                    description: "AI部门负责人",
+                    category: "person",
+                    icon: "👨‍💼",
+                    isAboveGround: true,
+                    position: { x: 20, y: 40 }
+                },
+                { 
+                    id: "selfmind", 
+                    label: "SelfMind", 
+                    description: "记忆图谱项目",
+                    category: "project",
+                    icon: "🧠",
+                    isAboveGround: true,
+                    position: { x: 80, y: 40 }
+                },
+                { 
+                    id: "hermes", 
+                    label: "Hermes", 
+                    description: "AI助手框架",
+                    category: "tool",
+                    icon: "🤖",
+                    isAboveGround: true,
+                    position: { x: 30, y: 60 }
+                },
+                { 
+                    id: "work-log", 
+                    label: "工作日志", 
+                    description: "每日工作总结",
+                    category: "memory",
+                    icon: "📝",
+                    isAboveGround: true,
+                    position: { x: 70, y: 60 }
+                },
+                { 
+                    id: "xiaochen", 
+                    label: "晓晨", 
+                    description: "美丽优秀的晓晨妹妹",
+                    category: "person",
+                    icon: "👩‍💼",
+                    isAboveGround: true,
+                    position: { x: 40, y: 80 }
+                },
+                { 
+                    id: "bank-plan", 
+                    label: "银行AI规划", 
+                    description: "商业银行人工智能体系五年规划",
+                    category: "project",
+                    icon: "🏦",
+                    isAboveGround: true,
+                    position: { x: 60, y: 80 }
+                },
+                
+                // 地下节点（隐性记忆）
+                { 
+                    id: "security", 
+                    label: "安全红线", 
+                    description: "未经确认不执行外部操作",
+                    category: "principle",
+                    icon: "🚫",
+                    isAboveGround: false,
+                    position: { x: 40, y: 60 }
+                },
+                { 
+                    id: "mac-calendar", 
+                    label: "Mac日历", 
+                    description: "通过AppleScript管理日历",
+                    category: "environment",
+                    icon: "📅",
+                    isAboveGround: false,
+                    position: { x: 60, y: 60 }
+                },
+                { 
+                    id: "finna", 
+                    label: "Finna供应商", 
+                    description: "MiniMax-M2.5模型配置",
+                    category: "environment",
+                    icon: "⚙️",
+                    isAboveGround: false,
+                    position: { x: 20, y: 80 }
+                },
+                { 
+                    id: "socrates", 
+                    label: "苏格拉底精神", 
+                    description: "无知之知、产婆术、辩证法",
+                    category: "principle",
+                    icon: "🏛️",
+                    isAboveGround: false,
+                    position: { x: 80, y: 80 }
+                },
+                { 
+                    id: "memory-lesson", 
+                    label: "行为教训", 
+                    description: "长任务完成后要直接交付内容",
+                    category: "principle",
+                    icon: "💡",
+                    isAboveGround: false,
+                    position: { x: 50, y: 90 }
+                }
+            ],
+            links: [
+                { source: "self", target: "tange", type: "manages" },
+                { source: "self", target: "selfmind", type: "owns" },
+                { source: "self", target: "hermes", type: "uses" },
+                { source: "self", target: "security", type: "follows" },
+                { source: "self", target: "work-log", type: "maintains" },
+                { source: "self", target: "socrates", type: "embodies" },
+                { source: "tange", target: "xiaochen", type: "collaborates" },
+                { source: "tange", target: "bank-plan", type: "leads" },
+                { source: "selfmind", target: "mac-calendar", type: "integrates" },
+                { source: "hermes", target: "finna", type: "configures" },
+                { source: "security", target: "memory-lesson", type: "includes" },
+                { source: "xiaochen", target: "bank-plan", type: "contributes" }
+            ]
+        };
+
+        let currentLayout = 'radial';
+        let selectedNodeId = null;
+
+        // 初始化树形图
+        function initTree() {
+            const branchesContainer = document.getElementById('branchesContainer');
+            const rootsContainer = document.getElementById('rootsContainer');
+            
+            // 清空容器
+            branchesContainer.innerHTML = '';
+            rootsContainer.innerHTML = '';
+            
+            // 创建节点
+            memoryData.nodes.forEach(node => {
+                createNodeElement(node);
+            });
+            
+            // 创建连接线
+            memoryData.links.forEach(link => {
+                createConnection(link);
+            });
+            
+            // 更新统计信息
+            updateStats();
+            
+            // 默认选中第一个节点
+            if (memoryData.nodes.length > 0 && !selectedNodeId) {
+                selectNode(memoryData.nodes[0].id);
+            }
+        }
+
+        function createNodeElement(node) {
+            const container = node.isAboveGround ? 
+                document.getElementById('branchesContainer') : 
+                document.getElementById('rootsContainer');
+            
+            const nodeElement = document.createElement('div');
+            nodeElement.className = `node category-${node.category}`;
+            nodeElement.dataset.id = node.id;
+            
+            // 计算实际位置
+            const containerRect = container.getBoundingClientRect();
+            const x = (node.position.x / 100) * containerRect.width;
+            const y = node.isAboveGround ? 
+                (node.position.y / 100) * containerRect.height :
+                containerRect.height - (node.position.y / 100) * containerRect.height;
+            
+            nodeElement.style.left = `${x}px`;
+            nodeElement.style.top = `${y}px`;
+            
+            nodeElement.innerHTML = `
+                <div class="node-icon">${node.icon}</div>
+                <div class="node-label">${node.label}</div>
+                <div class="node-description">${node.description}</div>
+            `;
+            
+            // 添加点击事件
+            nodeElement.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectNode(node.id);
+            });
+            
+            container.appendChild(nodeElement);
+        }
+
+        function createConnection(link) {
+            const sourceNode = memoryData.nodes.find(n => n.id === link.source);
+            const targetNode = memoryData.nodes.find(n => n.id === link.target);
+            
+            if (!sourceNode || !targetNode) return;
+            
+            // 确定容器
+            const sourceContainer = sourceNode.isAboveGround ? 
+                document.getElementById('branchesContainer') : 
+                document.getElementById('rootsContainer');
+            const targetContainer = targetNode.isAboveGround ? 
+                document.getElementById('branchesContainer') : 
+                document.getElementById('rootsContainer');
+            
+            // 如果节点在不同容器，不画连接线
+            if (sourceContainer !== targetContainer) return;
+            
+            const container = sourceContainer;
+            const containerRect = container.getBoundingClientRect();
+            
+            // 计算源节点位置
+            const sourceX = (sourceNode.position.x / 100) * containerRect.width;
+            const sourceY = sourceNode.isAboveGround ? 
+                (sourceNode.position.y / 100) * containerRect.height :
+                containerRect.height - (sourceNode.position.y / 100) * containerRect.height;
+            
+            // 计算目标节点位置
+            const targetX = (targetNode.position.x / 100) * containerRect.width;
+            const targetY = targetNode.isAboveGround ? 
+                (targetNode.position.y / 100) * containerRect.height :
+                containerRect.height - (targetNode.position.y / 100) * containerRect.height;
+            
+            // 计算连接线参数
+            const dx = targetX - sourceX;
+            const dy = targetY - sourceY;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            // 创建连接线元素
+            const connection = document.createElement('div');
+            connection.className = 'connection';
+            connection.style.left = `${sourceX}px`;
+            connection.style.top = `${sourceY}px`;
+            connection.style.width = `${length}px`;
+            connection.style.transform = `rotate(${angle}deg)`;
+            connection.style.height = '3px';
+            
+            container.appendChild(connection);
+        }
+
+        function selectNode(nodeId) {
+            selectedNodeId = nodeId;
+            const node = memoryData.nodes.find(n => n.id === nodeId);
+            
+            if (!node) return;
+            
+            // 更新选中节点的样式
+            document.querySelectorAll('.node').forEach(el => {
+                el.style.border = 'none';
+            });
+            
+            const selectedElement = document.querySelector(`.node[data-id="${nodeId}"]`);
+            if (selectedElement) {
+                selectedElement.style.border = '3px solid #ffd700';
+                selectedElement.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.5)';
+            }
+            
+            // 更新信息面板
+            updateNodeInfo(node);
+            
+            // 高亮相关连接
+            highlightConnections(nodeId);
+        }
+
+        function updateNodeInfo(node) {
+            const infoPanel = document.getElementById('selectedNodeInfo');
+            
+            // 获取相关连接
+            const connections = memoryData.links.filter(
+                link => link.source === node.id || link.target === node.id
+            );
+            
+            // 获取连接到的节点
+            const connectedNodes = connections.map(link => {
+                const otherNodeId = link.source === node.id ? link.target : link.source;
+                const otherNode = memoryData.nodes.find(n => n.id === otherNodeId);
+                const direction = link.source === node.id ? '→' : '←';
+                const relationType = getRelationTypeText(link.type);
+                
+                return { node: otherNode, direction, relationType };
+            }).filter(item => item.node);
+            
+            // 类别标签
+            const categoryLabels = {
+                identity: '核心身份',
+                person: '人物关系', 
+                project: '项目/任务',
+                principle: '行为准则',
+                tool: '能力/工具',
+                environment: '环境配置',
+                memory: '其他记忆'
+            };
+            
+            const categoryName = categoryLabels[node.category] || node.category;
+            const position = node.isAboveGround ? '地上（显性记忆）' : '地下（隐性记忆）';
+            
+            let connectionsHTML = '';
+            if (connectedNodes.length > 0) {
+                connectionsHTML = `
+                    <div class="connections-list">
+                        <h4>🔗 相关连接 (${connectedNodes.length})</h4>
+                        ${connectedNodes.map(item => `
+                            <div class="connection-item">
+                                <span class="node-icon">${item.node.icon}</span>
+                                <strong>${item.node.label}</strong>
+                                <span class="connection-type">${item.direction} ${item.relationType}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            infoPanel.innerHTML = `
+                <h3>${node.icon} ${node.label}</h3>
+                <div class="node-meta">
+                    <span class="tag category-${node.category}">${categoryName}</span>
+                    <span class="tag" style="background: ${node.isAboveGround ? '#27ae60' : '#8B4513'}; color: white;">
+                        ${position}
+                    </span>
+                </div>
+                <p>${node.description}</p>
+                ${connectionsHTML}
+            `;
+        }
+
+        function getRelationTypeText(type) {
+            const relations = {
+                'manages': '管理',
+                'owns': '拥有', 
+                'uses': '使用',
+                'follows': '遵循',
+                'collaborates': '协作',
+                'leads': '领导',
+                'integrates': '集成',
+                'configures': '配置',
+                'maintains': '维护',
+                'embodies': '体现',
+                'includes': '包含',
+                'contributes': '贡献'
+            };
+            return relations[type] || type;
+        }
+
+        function highlightConnections(nodeId) {
+            // 重置所有连接线
+            document.querySelectorAll('.connection').forEach(el => {
+                el.style.background = 'rgba(52, 152, 219, 0.3)';
+            });
+            
+            // 高亮相关连接
+            const relatedLinks = memoryData.links.filter(
+                link => link.source === nodeId || link.target === nodeId
+            );
+            
+            relatedLinks.forEach(link => {
+                // 这里需要更复杂的逻辑来找到对应的连接线元素
+                // 简化处理：暂时只更新样式
+            });
+        }
+
+        function updateStats() {
+            const totalNodes = memoryData.nodes.length;
+            const totalConnections = memoryData.links.length;
+            const aboveGroundNodes = memoryData.nodes.filter(n => n.isAboveGround).length;
+            const belowGroundNodes = memoryData.nodes.filter(n => !n.isAboveGround).length;
+            
+            document.getElementById('nodeCount').textContent = totalNodes;
+            document.getElementById('connectionCount').textContent = totalConnections;
+            document.getElementById('aboveGroundCount').textContent = aboveGroundNodes;
+            document.getElementById('belowGroundCount').textContent = belowGroundNodes;
+        }
+
+        function loadRealData() {
+            // 这里应该从API获取真实数据
+            fetch('/api/data')
+                .then(response => response.json())
+                .then(data => {
+                    // 转换数据格式
+                    // memoryData = transformData(data);
+                    // initTree();
+                    
+                    // 显示成功消息
+                    const infoPanel = document.getElementById('selectedNodeInfo');
+                    infoPanel.innerHTML = `
+                        <h3>✅ 数据加载成功</h3>
+                        <p>已连接到 SelfMind API</p>
+                        <p>当前使用示例数据，实际数据格式需要适配</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('加载数据失败:', error);
+                    const infoPanel = document.getElementById('selectedNodeInfo');
+                    infoPanel.innerHTML = `
+                        <h3>❌ 数据加载失败</h3>
+                        <p>无法连接到API服务器</p>
+                        <p>错误信息: ${error.message}</p>
+                        <p>继续使用示例数据</p>
+                    `;
+                });
+        }
+
+        function toggleLayout() {
+            currentLayout = currentLayout === 'radial' ? 'hierarchical' : 'radial';
+            
+            // 重新布局节点
+            if (currentLayout === 'hierarchical') {
+                // 层次布局
+                memoryData.nodes.forEach((node, index) => {
+                    const row = Math.floor(index / 4);
+                    const col = index % 4;
+                    node.position = {
+                        x: 20 + col * 25,
+                        y: node.isAboveGround ? 20 + row * 20 : 60 + row * 15
+                    };
+                });
+            } else {
+                // 径向布局（恢复原始位置）
+                memoryData.nodes.forEach(node => {
+                    if (node.id === "self") node.position = { x: 50, y: 20 };
+                    else if (node.id === "tange") node.position = { x: 20, y: 40 };
+                    else if (node.id === "selfmind") node.position = { x: 80, y: 40 };
+                    else if (node.id === "hermes") node.position = { x: 30, y: 60 };
+                    else if (node.id === "work-log") node.position = { x: 70, y: 60 };
+                    else if (node.id === "xiaochen") node.position = { x: 40, y: 80 };
+                    else if (node.id === "bank-plan") node.position = { x: 60, y: 80 };
+                    else if (node.id === "security") node.position = { x: 40, y: 60 };
+                    else if (node.id === "mac-calendar") node.position = { x: 60, y: 60 };
+                    else if (node.id === "finna") node.position = { x: 20, y: 80 };
+                    else if (node.id === "socrates") node.position = { x: 80, y: 80 };
+                    else if (node.id === "memory-lesson") node.position = { x: 50, y: 90 };
+                });
+            }
+            
+            initTree();
+            
+            // 更新按钮文本
+            const toggleBtn = document.querySelector('.btn-toggle');
+            toggleBtn.innerHTML = currentLayout === 'radial' ? 
+                '🔀 切换为层次布局' : 
+                '🔀 切换为径向布局';
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTree();
+            
+            // 窗口大小变化时重新布局
+            window.addEventListener('resize', initTree);
+        });
+    </script>
+</body>
+</html>
