@@ -7,7 +7,7 @@ from http.server import SimpleHTTPRequestHandler
 from pathlib import Path
 from typing import Optional
 
-from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config
+from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config, get_enabled_profiles
 from selfmind_app.document_importer import DocumentImporter
 from selfmind_app.memory_store import MemoryStore
 from selfmind_app.metadata_db import MetadataDB
@@ -450,10 +450,11 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         self.end_headers()
 
     def _handle_poll(self):
-        """轻量轮询接口：返回记忆源文件的修改时间戳，用于前端检测变化。"""
+        """轻量轮询接口：返回记忆源文件的修改时间戳 + Honcho API状态，用于前端检测变化。"""
         import hashlib
         from pathlib import Path
         
+        config = load_config()
         home = Path.home()
         memory_file = home / ".hermes" / "memories" / "MEMORY.md"
         user_file = home / ".hermes" / "memories" / "USER.md"
@@ -473,6 +474,25 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
             else:
                 files_info[fname] = {"mtime_ns": 0, "size": 0}
         
+        # Check Honcho API health if honcho profile has api config
+        honcho_info = {"status": "disabled"}
+        honcho_mtime = 0
+        source_cfg = config.get("source", {})
+        profiles = source_cfg.get("profiles", {})
+        mode = source_cfg.get("mode", "auto")
+        
+        # Only check Honcho if it's an enabled profile with api config
+        enabled_profiles = get_enabled_profiles(config)
+        if "honcho" in enabled_profiles:
+            honcho_profile = profiles.get("honcho", {})
+            api_config = honcho_profile.get("api")
+            if api_config and api_config.get("type") == "honcho":
+                from selfmind_app.honcho_api import honcho_api_health
+                honcho_info = honcho_api_health(api_config.get("base_url", "http://localhost:8000/v3"))
+                # Use conclusion count as a "mtime" proxy — changes when new conclusions are added
+                honcho_mtime = honcho_info.get("conclusion_count", 0)
+                total_mtime += honcho_mtime * 1000  # Scale up so changes are detectable
+        
         # 用所有文件的 mtime 拼接后取 hash，作为单一比较值
         mtime_str = str(total_mtime)
         poll_hash = hashlib.md5(mtime_str.encode()).hexdigest()
@@ -480,6 +500,7 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         self._json_response({
             "hash": poll_hash,
             "files": files_info,
+            "honcho": honcho_info,
             "timestamp": datetime.now().isoformat(),
         })
 

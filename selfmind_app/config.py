@@ -26,6 +26,12 @@ DEFAULT_CONFIG = {
                 "home": str(Path(os.environ.get("HONCHO_HOME", Path.home() / ".honcho"))),
                 "memory_files": ["memories/MEMORY.md", "memories/USER.md"],
                 "memory_files_fallback": ["memory.md", "user.md", "memories.md", "profile.md"],
+                "api": {
+                    "type": "honcho",
+                    "base_url": os.environ.get("HONCHO_API_URL", "http://localhost:8000/v3"),
+                    "workspace": os.environ.get("HONCHO_WORKSPACE", "hermes"),
+                    "peers": ["liuxiaocheng", "hermes"],
+                },
             },
         },
     },
@@ -154,8 +160,15 @@ def describe_sources(config: dict) -> str:
     enabled = get_enabled_profiles(config)
     parts = []
     for name in enabled:
-        home = profiles.get(name, {}).get("home", "")
-        parts.append(f"{name}={home}")
+        p_cfg = profiles.get(name, {})
+        # For API-based profiles, show the API endpoint instead of local path
+        api_cfg = p_cfg.get("api", {})
+        if api_cfg:
+            base_url = api_cfg.get("base_url", "")
+            parts.append(f"{name}=API:{base_url}")
+        else:
+            home = p_cfg.get("home", "")
+            parts.append(f"{name}={home}")
     if not parts:
         return "none"
     return "; ".join(parts)

@@ -13,6 +13,7 @@ inspired by cognitive psychology research on human memory types:
   emotional        (情绪记忆)   — user_mood, likes_dislikes, trust
 """
 
+import logging
 import re
 from datetime import datetime
 from hashlib import md5
@@ -20,6 +21,9 @@ from pathlib import Path
 
 from selfmind_app.analytics import analyze_memories
 from selfmind_app.config import get_enabled_profiles
+from selfmind_app.honcho_api import parse_honcho_api
+
+logger = logging.getLogger(__name__)
 
 # ────────────────────────────────────────────────────────────────────
 # 1. TAXONOMY — 8 primary categories × 24 subcategories
@@ -325,6 +329,72 @@ def parse_memories(config: dict) -> list[dict]:
 
     for profile_name in get_enabled_profiles(config):
         profile = profiles.get(profile_name, {})
+        api_config = profile.get("api")
+
+        # ── API-based source (e.g. Honcho) ──
+        if api_config and api_config.get("type") == "honcho":
+            logger.info(f"Profile '{profile_name}' has Honcho API config, fetching from API")
+            try:
+                honcho_entries = parse_honcho_api(
+                    api_config=api_config,
+                    profile_name=profile_name,
+                    classify_fn=classify_entry,
+                    label_fn=extract_label,
+                )
+                for entry in honcho_entries:
+                    label = entry["label"]
+                    if label in seen_labels:
+                        idx = seen_labels[label]
+                        if len(entry["description"]) > len(entries[idx]["description"]):
+                            entries[idx] = entry
+                        continue
+                    seen_labels[label] = len(entries)
+                    entries.append(entry)
+                # Also try local files as fallback (merge, not replace)
+                home = Path(profile.get("home", "")).expanduser()
+                memory_files = profile.get("memory_files", [])
+                fallback_files = profile.get("memory_files_fallback", [])
+                source_sections: list[tuple[str, str]] = []
+                for rel_path in memory_files:
+                    file_path = home / rel_path
+                    if file_path.exists():
+                        parsed = parse_memory_file(file_path, separator)
+                        source_sections.extend((section, rel_path) for section in parsed)
+                if not source_sections:
+                    for rel_path in fallback_files:
+                        file_path = home / rel_path
+                        if file_path.exists():
+                            parsed = parse_memory_file(file_path, separator)
+                            source_sections.extend((section, rel_path) for section in parsed)
+                # Process local fallback entries
+                for section_text, source_file in source_sections:
+                    if len(section_text.strip()) < 5:
+                        continue
+                    node_id = stable_id(section_text)
+                    lbl = extract_label(section_text)
+                    primary, secondary = classify_entry(section_text)
+                    description = re.sub(r"\*\*", "", section_text).strip()[:150]
+                    if lbl in seen_labels:
+                        idx = seen_labels[lbl]
+                        if len(description) > len(entries[idx]["description"]):
+                            entries[idx] = entry
+                        continue
+                    seen_labels[lbl] = len(entries)
+                    entries.append({
+                        "text": section_text,
+                        "label": lbl,
+                        "primary": primary,
+                        "secondary": secondary,
+                        "description": description,
+                        "node_id": node_id,
+                        "source_profile": profile_name,
+                        "source_file": source_file,
+                    })
+                continue  # Skip the standard file-only path below
+            except Exception as exc:
+                logger.warning(f"Honcho API fetch failed for '{profile_name}': {exc}, falling back to local files")
+
+        # ── Standard file-based source ──
         home = Path(profile.get("home", "")).expanduser()
         memory_files = profile.get("memory_files", [])
         fallback_files = profile.get("memory_files_fallback", [])
@@ -762,8 +832,13 @@ def build_graph(config: dict) -> dict:
     profiles = source_cfg.get("profiles", {})
     for profile_name in get_enabled_profiles(config):
         profile = profiles.get(profile_name, {})
-        home = profile.get("home", "")
-        used_sources.append(f"{profile_name}:{home}")
+        api_cfg = profile.get("api", {})
+        if api_cfg:
+            base_url = api_cfg.get("base_url", "")
+            used_sources.append(f"{profile_name}:API:{base_url}")
+        else:
+            home = profile.get("home", "")
+            used_sources.append(f"{profile_name}:{home}")
 
     source_text = ", ".join(used_sources) if used_sources else "none"
 
