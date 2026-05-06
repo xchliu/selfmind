@@ -95,6 +95,8 @@ selfmind/
 | `GET` | `/` | 返回 index.html 前端页面 |
 | `GET` | `/api/data` | 返回图谱数据（优先读缓存） |
 | `GET` | `/api/config` | 返回当前配置 |
+| `GET` | `/api/stats` | 返回6层记忆实时指标数据 |
+| `GET` | `/api/poll` | 轻量mtime变化检测+Honcho健康检查 |
 | `POST` | `/api/refresh` | 重新解析记忆文件，更新图谱 |
 | `POST` | `/api/save` | 将当前图谱数据保存到 data.json |
 | `POST` | `/api/config` | 保存配置 |

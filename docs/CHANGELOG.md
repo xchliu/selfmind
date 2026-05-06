@@ -1,3 +1,28 @@
+## [2.4.0] — 2026-05-06
+
+### Added
+- 🧠 **U型记忆沉淀页面** — 新增"记忆沉淀"导航tab，展示记忆从对话到固化技能的完整沉淀路径
+- 📊 **6层实时状态指标** — 每层节点卡片显示关键指标数字（会话数、容量占比、Honcho状态、节点数、Skill数、实体数）
+- 🔄 **动态健康检查** — L1-L6全部从 `/api/stats` 实时获取状态，不再硬编码
+- 🎯 **6条激活路径** — 右臂展示对话/推理/可视化/任务/检索/学习6条激活路径，贝塞尔射线连接源节点
+- 🏗️ **后端 `/api/stats` 端点** — 新增API，一次性返回6层实时指标数据（sessions/memories/honcho/selfmind/skills/wiki）
+- 🔗 **U型SVG弧线骨架** — 贝塞尔曲线绘制完整U型路径，节点沿弧线分布
+
+### Changed
+- `index.html` — 新增记忆沉淀视图(sediment)及相关CSS/HTML/JS
+- `index.html` — 浅色主题重写（白色背景、深色文字、无网格线）
+- `index.html` — U弧线右臂改为更直的路径（减少弯曲）
+- `index.html` — 激活卡片移至右臂弧线旁，射线从源节点连接
+- `selfmind_app/http_handler.py` — 新增 `/api/stats` 路由及 `_handle_stats()` 方法
+- `selfmind_app/http_handler.py` — `_handle_poll()` 新增 Honcho 健康检查
+
+### Fixed
+- 修复 L3/L4 状态硬编码❌ — 改为动态检查（Honcho用/health端点，SelfMind检测进程）
+- 修复 Honcho健康检查 — curl从GET /v3/workspaces改为/health端点
+- 修复 JS `<<script>` typo — 双小于号导致脚本不加载
+
+---
+
 ## [2.3.0] — 2026-04-27
 
 ### Added

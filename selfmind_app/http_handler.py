@@ -180,6 +180,8 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         clean_path = self.path.split("?")[0]
         if clean_path == "/api/data":
             self._json_response(self._load_data())
+        elif clean_path == "/api/stats":
+            self._handle_stats()
         elif clean_path == "/api/poll":
             self._handle_poll()
         elif clean_path == "/api/wiki/data":
@@ -448,6 +450,121 @@ class SelfMindHandler(SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
+
+    def _handle_stats(self):
+        """返回记忆各层的实时状态和关键指标，供 U 型沉淀页面使用。"""
+        from pathlib import Path
+        import subprocess
+
+        home = Path.home()
+        hermes_home = home / ".hermes"
+        stats = {}
+
+        # L1: 对话记忆 — session文件数
+        sessions_dir = hermes_home / "sessions"
+        if sessions_dir.exists():
+            session_count = len([f for f in sessions_dir.iterdir() if f.name.endswith('.json')])
+        else:
+            session_count = 0
+        stats['L1'] = {
+            'status': 'ok',
+            'metric': session_count,
+            'metric_label': 'sessions',
+            'detail': f'{session_count} 个历史会话'
+        }
+
+        # L2: 核心快照 — Memory/User容量
+        memory_file = hermes_home / "memories" / "MEMORY.md"
+        user_file = hermes_home / "memories" / "USER.md"
+        mem_size = memory_file.stat().st_size if memory_file.exists() else 0
+        user_size = user_file.stat().st_size if user_file.exists() else 0
+        mem_max = 2200
+        user_max = 1375
+        mem_pct = round(mem_size / mem_max * 100) if mem_max > 0 else 0
+        user_pct = round(user_size / user_max * 100) if user_max > 0 else 0
+        mem_status = 'err' if mem_pct > 90 else 'warn' if mem_pct > 75 else 'ok'
+        stats['L2'] = {
+            'status': mem_status,
+            'metric': mem_pct,
+            'metric_label': 'capacity',
+            'detail': f'MEM {mem_size}/{mem_max} ({mem_pct}%) · USER {user_size}/{user_max} ({user_pct}%)'
+        }
+
+        # L3: 身份推理 — Honcho健康+结论数
+        honcho_status = 'offline'
+        conclusion_count = 0
+        try:
+            import urllib.request
+            resp = urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)
+            if resp.status == 200:
+                honcho_status = 'ok'
+                # Try to get conclusion count from poll data
+                try:
+                    poll_resp = urllib.request.urlopen('http://127.0.0.1:8000/v3/workspaces/hermes/peers/liuxiaocheng/conclusions', timeout=3)
+                    import json as _json
+                    conclusions_data = _json.loads(resp.read())
+                    conclusion_count = len(conclusions_data) if isinstance(conclusions_data, list) else 0
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        # Also check from SelfMind's honcho_api module
+        try:
+            config = load_config()
+            enabled = get_enabled_profiles(config)
+            if 'honcho' in enabled:
+                from selfmind_app.honcho_api import honcho_api_health
+                honcho_cfg = config['source']['profiles']['honcho'].get('api', {})
+                honcho_info = honcho_api_health(honcho_cfg.get('base_url', 'http://localhost:8000/v3'))
+                if honcho_info.get('status') == 'ok':
+                    honcho_status = 'ok'
+                    conclusion_count = honcho_info.get('conclusion_count', 0)
+        except Exception:
+            pass
+        stats['L3'] = {
+            'status': honcho_status,
+            'metric': conclusion_count,
+            'metric_label': 'conclusions',
+            'detail': f'Honcho {honcho_status} · {conclusion_count} conclusions'
+        }
+
+        # L4: 可视化图谱 — SelfMind进程+wiki节点数
+        # If we're serving this API, SelfMind IS running
+        selfmind_running = True
+        wiki_nodes = 0
+        try:
+            data = self._load_data()
+            wiki_nodes = len(data.get('nodes', []))
+        except Exception:
+            pass
+        stats['L4'] = {
+            'status': 'ok' if selfmind_running else 'err',
+            'metric': wiki_nodes,
+            'metric_label': 'nodes',
+            'detail': f'SelfMind {"running" if selfmind_running else "offline"} · {wiki_nodes} 图谱节点'
+        }
+
+        # L5: 程序记忆 — skill数量
+        skills_dir = hermes_home / "skills"
+        skill_count = len([d for d in skills_dir.iterdir() if d.is_dir()]) if skills_dir.exists() else 0
+        stats['L5'] = {
+            'status': 'ok',
+            'metric': skill_count,
+            'metric_label': 'skills',
+            'detail': f'{skill_count} 个可复用工作流'
+        }
+
+        # L6: 知识库 — wiki实体文件数
+        wiki_dir = Path(home / "Documents" / "aiworkspace" / "wiki" / "entities")
+        entity_count = len([f for f in wiki_dir.iterdir() if f.name.endswith('.md')]) if wiki_dir.exists() else 0
+        stats['L6'] = {
+            'status': 'ok',
+            'metric': entity_count,
+            'metric_label': 'entities',
+            'detail': f'{entity_count} 个结构化实体'
+        }
+
+        self._json_response(stats)
 
     def _handle_poll(self):
         """轻量轮询接口：返回记忆源文件的修改时间戳 + Honcho API状态，用于前端检测变化。"""

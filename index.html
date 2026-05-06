@@ -17,22 +17,7 @@ body {
   width: 100vw;
 }
 
-/* 背景网格 */
-.bg-grid {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-image:
-    linear-gradient(rgba(30, 144, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(30, 144, 255, 0.08) 1px, transparent 1px);
-  background-size: 50px 50px;
-  z-index: 0;
-  /* animation removed — static grid for better readability */
-}
-
-@keyframes gridPulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 0.7; }
-}
+/* 背景网格已移除 */
 
 /* 顶部栏 */
 .top-bar {
@@ -2219,11 +2204,140 @@ svg { width: 100%; height: 100%; }
 .poll-interval {
   color: #bbb;
 }
+/* U型记忆沉淀 — Cyberpunk Dark */
+#sedimentDashboard { display:none; position:fixed; top:60px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow:hidden; font-family:'SF Mono','Fira Code','JetBrains Mono',monospace; color:#1a2332; }
+.sed-header { display:flex; align-items:center; justify-content:space-between; padding:12px 20px; }
+.sed-header h2 { margin:0; font-size:18px; font-weight:800; color:#1a6b4f; letter-spacing:1px; }
+.sed-header button { padding:6px 14px; border:1px solid #1a6b4f; border-radius:6px; background:transparent; color:#1a6b4f; cursor:pointer; font-size:12px; font-family:inherit; }
+.sed-header button:hover { background:#1a6b4f; color:#fff; }
+.sed-canvas { position:absolute; top:50px; left:0; right:0; bottom:0; background:#f0f3f8; }
+/* SVG U curve styling */
+.sed-curve-glow { filter: drop-shadow(0 0 10px rgba(26,107,79,0.3)); }
+.sed-curve-main { filter: drop-shadow(0 0 6px rgba(26,107,79,0.5)); }
+/* Node cards along curve */
+.sed-node-card { position:absolute; width:120px; padding:10px 12px; background:rgba(255,255,255,0.95); border:2px solid rgba(26,107,79,0.6); border-radius:10px; text-align:center; transition:all 0.3s; cursor:default; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node-card:hover { border-color:#1a6b4f; box-shadow:0 0 20px rgba(26,107,79,0.4); transform:scale(1.06); }
+.sed-node-card.sed-ok { border-color:#1a6b4f; }
+.sed-node-card.sed-warn { border-color:#b8860b; }
+.sed-node-card.sed-err { border-color:#cc3333; }
+.sed-node-icon { font-size:20px; margin-bottom:2px; }
+.sed-node-id { font-size:11px; color:#1a6b4f; font-weight:700; letter-spacing:1px; }
+.sed-node-name { font-size:12px; color:#1a2332; font-weight:600; }
+.sed-node-sub { font-size:10px; color:#6b7280; margin-top:1px; }
+.sed-metric { font-size:28px; color:#1a6b4f; font-weight:900; line-height:1.1; margin-top:3px; }
+.sed-metric-label { font-size:10px; color:#6b7280; font-weight:400; }
+.sed-detail { font-size:9px; color:#9ca3af; margin-top:2px; line-height:1.3; }
+.sed-node-status { position:absolute; top:6px; right:8px; font-size:12px; }
+.sed-node-status { font-size:10px; margin-top:3px; }
+.sed-node-card.bottom-card { background:rgba(255,255,255,0.92); border-color:rgba(168,85,247,0.6); width:130px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node-card.bottom-card:hover { border-color:#a855f7; box-shadow:0 0 18px rgba(168,85,247,0.4); }
+/* Right arm activation path cards */
+.sed-act-card { position:absolute; width:110px; padding:8px 10px; background:rgba(255,255,255,0.92); border:2px solid rgba(168,85,247,0.6); border-radius:10px; text-align:center; transition:all 0.3s; cursor:default; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-act-card:hover { border-color:#a855f7; box-shadow:0 0 14px rgba(168,85,247,0.4); transform:scale(1.06); }
+.sed-act-icon { font-size:20px; }
+.sed-act-name { font-size:12px; color:#4a2882; font-weight:600; }
+.sed-act-desc { font-size:10px; color:#4a5568; }
+.sed-act-srcs { display:flex; justify-content:center; gap:3px; margin-top:3px; }
+.sed-act-src { font-size:9px; padding:2px 5px; background:rgba(26,107,79,0.15); border-radius:4px; color:#1a6b4f; }
+/* Break markers */
+.sed-break-dot { font-size:11px; color:#ff6b6b; position:absolute; white-space:nowrap; }
+/* Labels */
+.sed-arm-label { position:absolute; font-size:16px; font-weight:800; letter-spacing:4px; color:#1a6b4f; }
+.sed-arm-label.left { left:5%; writing-mode:vertical-rl; transform:rotate(180deg); }
+.sed-arm-label.bottom { bottom:15%; left:50%; transform:translateX(-50%); }
+.sed-arm-label.right { right:3%; writing-mode:vertical-rl; }
+/* Animation for flow particles */
+.sed-particle { animation: sedFlow 3s linear infinite; }
+@keyframes sedFlow { 0%{opacity:0;offset-distance:0%} 10%{opacity:1} 90%{opacity:1} 100%{opacity:0;offset-distance:100%} }
+
+
+/* Header */
+.sed-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:16px 24px 0; flex-wrap:wrap; gap:10px; }
+.sed-header h2 { margin:0; font-size:20px; font-weight:800; color:#1a6b4f; letter-spacing:2px; }
+.sed-header h2 span { color:#a855f7; }
+.sed-toolbar { display:flex; gap:8px; }
+.sed-toolbar button { background:rgba(26,107,79,0.08); border:1px solid rgba(26,107,79,0.4); color:#1a6b4f; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:11px; font-family:inherit; transition:all .25s; }
+.sed-toolbar button:hover { background:rgba(26,107,79,0.15); border-color:#1a6b4f; }
+
+/* U-shape SVG container */
+.sed-u-container { position:relative; width:100%; height:calc(100vh - 120px); min-height:600px; }
+
+/* U-shape wrapper - this is the key layout */
+.sed-u-wrap { display:flex; width:100%; height:100%; position:relative; }
+
+/* Left arm column - sedimentation */
+.sed-u-left { width:22%; min-width:180px; display:flex; flex-direction:column; justify-content:flex-start; padding:16px 12px; gap:4px; overflow-y:auto; }
+.sed-u-left-label { text-align:center; font-size:11px; color:#1a6b4f; letter-spacing:3px; font-weight:700; margin-bottom:8px; }
+
+/* Bottom section */
+.sed-u-bottom { width:56%; min-width:300px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:8px 16px; position:relative; }
+.sed-u-bottom-label { text-align:center; font-size:11px; color:#b8860b; letter-spacing:3px; font-weight:700; margin-bottom:8px; }
+.sed-u-bottom-nodes { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
+.sed-u-bottom-curve { position:absolute; width:100%; height:100%; pointer-events:none; }
+
+/* Right arm column - activation */
+.sed-u-right { width:22%; min-width:180px; display:flex; flex-direction:column; justify-content:flex-start; padding:16px 12px; gap:6px; overflow-y:auto; }
+.sed-u-right-label { text-align:center; font-size:11px; color:#7c3aed; letter-spacing:3px; font-weight:700; margin-bottom:8px; }
+
+/* Node cards - glassmorphism */
+.sed-node { background:rgba(255,255,255,0.92); border:1px solid rgba(26,107,79,0.3); border-radius:10px; padding:10px 12px; position:relative; transition:all .3s; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#1a6b4f,transparent); opacity:0; transition:opacity .3s; }
+.sed-node:hover { border-color:#1a6b4f; box-shadow:0 0 24px rgba(26,107,79,0.3); transform:scale(1.03); }
+.sed-node:hover::before { opacity:1; }
+.sed-node.sed-ok { border-color:rgba(26,107,79,0.4); }
+.sed-node.sed-warn { border-color:rgba(184,134,11,0.4); }
+.sed-node.sed-err { border-color:rgba(204,51,51,0.4); }
+.sed-node-id { font-size:16px; font-weight:900; color:#1a6b4f; letter-spacing:2px; }
+.sed-act-name { font-size:11px; font-weight:600; color:#4a2882; margin-top:2px; }
+.sed-node-sub { font-size:9px; color:#4a5568; letter-spacing:1px; }
+.sed-node-desc { font-size:10px; color:#4a5568; margin-top:4px; line-height:1.3; }
+.sed-node-stats { display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; }
+.sed-stat { background:rgba(26,107,79,0.1); border:1px solid rgba(26,107,79,0.3); padding:1px 6px; border-radius:3px; font-size:9px; color:#1a6b4f; }
+.sed-stat.sed-warn { color:#b8860b; border-color:rgba(184,134,11,0.3); }
+.sed-stat.sed-err { color:#cc3333; border-color:rgba(204,51,51,0.3); }
+.sed-node-status { position:absolute; top:6px; right:8px; font-size:10px; }
+
+/* Bottom node special */
+.sed-node.bottom-node { background:rgba(255,255,255,0.92); border-color:rgba(168,85,247,0.3); min-width:180px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node.bottom-node:hover { border-color:#a855f7; box-shadow:0 0 24px rgba(168,85,247,0.4); }
+.sed-node.bottom-node::before { background:linear-gradient(90deg,transparent,#a855f7,transparent); }
+
+/* Flow arrows between nodes */
+.sed-arrow { text-align:center; padding:2px 0; color:#1a6b4f; font-size:8px; position:relative; height:16px; }
+.sed-arrow .flow-dot { display:inline-block; animation:sedFlowDown 1.8s ease-in-out infinite; }
+@keyframes sedFlowDown { 0%{transform:translateY(-6px);opacity:0} 50%{opacity:1} 100%{transform:translateY(6px);opacity:0} }
+@keyframes sedFlowUp { 0%{transform:translateY(6px);opacity:0} 50%{opacity:1} 100%{transform:translateY(-6px);opacity:0} }
+.sed-arrow.sed-break { color:#ff6b6b; }
+.sed-break-label { font-size:9px; color:#cc3333; background:rgba(204,51,51,0.08); padding:1px 6px; border-radius:3px; margin-left:4px; }
+
+/* Activation path cards */
+.sed-act-path { background:rgba(255,255,255,0.92); border:1px solid rgba(168,85,247,0.3); border-radius:10px; padding:10px 12px; position:relative; transition:all .3s; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-act-path:hover { border-color:#a855f7; box-shadow:0 0 20px rgba(168,85,247,0.35); transform:scale(1.03); }
+.sed-act-path::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#a855f7,transparent); opacity:0; transition:opacity .3s; }
+.sed-act-path:hover::before { opacity:1; }
+.sed-act-name { font-size:12px; font-weight:700; color:#a855f7; letter-spacing:1px; text-shadow:0 0 6px #a855f733; }
+.sed-act-desc { font-size:9px; color:#8b9bb4; margin-top:2px; }
+.sed-act-srcs { display:flex; gap:3px; margin-top:4px; flex-wrap:wrap; }
+.sed-act-src { background:rgba(168,85,247,0.15); color:#a855f7aa; padding:1px 5px; border-radius:3px; font-size:8px; letter-spacing:1px; }
+
+/* SVG curve animation */
+@keyframes svgFlow { 0%{stroke-dashoffset:20} 100%{stroke-dashoffset:0} }
+.sed-curve-path { stroke-dasharray:6 4; animation:svgFlow 2s linear infinite; }
+
+/* Responsive */
+@media(max-width:768px) {
+  #sedimentDashboard { padding:8px; }
+  .sed-u-wrap { flex-direction:column; }
+  .sed-u-left, .sed-u-right, .sed-u-bottom { width:100%; min-width:0; }
+  .sed-u-bottom { order:2; }
+  .sed-u-left { order:1; }
+  .sed-u-right { order:3; }
+}
 </style>
 </head>
 <body>
 
-<div class="bg-grid"></div>
+
 
 <!-- 顶部栏 -->
 <div class="top-bar">
@@ -2243,6 +2357,9 @@ svg { width: 100%; height: 100%; }
       </button>
       <button class="view-tab" id="tabAnalyze" onclick="switchView('analyze')">
         <span class="tab-icon">🔍</span>AI 分析
+      </button>
+      <button class="view-tab" id="tabSediment" onclick="switchView('sediment')">
+        <span class="tab-icon">⏳</span>记忆沉淀
       </button>
       <button class="view-tab" id="tabSettings" onclick="switchToSettings()">
         <span class="tab-icon">⚙️</span>设置
@@ -2510,6 +2627,23 @@ svg { width: 100%; height: 100%; }
   </div>
   <div id="analyzeSectionInsights" class="analyze-section">
     <div class="analyze-insights" id="analyzeInsights"></div>
+  </div>
+</div>
+
+<!-- U型记忆沉淀面板 -->
+<div id="sedimentDashboard">
+  <div class="sed-header">
+    <h2>⏳ 记忆沉淀 U 型结构</h2>
+    <div>
+      <button onclick="loadSedimentData()">⟳ 刷新</button>
+      <button onclick="sedimentRunCheck()">⌕ 检查</button>
+    </div>
+  </div>
+  <div class="sed-canvas" id="sedCanvas">
+    <!-- Full-page SVG: U curve + rays -->
+    <svg id="sedSvg" width="100%" height="100%" style="position:absolute;top:0;left:0;"></svg>
+    <!-- Node cards (positioned by JS) -->
+    <div id="sedNodes"></div>
   </div>
 </div>
 
@@ -4259,6 +4393,7 @@ function switchView(view) {
   document.getElementById('tabWiki').classList.toggle('active', view === 'wiki');
   document.getElementById('tabHealth').classList.toggle('active', view === 'health');
   document.getElementById('tabAnalyze').classList.toggle('active', view === 'analyze');
+  document.getElementById('tabSediment').classList.toggle('active', view === 'sediment');
 
   // 健康仪表盘显隐
   document.getElementById('healthDashboard').style.display = view === 'health' ? 'block' : 'none';
@@ -4266,8 +4401,10 @@ function switchView(view) {
   document.getElementById('analyzeDashboard').style.display = view === 'analyze' ? 'block' : 'none';
   // 设置面板显隐
   document.getElementById('settingsDashboard').style.display = view === 'settings' ? 'block' : 'none';
-  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings') ? 'none' : '';
-  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings') ? 'none' : '');
+  // U型沉淀面板显隐
+  document.getElementById('sedimentDashboard').style.display = view === 'sediment' ? 'block' : 'none';
+  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings' || view === 'sediment') ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings' || view === 'sediment') ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
@@ -4282,7 +4419,7 @@ function switchView(view) {
   // 切换刷新按钮文字
   const refreshBtn = document.getElementById('btnRefresh');
   refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新知识' : '刷新记忆'}`;
-  refreshBtn.style.display = (view === 'health' || view === 'settings') ? 'none' : '';
+  refreshBtn.style.display = (view === 'health' || view === 'settings' || view === 'sediment') ? 'none' : '';
 
   // 切换记忆管理按钮可见性（仅记忆视图显示）
   const memBtn = document.getElementById('btnMemory');
@@ -4306,6 +4443,11 @@ function switchView(view) {
   
   if (view === 'analyze') {
     loadAnalyzeData();
+    return;
+  }
+
+  if (view === 'sediment') {
+    loadSedimentData();
     return;
   }
 
@@ -6016,6 +6158,229 @@ document.addEventListener('DOMContentLoaded', function() {
   startPolling();
 });
 </script>
+
+<script>
+// ========== U型记忆沉淀 ==========
+// Live stats from /api/stats — fetched dynamically, no hardcoded values
+let sedimentLiveStats = {};
+
+const sedimentLayers = [
+  { id:'L1', name:'对话记忆', sub:'Session', icon:'💬', desc:'原始对话，最详细' },
+  { id:'L2', name:'核心快照', sub:'Memory', icon:'🧠', desc:'2K chars极限容量' },
+  { id:'L3', name:'身份推理', sub:'Honcho', icon:'🔮', desc:'dialectic推理引擎' },
+  { id:'L4', name:'可视化图谱', sub:'SelfMind', icon:'🕸️', desc:'力导向图渲染' },
+  { id:'L5', name:'程序记忆', sub:'Skills', icon:'⚡', desc:'可复用工作流' },
+  { id:'L6', name:'知识库', sub:'Wiki', icon:'📚', desc:'结构化实体存储' }
+];
+
+const sedimentBreaks = [
+  { from:'L1', to:'L2', label:'主观判断' },
+  { from:'L2', to:'L3', label:'Honcho不读Mem' },
+  { from:'L3', to:'L4', label:'格式不结构化' },
+  { from:'L4', to:'L5', label:'无自动流' }
+];
+
+const sedimentActPaths = [
+  { id:'conv', name:'对话激活', icon:'💬', desc:'L2/L5/L6 → L1', srcs:['L2','L5','L6'], color:'#1a6b4f' },
+  { id:'reason', name:'推理激活', icon:'🔮', desc:'L1/L2 → L3', srcs:['L1','L2','L3'], color:'#a855f7' },
+  { id:'visual', name:'可视化', icon:'🕸️', desc:'L2/L6 → L4', srcs:['L2','L6'], color:'#00d4ff' },
+  { id:'task', name:'任务激活', icon:'⚡', desc:'L5/L6 → 执行', srcs:['L5','L2','L6'], color:'#c05621' },
+  { id:'search', name:'检索激活', icon:'🔍', desc:'L1 → 历史', srcs:['L1'], color:'#ffd700' },
+  { id:'learn', name:'学习闭环', icon:'📝', desc:'L1 → L2/L5/L6', srcs:['L1','L2','L5'], color:'#ff6b6b' }
+];
+
+function loadSedimentData() {
+  // Fetch live stats from /api/stats — all 6 layers with real metrics
+  fetch('/api/stats?t=' + Date.now())
+    .then(r => r.json())
+    .then(data => {
+      sedimentLiveStats = data;
+      renderSediment();
+    })
+    .catch(() => {
+      // Fallback: still render with whatever data we have
+      renderSediment();
+    });
+}
+
+function renderSediment() {
+  const canvas = document.getElementById('sedCanvas');
+  const svg = document.getElementById('sedSvg');
+  const nodesDiv = document.getElementById('sedNodes');
+  if (!svg || !nodesDiv || !canvas) return;
+
+  const W = canvas.offsetWidth || 1280;
+  const H = canvas.offsetHeight || 670;
+
+  // U curve coordinates — full width spread
+  const LX = W * 0.12;      // left arm X
+  const RX = W * 0.88;      // right arm X
+  const TY = H * 0.04;      // top Y
+  const BY = H * 0.82;      // bottom Y (U bottom)
+  const MX = W * 0.50;      // bottom midpoint X
+
+  // Node positions — left arm (L1→L4 going down), bottom (L5→L6)
+  const nodePos = {
+    L1: { x: LX - 10, y: TY },
+    L2: { x: LX - 10, y: TY + H*0.22 },
+    L3: { x: LX - 10, y: TY + H*0.44 },
+    L4: { x: LX + W*0.05, y: TY + H*0.66 },
+    L5: { x: MX - W*0.10, y: BY },
+    L6: { x: MX + W*0.05, y: BY },
+  };
+
+  // Activation path positions — RIGHT side, next to the right arm of U curve
+  // Spread vertically alongside RX (right arm)
+  const actPos = {
+    conv:   { x: W * 0.80, y: H * 0.10 },
+    reason: { x: W * 0.80, y: H * 0.24 },
+    visual: { x: W * 0.80, y: H * 0.38 },
+    task:   { x: W * 0.80, y: H * 0.52 },
+    search: { x: W * 0.80, y: H * 0.66 },
+    learn:  { x: W * 0.80, y: H * 0.78 },
+  };
+
+  // 1. Build SVG
+  let svgHtml = '';
+
+  // Defs
+  svgHtml += `<defs>
+    <linearGradient id="uCurveGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00ffa3" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#ff6b35" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="uCurveGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00ffa3" stop-opacity="0.15"/>
+      <stop offset="40%" stop-color="#ff6b35" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.15"/>
+    </linearGradient>
+    <filter id="sedGlow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>`;
+
+  // Background grid removed
+
+  // U curve path — smooth bezier, full-width U shape
+  // Left arm down: L1→L2→L3→L4
+  // Bottom arc: L4→L5→L6→curve up
+  // Right arm up to RX
+  const uPath = `M ${LX} ${TY}
+    C ${LX} ${TY+H*0.08}, ${LX} ${TY+H*0.14}, ${LX} ${nodePos.L2.y}
+    C ${LX} ${nodePos.L2.y+H*0.08}, ${LX} ${nodePos.L3.y-H*0.06}, ${LX} ${nodePos.L3.y}
+    C ${LX} ${nodePos.L3.y+H*0.08}, ${LX+W*0.06} ${nodePos.L4.y-H*0.06}, ${nodePos.L4.x} ${nodePos.L4.y}
+    C ${nodePos.L4.x+W*0.08} ${nodePos.L4.y+H*0.08}, ${nodePos.L5.x-W*0.04} ${BY-H*0.04}, ${nodePos.L5.x} ${BY}
+    C ${nodePos.L5.x+W*0.04} ${BY+H*0.04}, ${nodePos.L6.x-W*0.04} ${BY+H*0.04}, ${nodePos.L6.x} ${BY}
+    C ${nodePos.L6.x+W*0.06} ${BY+H*0.02}, ${RX-W*0.04} ${BY+H*0.01}, ${RX} ${BY}
+    C ${RX+W*0.02} ${BY-H*0.04}, ${RX} ${BY-H*0.15}, ${RX} ${nodePos.L3.y}
+    L ${RX} ${TY}`;
+
+  // Glow layer
+  svgHtml += `<path d="${uPath}" stroke="url(#uCurveGlow)" stroke-width="24" fill="none" filter="url(#sedGlow)"/>`;
+  // Main curve
+  svgHtml += `<path d="${uPath}" stroke="url(#uCurveGrad)" stroke-width="3" fill="none"/>`;
+
+  // Flow particles
+  const pColors = ['#00ffa3','#ff6b35','#a855f7','#00d4ff'];
+  pColors.forEach((c, i) => {
+    svgHtml += `<circle r="${4-i*0.5}" fill="${c}" opacity="0.9">
+      <animateMotion dur="6s" repeatCount="indefinite" begin="${i*1.5}s" path="${uPath}"/>
+    </circle>`;
+  });
+
+// Break markers between left arm nodes
+  sedimentBreaks.forEach(brk => {
+    const from = nodePos[brk.from];
+    const to = nodePos[brk.to];
+    if (!from || !to) return;
+    const mx = (from.x + to.x) / 2 + 80;
+    const my = (from.y + to.y) / 2 + 20;
+    svgHtml += `<circle cx="${mx}" cy="${my}" r="5" fill="#ff6b6b" opacity="0.8" filter="url(#sedGlow)"/>`;
+    svgHtml += `<text x="${mx+8}" y="${my+4}" fill="#ff6b6b" font-size="11" font-family="monospace" opacity="0.9">${brk.label}</text>`;
+  });
+
+  // Activation rays: from memory layer nodes → activation cards INSIDE the U
+  sedimentActPaths.forEach(path => {
+    const destPos = actPos[path.id];
+    path.srcs.forEach((srcId, srcIdx) => {
+      const srcPos = nodePos[srcId];
+      if (!srcPos) return;
+      // Source: right edge of node card → dest: left edge of act card (inside U)
+      const sx = srcPos.x + 90;
+      const sy = srcPos.y + 20;
+      const dx = destPos.x;
+      const dy = destPos.y + 20;
+      // Bezier curving inward (toward center of U)
+      const cpx = sx + (dx - sx) * 0.4;
+      const cpy = sy + (dy - sy) * 0.5 + (srcIdx * 6);
+      const opacity = srcIdx === 0 ? 0.7 : 0.4;
+      const width = srcIdx === 0 ? 2 : 1.2;
+      svgHtml += `<path d="M ${sx} ${sy} Q ${cpx} ${cpy}, ${dx} ${dy}"
+        stroke="${path.color}" stroke-width="${width}" opacity="${opacity}" fill="none" stroke-dasharray="5 3"/>`;
+      if (srcIdx === 0) {
+        const rayPath = `M ${sx} ${sy} Q ${cpx} ${cpy}, ${dx} ${dy}`;
+        svgHtml += `<circle r="2" fill="${path.color}" opacity="0.6">
+          <animateMotion dur="2s" repeatCount="indefinite" begin="${Math.random()*2}s" path="${rayPath}"/>
+        </circle>`;
+      }
+    });
+  });
+
+// Arm labels
+  svgHtml += `<text x="${LX-10}" y="${TY+H*0.04}" fill="#00ffa3" font-size="16" font-weight="bold" text-anchor="start">沉淀 ▼</text>`;
+  svgHtml += `<text x="${MX}" y="${BY+H*0.08}" fill="#ff6b35" font-size="14" font-weight="bold" text-anchor="middle">固化</text>`;
+  svgHtml += `<text x="${RX+10}" y="${TY+H*0.04}" fill="#c084fc" font-size="16" font-weight="bold" text-anchor="start">激活 ▲</text>`;
+
+  svg.innerHTML = svgHtml;
+
+  // 2. Build HTML node cards
+  let nodesHtml = '';
+
+  // Left arm + bottom nodes — with live metrics from /api/stats
+  sedimentLayers.forEach(layer => {
+    const pos = nodePos[layer.id];
+    const live = sedimentLiveStats[layer.id] || { status:'warn', metric:0, metric_label:'', detail:'loading...' };
+    const sc = live.status === 'ok' ? 'sed-ok' : live.status === 'warn' ? 'sed-warn' : 'sed-err';
+    const sl = live.status === 'ok' ? '✅' : live.status === 'warn' ? '⚠️' : '❌';
+    const isBottom = (layer.id === 'L5' || layer.id === 'L6');
+    const bc = isBottom ? ' bottom-card' : '';
+    const metricColor = live.status === 'err' ? '#cc3333' : live.status === 'warn' ? '#b8860b' : '#1a6b4f';
+    nodesHtml += `
+    <div class="sed-node-card ${sc}${bc}" style="left:${pos.x}px;top:${pos.y}px;">
+      <div class="sed-node-icon">${layer.icon}</div>
+      <div class="sed-node-id">${layer.id}</div>
+      <div class="sed-node-name">${layer.name}</div>
+      <div class="sed-node-sub">${layer.sub}</div>
+      <div class="sed-metric" style="color:${metricColor}">${live.metric}</div>
+      <div class="sed-metric-label">${live.metric_label}</div>
+      <div class="sed-detail">${live.detail}</div>
+      <div class="sed-node-status">${sl}</div>
+    </div>`;
+  });
+
+  // Right arm activation cards
+  sedimentActPaths.forEach(path => {
+    const pos = actPos[path.id];
+    nodesHtml += `
+    <div class="sed-act-card" style="left:${pos.x}px;top:${pos.y}px;border-left:2px solid ${path.color};">
+      <div class="sed-act-icon">${path.icon}</div>
+      <div class="sed-act-name" style="color:${path.color}">${path.name}</div>
+      <div class="sed-act-desc">${path.desc}</div>
+      <div class="sed-act-srcs">${path.srcs.map(s => '<span class="sed-act-src">' + s + '</span>').join('')}</div>
+    </div>`;
+  });
+
+  nodesDiv.innerHTML = nodesHtml;
+}
+
+function sedimentRunCheck() {
+  loadSedimentData(); // re-fetch live status then render
+}
+</script>
+
+
 
 </body>
 </html>
