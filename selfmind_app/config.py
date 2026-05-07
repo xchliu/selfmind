@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 SELFMIND_DIR = Path(__file__).resolve().parent.parent
-DATA_FILE = SELFMIND_DIR / "data.json"
+DATA_FILE = SELFMIND_DIR / "data" / "data.json"
 CONFIG_FILE = SELFMIND_DIR / "config.json"
 
 DEFAULT_CONFIG = {

@@ -20,6 +20,11 @@ from selfmind_app.http_handler import SelfMindHandler, refresh_data
 def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 3002
 
+    # Ensure data directory exists
+    from pathlib import Path
+    data_dir = Path(__file__).resolve().parent / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+
     save_default_config()
 
     config = load_config()

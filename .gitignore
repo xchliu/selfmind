@@ -21,14 +21,17 @@ env/
 # Environment
 .env
 .env.local
+
+# Runtime data (auto-generated, in data/ directory)
+data/data.json
+data/selfmind.db
+data/selfmind_meta.db
+data/wiki_data.json
 config.json
-data.json
 
 # OS
 Thumbs.db
 Desktop.ini
 
-# Runtime data
-memories_store.json
+# Backups
 *.bak
-index.html.full.bak
