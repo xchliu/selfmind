@@ -1,0 +1,249 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #f5f7fa;
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 背景网格已移除 */
+
+/* 顶部栏 */
+.top-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff4757 0%, #ff475744 70%);
+  /* animation removed — static glow for cleaner look */
+  box-shadow: 0 0 15px #ff475744;
+}
+
+@keyframes corePulse {
+  0%, 100% { box-shadow: 0 0 20px #ff475766; transform: scale(1); }
+  50% { box-shadow: 0 0 25px #ff475777; transform: scale(1.02); }
+}
+
+.title-text {
+  font-size: 18px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #333 0%, #1e90ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 2px;
+}
+
+.title-sub {
+  font-size: 11px;
+  color: #999;
+  margin-left: 4px;
+  letter-spacing: 1px;
+}
+
+/* 视图 Tab 切换 */
+.view-tabs {
+  display: flex;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 2px;
+  margin-left: 16px;
+}
+
+.view-tab {
+  padding: 5px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #888;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+.view-tab:hover {
+  color: #555;
+  background: rgba(255,255,255,0.5);
+}
+
+.view-tab.active {
+  background: #fff;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 600;
+}
+
+.view-tab .tab-icon {
+  margin-right: 4px;
+}
+
+/* 操作按钮 */
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn {
+  padding: 7px 18px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.8);
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,1);
+  border-color: rgba(30, 144, 255, 0.5);
+  color: #333;
+  transform: translateY(-1px);
+}
+
+.btn-refresh {
+  border-color: rgba(46, 213, 115, 0.4);
+}
+
+.btn-refresh:hover {
+  border-color: #2ed573;
+  box-shadow: 0 4px 12px rgba(46, 213, 115, 0.15);
+}
+
+.btn-save {
+  border-color: rgba(30, 144, 255, 0.4);
+}
+
+.btn-save:hover {
+  border-color: #1e90ff;
+  box-shadow: 0 4px 12px rgba(30, 144, 255, 0.15);
+}
+
+.btn.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn .spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-top-color: #1e90ff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.btn.loading .spinner { display: inline-block; }
+.btn.loading .btn-icon { display: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 搜索框 */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 6px 14px;
+}
+
+.search-box input {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 13px;
+  outline: none;
+  width: 160px;
+}
+
+.search-box input::placeholder { color: #aaa; }
+
+/* ===== 底部轮询状态栏 ===== */
+.poll-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 28px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 200;
+  font-size: 11px;
+  color: #888;
+  user-select: none;
+}
+.poll-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.poll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4CAF50;
+  animation: pollPulse 2s ease-in-out infinite;
+}
+@keyframes pollPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.poll-status {
+  color: #666;
+}
+.poll-status.poll-ok {
+  color: #4CAF50;
+}
+.poll-status.poll-warn {
+  color: #FF9800;
+}
+.poll-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.poll-time {
+  color: #999;
+  min-width: 50px;
+  text-align: right;
+}
+.poll-sep {
+  color: #ddd;
+}
+.poll-interval {
+  color: #bbb;
+}

@@ -1,0 +1,129 @@
+/* U型记忆沉淀 — Cyberpunk Dark */
+#sedimentDashboard { display:none; position:fixed; top:60px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow:hidden; font-family:'SF Mono','Fira Code','JetBrains Mono',monospace; color:#1a2332; }
+.sed-header { display:flex; align-items:center; justify-content:space-between; padding:12px 20px; }
+.sed-header h2 { margin:0; font-size:18px; font-weight:800; color:#1a6b4f; letter-spacing:1px; }
+.sed-header button { padding:6px 14px; border:1px solid #1a6b4f; border-radius:6px; background:transparent; color:#1a6b4f; cursor:pointer; font-size:12px; font-family:inherit; }
+.sed-header button:hover { background:#1a6b4f; color:#fff; }
+.sed-canvas { position:absolute; top:50px; left:0; right:0; bottom:0; background:#f0f3f8; }
+/* SVG U curve styling */
+.sed-curve-glow { filter: drop-shadow(0 0 10px rgba(26,107,79,0.3)); }
+.sed-curve-main { filter: drop-shadow(0 0 6px rgba(26,107,79,0.5)); }
+/* Node cards along curve */
+.sed-node-card { position:absolute; width:120px; padding:10px 12px; background:rgba(255,255,255,0.95); border:2px solid rgba(26,107,79,0.6); border-radius:10px; text-align:center; transition:all 0.3s; cursor:default; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node-card:hover { border-color:#1a6b4f; box-shadow:0 0 20px rgba(26,107,79,0.4); transform:scale(1.06); }
+.sed-node-card.sed-ok { border-color:#1a6b4f; }
+.sed-node-card.sed-warn { border-color:#b8860b; }
+.sed-node-card.sed-err { border-color:#cc3333; }
+.sed-node-icon { font-size:20px; margin-bottom:2px; }
+.sed-node-id { font-size:11px; color:#1a6b4f; font-weight:700; letter-spacing:1px; }
+.sed-node-name { font-size:12px; color:#1a2332; font-weight:600; }
+.sed-node-sub { font-size:10px; color:#6b7280; margin-top:1px; }
+.sed-metric { font-size:28px; color:#1a6b4f; font-weight:900; line-height:1.1; margin-top:3px; }
+.sed-metric-label { font-size:10px; color:#6b7280; font-weight:400; }
+.sed-detail { font-size:9px; color:#9ca3af; margin-top:2px; line-height:1.3; }
+.sed-node-status { position:absolute; top:6px; right:8px; font-size:12px; }
+.sed-node-status { font-size:10px; margin-top:3px; }
+.sed-node-card.bottom-card { background:rgba(255,255,255,0.92); border-color:rgba(168,85,247,0.6); width:130px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node-card.bottom-card:hover { border-color:#a855f7; box-shadow:0 0 18px rgba(168,85,247,0.4); }
+/* Right arm activation path cards */
+.sed-act-card { position:absolute; width:110px; padding:8px 10px; background:rgba(255,255,255,0.92); border:2px solid rgba(168,85,247,0.6); border-radius:10px; text-align:center; transition:all 0.3s; cursor:default; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-act-card:hover { border-color:#a855f7; box-shadow:0 0 14px rgba(168,85,247,0.4); transform:scale(1.06); }
+.sed-act-icon { font-size:20px; }
+.sed-act-name { font-size:12px; color:#4a2882; font-weight:600; }
+.sed-act-desc { font-size:10px; color:#4a5568; }
+.sed-act-srcs { display:flex; justify-content:center; gap:3px; margin-top:3px; }
+.sed-act-src { font-size:9px; padding:2px 5px; background:rgba(26,107,79,0.15); border-radius:4px; color:#1a6b4f; }
+/* Break markers */
+.sed-break-dot { font-size:11px; color:#ff6b6b; position:absolute; white-space:nowrap; }
+/* Labels */
+.sed-arm-label { position:absolute; font-size:16px; font-weight:800; letter-spacing:4px; color:#1a6b4f; }
+.sed-arm-label.left { left:5%; writing-mode:vertical-rl; transform:rotate(180deg); }
+.sed-arm-label.bottom { bottom:15%; left:50%; transform:translateX(-50%); }
+.sed-arm-label.right { right:3%; writing-mode:vertical-rl; }
+/* Animation for flow particles */
+.sed-particle { animation: sedFlow 3s linear infinite; }
+@keyframes sedFlow { 0%{opacity:0;offset-distance:0%} 10%{opacity:1} 90%{opacity:1} 100%{opacity:0;offset-distance:100%} }
+
+
+/* Header */
+.sed-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:16px 24px 0; flex-wrap:wrap; gap:10px; }
+.sed-header h2 { margin:0; font-size:20px; font-weight:800; color:#1a6b4f; letter-spacing:2px; }
+.sed-header h2 span { color:#a855f7; }
+.sed-toolbar { display:flex; gap:8px; }
+.sed-toolbar button { background:rgba(26,107,79,0.08); border:1px solid rgba(26,107,79,0.4); color:#1a6b4f; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:11px; font-family:inherit; transition:all .25s; }
+.sed-toolbar button:hover { background:rgba(26,107,79,0.15); border-color:#1a6b4f; }
+
+/* U-shape SVG container */
+.sed-u-container { position:relative; width:100%; height:calc(100vh - 120px); min-height:600px; }
+
+/* U-shape wrapper - this is the key layout */
+.sed-u-wrap { display:flex; width:100%; height:100%; position:relative; }
+
+/* Left arm column - sedimentation */
+.sed-u-left { width:22%; min-width:180px; display:flex; flex-direction:column; justify-content:flex-start; padding:16px 12px; gap:4px; overflow-y:auto; }
+.sed-u-left-label { text-align:center; font-size:11px; color:#1a6b4f; letter-spacing:3px; font-weight:700; margin-bottom:8px; }
+
+/* Bottom section */
+.sed-u-bottom { width:56%; min-width:300px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:8px 16px; position:relative; }
+.sed-u-bottom-label { text-align:center; font-size:11px; color:#b8860b; letter-spacing:3px; font-weight:700; margin-bottom:8px; }
+.sed-u-bottom-nodes { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
+.sed-u-bottom-curve { position:absolute; width:100%; height:100%; pointer-events:none; }
+
+/* Right arm column - activation */
+.sed-u-right { width:22%; min-width:180px; display:flex; flex-direction:column; justify-content:flex-start; padding:16px 12px; gap:6px; overflow-y:auto; }
+.sed-u-right-label { text-align:center; font-size:11px; color:#7c3aed; letter-spacing:3px; font-weight:700; margin-bottom:8px; }
+
+/* Node cards - glassmorphism */
+.sed-node { background:rgba(255,255,255,0.92); border:1px solid rgba(26,107,79,0.3); border-radius:10px; padding:10px 12px; position:relative; transition:all .3s; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#1a6b4f,transparent); opacity:0; transition:opacity .3s; }
+.sed-node:hover { border-color:#1a6b4f; box-shadow:0 0 24px rgba(26,107,79,0.3); transform:scale(1.03); }
+.sed-node:hover::before { opacity:1; }
+.sed-node.sed-ok { border-color:rgba(26,107,79,0.4); }
+.sed-node.sed-warn { border-color:rgba(184,134,11,0.4); }
+.sed-node.sed-err { border-color:rgba(204,51,51,0.4); }
+.sed-node-id { font-size:16px; font-weight:900; color:#1a6b4f; letter-spacing:2px; }
+.sed-act-name { font-size:11px; font-weight:600; color:#4a2882; margin-top:2px; }
+.sed-node-sub { font-size:9px; color:#4a5568; letter-spacing:1px; }
+.sed-node-desc { font-size:10px; color:#4a5568; margin-top:4px; line-height:1.3; }
+.sed-node-stats { display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; }
+.sed-stat { background:rgba(26,107,79,0.1); border:1px solid rgba(26,107,79,0.3); padding:1px 6px; border-radius:3px; font-size:9px; color:#1a6b4f; }
+.sed-stat.sed-warn { color:#b8860b; border-color:rgba(184,134,11,0.3); }
+.sed-stat.sed-err { color:#cc3333; border-color:rgba(204,51,51,0.3); }
+.sed-node-status { position:absolute; top:6px; right:8px; font-size:10px; }
+
+/* Bottom node special */
+.sed-node.bottom-node { background:rgba(255,255,255,0.92); border-color:rgba(168,85,247,0.3); min-width:180px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-node.bottom-node:hover { border-color:#a855f7; box-shadow:0 0 24px rgba(168,85,247,0.4); }
+.sed-node.bottom-node::before { background:linear-gradient(90deg,transparent,#a855f7,transparent); }
+
+/* Flow arrows between nodes */
+.sed-arrow { text-align:center; padding:2px 0; color:#1a6b4f; font-size:8px; position:relative; height:16px; }
+.sed-arrow .flow-dot { display:inline-block; animation:sedFlowDown 1.8s ease-in-out infinite; }
+@keyframes sedFlowDown { 0%{transform:translateY(-6px);opacity:0} 50%{opacity:1} 100%{transform:translateY(6px);opacity:0} }
+@keyframes sedFlowUp { 0%{transform:translateY(6px);opacity:0} 50%{opacity:1} 100%{transform:translateY(-6px);opacity:0} }
+.sed-arrow.sed-break { color:#ff6b6b; }
+.sed-break-label { font-size:9px; color:#cc3333; background:rgba(204,51,51,0.08); padding:1px 6px; border-radius:3px; margin-left:4px; }
+
+/* Activation path cards */
+.sed-act-path { background:rgba(255,255,255,0.92); border:1px solid rgba(168,85,247,0.3); border-radius:10px; padding:10px 12px; position:relative; transition:all .3s; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sed-act-path:hover { border-color:#a855f7; box-shadow:0 0 20px rgba(168,85,247,0.35); transform:scale(1.03); }
+.sed-act-path::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#a855f7,transparent); opacity:0; transition:opacity .3s; }
+.sed-act-path:hover::before { opacity:1; }
+.sed-act-name { font-size:12px; font-weight:700; color:#a855f7; letter-spacing:1px; text-shadow:0 0 6px #a855f733; }
+.sed-act-desc { font-size:9px; color:#8b9bb4; margin-top:2px; }
+.sed-act-srcs { display:flex; gap:3px; margin-top:4px; flex-wrap:wrap; }
+.sed-act-src { background:rgba(168,85,247,0.15); color:#a855f7aa; padding:1px 5px; border-radius:3px; font-size:8px; letter-spacing:1px; }
+
+/* SVG curve animation */
+@keyframes svgFlow { 0%{stroke-dashoffset:20} 100%{stroke-dashoffset:0} }
+.sed-curve-path { stroke-dasharray:6 4; animation:svgFlow 2s linear infinite; }
+
+/* Responsive */
+@media(max-width:768px) {
+  #sedimentDashboard { padding:8px; }
+  .sed-u-wrap { flex-direction:column; }
+  .sed-u-left, .sed-u-right, .sed-u-bottom { width:100%; min-width:0; }
+  .sed-u-bottom { order:2; }
+  .sed-u-left { order:1; }
+  .sed-u-right { order:3; }
+}
