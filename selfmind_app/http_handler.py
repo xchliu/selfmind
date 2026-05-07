@@ -201,6 +201,8 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._handle_poll()
         elif clean_path == "/api/wiki/data":
             self._json_response(self._load_wiki_data())
+        elif clean_path == "/api/wiki/pages":
+            self._json_response(self._load_wiki_pages())
         elif clean_path == "/api/iq":
             self._json_response(self._compute_iq())
         elif clean_path == "/api/skills":

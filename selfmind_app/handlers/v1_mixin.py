@@ -7,13 +7,30 @@ from pathlib import Path
 from typing import Optional
 
 from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config, get_enabled_profiles
-from selfmind_app.wiki_parser import build_wiki_graph
+from selfmind_app.wiki_parser import build_wiki_graph, scan_wiki_pages_flat
 
 logger = logging.getLogger(__name__)
 
 
 class V1Mixin:
     """Handler methods for v1 API and wiki data."""
+
+    def _load_wiki_pages(self) -> dict:
+        """Load wiki pages as flat list for library view."""
+        config = load_config()
+        wiki_cfg = config.get("wiki", {})
+        wiki_path = wiki_cfg.get("path", "")
+        if not wiki_cfg.get("enabled", False) or not wiki_path:
+            return {"pages": [], "categories": {}}
+        pages = scan_wiki_pages_flat(wiki_path)
+        # Group by type for frontend
+        categories: dict[str, list[dict]] = {}
+        for p in pages:
+            cat = p.get("type", "uncategorized")
+            if cat not in categories:
+                categories[cat] = []
+            categories[cat].append(p)
+        return {"pages": pages, "categories": categories, "total": len(pages)}
 
     def _load_wiki_data(self) -> dict:
         """Load wiki graph data, building from wiki files."""

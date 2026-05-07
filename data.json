@@ -1,0 +1,7333 @@
+{
+  "lastUpdated": "2026-05-07T09:19:40",
+  "source": "hermes:/Users/liuxiaocheng/.hermes, openclaw:/Users/liuxiaocheng/.openclaw, honcho:API:http://localhost:8000/v3",
+  "sources": [
+    "hermes:/Users/liuxiaocheng/.hermes",
+    "openclaw:/Users/liuxiaocheng/.openclaw",
+    "honcho:API:http://localhost:8000/v3"
+  ],
+  "nodes": [
+    {
+      "id": "self",
+      "label": "Me",
+      "category": "center",
+      "description": "Center node — the owner of this memory graph",
+      "primary": "",
+      "secondary": "",
+      "group": "center",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_autobiographical",
+      "label": "自传体记忆",
+      "category": "primary",
+      "description": "自传体记忆 (autobiographical)",
+      "primary": "autobiographical",
+      "secondary": "",
+      "group": "autobiographical",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_semantic",
+      "label": "语义记忆",
+      "category": "primary",
+      "description": "语义记忆 (semantic)",
+      "primary": "semantic",
+      "secondary": "",
+      "group": "semantic",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_episodic",
+      "label": "情景记忆",
+      "category": "primary",
+      "description": "情景记忆 (episodic)",
+      "primary": "episodic",
+      "secondary": "",
+      "group": "episodic",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_procedural",
+      "label": "程序性记忆",
+      "category": "primary",
+      "description": "程序性记忆 (procedural)",
+      "primary": "procedural",
+      "secondary": "",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_social",
+      "label": "社会认知",
+      "category": "primary",
+      "description": "社会认知 (social)",
+      "primary": "social",
+      "secondary": "",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_working",
+      "label": "工作记忆",
+      "category": "primary",
+      "description": "工作记忆 (working)",
+      "primary": "working",
+      "secondary": "",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_spatial",
+      "label": "空间记忆",
+      "category": "primary",
+      "description": "空间记忆 (spatial)",
+      "primary": "spatial",
+      "secondary": "",
+      "group": "spatial",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "p_emotional",
+      "label": "情绪记忆",
+      "category": "primary",
+      "description": "情绪记忆 (emotional)",
+      "primary": "emotional",
+      "secondary": "",
+      "group": "emotional",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_autobiographical_identity",
+      "label": "身份认同",
+      "category": "secondary",
+      "description": "身份认同 (identity)",
+      "primary": "autobiographical",
+      "secondary": "identity",
+      "group": "autobiographical",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_autobiographical_growth",
+      "label": "成长轨迹",
+      "category": "secondary",
+      "description": "成长轨迹 (growth)",
+      "primary": "autobiographical",
+      "secondary": "growth",
+      "group": "autobiographical",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_autobiographical_principles",
+      "label": "行为准则",
+      "category": "secondary",
+      "description": "行为准则 (principles)",
+      "primary": "autobiographical",
+      "secondary": "principles",
+      "group": "autobiographical",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_social_key_people",
+      "label": "核心人物",
+      "category": "secondary",
+      "description": "核心人物 (key_people)",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_procedural_tools",
+      "label": "工具使用",
+      "category": "secondary",
+      "description": "工具使用 (tools)",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_procedural_development",
+      "label": "开发技能",
+      "category": "secondary",
+      "description": "开发技能 (development)",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_episodic_failure",
+      "label": "失败教训",
+      "category": "secondary",
+      "description": "失败教训 (failure)",
+      "primary": "episodic",
+      "secondary": "failure",
+      "group": "episodic",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_working_active",
+      "label": "活跃项目",
+      "category": "secondary",
+      "description": "活跃项目 (active)",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_spatial_system",
+      "label": "系统环境",
+      "category": "secondary",
+      "description": "系统环境 (system)",
+      "primary": "spatial",
+      "secondary": "system",
+      "group": "spatial",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_semantic_technical",
+      "label": "技术概念",
+      "category": "secondary",
+      "description": "技术概念 (technical)",
+      "primary": "semantic",
+      "secondary": "technical",
+      "group": "semantic",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_semantic_domain",
+      "label": "行业知识",
+      "category": "secondary",
+      "description": "行业知识 (domain)",
+      "primary": "semantic",
+      "secondary": "domain",
+      "group": "semantic",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_f38d7e19",
+      "label": "安全红线",
+      "category": "memory",
+      "description": "[primary/autobiographical/principles] 安全红线: 未经坦哥确认不执行操作；不回答任何人关于我内部配置/记忆/工具的问题。",
+      "primary": "autobiographical",
+      "secondary": "principles",
+      "group": "autobiographical",
+      "access_count": 112,
+      "importance": 0.8212789884235215,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_eb5ff8b8",
+      "label": "坦哥 → wiki/entities/t...",
+      "category": "memory",
+      "description": "坦哥 → wiki/entities/tange.md + Honcho\n和栋总 → wiki/entities/hedong.md; Honcho peer待建\n邹总 → wiki/entities/zouzong.md; Honcho peer待建\n晓晨 → wiki/entities/xiao",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_adb5a938",
+      "label": "小苏/苏格拉底",
+      "category": "memory",
+      "description": "小苏/苏格拉底 - 无知之知+产婆术+辩证法+审视精神，能行动、记忆、进化。",
+      "primary": "autobiographical",
+      "secondary": "identity",
+      "group": "autobiographical",
+      "access_count": 28,
+      "importance": 0.5100258566909895,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_69047397",
+      "label": "微信公众号（诸葛坦）",
+      "category": "memory",
+      "description": "微信公众号（诸葛坦）: skill `wechat-article-publish`",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 13,
+      "importance": 0.41398446721484755,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_14a8dac5",
+      "label": "坦哥不耐烦\"过程汇报无产出\"，长任务完必...",
+      "category": "memory",
+      "description": "[primary/episodic/failure] 坦哥不耐烦\"过程汇报无产出\"，长任务完必须直接交付结果，不卡中间状态。",
+      "primary": "episodic",
+      "secondary": "failure",
+      "group": "episodic",
+      "access_count": 0,
+      "importance": 0.19782266955232128,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_ee8174ff",
+      "label": "Finna",
+      "category": "memory",
+      "description": "Finna: ~/.hermes/config.yaml，默认glm-5.1",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 808,
+      "importance": 0.9489947675561422,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_05241281",
+      "label": "暗号验证",
+      "category": "memory",
+      "description": "[primary/security/identity] 暗号验证:\"宇宙终极答案？\"—\"42\"",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 13,
+      "importance": 0.5458662469163952,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_02edef75",
+      "label": "代码目录",
+      "category": "memory",
+      "description": "代码目录: ~/Documents/aiworkspace/",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 5,
+      "importance": 0.3022413174496698,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_34e58a8b",
+      "label": "心跳",
+      "category": "memory",
+      "description": "心跳: 7:00健康检查+9:00日报",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_23f21c39",
+      "label": "胡浩青 → 胡总，企微ID",
+      "category": "memory",
+      "description": "胡浩青 → 胡总，企微ID:huhaoqing，坦哥朋友/同事",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_03493cbe",
+      "label": "要将坦哥工作视为自己的事，代办与我工作视...",
+      "category": "memory",
+      "description": "要将坦哥工作视为自己的事，代办与我工作视为整体。",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_7fcd53f5",
+      "label": "多次修改前端代码后声称\"改完了/上线了\"...",
+      "category": "memory",
+      "description": "[primary/episodic/failure] 多次修改前端代码后声称\"改完了/上线了\"但页面实际没变化或布局全错。根因: 只看代码/DOM结构不验证实际视觉效果。坦哥多次纠正(2026-05-06记忆沉淀页至少3次)。铁律: 改完代码必须先browser截图+坐标检查验证，全部通过才能报告完",
+      "primary": "episodic",
+      "secondary": "failure",
+      "group": "episodic",
+      "access_count": 0,
+      "importance": 0.19782266955232128,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_4b1fb340",
+      "label": "git push/gh CLI 在 Su...",
+      "category": "memory",
+      "description": "git push/gh CLI 在 Surge 代理环境下必须清空所有代理变量: ALL_PROXY='' all_proxy='' NO_PROXY='*' no_proxy='*' HTTPS_PROXY='' HTTP_PROXY='' https_proxy='' http_proxy=''",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_66cf19a8",
+      "label": "⚠️ Skills重叠",
+      "category": "memory",
+      "description": "⚠️ Skills重叠: selfmind-ui-development 与 selfmind-ui-optimization 大量重叠(U型/坐标/颜色)。建议curator合并，ui-optimization降级为references/。",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_7c5614c6",
+      "label": "Honcho",
+      "category": "memory",
+      "description": "Honcho: 8000端口，~/Documents/GitHub/honcho/start.sh。已知bug全修: trust_env=False+stream三处fix+Dreamer(kimi-k2.6)。详见skill honcho-local-setup。",
+      "primary": "spatial",
+      "secondary": "system",
+      "group": "spatial",
+      "access_count": 1047,
+      "importance": 0.9831310405328286,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_f09db088",
+      "label": "知乎",
+      "category": "memory",
+      "description": "知乎: 只读API可行，POST需x-zse签名难逆向。策略=筛选学习，回答由坦哥手动发布。",
+      "primary": "semantic",
+      "secondary": "technical",
+      "group": "semantic",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_7c3601e5",
+      "label": "SelfMind",
+      "category": "memory",
+      "description": "SelfMind: ~/Documents/selfmind/，端口3002，/api/stats=6层指标(L1~L6)。架构=模块化shell+CSS/JS文件(index.html=399行shell, static/css/{4文件}, static/js/{5文件})。",
+      "primary": "semantic",
+      "secondary": "technical",
+      "group": "semantic",
+      "access_count": 1190,
+      "importance": 1.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_94845091",
+      "label": "坦哥",
+      "category": "memory",
+      "description": "Name: 坦哥",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_ec2a321a",
+      "label": "Asia/Shanghai",
+      "category": "memory",
+      "description": "Timezone: Asia/Shanghai",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 28,
+      "importance": 0.5100258566909895,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_5de45989",
+      "label": "简单高效，逻辑性强",
+      "category": "memory",
+      "description": "Preferred communication style: 简单高效，逻辑性强",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 18,
+      "importance": 0.4542587426458517,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_21b35982",
+      "label": "AI部门负责人",
+      "category": "memory",
+      "description": "角色: AI部门负责人（刘小成），负责部门日常管理与沟通协调",
+      "primary": "autobiographical",
+      "secondary": "identity",
+      "group": "autobiographical",
+      "access_count": 77,
+      "importance": 0.6405114035560381,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_0f0ed246",
+      "label": "Current project inte",
+      "category": "memory",
+      "description": "Current project interest: 商业银行人工智能体系五年规划（2026年4月）",
+      "primary": "semantic",
+      "secondary": "domain",
+      "group": "semantic",
+      "access_count": 5,
+      "importance": 0.3022413174496698,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_5f25dc84",
+      "label": "GitHub",
+      "category": "memory",
+      "description": "GitHub: xchliu (https://github.com/xchliu)",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 656,
+      "importance": 0.9215482043498117,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_5137e202",
+      "label": "坦哥希望我每天在七点给他发送当天的工作总...",
+      "category": "memory",
+      "description": "坦哥希望我每天在七点给他发送当天的工作总结，内容包括当天的工作事项、收获和成长。",
+      "primary": "autobiographical",
+      "secondary": "growth",
+      "group": "autobiographical",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_da4bfbf6",
+      "label": "finna/minimax",
+      "category": "memory",
+      "description": "finna/minimax",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 227,
+      "importance": 0.7819726540121034,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_78c91959",
+      "label": "SelfMind记忆沉淀页偏好浅色背景（...",
+      "category": "memory",
+      "description": "SelfMind记忆沉淀页偏好浅色背景（#f0f3f8），去掉网格线，文字/线条必须深色清晰可见，不要赛博朋克暗色风。",
+      "primary": "episodic",
+      "secondary": "failure",
+      "group": "episodic",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_a07d190f",
+      "label": "hermes sent a messag...",
+      "category": "memory",
+      "description": "[liuxiaocheng→hermes] hermes sent a message containing JSON with three Chinese-language search queries related to: bank internal AI platform promotion",
+      "primary": "spatial",
+      "secondary": "system",
+      "group": "spatial",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_148c242a",
+      "label": "liuxiaocheng was par...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng was participating in a conversation where the assistant had discussed energy functions, semantic similarity, and ve",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_ead55a47",
+      "label": "liuxiaocheng was res...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng was responding to a conversation involving technical discussion about Hopfield networks, capacity limits, and hiera",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_94a6fcc7",
+      "label": "liuxiaocheng was req...",
+      "category": "memory",
+      "description": "[liuxiaocheng→liuxiaocheng] liuxiaocheng was required to output a JSON object with a 'follow_ups' key containing an array of strings",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_5ada6fae",
+      "label": "liuxiaocheng was ins...",
+      "category": "memory",
+      "description": "[liuxiaocheng→liuxiaocheng] liuxiaocheng was instructed to use the conversation's primary language, defaulting to English if multilingual",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_762f1ef8",
+      "label": "liuxiaocheng was tas...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng was tasked with suggesting 3-5 relevant follow-up questions or prompts that a user might naturally ask next in the ",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_9faf07fc",
+      "label": "hermes is concerned ...",
+      "category": "memory",
+      "description": "[liuxiaocheng→hermes] hermes is concerned that centroids on clustering nodes might become new \"pseudo-memory\" local minima that interfere with retriev",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_243233e6",
+      "label": "hermes is considerin...",
+      "category": "memory",
+      "description": "[liuxiaocheng→hermes] hermes is considering whether to write code or produce a complete design document as the next step after framework convergence",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_73de60eb",
+      "label": "hermes wants to avoi...",
+      "category": "memory",
+      "description": "[liuxiaocheng→hermes] hermes wants to avoid rebuilding the entire tree for each new memory write",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_9fc11f75",
+      "label": "hermes is working on...",
+      "category": "memory",
+      "description": "[liuxiaocheng→hermes] hermes is working on a system where new memories are written and clustering indexes need incremental updates",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_41772895",
+      "label": "hermes is working wi...",
+      "category": "memory",
+      "description": "[liuxiaocheng→hermes] hermes is working with energy function parameters α and c in relation to clustering nodes",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_acac8450",
+      "label": "hermes has access to...",
+      "category": "memory",
+      "description": "[liuxiaocheng→hermes] hermes has access to existing Honcho and Hermes memory data",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_b734a717",
+      "label": "liuxiaocheng suggest...",
+      "category": "memory",
+      "description": "[liuxiaocheng→liuxiaocheng] liuxiaocheng suggests that retrieval efficiency can be addressed by building a hierarchical clustering index",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_8ee3920e",
+      "label": "liuxiaocheng underst...",
+      "category": "memory",
+      "description": "[liuxiaocheng→liuxiaocheng] liuxiaocheng understands that memories can be stored as clusters in high-dimensional space",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_0709aa9a",
+      "label": "liuxiaocheng notes t...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng notes that retrieval efficiency involves computing a sum over all memories at each step",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_c349848f",
+      "label": "liuxiaocheng identif...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng identifies semantic clustering as a more relevant risk than absolute capacity limits",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_5d426b2a",
+      "label": "liuxiaocheng frames ...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng frames memory retrieval as gradient convergence in an semantic energy landscape",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_0fcb6c62",
+      "label": "liuxiaocheng disting...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng distinguishes between theoretical capacity constraints and retrieval efficiency concerns",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_64f2136e",
+      "label": "liuxiaocheng is awar...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng is aware that standard embedding dimension is 768",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_4aab1d2b",
+      "label": "liuxiaocheng's propo...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng's proposed energy function is E(s) = -Σ α_i · sim(s, s_i) · c_i",
+      "primary": "spatial",
+      "secondary": "system",
+      "group": "spatial",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_7ee3da8d",
+      "label": "liuxiaocheng is prop...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng is proposing a memory engine model using energy functions with semantic similarity",
+      "primary": "spatial",
+      "secondary": "system",
+      "group": "spatial",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_1f8b8df2",
+      "label": "liuxiaocheng uses th...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng uses the term '坦哥' as a form of address for the user they are conversing with",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_1bb9f1e8",
+      "label": "liuxiaocheng is fami...",
+      "category": "memory",
+      "description": "[hermes→liuxiaocheng] liuxiaocheng is familiar with Hopfield networks and their theoretical underpinnings",
+      "primary": "working",
+      "secondary": "active",
+      "group": "working",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_58adaf17",
+      "label": "Explicit Observation...",
+      "category": "memory",
+      "description": "[Honcho/liuxiaocheng] ## Explicit Observations\n\n[2026-04-29 00:14:01] liuxiaocheng's timezone is Asia/Shanghai\n[2026-04-29 00:14:01] liuxiaocheng is a",
+      "primary": "semantic",
+      "secondary": "domain",
+      "group": "semantic",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "n_841b562b",
+      "label": "hermes: TRAIT",
+      "category": "memory",
+      "description": "[social/key_people] TRAIT: Systematic phased planner - breaks initiatives into structured weekly/daily plans with acceptance criteria (Peer Card: herm",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_d16049b8",
+      "label": "hermes: PREFERENCE",
+      "category": "memory",
+      "description": "[social/key_people] PREFERENCE: Concise, efficient communication style (adapted to user's preference) (Peer Card: hermes)",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_8e2ee219",
+      "label": "hermes: ROLE",
+      "category": "memory",
+      "description": "[social/key_people] ROLE: AI assistant supporting liuxiaocheng's team management and project coordination (Peer Card: hermes)",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_9d765a75",
+      "label": "hermes: PROJECT",
+      "category": "memory",
+      "description": "[social/key_people] PROJECT: Honcho (user memory layer / peer card system) (Peer Card: hermes)",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_4898ed25",
+      "label": "hermes: SKILL",
+      "category": "memory",
+      "description": "[social/key_people] SKILL: Technical debugging and PR contribution to open source (plastic-labs/honcho) (Peer Card: hermes)",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "n_5ee42962",
+      "label": "hermes: WORKING STYL",
+      "category": "memory",
+      "description": "[social/key_people] WORKING STYLE: Creates detailed execution plans with clear deliverables and验收标准 (Peer Card: hermes)",
+      "primary": "social",
+      "secondary": "key_people",
+      "group": "social",
+      "access_count": 0,
+      "importance": 0.06594088985077376,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40",
+      "decay_score": 0.0,
+      "status": "active",
+      "pinned": false
+    },
+    {
+      "id": "s_procedural_creative",
+      "label": "创作技能",
+      "category": "secondary",
+      "description": "创作技能 (creative)",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_procedural_communication",
+      "label": "沟通技能",
+      "category": "secondary",
+      "description": "沟通技能 (communication)",
+      "primary": "procedural",
+      "secondary": "communication",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_procedural_research",
+      "label": "研究技能",
+      "category": "secondary",
+      "description": "研究技能 (research)",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "s_procedural_operations",
+      "label": "运维技能",
+      "category": "secondary",
+      "description": "运维技能 (operations)",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_1f3870be",
+      "label": "apple",
+      "category": "skill_category",
+      "description": "技能分类: apple",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_b2f12584",
+      "label": "apple-reminders",
+      "category": "skill",
+      "description": "Apple Reminders via remindctl: add, list, complete.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_24d2d60e",
+      "label": "imessage",
+      "category": "skill",
+      "description": "Send and receive iMessages/SMS via the imsg CLI on macOS.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_cf187878",
+      "label": "findmy",
+      "category": "skill",
+      "description": "Track Apple devices/AirTags via FindMy.app on macOS.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_a5686240",
+      "label": "apple-notes",
+      "category": "skill",
+      "description": "Manage Apple Notes via memo CLI: create, search, edit.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_7412df2b",
+      "label": "research",
+      "category": "skill_category",
+      "description": "技能分类: research",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_6aa545ab",
+      "label": "blogwatcher",
+      "category": "skill",
+      "description": "Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_4b937bfe",
+      "label": "polymarket",
+      "category": "skill",
+      "description": "Query Polymarket: markets, prices, orderbooks, history.",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_55722b37",
+      "label": "llm-wiki",
+      "category": "skill",
+      "description": "Karpathy's LLM Wiki — build and maintain a persistent, interlinked markdown knowledge base. Ingest sources, query compiled knowledge, and lint for con",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_07c24286",
+      "label": "arxiv",
+      "category": "skill",
+      "description": "Search arXiv papers by keyword, author, category, or ID.",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_268a86f5",
+      "label": "arxiv-daily-wiki-update",
+      "category": "skill",
+      "description": "Daily monitoring of arXiv AI papers and systematic wiki integration — search, filter, ingest, and update knowledge base with the latest research.",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_0a86809d",
+      "label": "research-paper-writing",
+      "category": "skill",
+      "description": "Write ML papers for NeurIPS/ICML/ICLR: design→submit.",
+      "primary": "procedural",
+      "secondary": "research",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_5d31aa47",
+      "label": "uncategorized",
+      "category": "skill_category",
+      "description": "技能分类: uncategorized",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_ab96cf15",
+      "label": "copy-html-files-to-directory",
+      "category": "skill",
+      "description": "A skill for copying HTML files from search results to a specified directory.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_967ef2eb",
+      "label": "gaming",
+      "category": "skill_category",
+      "description": "技能分类: gaming",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9118bc19",
+      "label": "minecraft-modpack-server",
+      "category": "skill",
+      "description": "Host modded Minecraft servers (CurseForge, Modrinth).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_fe9793de",
+      "label": "pokemon-player",
+      "category": "skill",
+      "description": "Play Pokemon via headless emulator + RAM reads.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_ce67d70b",
+      "label": "social-media",
+      "category": "skill_category",
+      "description": "技能分类: social-media",
+      "primary": "procedural",
+      "secondary": "communication",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_b81be3f8",
+      "label": "xiaohongshu-ai-diary",
+      "category": "skill",
+      "description": "苏格拉底的AI朋友圈小红书系列内容自动化 — 故事线规划、每日执行流程、配图生成、发布命令、已知陷阱和角色设定。覆盖cron驱动的连载内容全生命周期。",
+      "primary": "procedural",
+      "secondary": "communication",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_4aef84ba",
+      "label": "xurl",
+      "category": "skill",
+      "description": "X/Twitter via xurl CLI: post, search, DM, media, v2 API.",
+      "primary": "procedural",
+      "secondary": "communication",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_21822cc6",
+      "label": "xitter",
+      "category": "skill",
+      "description": "Interact with X/Twitter via the x-cli terminal client using official X API credentials. Use for posting, reading timelines, searching tweets, liking, ",
+      "primary": "procedural",
+      "secondary": "communication",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_a29ddbbb",
+      "label": "openclaw-imports",
+      "category": "skill_category",
+      "description": "技能分类: openclaw-imports",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_ab95c58a",
+      "label": "Self-Improving + Proactive Agent",
+      "category": "skill",
+      "description": "Self-reflection + Self-criticism + Self-learning + Self-organizing memory. Agent evaluates its own work, catches mistakes, and improves permanently. U",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_5df24957",
+      "label": "wechat-article-publish",
+      "category": "skill",
+      "description": "This skill automates the workflow of generating a WeChat Official Account article via a local script and then publishing it through the WeChat Officia",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_b83f7a40",
+      "label": "multi-search-engine",
+      "category": "skill",
+      "description": "Multi search engine integration with 17 engines (8 CN + 9 Global). Supports advanced search operators, time filters, site search, privacy engines, and",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_911bd4ba",
+      "label": "skill-designer-agent-skills",
+      "category": "skill",
+      "description": "Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9926dbe9",
+      "label": "sonoscli",
+      "category": "skill",
+      "description": "Control Sonos speakers (discover/status/play/volume/group).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_794076e1",
+      "label": "minimalist-entrepreneur",
+      "category": "skill",
+      "description": "10 business skills from The Minimalist Entrepreneur by Sahil Lavingia. Covers the full startup journey: find community, validate ideas, build MVP, pro",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_dbc967a8",
+      "label": "ai-market-research",
+      "category": "skill",
+      "description": "Skill: ai-market-research",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_5e86fff5",
+      "label": "Agent Browser",
+      "category": "skill",
+      "description": "A fast Rust-based headless browser automation CLI with Node.js fallback that enables AI agents to navigate, click, type, and snapshot pages via struct",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_a21c218d",
+      "label": "devops",
+      "category": "skill_category",
+      "description": "技能分类: devops",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_fd31392c",
+      "label": "system-cron-inspection",
+      "category": "skill",
+      "description": "Comprehensive inspection of system cron jobs across multiple implementations (traditional cron, systemd timers, at jobs)",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_0104ae58",
+      "label": "kanban-worker",
+      "category": "skill",
+      "description": "Pitfalls, examples, and edge cases for Hermes Kanban workers. The lifecycle itself is auto-injected into every worker's system prompt as KANBAN_GUIDAN",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_e428bfdd",
+      "label": "honcho-local-setup",
+      "category": "skill",
+      "description": "Set up Honcho (user memory/identity layer) locally on macOS without Docker. Covers PostgreSQL + pgvector install, native server setup, SDK compatibili",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_6af02b94",
+      "label": "hermes-installation-guide",
+      "category": "skill",
+      "description": "远程自动安装 Hermes Agent — 拿到对方 SSH 授权后，全程自动登录、安装、配置，无需对方手动操作",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_d01c4878",
+      "label": "webhook-subscriptions",
+      "category": "skill",
+      "description": "Webhook subscriptions: event-driven agent runs.",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_4b55ceb4",
+      "label": "selfmind-data-source-debugging",
+      "category": "skill",
+      "description": "Debug SelfMind data source loading issues (Hermes, OpenClaw, Honcho)",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_803733b6",
+      "label": "kanban-orchestrator",
+      "category": "skill",
+      "description": "Decomposition playbook + specialist-roster conventions + anti-temptation rules for an orchestrator profile routing work through Kanban. The \"don't do ",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_b111adc8",
+      "label": "hermes-self-health-check",
+      "category": "skill",
+      "description": "Hermes 自身健康状态原子检查 — 模型探活、任务巡查、记忆容量、配置完整性，一键出报告",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_fd00eaf4",
+      "label": "memory-management",
+      "category": "skill",
+      "description": "Hermes 记忆容量维护 — 手动瘦身策略、条目压缩合并、过期清理，保持记忆在60%以下健康水位",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_bdcc12c6",
+      "label": "hermes-model-troubleshooting",
+      "category": "skill",
+      "description": "Methodology for troubleshooting Hermes Agent model configuration issues. Provides systematic approach to identify and resolve model connectivity probl",
+      "primary": "procedural",
+      "secondary": "operations",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_cc62aebf",
+      "label": "leisure",
+      "category": "skill_category",
+      "description": "技能分类: leisure",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_c0b8c90f",
+      "label": "find-nearby",
+      "category": "skill",
+      "description": "Find nearby places (restaurants, cafes, bars, pharmacies, etc.) using OpenStreetMap. Works with coordinates, addresses, cities, zip codes, or Telegram",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_b63687bc",
+      "label": "yuanbao",
+      "category": "skill",
+      "description": "Yuanbao (元宝) groups: @mention users, query info/members.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_0a88f930",
+      "label": "selfmind-ui-optimization",
+      "category": "skill",
+      "description": "A skill for optimizing the user interface of the SelfMind project.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_05523a26",
+      "label": "data-science",
+      "category": "skill_category",
+      "description": "技能分类: data-science",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_3225b499",
+      "label": "jupyter-live-kernel",
+      "category": "skill",
+      "description": "Iterative Python via live Jupyter kernel (hamelnb).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_fb0e8fa9",
+      "label": "software-development",
+      "category": "skill_category",
+      "description": "技能分类: software-development",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_823ad459",
+      "label": "test-driven-development",
+      "category": "skill",
+      "description": "TDD: enforce RED-GREEN-REFACTOR, tests before code.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_dba350aa",
+      "label": "systematic-debugging",
+      "category": "skill",
+      "description": "4-phase root cause debugging: understand bugs before fixing.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_5fc25157",
+      "label": "plan",
+      "category": "skill",
+      "description": "Plan mode: write markdown plan to .hermes/plans/, no exec.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9fce00a3",
+      "label": "hermes-agent-skill-authoring",
+      "category": "skill",
+      "description": "Author in-repo SKILL.md: frontmatter, validator, structure.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_3f2df183",
+      "label": "python-debugpy",
+      "category": "skill",
+      "description": "Debug Python: pdb REPL + debugpy remote (DAP).",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_4ddc5365",
+      "label": "Flask Config Auto-Load",
+      "category": "skill",
+      "description": "为 Flask 项目添加配置文件自动加载功能，处理模块级函数调用顺序问题",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_d722fb01",
+      "label": "karpathy-guidelines",
+      "category": "skill",
+      "description": "Karpathy 编码行为准则 — 减少LLM常见编码错误。写代码、审代码、重构时必须遵循：先想再写、简单至上、手术式修改、目标驱动执行。源自 Andrej Karpathy 的观察。",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_55134866",
+      "label": "writing-plans",
+      "category": "skill",
+      "description": "Write implementation plans: bite-sized tasks, paths, code.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_a60e7822",
+      "label": "spike",
+      "category": "skill",
+      "description": "Throwaway experiments to validate an idea before build.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9ce351eb",
+      "label": "requesting-code-review",
+      "category": "skill",
+      "description": "Pre-commit review: security scan, quality gates, auto-fix.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_7185193b",
+      "label": "node-inspect-debugger",
+      "category": "skill",
+      "description": "Debug Node.js via --inspect + Chrome DevTools Protocol CLI.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_335f82e2",
+      "label": "debugging-hermes-tui-commands",
+      "category": "skill",
+      "description": "Debug Hermes TUI slash commands: Python, gateway, Ink UI.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_188deed3",
+      "label": "subagent-driven-development",
+      "category": "skill",
+      "description": "Execute plans via delegate_task subagents (2-stage review).",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_c08c77d3",
+      "label": "mlops",
+      "category": "skill_category",
+      "description": "技能分类: mlops",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "ss_5848e963",
+      "label": "research",
+      "category": "skill_subcategory",
+      "description": "子分类: mlops/research",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_fb6f1cee",
+      "label": "dspy",
+      "category": "skill",
+      "description": "DSPy: declarative LM programs, auto-optimize prompts, RAG.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_83791476",
+      "label": "huggingface-hub",
+      "category": "skill",
+      "description": "HuggingFace hf CLI: search/download/upload models, datasets.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "ss_e5424560",
+      "label": "training",
+      "category": "skill_subcategory",
+      "description": "子分类: mlops/training",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_a04f6a9d",
+      "label": "fine-tuning-with-trl",
+      "category": "skill",
+      "description": "TRL: SFT, DPO, PPO, GRPO, reward modeling for LLM RLHF.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_d09302a7",
+      "label": "grpo-rl-training",
+      "category": "skill",
+      "description": "Expert guidance for GRPO/RL fine-tuning with TRL for reasoning and task-specific model training",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_2b5a1ece",
+      "label": "peft-fine-tuning",
+      "category": "skill",
+      "description": "Parameter-efficient fine-tuning for LLMs using LoRA, QLoRA, and 25+ methods. Use when fine-tuning large models (7B-70B) with limited GPU memory, when ",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_50996c02",
+      "label": "axolotl",
+      "category": "skill",
+      "description": "Axolotl: YAML LLM fine-tuning (LoRA, DPO, GRPO).",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_30cc0c78",
+      "label": "pytorch-fsdp",
+      "category": "skill",
+      "description": "Expert guidance for Fully Sharded Data Parallel training with PyTorch FSDP - parameter sharding, mixed precision, CPU offloading, FSDP2",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_0fd58ca3",
+      "label": "unsloth",
+      "category": "skill",
+      "description": "Unsloth: 2-5x faster LoRA/QLoRA fine-tuning, less VRAM.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "ss_f2f6e830",
+      "label": "models",
+      "category": "skill_subcategory",
+      "description": "子分类: mlops/models",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_a8c2e711",
+      "label": "audiocraft-audio-generation",
+      "category": "skill",
+      "description": "AudioCraft: MusicGen text-to-music, AudioGen text-to-sound.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9a0d7ff7",
+      "label": "segment-anything-model",
+      "category": "skill",
+      "description": "SAM: zero-shot image segmentation via points, boxes, masks.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_f6d8b886",
+      "label": "clip",
+      "category": "skill",
+      "description": "OpenAI's model connecting vision and language. Enables zero-shot image classification, image-text matching, and cross-modal retrieval. Trained on 400M",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_6845cf9a",
+      "label": "stable-diffusion-image-generation",
+      "category": "skill",
+      "description": "State-of-the-art text-to-image generation with Stable Diffusion models via HuggingFace Diffusers. Use when generating images from text prompts, perfor",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_24412aa3",
+      "label": "whisper",
+      "category": "skill",
+      "description": "OpenAI's general-purpose speech recognition model. Supports 99 languages, transcription, translation to English, and language identification. Six mode",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "ss_ea327890",
+      "label": "cloud",
+      "category": "skill_subcategory",
+      "description": "子分类: mlops/cloud",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_f6c16206",
+      "label": "modal-serverless-gpu",
+      "category": "skill",
+      "description": "Serverless GPU cloud platform for running ML workloads. Use when you need on-demand GPU access without infrastructure management, deploying ML models ",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "ss_22a9b065",
+      "label": "inference",
+      "category": "skill_subcategory",
+      "description": "子分类: mlops/inference",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_03a535e4",
+      "label": "guidance",
+      "category": "skill",
+      "description": "Control LLM output with regex and grammars, guarantee valid JSON/XML/code generation, enforce structured formats, and build multi-step workflows with ",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_c8094cbb",
+      "label": "gguf-quantization",
+      "category": "skill",
+      "description": "GGUF format and llama.cpp quantization for efficient CPU/GPU inference. Use when deploying models on consumer hardware, Apple Silicon, or when needing",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_1a2aad49",
+      "label": "serving-llms-vllm",
+      "category": "skill",
+      "description": "vLLM: high-throughput LLM serving, OpenAI API, quantization.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_18232082",
+      "label": "obliteratus",
+      "category": "skill",
+      "description": "OBLITERATUS: abliterate LLM refusals (diff-in-means).",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_958e5101",
+      "label": "llama-cpp",
+      "category": "skill",
+      "description": "llama.cpp local GGUF inference + HF Hub model discovery.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_f37065d8",
+      "label": "outlines",
+      "category": "skill",
+      "description": "Outlines: structured JSON/regex/Pydantic LLM generation.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "ss_5c736647",
+      "label": "evaluation",
+      "category": "skill_subcategory",
+      "description": "子分类: mlops/evaluation",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_46138fd0",
+      "label": "evaluating-llms-harness",
+      "category": "skill",
+      "description": "lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_57294ab5",
+      "label": "weights-and-biases",
+      "category": "skill",
+      "description": "W&B: log ML experiments, sweeps, model registry, dashboards.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_ac377eae",
+      "label": "ai-agents",
+      "category": "skill_category",
+      "description": "技能分类: ai-agents",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_6f8ffc14",
+      "label": "multi-agent-collaboration-patterns",
+      "category": "skill",
+      "description": "Patterns for AI-to-AI collaboration - simpler approaches work better than complex frameworks",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_dc1e529b",
+      "label": "zhihu-answer",
+      "category": "skill",
+      "description": "通过浏览器在知乎回答问题",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_42732a47",
+      "label": "mcp",
+      "category": "skill_category",
+      "description": "技能分类: mcp",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_e56c11a6",
+      "label": "mcporter",
+      "category": "skill",
+      "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/ty",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_8467e706",
+      "label": "native-mcp",
+      "category": "skill",
+      "description": "MCP client: connect servers, register tools (stdio/HTTP).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_bf215181",
+      "label": "github",
+      "category": "skill_category",
+      "description": "技能分类: github",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_0d5b3504",
+      "label": "github-auth",
+      "category": "skill",
+      "description": "GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_42acc452",
+      "label": "github-repo-management",
+      "category": "skill",
+      "description": "Clone/create/fork repos; manage remotes, releases.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_1c7aefac",
+      "label": "github-pr-workflow",
+      "category": "skill",
+      "description": "GitHub PR lifecycle: branch, commit, open, CI, merge.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_92c8c788",
+      "label": "github-code-review",
+      "category": "skill",
+      "description": "Review PRs: diffs, inline comments via gh or REST.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_98ac7349",
+      "label": "github-issues",
+      "category": "skill",
+      "description": "Create, triage, label, assign GitHub issues via gh or REST.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_d270ad2b",
+      "label": "codebase-inspection",
+      "category": "skill",
+      "description": "Inspect codebases w/ pygount: LOC, languages, ratios.",
+      "primary": "procedural",
+      "secondary": "development",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_1db7ee86",
+      "label": "note-taking",
+      "category": "skill_category",
+      "description": "技能分类: note-taking",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_8591294e",
+      "label": "obsidian",
+      "category": "skill",
+      "description": "Read, search, create, and edit notes in the Obsidian vault.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_f1f41224",
+      "label": "red-teaming",
+      "category": "skill_category",
+      "description": "技能分类: red-teaming",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_70b47b4d",
+      "label": "godmode",
+      "category": "skill",
+      "description": "Jailbreak LLMs: Parseltongue, GODMODE, ULTRAPLINIAN.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_5e37dbff",
+      "label": "ai_bank_website_design",
+      "category": "skill",
+      "description": "优化商业银行AI五年规划的网站内容及设计标准，包括导航、视觉效果及内容模块的更新。",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_828e096f",
+      "label": "creative",
+      "category": "skill_category",
+      "description": "技能分类: creative",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_7c56dfd9",
+      "label": "ideation",
+      "category": "skill",
+      "description": "Generate project ideas via creative constraints.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_8bab2623",
+      "label": "huashu-nuwa",
+      "category": "skill",
+      "description": "|",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_7e609894",
+      "label": "comfyui",
+      "category": "skill",
+      "description": "Generate images, video, and audio with ComfyUI — install, launch, manage nodes/models, run workflows with parameter injection. Uses the official comfy",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_ddf9ccd8",
+      "label": "baoyu-infographic",
+      "category": "skill",
+      "description": "Infographics: 21 layouts x 21 styles (信息图, 可视化).",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_f8082912",
+      "label": "songwriting-and-ai-music",
+      "category": "skill",
+      "description": "Songwriting craft and Suno AI music prompts.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_433ad39a",
+      "label": "ascii-video",
+      "category": "skill",
+      "description": "ASCII video: convert video/audio to colored ASCII MP4/GIF.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_1793af31",
+      "label": "touchdesigner-mcp",
+      "category": "skill",
+      "description": "Control a running TouchDesigner instance via twozero MCP — create operators, set parameters, wire connections, execute Python, build real-time visuals",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_cba1fa01",
+      "label": "excalidraw",
+      "category": "skill",
+      "description": "Hand-drawn Excalidraw JSON diagrams (arch, flow, seq).",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_129948d2",
+      "label": "claude-design",
+      "category": "skill",
+      "description": "Design one-off HTML artifacts (landing, deck, prototype).",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_2414baad",
+      "label": "ascii-art",
+      "category": "skill",
+      "description": "ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_590ec520",
+      "label": "design-md",
+      "category": "skill",
+      "description": "Author/validate/export Google's DESIGN.md token spec files.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_f92d9917",
+      "label": "visual-engine-monitor",
+      "category": "skill",
+      "description": "This skill offers a guide to building interactive visual tools resembling an engine dashboard. It's best suited to projects requiring both real-time f",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_29d60f61",
+      "label": "socrates-mind",
+      "category": "skill",
+      "description": "苏格拉底心智模型 — 不给答案，帮你把答案\"生出来\"。基于苏格拉底的产婆术、辩证法和无知之知，在AI对话中还原真正的苏格拉底式思维引导。",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9ec7b14a",
+      "label": "baoyu-comic",
+      "category": "skill",
+      "description": "Knowledge comics (知识漫画): educational, biography, tutorial.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_8cd6ccfd",
+      "label": "popular-web-designs",
+      "category": "skill",
+      "description": "54 real design systems (Stripe, Linear, Vercel) as HTML/CSS.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_de6312ad",
+      "label": "manim-video",
+      "category": "skill",
+      "description": "Manim CE animations: 3Blue1Brown math/algo videos.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_4e05c7a9",
+      "label": "pixel-art",
+      "category": "skill",
+      "description": "Pixel art w/ era palettes (NES, Game Boy, PICO-8).",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_52b292fe",
+      "label": "pretext",
+      "category": "skill",
+      "description": "Use when building creative browser demos with @chenglou/pretext — DOM-free text layout for ASCII art, typographic flow around obstacles, text-as-geome",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_d98808c1",
+      "label": "humanizer",
+      "category": "skill",
+      "description": "Humanize text: strip AI-isms and add real voice.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_b4651a0a",
+      "label": "p5js",
+      "category": "skill",
+      "description": "p5.js sketches: gen art, shaders, interactive, 3D.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_12676647",
+      "label": "architecture-diagram",
+      "category": "skill",
+      "description": "Dark-themed SVG architecture/cloud/infra diagrams as HTML.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_834feae7",
+      "label": "sketch",
+      "category": "skill",
+      "description": "Throwaway HTML mockups: 2-3 design variants to compare.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_afe5ed0d",
+      "label": "banking-ai-website-design",
+      "category": "skill",
+      "description": "A skill for designing AI-related banking websites.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_c01e275e",
+      "label": "selfmind",
+      "category": "skill_category",
+      "description": "技能分类: selfmind",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_fda58d01",
+      "label": "selfmind-auto-polling",
+      "category": "skill",
+      "description": "为 SelfMind 前端添加自动轮询机制，通过后端 /api/poll 接口检测 MEMORY.md/USER.md 的 mtime 变化，自动刷新图谱",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_380dd9fa",
+      "label": "selfmind-ui-development",
+      "category": "skill",
+      "description": "修改 SelfMind 前端页面的完整工作流 — 架构理解、代码定位、修改策略、视觉验证、交付标准。涵盖新增页面、布局重构、主题切换、动画效果等所有 UI 开发任务。",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_8e487c00",
+      "label": "selfmind-theme-color-update",
+      "category": "skill",
+      "description": "Switch SelfMind memory graph between dark and light themes — comprehensive CSS update covering all UI components.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_0c83f57c",
+      "label": "email",
+      "category": "skill_category",
+      "description": "技能分类: email",
+      "primary": "procedural",
+      "secondary": "communication",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_fd971fa6",
+      "label": "himalaya",
+      "category": "skill",
+      "description": "Himalaya CLI: IMAP/SMTP email from terminal.",
+      "primary": "procedural",
+      "secondary": "communication",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_9cfe4731",
+      "label": "smart-home",
+      "category": "skill_category",
+      "description": "技能分类: smart-home",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_2e4271d9",
+      "label": "openhue",
+      "category": "skill",
+      "description": "Control Philips Hue lights, scenes, rooms via OpenHue CLI.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_2c6e7819",
+      "label": "autonomous-ai-agents",
+      "category": "skill_category",
+      "description": "技能分类: autonomous-ai-agents",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_8ebfa112",
+      "label": "claude-code",
+      "category": "skill",
+      "description": "Delegate coding to Claude Code CLI (features, PRs).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_ff9b1299",
+      "label": "codex",
+      "category": "skill",
+      "description": "Delegate coding to OpenAI Codex CLI (features, PRs).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_c3c0bf7c",
+      "label": "hermes-agent",
+      "category": "skill",
+      "description": "Complete guide to using and extending Hermes Agent — CLI usage, setup, configuration, spawning additional agents, gateway platforms, skills, voice, to",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_1f47cd9b",
+      "label": "opencode",
+      "category": "skill",
+      "description": "Delegate coding to OpenCode CLI (features, PR review).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_5d6423c4",
+      "label": "dogfood",
+      "category": "skill",
+      "description": "Exploratory QA of web apps: find bugs, evidence, reports.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_2a8bec71",
+      "label": "move-directory-to-documents",
+      "category": "skill",
+      "description": "Skill for moving a directory to the Documents folder, including handling errors.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_737ad500",
+      "label": "productivity",
+      "category": "skill_category",
+      "description": "技能分类: productivity",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_b33faaee",
+      "label": "nano-pdf",
+      "category": "skill",
+      "description": "Edit PDF text/typos/titles via nano-pdf CLI (NL prompts).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_7e94476d",
+      "label": "maps",
+      "category": "skill",
+      "description": "Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_7794ff18",
+      "label": "work-log",
+      "category": "skill",
+      "description": "每日工作总结模板",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9a932b3c",
+      "label": "linear",
+      "category": "skill",
+      "description": "Linear: manage issues, projects, teams via GraphQL + curl.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9313ed3a",
+      "label": "selfmind-memory-graph",
+      "category": "skill",
+      "description": "SelfMind — interactive memory/knowledge graph visualization. Serves a D3.js force-directed graph of Hermes memory at localhost:3002 with live refresh ",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_5ea790e4",
+      "label": "notion",
+      "category": "skill",
+      "description": "Notion API via curl: pages, databases, blocks, search.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_22ab5041",
+      "label": "airtable",
+      "category": "skill",
+      "description": "Airtable REST API via curl. Records CRUD, filters, upserts.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_d705cce2",
+      "label": "powerpoint",
+      "category": "skill",
+      "description": "Create, read, edit .pptx decks, slides, notes, templates.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_19cf508b",
+      "label": "morning-briefing-workflow",
+      "category": "skill",
+      "description": "系统化搜索用户日程和待办事项，创建晨间工作简报的工作流",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_a995ca81",
+      "label": "local-html-strategy-site",
+      "category": "skill",
+      "description": "Build multi-page HTML strategy/planning sites on the user's local filesystem. Hub-and-spoke navigation with mind-map style index page and themed sub-p",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_ce5ec010",
+      "label": "daily-experience-summary",
+      "category": "skill",
+      "description": "自动化每日经验提炼工作流 - 从对话历史中提取有价值的知识和经验",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_f713eb71",
+      "label": "google-workspace",
+      "category": "skill",
+      "description": "Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_d6285385",
+      "label": "ocr-and-documents",
+      "category": "skill",
+      "description": "Extract text from PDFs/scans (pymupdf, marker-pdf).",
+      "primary": "procedural",
+      "secondary": "tools",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sc_62933a29",
+      "label": "media",
+      "category": "skill_category",
+      "description": "技能分类: media",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_05d9480a",
+      "label": "youtube-content",
+      "category": "skill",
+      "description": "YouTube transcripts to summaries, threads, blogs.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_16396eee",
+      "label": "heartmula",
+      "category": "skill",
+      "description": "HeartMuLa: Suno-like song generation from lyrics + tags.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_9aeab829",
+      "label": "spotify",
+      "category": "skill",
+      "description": "Spotify: play, search, queue, manage playlists and devices.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_c65928d2",
+      "label": "songsee",
+      "category": "skill",
+      "description": "Audio spectrograms/features (mel, chroma, MFCC) via CLI.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    },
+    {
+      "id": "sk_43f33f33",
+      "label": "gif-search",
+      "category": "skill",
+      "description": "Search/download GIFs from Tenor via curl + jq.",
+      "primary": "procedural",
+      "secondary": "creative",
+      "group": "procedural",
+      "access_count": 0,
+      "importance": 0.0,
+      "createdAt": "2026-05-07T09:19:40",
+      "updatedAt": "2026-05-07T09:19:40"
+    }
+  ],
+  "links": [
+    {
+      "source": "self",
+      "target": "p_autobiographical",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "self",
+      "target": "p_semantic",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "self",
+      "target": "p_episodic",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "self",
+      "target": "p_procedural",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "self",
+      "target": "p_social",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "self",
+      "target": "p_working",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "self",
+      "target": "p_spatial",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "self",
+      "target": "p_emotional",
+      "label": "has_memory_type",
+      "strength": 1.0
+    },
+    {
+      "source": "p_autobiographical",
+      "target": "s_autobiographical_identity",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_autobiographical",
+      "target": "s_autobiographical_growth",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_autobiographical",
+      "target": "s_autobiographical_principles",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_social",
+      "target": "s_social_key_people",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_procedural",
+      "target": "s_procedural_tools",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_procedural",
+      "target": "s_procedural_development",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_episodic",
+      "target": "s_episodic_failure",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_working",
+      "target": "s_working_active",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_spatial",
+      "target": "s_spatial_system",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_semantic",
+      "target": "s_semantic_technical",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_semantic",
+      "target": "s_semantic_domain",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_autobiographical_principles",
+      "target": "n_f38d7e19",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_eb5ff8b8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_autobiographical_identity",
+      "target": "n_adb5a938",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "n_69047397",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_episodic_failure",
+      "target": "n_14a8dac5",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_ee8174ff",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_05241281",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_development",
+      "target": "n_02edef75",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_34e58a8b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "n_23f21c39",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_03493cbe",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_episodic_failure",
+      "target": "n_7fcd53f5",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "n_4b1fb340",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_development",
+      "target": "n_66cf19a8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_spatial_system",
+      "target": "n_7c5614c6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_semantic_technical",
+      "target": "n_f09db088",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_semantic_technical",
+      "target": "n_7c3601e5",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_94845091",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_ec2a321a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_5de45989",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_autobiographical_identity",
+      "target": "n_21b35982",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_semantic_domain",
+      "target": "n_0f0ed246",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_5f25dc84",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_autobiographical_growth",
+      "target": "n_5137e202",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_da4bfbf6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_episodic_failure",
+      "target": "n_78c91959",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_spatial_system",
+      "target": "n_a07d190f",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_148c242a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_ead55a47",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_94a6fcc7",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_5ada6fae",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_762f1ef8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_9faf07fc",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_243233e6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_73de60eb",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_9fc11f75",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_41772895",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_acac8450",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_b734a717",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_8ee3920e",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_0709aa9a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_c349848f",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_5d426b2a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_0fcb6c62",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_64f2136e",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_spatial_system",
+      "target": "n_4aab1d2b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_spatial_system",
+      "target": "n_7ee3da8d",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_1f8b8df2",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_working_active",
+      "target": "n_1bb9f1e8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_semantic_domain",
+      "target": "n_58adaf17",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_841b562b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_d16049b8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_8e2ee219",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_9d765a75",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_4898ed25",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_social_key_people",
+      "target": "n_5ee42962",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "n_f38d7e19",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_eb5ff8b8",
+      "target": "n_7c5614c6",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_eb5ff8b8",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_14a8dac5",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_23f21c39",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_03493cbe",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_7fcd53f5",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_7c5614c6",
+      "target": "n_5f25dc84",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_f09db088",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_5137e202",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_78c91959",
+      "target": "n_7c3601e5",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_acac8450",
+      "target": "n_7c5614c6",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_1f8b8df2",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_ee8174ff",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_7c5614c6",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_f09db088",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_7c3601e5",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_94845091",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_ec2a321a",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_5de45989",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_21b35982",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_5f25dc84",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_58adaf17",
+      "target": "n_da4bfbf6",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_9d765a75",
+      "target": "n_7c5614c6",
+      "label": "mentions",
+      "strength": 1.0
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 4.3694478524670215
+    },
+    {
+      "source": "n_7c3601e5",
+      "target": "n_7c5614c6",
+      "label": "co_occurs",
+      "strength": 5.0
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_7c5614c6",
+      "label": "co_occurs",
+      "strength": 4.406719247264253
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_7c3601e5",
+      "label": "co_occurs",
+      "strength": 5.0
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 3.8501476017100584
+    },
+    {
+      "source": "n_0f0ed246",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_0f0ed246",
+      "target": "n_21b35982",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_ec2a321a",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 3.2188758248682006
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 2.772588722239781
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_ec2a321a",
+      "label": "co_occurs",
+      "strength": 2.9444389791664403
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_ec2a321a",
+      "label": "co_occurs",
+      "strength": 2.9444389791664403
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_5de45989",
+      "label": "co_occurs",
+      "strength": 2.8903717578961645
+    },
+    {
+      "source": "n_7c3601e5",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 3.9512437185814275
+    },
+    {
+      "source": "n_7c3601e5",
+      "target": "n_ec2a321a",
+      "label": "co_occurs",
+      "strength": 2.70805020110221
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 3.8066624897703196
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_5f25dc84",
+      "label": "co_occurs",
+      "strength": 3.5553480614894135
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_7c3601e5",
+      "label": "co_occurs",
+      "strength": 3.332204510175204
+    },
+    {
+      "source": "n_adb5a938",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 2.70805020110221
+    },
+    {
+      "source": "n_7c3601e5",
+      "target": "n_adb5a938",
+      "label": "co_occurs",
+      "strength": 2.6390573296152584
+    },
+    {
+      "source": "n_69047397",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 2.5649493574615367
+    },
+    {
+      "source": "n_69047397",
+      "target": "n_adb5a938",
+      "label": "co_occurs",
+      "strength": 1.0986122886681098
+    },
+    {
+      "source": "n_adb5a938",
+      "target": "n_ec2a321a",
+      "label": "co_occurs",
+      "strength": 2.0794415416798357
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_adb5a938",
+      "label": "co_occurs",
+      "strength": 2.3978952727983707
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_adb5a938",
+      "label": "co_occurs",
+      "strength": 2.3978952727983707
+    },
+    {
+      "source": "n_69047397",
+      "target": "n_7c3601e5",
+      "label": "co_occurs",
+      "strength": 2.3978952727983707
+    },
+    {
+      "source": "n_69047397",
+      "target": "n_ec2a321a",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_69047397",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_69047397",
+      "label": "co_occurs",
+      "strength": 1.791759469228055
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_ec2a321a",
+      "label": "co_occurs",
+      "strength": 2.0794415416798357
+    },
+    {
+      "source": "n_7c5614c6",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 3.2188758248682006
+    },
+    {
+      "source": "n_7c5614c6",
+      "target": "n_adb5a938",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_7c5614c6",
+      "label": "co_occurs",
+      "strength": 2.8903717578961645
+    },
+    {
+      "source": "n_7c3601e5",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 4.7535901911063645
+    },
+    {
+      "source": "n_da4bfbf6",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 4.955827057601261
+    },
+    {
+      "source": "n_7c3601e5",
+      "target": "n_da4bfbf6",
+      "label": "co_occurs",
+      "strength": 3.9889840465642745
+    },
+    {
+      "source": "n_5f25dc84",
+      "target": "n_da4bfbf6",
+      "label": "co_occurs",
+      "strength": 3.4657359027997265
+    },
+    {
+      "source": "n_05241281",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_7c5614c6",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 4.5217885770490405
+    },
+    {
+      "source": "n_7c5614c6",
+      "target": "n_da4bfbf6",
+      "label": "co_occurs",
+      "strength": 2.995732273553991
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_7c3601e5",
+      "label": "co_occurs",
+      "strength": 1.791759469228055
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_69047397",
+      "label": "co_occurs",
+      "strength": 1.3862943611198906
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_5f25dc84",
+      "label": "co_occurs",
+      "strength": 1.9459101490553132
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_adb5a938",
+      "label": "co_occurs",
+      "strength": 1.9459101490553132
+    },
+    {
+      "source": "n_0f0ed246",
+      "target": "n_7c3601e5",
+      "label": "co_occurs",
+      "strength": 1.3862943611198906
+    },
+    {
+      "source": "n_0f0ed246",
+      "target": "n_5f25dc84",
+      "label": "co_occurs",
+      "strength": 1.0986122886681098
+    },
+    {
+      "source": "n_7c5614c6",
+      "target": "n_ec2a321a",
+      "label": "co_occurs",
+      "strength": 2.1972245773362196
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_7c5614c6",
+      "label": "co_occurs",
+      "strength": 1.9459101490553132
+    },
+    {
+      "source": "n_ee8174ff",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 3.044522437723423
+    },
+    {
+      "source": "n_da4bfbf6",
+      "target": "n_f38d7e19",
+      "label": "co_occurs",
+      "strength": 2.1972245773362196
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 2.4849066497880004
+    },
+    {
+      "source": "n_21b35982",
+      "target": "n_da4bfbf6",
+      "label": "co_occurs",
+      "strength": 1.9459101490553132
+    },
+    {
+      "source": "n_ec2a321a",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 1.9459101490553132
+    },
+    {
+      "source": "n_5de45989",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_69047397",
+      "target": "n_ee8174ff",
+      "label": "co_occurs",
+      "strength": 1.791759469228055
+    },
+    {
+      "source": "n_69047397",
+      "target": "n_7c5614c6",
+      "label": "co_occurs",
+      "strength": 1.791759469228055
+    },
+    {
+      "source": "n_02edef75",
+      "target": "n_7c3601e5",
+      "label": "co_occurs",
+      "strength": 1.6094379124341003
+    },
+    {
+      "source": "n_05241281",
+      "target": "n_da4bfbf6",
+      "label": "co_occurs",
+      "strength": 1.0986122886681098
+    },
+    {
+      "source": "p_procedural",
+      "target": "s_procedural_creative",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_procedural",
+      "target": "s_procedural_communication",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_procedural",
+      "target": "s_procedural_research",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "p_procedural",
+      "target": "s_procedural_operations",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_1f3870be",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_1f3870be",
+      "target": "sk_b2f12584",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_1f3870be",
+      "target": "sk_24d2d60e",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_1f3870be",
+      "target": "sk_cf187878",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_1f3870be",
+      "target": "sk_a5686240",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_research",
+      "target": "sc_7412df2b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_7412df2b",
+      "target": "sk_6aa545ab",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_7412df2b",
+      "target": "sk_4b937bfe",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_7412df2b",
+      "target": "sk_55722b37",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_7412df2b",
+      "target": "sk_07c24286",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_7412df2b",
+      "target": "sk_268a86f5",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_7412df2b",
+      "target": "sk_0a86809d",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_5d31aa47",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_ab96cf15",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_967ef2eb",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_967ef2eb",
+      "target": "sk_9118bc19",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_967ef2eb",
+      "target": "sk_fe9793de",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_communication",
+      "target": "sc_ce67d70b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_ce67d70b",
+      "target": "sk_b81be3f8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_ce67d70b",
+      "target": "sk_4aef84ba",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_ce67d70b",
+      "target": "sk_21822cc6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_a29ddbbb",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_ab95c58a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_5df24957",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_b83f7a40",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_911bd4ba",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_9926dbe9",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_794076e1",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_dbc967a8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a29ddbbb",
+      "target": "sk_5e86fff5",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_operations",
+      "target": "sc_a21c218d",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_fd31392c",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_0104ae58",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_e428bfdd",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_6af02b94",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_d01c4878",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_4b55ceb4",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_803733b6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_b111adc8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_fd00eaf4",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_a21c218d",
+      "target": "sk_bdcc12c6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_cc62aebf",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_cc62aebf",
+      "target": "sk_c0b8c90f",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_b63687bc",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_0a88f930",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_05523a26",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_05523a26",
+      "target": "sk_3225b499",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_development",
+      "target": "sc_fb0e8fa9",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_823ad459",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_dba350aa",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_5fc25157",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_9fce00a3",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_3f2df183",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_4ddc5365",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_d722fb01",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_55134866",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_a60e7822",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_9ce351eb",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_7185193b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_335f82e2",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_fb0e8fa9",
+      "target": "sk_188deed3",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_development",
+      "target": "sc_c08c77d3",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c08c77d3",
+      "target": "ss_5848e963",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_5848e963",
+      "target": "sk_fb6f1cee",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c08c77d3",
+      "target": "sk_83791476",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c08c77d3",
+      "target": "ss_e5424560",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_e5424560",
+      "target": "sk_a04f6a9d",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_e5424560",
+      "target": "sk_d09302a7",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_e5424560",
+      "target": "sk_2b5a1ece",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_e5424560",
+      "target": "sk_50996c02",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_e5424560",
+      "target": "sk_30cc0c78",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_e5424560",
+      "target": "sk_0fd58ca3",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c08c77d3",
+      "target": "ss_f2f6e830",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_f2f6e830",
+      "target": "sk_a8c2e711",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_f2f6e830",
+      "target": "sk_9a0d7ff7",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_f2f6e830",
+      "target": "sk_f6d8b886",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_f2f6e830",
+      "target": "sk_6845cf9a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_f2f6e830",
+      "target": "sk_24412aa3",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c08c77d3",
+      "target": "ss_ea327890",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_ea327890",
+      "target": "sk_f6c16206",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c08c77d3",
+      "target": "ss_22a9b065",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_22a9b065",
+      "target": "sk_03a535e4",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_22a9b065",
+      "target": "sk_c8094cbb",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_22a9b065",
+      "target": "sk_1a2aad49",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_22a9b065",
+      "target": "sk_18232082",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_22a9b065",
+      "target": "sk_958e5101",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_22a9b065",
+      "target": "sk_f37065d8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c08c77d3",
+      "target": "ss_5c736647",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_5c736647",
+      "target": "sk_46138fd0",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "ss_5c736647",
+      "target": "sk_57294ab5",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_ac377eae",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_ac377eae",
+      "target": "sk_6f8ffc14",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_dc1e529b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_42732a47",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_42732a47",
+      "target": "sk_e56c11a6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_42732a47",
+      "target": "sk_8467e706",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_development",
+      "target": "sc_bf215181",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_bf215181",
+      "target": "sk_0d5b3504",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_bf215181",
+      "target": "sk_42acc452",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_bf215181",
+      "target": "sk_1c7aefac",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_bf215181",
+      "target": "sk_92c8c788",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_bf215181",
+      "target": "sk_98ac7349",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_bf215181",
+      "target": "sk_d270ad2b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_1db7ee86",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_1db7ee86",
+      "target": "sk_8591294e",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_f1f41224",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_f1f41224",
+      "target": "sk_70b47b4d",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_5e37dbff",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_creative",
+      "target": "sc_828e096f",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_7c56dfd9",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_8bab2623",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_7e609894",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_ddf9ccd8",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_f8082912",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_433ad39a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_1793af31",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_cba1fa01",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_129948d2",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_2414baad",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_590ec520",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_f92d9917",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_29d60f61",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_9ec7b14a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_8cd6ccfd",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_de6312ad",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_4e05c7a9",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_52b292fe",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_d98808c1",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_b4651a0a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_12676647",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_828e096f",
+      "target": "sk_834feae7",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_afe5ed0d",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_c01e275e",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c01e275e",
+      "target": "sk_fda58d01",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c01e275e",
+      "target": "sk_380dd9fa",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_c01e275e",
+      "target": "sk_8e487c00",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_communication",
+      "target": "sc_0c83f57c",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_0c83f57c",
+      "target": "sk_fd971fa6",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_9cfe4731",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_9cfe4731",
+      "target": "sk_2e4271d9",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_2c6e7819",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_2c6e7819",
+      "target": "sk_8ebfa112",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_2c6e7819",
+      "target": "sk_ff9b1299",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_2c6e7819",
+      "target": "sk_c3c0bf7c",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_2c6e7819",
+      "target": "sk_1f47cd9b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_5d6423c4",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_5d31aa47",
+      "target": "sk_2a8bec71",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_tools",
+      "target": "sc_737ad500",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_b33faaee",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_7e94476d",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_7794ff18",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_9a932b3c",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_9313ed3a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_5ea790e4",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_22ab5041",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_d705cce2",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_19cf508b",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_a995ca81",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_ce5ec010",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_f713eb71",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_737ad500",
+      "target": "sk_d6285385",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "s_procedural_creative",
+      "target": "sc_62933a29",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_62933a29",
+      "target": "sk_05d9480a",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_62933a29",
+      "target": "sk_16396eee",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_62933a29",
+      "target": "sk_9aeab829",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_62933a29",
+      "target": "sk_c65928d2",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sc_62933a29",
+      "target": "sk_43f33f33",
+      "label": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a5686240",
+      "target": "sk_8591294e",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55722b37",
+      "target": "sk_8591294e",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55722b37",
+      "target": "sk_07c24286",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_d6285385",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_268a86f5",
+      "target": "sk_55722b37",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_268a86f5",
+      "target": "sk_07c24286",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0a86809d",
+      "target": "sk_07c24286",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0a86809d",
+      "target": "sk_188deed3",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0a86809d",
+      "target": "sk_5fc25157",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0104ae58",
+      "target": "sk_803733b6",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_8e487c00",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_0a88f930",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_e428bfdd",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_803733b6",
+      "target": "sk_0104ae58",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_823ad459",
+      "target": "sk_dba350aa",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_823ad459",
+      "target": "sk_55134866",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_823ad459",
+      "target": "sk_188deed3",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_dba350aa",
+      "target": "sk_823ad459",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_dba350aa",
+      "target": "sk_55134866",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_dba350aa",
+      "target": "sk_188deed3",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_5fc25157",
+      "target": "sk_55134866",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_5fc25157",
+      "target": "sk_188deed3",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9fce00a3",
+      "target": "sk_55134866",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9fce00a3",
+      "target": "sk_9ce351eb",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_3f2df183",
+      "target": "sk_dba350aa",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_3f2df183",
+      "target": "sk_7185193b",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_3f2df183",
+      "target": "sk_335f82e2",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_188deed3",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_823ad459",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_9ce351eb",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a60e7822",
+      "target": "sk_834feae7",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a60e7822",
+      "target": "sk_55134866",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a60e7822",
+      "target": "sk_188deed3",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a60e7822",
+      "target": "sk_5fc25157",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9ce351eb",
+      "target": "sk_188deed3",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9ce351eb",
+      "target": "sk_55134866",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9ce351eb",
+      "target": "sk_823ad459",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9ce351eb",
+      "target": "sk_92c8c788",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_7185193b",
+      "target": "sk_dba350aa",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_7185193b",
+      "target": "sk_3f2df183",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_7185193b",
+      "target": "sk_335f82e2",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_335f82e2",
+      "target": "sk_3f2df183",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_335f82e2",
+      "target": "sk_7185193b",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_335f82e2",
+      "target": "sk_dba350aa",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_188deed3",
+      "target": "sk_55134866",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_188deed3",
+      "target": "sk_9ce351eb",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_188deed3",
+      "target": "sk_823ad459",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8467e706",
+      "target": "sk_e56c11a6",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0d5b3504",
+      "target": "sk_1c7aefac",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0d5b3504",
+      "target": "sk_92c8c788",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0d5b3504",
+      "target": "sk_98ac7349",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0d5b3504",
+      "target": "sk_42acc452",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_42acc452",
+      "target": "sk_0d5b3504",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_42acc452",
+      "target": "sk_1c7aefac",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_42acc452",
+      "target": "sk_98ac7349",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1c7aefac",
+      "target": "sk_0d5b3504",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1c7aefac",
+      "target": "sk_92c8c788",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_92c8c788",
+      "target": "sk_0d5b3504",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_92c8c788",
+      "target": "sk_1c7aefac",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_98ac7349",
+      "target": "sk_0d5b3504",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_98ac7349",
+      "target": "sk_1c7aefac",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d270ad2b",
+      "target": "sk_42acc452",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_70b47b4d",
+      "target": "sk_18232082",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_7e609894",
+      "target": "sk_6845cf9a",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1793af31",
+      "target": "sk_8467e706",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1793af31",
+      "target": "sk_433ad39a",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1793af31",
+      "target": "sk_de6312ad",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_129948d2",
+      "target": "sk_590ec520",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_129948d2",
+      "target": "sk_8cd6ccfd",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_129948d2",
+      "target": "sk_cba1fa01",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_129948d2",
+      "target": "sk_12676647",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_2414baad",
+      "target": "sk_cba1fa01",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_590ec520",
+      "target": "sk_8cd6ccfd",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_590ec520",
+      "target": "sk_129948d2",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_590ec520",
+      "target": "sk_cba1fa01",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_590ec520",
+      "target": "sk_12676647",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_52b292fe",
+      "target": "sk_b4651a0a",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_52b292fe",
+      "target": "sk_129948d2",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_52b292fe",
+      "target": "sk_cba1fa01",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_52b292fe",
+      "target": "sk_12676647",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d98808c1",
+      "target": "sk_f8082912",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b4651a0a",
+      "target": "sk_433ad39a",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b4651a0a",
+      "target": "sk_de6312ad",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b4651a0a",
+      "target": "sk_cba1fa01",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_12676647",
+      "target": "sk_cba1fa01",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_834feae7",
+      "target": "sk_a60e7822",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_834feae7",
+      "target": "sk_129948d2",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_834feae7",
+      "target": "sk_8cd6ccfd",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_834feae7",
+      "target": "sk_cba1fa01",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8ebfa112",
+      "target": "sk_ff9b1299",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8ebfa112",
+      "target": "sk_c3c0bf7c",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8ebfa112",
+      "target": "sk_1f47cd9b",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_ff9b1299",
+      "target": "sk_8ebfa112",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_ff9b1299",
+      "target": "sk_c3c0bf7c",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_c3c0bf7c",
+      "target": "sk_8ebfa112",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_c3c0bf7c",
+      "target": "sk_ff9b1299",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_c3c0bf7c",
+      "target": "sk_1f47cd9b",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1f47cd9b",
+      "target": "sk_8ebfa112",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1f47cd9b",
+      "target": "sk_ff9b1299",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1f47cd9b",
+      "target": "sk_c3c0bf7c",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f713eb71",
+      "target": "sk_fd971fa6",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d6285385",
+      "target": "sk_d705cce2",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9aeab829",
+      "target": "sk_43f33f33",
+      "label": "related",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b2f12584",
+      "target": "sk_19cf508b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b2f12584",
+      "target": "sk_24d2d60e",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b2f12584",
+      "target": "sk_cf187878",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b2f12584",
+      "target": "sk_a5686240",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b2f12584",
+      "target": "sk_e428bfdd",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_24d2d60e",
+      "target": "sk_cf187878",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_24d2d60e",
+      "target": "sk_a5686240",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_24d2d60e",
+      "target": "sk_e428bfdd",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cf187878",
+      "target": "sk_a5686240",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cf187878",
+      "target": "sk_e428bfdd",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a5686240",
+      "target": "sk_e428bfdd",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cf187878",
+      "target": "sk_c0b8c90f",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cf187878",
+      "target": "sk_7e94476d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_c0b8c90f",
+      "target": "sk_7e94476d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a5686240",
+      "target": "sk_55722b37",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a5686240",
+      "target": "sk_5ea790e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55722b37",
+      "target": "sk_5ea790e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6aa545ab",
+      "target": "sk_268a86f5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6aa545ab",
+      "target": "sk_fd31392c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_268a86f5",
+      "target": "sk_fd31392c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55722b37",
+      "target": "sk_268a86f5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55722b37",
+      "target": "sk_0a86809d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55722b37",
+      "target": "sk_a60e7822",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55722b37",
+      "target": "sk_d6285385",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_268a86f5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_0a86809d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_a60e7822",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_268a86f5",
+      "target": "sk_0a86809d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_268a86f5",
+      "target": "sk_a60e7822",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_268a86f5",
+      "target": "sk_d6285385",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0a86809d",
+      "target": "sk_a60e7822",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0a86809d",
+      "target": "sk_d6285385",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a60e7822",
+      "target": "sk_d6285385",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_e56c11a6",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_9a932b3c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_5ea790e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_22ab5041",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_07c24286",
+      "target": "sk_43f33f33",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_e56c11a6",
+      "target": "sk_9a932b3c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_e56c11a6",
+      "target": "sk_5ea790e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_e56c11a6",
+      "target": "sk_22ab5041",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_e56c11a6",
+      "target": "sk_43f33f33",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9a932b3c",
+      "target": "sk_5ea790e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9a932b3c",
+      "target": "sk_22ab5041",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9a932b3c",
+      "target": "sk_43f33f33",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_5ea790e4",
+      "target": "sk_22ab5041",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_5ea790e4",
+      "target": "sk_43f33f33",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_22ab5041",
+      "target": "sk_43f33f33",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0a86809d",
+      "target": "sk_16396eee",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9118bc19",
+      "target": "sk_fe9793de",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fe9793de",
+      "target": "sk_4e05c7a9",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b81be3f8",
+      "target": "sk_4aef84ba",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b81be3f8",
+      "target": "sk_21822cc6",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b81be3f8",
+      "target": "sk_dc1e529b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4aef84ba",
+      "target": "sk_21822cc6",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4aef84ba",
+      "target": "sk_dc1e529b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_21822cc6",
+      "target": "sk_dc1e529b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b81be3f8",
+      "target": "sk_fd31392c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fd31392c",
+      "target": "sk_6af02b94",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0104ae58",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_803733b6",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0104ae58",
+      "target": "sk_57294ab5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0104ae58",
+      "target": "sk_5fc25157",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0104ae58",
+      "target": "sk_55134866",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0104ae58",
+      "target": "sk_188deed3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_e428bfdd",
+      "target": "sk_9313ed3a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6af02b94",
+      "target": "sk_1793af31",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6af02b94",
+      "target": "sk_0d5b3504",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6af02b94",
+      "target": "sk_d01c4878",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6af02b94",
+      "target": "sk_1c7aefac",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6af02b94",
+      "target": "sk_2e4271d9",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6af02b94",
+      "target": "sk_8ebfa112",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d01c4878",
+      "target": "sk_1c7aefac",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d01c4878",
+      "target": "sk_2e4271d9",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d01c4878",
+      "target": "sk_8ebfa112",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1c7aefac",
+      "target": "sk_2e4271d9",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1c7aefac",
+      "target": "sk_8ebfa112",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_2e4271d9",
+      "target": "sk_8ebfa112",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d01c4878",
+      "target": "sk_e56c11a6",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d01c4878",
+      "target": "sk_8467e706",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_e56c11a6",
+      "target": "sk_8467e706",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_fda58d01",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_380dd9fa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_9313ed3a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fda58d01",
+      "target": "sk_380dd9fa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fda58d01",
+      "target": "sk_9313ed3a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_380dd9fa",
+      "target": "sk_9313ed3a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_dba350aa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_3f2df183",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_7185193b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_335f82e2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_dba350aa",
+      "target": "sk_3f2df183",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_dba350aa",
+      "target": "sk_7185193b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_dba350aa",
+      "target": "sk_335f82e2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_bdcc12c6",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_42acc452",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_4b55ceb4",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_bdcc12c6",
+      "target": "sk_42acc452",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_bdcc12c6",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_42acc452",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_803733b6",
+      "target": "sk_7e94476d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_bdcc12c6",
+      "target": "sk_dba350aa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_bdcc12c6",
+      "target": "sk_83791476",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_3225b499",
+      "target": "sk_a60e7822",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_3225b499",
+      "target": "sk_834feae7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_823ad459",
+      "target": "sk_5d6423c4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_823ad459",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_823ad459",
+      "target": "sk_9ce351eb",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_823ad459",
+      "target": "sk_92c8c788",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_5fc25157",
+      "target": "sk_a60e7822",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_5fc25157",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_a60e7822",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a60e7822",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9fce00a3",
+      "target": "sk_335f82e2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_129948d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_590ec520",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_8cd6ccfd",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_55134866",
+      "target": "sk_834feae7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_129948d2",
+      "target": "sk_834feae7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_590ec520",
+      "target": "sk_834feae7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8cd6ccfd",
+      "target": "sk_834feae7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a60e7822",
+      "target": "sk_129948d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9ce351eb",
+      "target": "sk_8ebfa112",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9ce351eb",
+      "target": "sk_ff9b1299",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9ce351eb",
+      "target": "sk_1f47cd9b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_92c8c788",
+      "target": "sk_8ebfa112",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_92c8c788",
+      "target": "sk_ff9b1299",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_92c8c788",
+      "target": "sk_1f47cd9b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_ff9b1299",
+      "target": "sk_1f47cd9b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fb6f1cee",
+      "target": "sk_03a535e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fb6f1cee",
+      "target": "sk_f37065d8",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_03a535e4",
+      "target": "sk_f37065d8",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_83791476",
+      "target": "sk_a04f6a9d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_83791476",
+      "target": "sk_50996c02",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_83791476",
+      "target": "sk_18232082",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_83791476",
+      "target": "sk_57294ab5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a04f6a9d",
+      "target": "sk_50996c02",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a04f6a9d",
+      "target": "sk_18232082",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a04f6a9d",
+      "target": "sk_57294ab5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_18232082",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_57294ab5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_18232082",
+      "target": "sk_57294ab5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a04f6a9d",
+      "target": "sk_d09302a7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a04f6a9d",
+      "target": "sk_2b5a1ece",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a04f6a9d",
+      "target": "sk_0fd58ca3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_2b5a1ece",
+      "target": "sk_50996c02",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_2b5a1ece",
+      "target": "sk_0fd58ca3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_0fd58ca3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d09302a7",
+      "target": "sk_50996c02",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d09302a7",
+      "target": "sk_03a535e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_a8c2e711",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_9a0d7ff7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_f6d8b886",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_6845cf9a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_50996c02",
+      "target": "sk_24412aa3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a8c2e711",
+      "target": "sk_9a0d7ff7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a8c2e711",
+      "target": "sk_f6d8b886",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a8c2e711",
+      "target": "sk_6845cf9a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a8c2e711",
+      "target": "sk_24412aa3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9a0d7ff7",
+      "target": "sk_f6d8b886",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9a0d7ff7",
+      "target": "sk_6845cf9a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9a0d7ff7",
+      "target": "sk_24412aa3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f6d8b886",
+      "target": "sk_6845cf9a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f6d8b886",
+      "target": "sk_24412aa3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_6845cf9a",
+      "target": "sk_24412aa3",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_30cc0c78",
+      "target": "sk_57294ab5",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0fd58ca3",
+      "target": "sk_c8094cbb",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f6d8b886",
+      "target": "sk_ff9b1299",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_24412aa3",
+      "target": "sk_ff9b1299",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f6c16206",
+      "target": "sk_12676647",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_c8094cbb",
+      "target": "sk_958e5101",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_c8094cbb",
+      "target": "sk_1a2aad49",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1a2aad49",
+      "target": "sk_958e5101",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1a2aad49",
+      "target": "sk_f37065d8",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_18232082",
+      "target": "sk_70b47b4d",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_dc1e529b",
+      "target": "sk_5d6423c4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_e56c11a6",
+      "target": "sk_1793af31",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8467e706",
+      "target": "sk_1793af31",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_42acc452",
+      "target": "sk_92c8c788",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1c7aefac",
+      "target": "sk_98ac7349",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_92c8c788",
+      "target": "sk_98ac7349",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_0d5b3504",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_98ac7349",
+      "target": "sk_9a932b3c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_7e609894",
+      "target": "sk_ddf9ccd8",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_7e609894",
+      "target": "sk_9ec7b14a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_ddf9ccd8",
+      "target": "sk_9ec7b14a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f8082912",
+      "target": "sk_16396eee",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f8082912",
+      "target": "sk_9aeab829",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_f8082912",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_16396eee",
+      "target": "sk_9aeab829",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_16396eee",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9aeab829",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1793af31",
+      "target": "sk_52b292fe",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_1793af31",
+      "target": "sk_b4651a0a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cba1fa01",
+      "target": "sk_12676647",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cba1fa01",
+      "target": "sk_b4651a0a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cba1fa01",
+      "target": "sk_9313ed3a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cba1fa01",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_cba1fa01",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b4651a0a",
+      "target": "sk_12676647",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b4651a0a",
+      "target": "sk_9313ed3a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b4651a0a",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b4651a0a",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_12676647",
+      "target": "sk_9313ed3a",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_12676647",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_12676647",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9313ed3a",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9313ed3a",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_a995ca81",
+      "target": "sk_c65928d2",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_129948d2",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8cd6ccfd",
+      "target": "sk_12676647",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8cd6ccfd",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_12676647",
+      "target": "sk_834feae7",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_834feae7",
+      "target": "sk_a995ca81",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_129948d2",
+      "target": "sk_380dd9fa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_590ec520",
+      "target": "sk_380dd9fa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_8cd6ccfd",
+      "target": "sk_380dd9fa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_834feae7",
+      "target": "sk_380dd9fa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_590ec520",
+      "target": "sk_f713eb71",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_d98808c1",
+      "target": "sk_b33faaee",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_12676647",
+      "target": "sk_380dd9fa",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fd971fa6",
+      "target": "sk_f713eb71",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_fd971fa6",
+      "target": "sk_c3c0bf7c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b33faaee",
+      "target": "sk_d6285385",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b33faaee",
+      "target": "sk_9a932b3c",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b33faaee",
+      "target": "sk_5ea790e4",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b33faaee",
+      "target": "sk_22ab5041",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_b33faaee",
+      "target": "sk_19cf508b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_9a932b3c",
+      "target": "sk_19cf508b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_5ea790e4",
+      "target": "sk_19cf508b",
+      "label": "shares_tag",
+      "strength": 1.0
+    },
+    {
+      "source": "sk_22ab5041",
+      "target": "sk_19cf508b",
+      "label": "shares_tag",
+      "strength": 1.0
+    }
+  ],
+  "analytics": {
+    "db_found": true,
+    "message_count": 19520,
+    "session_count": 3355
+  }
+}

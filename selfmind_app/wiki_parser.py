@@ -129,6 +129,81 @@ def extract_wikilinks(content: str) -> list[str]:
 # Wiki scanning
 # ---------------------------------------------------------------------------
 
+def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
+    """Scan wiki directory and return flat list of pages with full content.
+
+    Designed for the wiki library view — returns pages grouped by type,
+    with title, tags, content preview, and creation/update dates.
+    """
+    root = Path(wiki_path)
+    if not root.is_dir():
+        return []
+
+    pages: list[dict] = []
+
+    # Root-level .md files
+    for md_file in sorted(root.glob("*.md")):
+        if md_file.name in _SKIP_FILES:
+            continue
+        try:
+            content = md_file.read_text(encoding="utf-8")
+        except OSError:
+            continue
+
+        fm = parse_frontmatter(content)
+        wikilinks = extract_wikilinks(content)
+        body = _FRONTMATTER_RE.sub("", content, count=1).strip()
+        preview = body[:300] if body else ""
+
+        pages.append({
+            "name": fm.get("title", "") or md_file.stem,
+            "path": str(md_file.relative_to(root)),
+            "type": fm.get("type", "") or "uncategorized",
+            "tags": fm.get("tags", []),
+            "wikilinks": wikilinks,
+            "content_preview": preview,
+            "created": fm.get("created", ""),
+            "updated": fm.get("updated", ""),
+        })
+
+    # Subdirectories
+    _ALL_DIRS = {"entities", "concepts", "comparisons", "queries", "summaries", "raw"}
+    for subdir_name in sorted(_ALL_DIRS):
+        subdir = root / subdir_name
+        if not subdir.is_dir():
+            continue
+
+        for md_file in sorted(subdir.rglob("*.md")):
+            if md_file.name in _SKIP_FILES:
+                continue
+            try:
+                content = md_file.read_text(encoding="utf-8")
+            except OSError:
+                continue
+
+            fm = parse_frontmatter(content)
+            wikilinks = extract_wikilinks(content)
+            body = _FRONTMATTER_RE.sub("", content, count=1).strip()
+            preview = body[:300] if body else ""
+
+            name = md_file.stem
+
+            pages.append({
+                "name": name,
+                "title": fm["title"] or name,
+                "path": str(md_file.relative_to(root)),
+                "type": fm["type"] or _DIR_TYPE_MAP.get(subdir_name, "page"),
+                "tags": fm["tags"],
+                "sources": fm["sources"],
+                "wikilinks": wikilinks,
+                "content_preview": preview,
+                "created": fm["created"],
+                "updated": fm["updated"],
+            })
+
+    return pages
+
+
 def scan_wiki_pages(wiki_path: str) -> list[dict]:
     """Scan the wiki directory for .md files in recognised subdirectories.
 

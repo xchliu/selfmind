@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/static/css/graph.css">
 <link rel="stylesheet" href="/static/css/health.css">
 <link rel="stylesheet" href="/static/css/sediment.css">
+  <link rel="stylesheet" href="/static/css/wiki.css">
 </head>
 <body>
 
@@ -25,7 +26,7 @@
         <span class="tab-icon">🧠</span>记忆图谱
       </button>
       <button class="view-tab" id="tabWiki" onclick="switchView('wiki')">
-        <span class="tab-icon">📖</span>知识图谱
+        <span class="tab-icon">📖</span>Wiki库
       </button>
       <button class="view-tab" id="tabHealth" onclick="switchView('health')">
         <span class="tab-icon">💊</span>记忆健康
@@ -208,6 +209,29 @@
 <div class="toast" id="toast"></div>
 
 <div id="graph"></div>
+
+<!-- Wiki库面板 -->
+<div id="wikiDashboard" style="display:none;">
+  <div class="wiki-header">
+    <h2>📖 <span>Wiki 知识库</span></h2>
+    <div class="wiki-toolbar">
+      <input type="text" id="wikiSearch" placeholder="搜索 Wiki 页面..." oninput="wikiSearchFilter(this.value)">
+      <button onclick="loadWikiPages()">⟳ 刷新</button>
+    </div>
+  </div>
+  <div class="wiki-stats" id="wikiStats"></div>
+  <div class="wiki-categories" id="wikiCategories"></div>
+  <!-- Wiki 页面详情弹窗 -->
+  <div class="wiki-detail-overlay" id="wikiDetailOverlay" onclick="closeWikiDetail()"></div>
+  <div class="wiki-detail-modal" id="wikiDetailModal" style="display:none;">
+    <div class="wiki-detail-header">
+      <span class="wiki-detail-title" id="wikiDetailTitle"></span>
+      <button class="wiki-detail-close" onclick="closeWikiDetail()">×</button>
+    </div>
+    <div class="wiki-detail-meta" id="wikiDetailMeta"></div>
+    <div class="wiki-detail-body" id="wikiDetailBody"></div>
+  </div>
+</div>
 <div id="healthDashboard">
   <div class="health-header">
     <h2>🧠 <span>记忆健康</span> 仪表盘</h2>
@@ -392,6 +416,7 @@
 
 <script src="/static/js/init.js"></script>
 <script src="/static/js/sediment.js"></script>
+<script src="/static/js/wiki.js"></script>
 
 
 

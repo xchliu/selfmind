@@ -884,8 +884,10 @@ function switchView(view) {
   document.getElementById('settingsDashboard').style.display = view === 'settings' ? 'block' : 'none';
   // U型沉淀面板显隐
   document.getElementById('sedimentDashboard').style.display = view === 'sediment' ? 'block' : 'none';
-  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings' || view === 'sediment') ? 'none' : '';
-  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings' || view === 'sediment') ? 'none' : '');
+  // Wiki库面板显隐
+  document.getElementById('wikiDashboard').style.display = view === 'wiki' ? 'block' : 'none';
+  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings' || view === 'sediment' || view === 'wiki') ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings' || view === 'sediment' || view === 'wiki') ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
@@ -899,8 +901,8 @@ function switchView(view) {
 
   // 切换刷新按钮文字
   const refreshBtn = document.getElementById('btnRefresh');
-  refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新知识' : '刷新记忆'}`;
-  refreshBtn.style.display = (view === 'health' || view === 'settings' || view === 'sediment') ? 'none' : '';
+  refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新Wiki' : '刷新记忆'}`;
+  refreshBtn.style.display = (view === 'health' || view === 'settings' || view === 'sediment' || view === 'wiki') ? 'none' : '';
 
   // 切换记忆管理按钮可见性（仅记忆视图显示）
   const memBtn = document.getElementById('btnMemory');
@@ -933,14 +935,7 @@ function switchView(view) {
   }
 
   if (view === 'wiki') {
-    buildWikiFilterBar();
-    if (wikiGraphData) {
-      wikiCurrentViewData = { ...wikiGraphData };
-      updateStats(wikiCurrentViewData);
-      renderGraph(wikiCurrentViewData);
-    } else {
-      loadWikiData();
-    }
+    loadWikiPages();
   } else {
     buildFilterBar();
     if (graphData) {
