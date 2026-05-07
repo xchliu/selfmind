@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config, get_enabled_profiles
-from selfmind_app.wiki_parser import build_wiki_graph, scan_wiki_pages_flat
+from selfmind_app.wiki_parser import build_wiki_graph, scan_wiki_pages_flat, parse_frontmatter
 
 logger = logging.getLogger(__name__)
 
@@ -165,6 +165,61 @@ class V1Mixin:
             return
 
         self._json_response({"error": "Not found"}, code=404)
+
+    def _save_wiki_page(self, body: bytes) -> dict:
+        """Save edited wiki page content back to the markdown file."""
+        try:
+            data = json.loads(body)
+        except json.JSONDecodeError:
+            return {"error": "Invalid JSON"}
+
+        page_path = data.get("path", "")
+        content = data.get("content", "")
+        title = data.get("title", "")
+        tags = data.get("tags", [])
+
+        if not page_path:
+            return {"error": "Missing path"}
+
+        config = load_config()
+        wiki_path = config.get("wiki", {}).get("path", "")
+        if not wiki_path:
+            return {"error": "Wiki not configured"}
+
+        full_path = Path(wiki_path) / page_path
+        if not full_path.exists():
+            return {"error": f"Page not found: {page_path}"}
+
+        # Read original file to preserve frontmatter
+        original = full_path.read_text(encoding="utf-8")
+        fm = parse_frontmatter(original)
+
+        # Update frontmatter fields
+        if title:
+            fm["title"] = title
+        if tags:
+            fm["tags"] = tags
+        fm["updated"] = datetime.now().strftime("%Y-%m-%d")
+
+        # Rebuild frontmatter block
+        fm_lines = ["---"]
+        fm_lines.append(f"title: \"{fm.get('title', '')}\"")
+        fm_lines.append(f"type: \"{fm.get('type', '')}\"")
+        if fm.get("created"):
+            fm_lines.append(f"created: \"{fm['created']}\"")
+        fm_lines.append(f"updated: \"{fm['updated']}\"")
+        if fm.get("tags"):
+            fm_lines.append(f"tags: [{', '.join(fm['tags'])}]")
+        if fm.get("sources"):
+            fm_lines.append(f"sources: [{', '.join(fm['sources'])}]")
+        fm_lines.append("---")
+
+        # Write back: frontmatter + new body
+        new_file_content = "\n".join(fm_lines) + "\n\n" + content + "\n"
+        full_path.write_text(new_file_content, encoding="utf-8")
+
+        logger.info(f"Wiki page saved: {page_path}")
+        return {"status": "ok", "path": page_path, "updated": fm["updated"]}
 
     def _get_query_param(self, key: str) -> Optional[str]:
         """获取 URL 查询参数"""

@@ -426,6 +426,12 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
 
     def do_PUT(self):
         clean_path = self.path.split("?")[0]
+        if clean_path == "/api/wiki/page":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length) if content_length > 0 else b""
+            self._json_response(self._save_wiki_page(body))
+            return
+
         if clean_path.startswith("/api/memories/"):
             entry_id = clean_path.split("/api/memories/")[1]
             self._handle_memory_update(entry_id)

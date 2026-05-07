@@ -153,7 +153,6 @@ def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
         fm = parse_frontmatter(content)
         wikilinks = extract_wikilinks(content)
         body = _FRONTMATTER_RE.sub("", content, count=1).strip()
-        preview = body[:300] if body else ""
 
         pages.append({
             "name": fm.get("title", "") or md_file.stem,
@@ -161,7 +160,8 @@ def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
             "type": fm.get("type", "") or "uncategorized",
             "tags": fm.get("tags", []),
             "wikilinks": wikilinks,
-            "content_preview": preview,
+            "content_preview": body[:200] if body else "",
+            "content": body,
             "created": fm.get("created", ""),
             "updated": fm.get("updated", ""),
         })
@@ -184,7 +184,6 @@ def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
             fm = parse_frontmatter(content)
             wikilinks = extract_wikilinks(content)
             body = _FRONTMATTER_RE.sub("", content, count=1).strip()
-            preview = body[:300] if body else ""
 
             name = md_file.stem
 
@@ -196,7 +195,8 @@ def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
                 "tags": fm["tags"],
                 "sources": fm["sources"],
                 "wikilinks": wikilinks,
-                "content_preview": preview,
+                "content_preview": body[:200] if body else "",
+                "content": body,
                 "created": fm["created"],
                 "updated": fm["updated"],
             })

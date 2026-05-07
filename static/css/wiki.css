@@ -140,7 +140,7 @@
 /* Page list */
 .wiki-page-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 12px;
 }
 
@@ -171,11 +171,29 @@
 
 .wiki-page-card-preview {
   font-size: 13px;
-  color: #888;
-  line-height: 1.5;
+  color: #666;
+  line-height: 1.6;
   margin-bottom: 10px;
-  max-height: 60px;
+  max-height: 120px;
   overflow: hidden;
+}
+
+/* Markdown inline styles in card preview */
+.wiki-page-card-preview b {
+  color: #2d3436;
+}
+
+.wiki-page-card-preview .wiki-md-h2,
+.wiki-page-card-preview .wiki-md-h3 {
+  font-weight: 600;
+  color: #444;
+  display: block;
+  margin: 4px 0;
+}
+
+.wiki-page-card-preview .wiki-md-link {
+  color: #3498db;
+  font-size: 12px;
 }
 
 .wiki-page-card-footer {
@@ -206,7 +224,8 @@
   white-space: nowrap;
 }
 
-/* Detail modal */
+/* ===== Detail modal ===== */
+
 .wiki-detail-overlay {
   display: none;
   position: fixed;
@@ -220,9 +239,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 640px;
-  max-width: 90vw;
-  max-height: 80vh;
+  width: 700px;
+  max-width: 92vw;
+  max-height: 85vh;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
@@ -242,6 +261,40 @@
   font-size: 18px;
   font-weight: 700;
   color: #2d3436;
+  flex: 1;
+}
+
+.wiki-detail-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.wiki-detail-actions button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wiki-detail-actions button:hover {
+  background: #f5f5f5;
+}
+
+.wiki-detail-actions button.wiki-btn-save {
+  background: #3498db;
+  color: #fff;
+  border-color: #3498db;
+}
+
+.wiki-detail-actions button.wiki-btn-save:hover {
+  background: #2980b9;
 }
 
 .wiki-detail-close {
@@ -288,12 +341,112 @@
   border-radius: 4px;
 }
 
+/* Detail content — rendered markdown */
 .wiki-detail-content {
   font-size: 14px;
   color: #444;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  word-break: break-word;
+  line-height: 1.8;
+}
+
+.wiki-detail-content .wiki-md-h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3436;
+  margin: 16px 0 8px;
+  border-bottom: 1px solid #e8ecef;
+  padding-bottom: 4px;
+}
+
+.wiki-detail-content .wiki-md-h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+  margin: 12px 0 6px;
+}
+
+.wiki-detail-content .wiki-md-h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #444;
+  margin: 10px 0 4px;
+}
+
+.wiki-detail-content strong {
+  color: #2d3436;
+  font-weight: 600;
+}
+
+.wiki-detail-content .wiki-md-link {
+  color: #3498db;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wiki-detail-content .wiki-md-list {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.wiki-detail-content .wiki-md-list li {
+  margin: 4px 0;
+  color: #555;
+}
+
+.wiki-detail-content .wiki-md-hr {
+  border: none;
+  border-top: 1px solid #e8ecef;
+  margin: 16px 0;
+}
+
+/* ===== Edit mode ===== */
+
+.wiki-edit-title-input {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3436;
+  width: 100%;
+  padding: 6px 10px;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  outline: none;
+  background: #f8f9ff;
+}
+
+.wiki-edit-tags-input {
+  padding: 4px 10px;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  background: #f8f9ff;
+  width: 280px;
+}
+
+.wiki-edit-label {
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+}
+
+.wiki-edit-textarea {
+  width: 100%;
+  min-height: 400px;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.8;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  border: 2px solid #3498db;
+  border-radius: 10px;
+  outline: none;
+  resize: vertical;
+  background: #f8f9ff;
+  color: #2d3436;
+  tab-size: 2;
+}
+
+.wiki-edit-textarea:focus {
+  border-color: #2980b9;
+  background: #fff;
 }
 
 /* Empty state */

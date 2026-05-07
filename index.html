@@ -226,7 +226,12 @@
   <div class="wiki-detail-modal" id="wikiDetailModal" style="display:none;">
     <div class="wiki-detail-header">
       <span class="wiki-detail-title" id="wikiDetailTitle"></span>
-      <button class="wiki-detail-close" onclick="closeWikiDetail()">×</button>
+      <div class="wiki-detail-actions">
+        <button id="wikiEditBtn" onclick="enterEditMode()" style="display:none;">✏️ 编辑</button>
+        <button id="wikiSaveBtn" class="wiki-btn-save" onclick="saveWikiPage()" style="display:none;">💾 保存</button>
+        <button id="wikiCancelBtn" onclick="cancelEditMode()" style="display:none;">取消</button>
+        <button class="wiki-detail-close" onclick="closeWikiDetail()">×</button>
+      </div>
     </div>
     <div class="wiki-detail-meta" id="wikiDetailMeta"></div>
     <div class="wiki-detail-body" id="wikiDetailBody"></div>

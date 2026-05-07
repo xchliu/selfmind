@@ -1,8 +1,8 @@
 /**
- * Wiki库视图 — 加载和渲染wiki页面列表
+ * Wiki库视图 — 加载、渲染、编辑wiki页面
  */
 
-// 分类配置：图标、颜色、中文名
+// 分类配置
 const WIKI_TYPE_CONFIG = {
   entity:      { icon: '🏢', color: '#e74c3c', name: '实体' },
   concept:     { icon: '💡', color: '#3498db', name: '概念' },
@@ -15,6 +15,7 @@ const WIKI_TYPE_CONFIG = {
 
 let wikiPagesData = null;
 let wikiSearchText = '';
+let currentEditPage = null;
 
 async function loadWikiPages() {
   try {
@@ -45,25 +46,22 @@ function renderWikiView(data) {
     </div>
   `;
 
-  // 分类卡片
   const container = document.getElementById('wikiCategories');
   container.innerHTML = '';
 
-  // 排序：按分类中页面数量降序
   const sortedCats = Object.entries(data.categories)
     .sort((a, b) => b[1].length - a[1].length);
 
   for (const [catType, pages] of sortedCats) {
     const config = WIKI_TYPE_CONFIG[catType] || { icon: '📄', color: '#78909c', name: catType };
 
-    // 搜索过滤
     let filteredPages = pages;
     if (wikiSearchText) {
       const q = wikiSearchText.toLowerCase();
       filteredPages = pages.filter(p =>
         (p.title || p.name || '').toLowerCase().includes(q) ||
         (p.tags || []).some(t => t.toLowerCase().includes(q)) ||
-        (p.content_preview || '').toLowerCase().includes(q)
+        (p.content || p.content_preview || '').toLowerCase().includes(q)
       );
     }
 
@@ -72,7 +70,6 @@ function renderWikiView(data) {
     const section = document.createElement('div');
     section.className = 'wiki-category-section';
 
-    // 分类头
     const header = document.createElement('div');
     header.className = 'wiki-category-header';
     header.innerHTML = `
@@ -83,7 +80,6 @@ function renderWikiView(data) {
     `;
     section.appendChild(header);
 
-    // 页面卡片列表
     const list = document.createElement('div');
     list.className = 'wiki-page-list';
 
@@ -93,13 +89,18 @@ function renderWikiView(data) {
       card.onclick = () => openWikiDetail(page);
 
       const title = page.title || page.name || 'Untitled';
-      const preview = (page.content_preview || '').substring(0, 120);
+      // Use full content for preview, display up to 300 chars in card
+      const fullContent = page.content || page.content_preview || '';
+      const preview = fullContent.substring(0, 300);
       const tags = (page.tags || []).slice(0, 4);
       const updated = page.updated || page.created || '';
 
+      // Simple markdown-to-HTML for card preview (bold, headers, links)
+      const previewHtml = simpleMarkdown(preview);
+
       card.innerHTML = `
         <div class="wiki-page-card-title">${title}</div>
-        <div class="wiki-page-card-preview">${preview}</div>
+        <div class="wiki-page-card-preview">${previewHtml}</div>
         <div class="wiki-page-card-footer">
           <div class="wiki-page-card-tags">
             ${tags.map(t => `<span class="wiki-tag" style="background:${config.color}22;color:${config.color}">${t}</span>`).join('')}
@@ -114,7 +115,6 @@ function renderWikiView(data) {
     container.appendChild(section);
   }
 
-  // 无结果
   if (wikiSearchText && container.children.length === 0) {
     container.innerHTML = `<div class="wiki-empty">没有找到匹配 "${wikiSearchText}" 的Wiki页面</div>`;
   }
@@ -128,6 +128,7 @@ function wikiSearchFilter(value) {
 }
 
 function openWikiDetail(page) {
+  currentEditPage = page;
   const modal = document.getElementById('wikiDetailModal');
   const overlay = document.getElementById('wikiDetailOverlay');
   const config = WIKI_TYPE_CONFIG[page.type] || { icon: '📄', color: '#78909c', name: page.type };
@@ -141,9 +142,14 @@ function openWikiDetail(page) {
     <span class="wiki-detail-path">${page.path || ''}</span>
   `;
 
-  // 渲染Markdown内容预览
-  const preview = page.content_preview || '（无内容预览）';
-  document.getElementById('wikiDetailBody').innerHTML = `<div class="wiki-detail-content">${escapeHtml(preview)}</div>`;
+  // Render full markdown content
+  const fullContent = page.content || page.content_preview || '（无内容）';
+  document.getElementById('wikiDetailBody').innerHTML = `
+    <div class="wiki-detail-content">${renderMarkdown(fullContent)}</div>
+  `;
+
+  // Show edit button
+  document.getElementById('wikiEditBtn').style.display = 'inline-flex';
 
   modal.style.display = 'block';
   overlay.style.display = 'block';
@@ -152,6 +158,143 @@ function openWikiDetail(page) {
 function closeWikiDetail() {
   document.getElementById('wikiDetailModal').style.display = 'none';
   document.getElementById('wikiDetailOverlay').style.display = 'none';
+}
+
+function enterEditMode() {
+  if (!currentEditPage) return;
+
+  const titleEl = document.getElementById('wikiDetailTitle');
+  const metaEl = document.getElementById('wikiDetailMeta');
+  const bodyEl = document.getElementById('wikiDetailBody');
+  const editBtn = document.getElementById('wikiEditBtn');
+  const saveBtn = document.getElementById('wikiSaveBtn');
+  const cancelBtn = document.getElementById('wikiCancelBtn');
+
+  // Switch to edit mode
+  titleEl.innerHTML = `<input type="text" id="wikiEditTitle" value="${currentEditPage.title || currentEditPage.name || ''}" class="wiki-edit-title-input">`;
+
+  // Editable tags
+  const tagsStr = (currentEditPage.tags || []).join(', ');
+  metaEl.innerHTML = `
+    <span class="wiki-edit-label">标签:</span>
+    <input type="text" id="wikiEditTags" value="${tagsStr}" class="wiki-edit-tags-input" placeholder="用逗号分隔标签">
+    <span class="wiki-detail-path">${currentEditPage.path || ''}</span>
+  `;
+
+  // Editable content textarea
+  const fullContent = currentEditPage.content || currentEditPage.content_preview || '';
+  bodyEl.innerHTML = `
+    <textarea id="wikiEditContent" class="wiki-edit-textarea">${escapeHtml(fullContent)}</textarea>
+  `;
+
+  editBtn.style.display = 'none';
+  saveBtn.style.display = 'inline-flex';
+  cancelBtn.style.display = 'inline-flex';
+}
+
+function cancelEditMode() {
+  // Restore view mode
+  openWikiDetail(currentEditPage);
+}
+
+async function saveWikiPage() {
+  if (!currentEditPage) return;
+
+  const title = document.getElementById('wikiEditTitle').value.trim();
+  const tagsStr = document.getElementById('wikiEditTags').value.trim();
+  const content = document.getElementById('wikiEditContent').value;
+
+  const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(t => t) : [];
+
+  try {
+    const res = await fetch('/api/wiki/page', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        path: currentEditPage.path,
+        title: title,
+        tags: tags,
+        content: content,
+      }),
+    });
+
+    const result = await res.json();
+    if (result.error) {
+      showToast('❌ 保存失败: ' + result.error, 'error');
+      return;
+    }
+
+    showToast('✅ Wiki页面已保存', 'success');
+
+    // Refresh data and reopen
+    await loadWikiPages();
+    // Find updated page in new data
+    const updatedPages = wikiPagesData.pages.filter(p => p.path === currentEditPage.path);
+    if (updatedPages.length > 0) {
+      currentEditPage = updatedPages[0];
+      openWikiDetail(currentEditPage);
+    }
+  } catch (e) {
+    showToast('❌ 保存失败: ' + e.message, 'error');
+  }
+}
+
+// ---- Markdown rendering ----
+
+function simpleMarkdown(text) {
+  // Minimal renderer for card preview
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/## (.+)/g, '<span class="wiki-md-h2">$1</span>')
+    .replace(/### (.+)/g, '<span class="wiki-md-h3">$1</span>')
+    .replace(/\[\[([^\]]+)\]\]/g, '<span class="wiki-md-link">⟶$1</span>')
+    .replace(/\n/g, '<br>');
+}
+
+function renderMarkdown(text) {
+  // Full markdown renderer for detail view
+  let html = escapeHtml(text);
+
+  // Headers (### first to avoid ## matching inside ###)
+  html = html.replace(/^### (.+)$/gm, '<h4 class="wiki-md-h4">$1</h4>');
+  html = html.replace(/^## (.+)$/gm, '<h3 class="wiki-md-h3">$1</h3>');
+  html = html.replace(/^# (.+)$/gm, '<h2 class="wiki-md-h2">$1</h2>');
+
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // Italic
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Wikilinks [[name]]
+  html = html.replace(/\[\[([^\]]+)\]\]/g, '<span class="wiki-md-link">⟶ $1</span>');
+
+  // Lists (- item)
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  // Wrap consecutive <li> in <ul>
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul class="wiki-md-list">${match}</ul>`);
+
+  // Numbered lists (1. item)
+  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+  // Horizontal rule
+  html = html.replace(/^---$/gm, '<hr class="wiki-md-hr">');
+
+  // Paragraphs: double newline → paragraph break
+  html = html.replace(/\n\n+/g, '</p><p>');
+  // Single newline within paragraph
+  html = html.replace(/\n/g, '<br>');
+
+  // Wrap in paragraph
+  html = '<p>' + html + '</p>';
+
+  // Clean up empty paragraphs
+  html = html.replace(/<p><\/p>/g, '');
+  html = html.replace(/<p><br>/g, '<p>');
+  html = html.replace(/<br><\/p>/g, '</p>');
+
+  return html;
 }
 
 function escapeHtml(text) {
