@@ -916,6 +916,9 @@ async function importMemory() {
 
 async function loadHealthData() {
   try {
+    // Auto-sync before loading health data
+    await fetch('/api/meta/sync', {method: 'POST'});
+    
     const [hRes, eRes, oRes] = await Promise.all([
       fetch('/api/meta/health'), fetch('/api/meta/entries?status=active'), fetch('/api/meta/operations?limit=20')
     ]);

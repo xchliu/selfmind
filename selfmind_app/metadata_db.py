@@ -244,7 +244,8 @@ class MetadataDB:
             days = max((now - last).total_seconds() / 86400, 0)
             recency = math.exp(-0.05 * days)
             freq = math.log(1 + r["access_count"]) / math.log(1 + max_ac) if max_ac > 0 else 0
-            decay = r["importance"] * (freq * recency)
+            # Base vitality 0.5 + frequency/recency bonus; new entries start at ~0.25
+            decay = r["importance"] * (0.5 + 0.5 * freq * recency)
             decay = max(0.0, min(1.0, decay))
             self.conn.execute("UPDATE memory_meta SET decay_score=? WHERE id=?", (round(decay, 4), r["id"]))
             updated += 1
@@ -274,7 +275,7 @@ class MetadataDB:
 
         # Low decay (fading candidates)
         row = self.conn.execute(
-            "SELECT COUNT(*) as cnt FROM memory_meta WHERE status='active' AND decay_score < 0.1 AND pinned=0"
+            "SELECT COUNT(*) as cnt FROM memory_meta WHERE status='active' AND decay_score < 0.2 AND pinned=0"
         ).fetchone()
         stats["fading_candidates"] = row["cnt"]
 
