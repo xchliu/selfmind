@@ -37,7 +37,7 @@
 
 | 特性 | 含义 |
 |------|------|
-| 👁️ **可见** | 把 AI 的记忆变成可交互的知识图谱，看清它在"想"什么 |
+| 👁️ **可见** | 把 AI 的记忆变成可交互的知识图谱和 Wiki 库，看清它在"想"什么 |
 | 🚚 **可移植** | 纯文本 Markdown 格式，一个文件夹走天下 |
 | ✏️ **可修改** | 随时手动编辑、导出、备份，你的记忆你做主 |
 | 🔒 **可掌控** | 本地运行，无云端依赖，数据永远在你手里 |
@@ -48,9 +48,9 @@
 
 ## What is SelfMind?
 
-**SelfMind 把 AI 的记忆变成可视化的、可交互的知识图谱。**
+**SelfMind 把 AI 的记忆变成可视化的、可交互的知识图谱和 Wiki 库。**
 
-每条记忆是一个节点，关系是连线，分类是颜色。基于认知心理学的 8 大记忆系统分类，让你看清 AI 大脑的全貌。
+每条记忆是一个节点，关系是连线，分类是颜色。Wiki 库以卡片展示知识，支持详情弹窗、Markdown 渲染和编辑保存。基于认知心理学的 8 大记忆系统分类，让你看清 AI 大脑的全貌。
 
 ## Cognitive Memory System
 
@@ -111,23 +111,27 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 
 **目标**：让人直观"看到"记忆的全貌
 
-|| 模块 | 功能 | 状态 |
-|------|------|------|
-| 记忆图谱 | 节点/边关系可视化 | 🔄 边关系修复中 |
-| 知识图谱 | 结构化知识网络 | 🔄 边为0 |
-| 记忆健康 | 遗忘曲线、衰减预警 | 🔄 未激活 |
-| 时间轴 | 记忆时间线播放 | ✅ 基础完成 |
-| **焦点模式** | 时间线播放自动对焦变化区域 | ✅ 已完成 |
-| 主题切换 | 浅色/深色主题 | 🔄 优化中 |
-| **实时感知** | 源文件变化自动检测与图谱刷新 | ✅ 已完成 |
+|| 模块 | 功能 | 状态 ||
+||------|------|------||
+|| 记忆图谱 | 节点/边关系可视化 | 🔄 边关系修复中 |
+|| Wiki 库 | 卡片展示+详情弹窗+Markdown渲染+编辑保存 | ✅ 已完成 |
+|| 记忆健康 | 遗忘曲线、衰减预警、30条数据、自动sync | ✅ 已激活 |
+|| 记忆沉淀 | U型6层路径+激活路径可视化 | ✅ 已完成 |
+|| 时间轴 | 记忆时间线播放 | ✅ 基础完成 |
+|| **焦点模式** | 时间线播放自动对焦变化区域 | ✅ 已完成 |
+|| 主题切换 | 浅色/深色主题 | 🔄 优化中 |
+|| **实时感知** | 源文件变化自动检测与图谱刷新 | ✅ 已完成 |
 
 **核心特性**：
 - 🧠 **认知记忆体系** — 8 大分类 24 子类，基于认知心理学
 - 🕸️ **力导向图谱** — D3.js 驱动，物理模拟，层级自然聚集
 - 🧬 **IQ 智商系统** — 参考人类标准的 AI 智商评估，6 维度计算
-- 📊 **记忆健康仪表盘** — 活跃率、冗余率、冲突率分析
+- 📖 **Wiki 库** — 卡片展示 + 详情弹窗 + Markdown 渲染 + 编辑保存，替代知识图谱
+- 📊 **记忆健康仪表盘** — 30 条数据、衰减公式修正、启动自动 sync
+- 📉 **记忆沉淀** — U 型 6 层路径 + 激活路径可视化
 - 🔍 **焦点模式** — 时间线播放时自动对焦到新增节点，变化高亮（节点✦标记+绿色脉冲光环，连线荧光绿高亮）
 - 🔄 **实时感知** — 自动检测 MEMORY.md/USER.md 变化并刷新图谱，无需手动操作
+- 🔄 **演变追踪** — 核心字段：产生时间 + 版本 + 更新时间 + 记忆强度
 
 ---
 
@@ -135,13 +139,13 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 
 **目标**：让人能够"管"记忆
 
-| 模块 | 功能 | 状态 |
-|------|------|------|
-| 记忆增删 | 创建、编辑、删除记忆 | ❌ 未实现 |
-| 分类管理 | 自定义分类、标签体系 | 🔄 基础 |
-| 导入导出 | JSON/MD 格式导入导出 | ❌ 未实现 |
-| 批量操作 | 批量编辑、删除、归类 | ❌ 未实现 |
-| 高级搜索 | 语义搜索、多条件过滤 | 🔄 简单 |
+|| 模块 | 功能 | 状态 ||
+||------|------|------||
+|| 记忆增删 | 创建、编辑、删除记忆 | 🔄 基础实现（Wiki 库编辑） ||
+|| 分类管理 | 自定义分类、标签体系 | 🔄 基础 ||
+|| 导入导出 | JSON/MD 格式导入导出 | ❌ 未实现 ||
+|| 批量操作 | 批量编辑、删除、归类 | ❌ 未实现 ||
+|| 高级搜索 | 语义搜索、多条件过滤 | 🔄 简单 |
 
 ---
 
@@ -151,9 +155,9 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 
 | 模块 | 功能 | 状态 |
 |------|------|------|
-| REST API | 记忆读写 API | ❌ 未实现 |
+| REST API | 记忆读写 API | ✅ 已实现（13个端点） |
 | Agent 集成 | 与 Hermes/Openclaw 对接 | 🔄 Hermes 读取 |
-| 多数据源 | 记忆源统一管理 | 🔄 仅 Hermes |
+| 多数据源 | 记忆源统一管理 | 🔄 unified_store + unified_sync 进行中 |
 | 插件系统 | 扩展点设计 | ❌ 未实现 |
 | Webhook | 记忆变更通知 | ❌ 未实现 |
 
@@ -162,6 +166,7 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 ### 🚚 可移植 — 一个文件夹走天下
 
 - 💾 **纯文本格式** — Markdown 文件存储，无专有格式
+- 📦 **SQLite 数据源** — selfmind.db 统一存储，SQLite 成为唯一数据源方向
 - 📤 **随时导出** — 一键导出为 JSON/CSV，迁移无压力
 - 🔌 **多框架兼容** — 抽象接口设计，轻松适配不同 Agent 框架
 
@@ -170,25 +175,28 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 - 🎯 **分类导航** — 顶部 8 大分类标签，底部指示条高亮
 - ⏱️ **时间轴** — 底部全宽时间刻度，按时间回溯记忆
 - 🌗 **明暗主题** — 毛玻璃效果，现代极简设计
+- 📖 **Wiki 库 Tab** — 卡片展示、详情弹窗、Markdown 渲染、编辑保存
 
 ### V2: Agent 睡眠系统 (Beta)
 
 > 从"可视化工具"升级为 Agent 的"睡眠系统"
 
 - 🔄 **巩固引擎 (Consolidator)** — 去重、合并、提炼、冲突检测
-- 📉 **遗忘引擎** — 基于艾宾浩斯曲线的重要性衰减
-- 📊 **记忆健康仪表盘** — 活跃率、冗余率、冲突率分析
+- 📉 **遗忘引擎** — 基于艾宾浩斯曲线的重要性衰减（衰减公式已修正）
+- 📊 **记忆健康仪表盘** — 30 条数据、衰减公式修正、启动自动 sync
 - 🛡️ **人工审查面板** — 可视化干预，确认/拒绝自动操作
 - 💾 **SQLite 元数据库** — 记忆元数据持久化，版本快照
 - 🤖 **LLM 驱动的智能合并** — AI 自动生成合并/压缩建议
+- 🔄 **数据管道统一** — unified_store + unified_sync，SQLite 成为唯一数据源方向
+- 🔄 **演变追踪** — 核心字段：产生时间 + 版本 + 更新时间 + 记忆强度
 
 详细设计见 [ARCHITECTURE_V2.md](ARCHITECTURE_V2.md)。
 
-## Wiki Knowledge Graph
+## Wiki Library
 
-SelfMind 支持双视图切换：**记忆图谱** 和 **知识图谱**。
+SelfMind 支持 Wiki 库 tab：**卡片展示 + 详情弹窗 + Markdown 渲染 + 编辑保存**，替代了原有的知识图谱视图。
 
-知识图谱基于 [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)（Karpathy 提出的持久知识库模式），将 markdown 知识库可视化为交互式图谱。
+Wiki 库基于 [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)（Karpathy 提出的持久知识库模式），将 markdown 知识库以卡片形式展示，支持点击查看详情、Markdown 渲染和在线编辑保存。
 
 ### Wiki 结构
 
@@ -251,13 +259,49 @@ python server.py
 
 Open **http://localhost:3002** in your browser.
 
-### Configuration
+### 项目结构
 
-| Environment Variable | Default | Description |
-|---------------------|---------|-------------|
-| `HERMES_HOME` | `~/.hermes` | Hermes profile home directory |
-| `SELFMIND_SOURCE_MODE` | `auto` | `auto` reads all profiles, `single` reads one |
-| `SELFMIND_PROFILE` | `hermes` | Active profile name |
+```text
+selfmind/
+├── index.html           # 前端 shell（17KB）
+├── server.py            # 后端入口
+├── config.json          # 运行配置
+├── data/
+│   ├── data.json        # 图谱数据缓存
+│   └── selfmind.db      # 统一 SQLite 数据源
+├── docs/                # 文档目录
+├── selfmind_app/        # 后端模块
+├── static/              # 前端 CSS/JS（模块化9个文件）
+├── assets/logo.png
+├── requirements.txt
+├── LICENSE
+```
+
+### API 端点
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/api/stats` | GET | 图谱统计信息 |
+| `/api/poll` | GET | 变化轮询 |
+| `/api/memories` | GET | 全部记忆 |
+| `/api/wiki/pages` | GET | Wiki 页面列表 |
+| `/api/wiki/page` | GET | 单个 Wiki 页面内容 |
+| `/api/wiki/page` | PUT | 保存 Wiki 页面编辑 |
+| `/api/meta/health` | GET | 记忆健康数据 |
+| `/api/meta/entries` | GET | 元数据条目 |
+| `/api/meta/evolution` | GET | 演变追踪数据 |
+| `/api/consolidate` | POST | 触发巩固 |
+| `/api/forget` | POST | 触发遗忘 |
+| `/api/analyze` | POST | 触发分析 |
+| `/api/meta/sync` | POST | 触发元数据同步 |
+
+### 配置
+
+| 环境变量 | 默认值 | 说明 |
+|---------|--------|------|
+| `HERMES_HOME` | `~/.hermes` | Hermes 配置目录 |
+| `SELFMIND_SOURCE_MODE` | `auto` | `auto` 读取全部 profile，`single` 读取一个 |
+| `SELFMIND_PROFILE` | `hermes` | 当前 Profile 名称 |
 
 ### Memory Format
 
@@ -277,12 +321,14 @@ Open **http://localhost:3002** in your browser.
 Memory Files              Backend                    Browser
 ┌──────────────┐   parse  ┌──────────────────┐ JSON  ┌──────────────┐
 │ MEMORY.md    │ ───────→ │ parser.py        │ ────→ │  index.html  │
-│ USER.md      │          │  - 8大分类解析    │       │  D3.js 图谱  │
-│ Skills/*.md  │          │  - 技能层级构建   │       │  IQ 仪表盘   │
-│ Wiki/*.md    │          │  - IQ 算法计算    │       │  双视图切换  │
-└──────────────┘          │  - Wiki 图谱构建  │       └──────────────┘
-                          │ http_handler.py   │
-                          │ wiki_parser.py    │
+│ USER.md      │          │  - 8大分类解析    │       │  (17KB shell)│
+│ Skills/*.md  │          │  - 技能层级构建   │       │  D3.js 图谱  │
+│ Wiki/*.md    │          │  - IQ 算法计算    │       │  IQ 仪表盘   │
+│ selfmind.db  │          │  - Wiki 图谱构建  │       │  Wiki 库 tab │
+└──────────────┘          │  - 记忆健康/沉淀  │       │  记忆健康    │
+                          │ http_handler.py   │       │  记忆沉淀    │
+                          │ wiki_parser.py    │       │  模块化前端  │
+                          │ unified_store.py  │       └──────────────┘
                           │ server.py (entry) │
                           └──────────────────┘
 ```
@@ -291,8 +337,10 @@ Memory Files              Backend                    Browser
 2. **扫描技能** — 遍历 `~/.hermes/skills/` 目录，解析 SKILL.md 的 YAML frontmatter
 3. **构建图谱** — 生成节点和连线，记忆 + 技能四层层级结构
 4. **计算 IQ** — 6 维度加权评估，映射到人类 IQ 标准
-5. **解析 Wiki** — 扫描 Wiki 目录，解析 frontmatter + `[[wikilinks]]`，构建知识图谱
-6. **渲染展示** — D3.js 力导向图，双视图切换，分类着色，交互式探索
+5. **解析 Wiki** — 扫描 Wiki 目录，解析 frontmatter + `[[wikilinks]]`，构建卡片展示
+6. **记忆健康** — 衰减公式计算、30 条健康数据、启动自动 sync
+7. **记忆沉淀** — U 型 6 层路径 + 激活路径可视化
+8. **渲染展示** — D3.js 力导向图，Wiki 库 tab，分类着色，交互式探索
 
 ### Backend Structure
 
@@ -300,15 +348,41 @@ Memory Files              Backend                    Browser
 selfmind_app/
 ├── config.py            # 配置加载、Profile 管理
 ├── parser.py            # 记忆解析 + 技能扫描 + 图谱构建 + IQ 计算
-├── wiki_parser.py      # Wiki 知识库解析 + 知识图谱构建
+├── wiki_parser.py       # Wiki 知识库解析 + 卡片构建
 ├── memory_store.py      # 记忆存储管理（CRUD + 同步）
 ├── document_importer.py # 文档导入 + LLM 记忆提取
-├── http_handler.py     # API 端点、刷新/保存处理
-├── consolidator.py     # V2 巩固引擎（去重/合并/冲突检测）
-├── metadata_db.py      # V2 SQLite 元数据库（记忆状态/快照）
-└── analytics.py        # V2 遗忘引擎（衰减分数计算）
+├── http_handler.py      # API 端点入口（拆为 4 个 mixin）
+│   ├── stats_handler.py     # /api/stats, /api/poll
+│   ├── memories_handler.py  # /api/memories
+│   ├── wiki_handler.py      # /api/wiki/pages, /api/wiki/page
+│   └── meta_handler.py      # /api/meta/health, /api/meta/entries, /api/meta/evolution, /api/meta/sync
+├── consolidator.py      # V2 巩固引擎（去重/合并/冲突检测）
+├── metadata_db.py       # V2 SQLite 元数据库（记忆状态/快照）
+├── analytics.py         # V2 遗忘引擎（衰减分数计算）
+├── unified_store.py     # 统一数据管道（SQLite 为唯一数据源）
+├── unified_sync.py      # 统一同步逻辑（启动自动 sync）
 
 server.py                # 服务入口（默认 3002 端口）
+```
+
+### Frontend Structure
+
+```text
+static/
+├── css/
+│   ├── main.css          # 全局布局与基础样式
+│   ├── graph.css         # 图谱与力导向图样式
+│   ├── wiki.css          # Wiki 库卡片与详情弹窗样式
+│   ├── meta.css          # 记忆健康与沉淀路径样式
+├── js/
+│   ├── app.js            # 主入口、初始化与 Tab 切换
+│   ├── graph.js          # 记忆图谱（D3.js 力导向图）
+│   ├── wiki.js           # Wiki 库（卡片展示 + 详情弹窗 + Markdown 渲染 + 编辑保存）
+│   ├── health.js         # 记忆健康仪表盘
+│   ├── consolidation.js  # 记忆沉淀页（U型6层路径 + 激活路径可视化）
+│   ├── utils.js          # 通用工具函数
+
+index.html               # 前端 shell（17KB，较原版缩减 93.7%）
 ```
 
 ## Interactions
@@ -332,25 +406,32 @@ server.py                # 服务入口（默认 3002 端口）
 
 ### v1.0 可视化深化（当前）
 
-- [x] 记忆/知识双视图切换
+- [x] 记忆图谱力导向可视化
+- [x] Wiki 库 tab（卡片展示+详情弹窗+Markdown渲染+编辑保存）
 - [x] IQ 智商系统
 - [x] 时间轴功能
 - [x] 时间线焦点模式 — 播放时自动对焦变化区域，变化节点/连线高亮
+- [x] 记忆健康模块激活（30条数据、衰减公式修正、启动自动sync）
+- [x] 记忆沉淀页（U型6层路径+激活路径可视化）
+- [x] 前端模块化（index.html 缩减93.7%，拆为9个CSS/JS文件）
+- [x] 后端 http_handler 拆为4个 mixin
+- [x] 数据管道统一（unified_store + unified_sync，SQLite成为唯一数据源方向）
 - [ ] 修复边关系逻辑（当前0条边）
-- [ ] 激活遗忘引擎访问统计
 - [ ] 浅色主题重写
 
 ### v2.0 记忆管理
 
-- [ ] 记忆 CRUD API
+- [x] Wiki 库编辑保存功能
+- [ ] 记忆 CRUD API 完善
 - [ ] 分类/标签管理界面
 - [ ] 导入导出功能（JSON/MD）
 - [ ] 批量选择与操作
 - [ ] 记忆关联推荐
+- [ ] 演变追踪系统（核心字段：产生时间+版本+更新时间+记忆强度）
 
 ### v3.0 服务化输出
 
-- [ ] RESTful API 设计
+- [x] REST API 已实现（13个端点）
 - [ ] OpenAPI 文档
 - [ ] 多数据源适配器（Hermes/Openclaw/Honcho）
 - [ ] 记忆变更事件机制（Webhook）
@@ -359,7 +440,7 @@ server.py                # 服务入口（默认 3002 端口）
 ### 技术债务
 
 - [ ] 边关系逻辑重构
-- [ ] 前端组件化（当前 monolith）
+- [x] 前端组件化（已完成：9个CSS/JS文件，index.html缩减93.7%）
 - [ ] API 文档补全
 - [ ] 单元测试覆盖
 - [ ] 性能优化（大节点图）
@@ -392,9 +473,9 @@ An AI memory visualization system based on cognitive psychology — turning AI's
 
 AI assistants accumulate memories during work — user preferences, project context, behavioral rules, relationships, skill libraries. But these memories are invisible.
 
-**SelfMind makes AI memory visible and interactive as a knowledge graph.**
+**SelfMind makes AI memory visible and interactive as a knowledge graph and Wiki Library.**
 
-Each memory is a node, relationships are links, categories are colors. Based on 8 cognitive memory systems from psychology, giving you a complete picture of the AI's brain.
+Each memory is a node, relationships are links, categories are colors. The Wiki Library presents knowledge as cards with detail popups, Markdown rendering, and edit/save. Based on 8 cognitive memory systems from psychology, giving you a complete picture of the AI's brain.
 
 ## Cognitive Memory System
 
@@ -445,12 +526,15 @@ SelfMind includes an AI IQ assessment system, referenced against human IQ distri
 - 🧬 **IQ System** — Human-referenced AI IQ assessment, 6-dimension calculation
 - 🛠️ **Skill Graph** — 95+ skills in 4-layer hierarchy (root → category → subcategory → skill)
 - 🕸️ **Force-Directed Graph** — D3.js powered, physics simulation, hierarchical clustering
+- 📖 **Wiki Library** — Card display + detail popup + Markdown rendering + edit/save, replacing Knowledge Graph
+- 📊 **Memory Health Dashboard** — 30 health entries, decay formula correction, auto-sync on startup
+- 📉 **Memory Consolidation** — U-shaped 6-layer path + activation path visualization
 - 🔍 **Focus Mode** — Timeline auto-focuses on changed areas, new nodes highlighted with ✦ marker + green pulse, new links in fluorescent green
+- 🔄 **Evolution Tracking** — Core fields: creation time + version + update time + memory strength
 - 🔍 **Search & Filter** — Filter by name, description, or category
 - 🎯 **Category Navigation** — Top nav with 8 category tabs, bottom indicator highlight
 - ⏱️ **Timeline** — Full-width bottom timeline for temporal memory browsing
 - 🎨 **Dark Theme** — Glassmorphism effects, modern minimalist design
-- 📖 **Wiki Knowledge Graph** — LLM Wiki visualization with dual-view toggle (Memory / Knowledge)
 - 💾 **Persistent Cache** — Parse once, load instantly
 
 ## Quick Start
@@ -471,6 +555,42 @@ python server.py
 ```
 
 Open **http://localhost:3002** in your browser.
+
+### Project Structure
+
+```text
+selfmind/
+├── index.html           # Frontend shell (17KB)
+├── server.py            # Backend entry
+├── config.json          # Runtime config
+├── data/
+│   ├── data.json        # Graph data cache
+│   └── selfmind.db      # Unified SQLite data source
+├── docs/                # Documentation
+├── selfmind_app/        # Backend modules
+├── static/              # Frontend CSS/JS (9 modular files)
+├── assets/logo.png
+├── requirements.txt
+├── LICENSE
+```
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/stats` | GET | Graph statistics |
+| `/api/poll` | GET | Poll for changes |
+| `/api/memories` | GET | All memories |
+| `/api/wiki/pages` | GET | Wiki page list |
+| `/api/wiki/page` | GET | Single wiki page content |
+| `/api/wiki/page` | PUT | Save wiki page edits |
+| `/api/meta/health` | GET | Memory health data |
+| `/api/meta/entries` | GET | Metadata entries |
+| `/api/meta/evolution` | GET | Evolution tracking data |
+| `/api/consolidate` | POST | Trigger consolidation |
+| `/api/forget` | POST | Trigger forgetting |
+| `/api/analyze` | POST | Trigger analysis |
+| `/api/meta/sync` | POST | Trigger metadata sync |
 
 ### Configuration
 
@@ -498,12 +618,14 @@ Memory files use `§` as separator with category tags:
 Memory Files              Backend                    Browser
 ┌──────────────┐   parse  ┌──────────────────┐ JSON  ┌──────────────┐
 │ MEMORY.md    │ ───────→ │ parser.py        │ ────→ │  index.html  │
-│ USER.md      │          │  - 8-category    │       │  D3.js graph │
-│ Skills/*.md  │          │  - skill hierarchy│      │  IQ dashboard│
-│ Wiki/*.md    │          │  - IQ algorithm  │       │  dual view   │
-└──────────────┘          │  - wiki graph    │       └──────────────┘
-                          │ http_handler.py   │
-                          │ wiki_parser.py    │
+│ USER.md      │          │  - 8-category    │       │  (17KB shell)│
+│ Skills/*.md  │          │  - skill hierarchy│      │  D3.js graph │
+│ Wiki/*.md    │          │  - IQ algorithm  │       │  IQ dashboard│
+│ selfmind.db  │          │  - wiki cards    │       │  Wiki Library│
+└──────────────┘          │  - health/consol │       │  Memory Health│
+                          │ http_handler.py   │       │  Consolidation│
+                          │ wiki_parser.py    │       │  Modular UI  │
+                          │ unified_store.py  │       └──────────────┘
                           │ server.py (entry) │
                           └──────────────────┘
 ```

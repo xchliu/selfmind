@@ -16,7 +16,7 @@ inspired by cognitive psychology research on human memory types:
 import logging
 import re
 from datetime import datetime
-from hashlib import md5
+from hashlib import md5, sha256
 from pathlib import Path
 
 from selfmind_app.analytics import analyze_memories
@@ -852,5 +852,200 @@ def build_graph(config: dict) -> dict:
             "db_found": analytics.get("db_found", False),
             "message_count": analytics.get("message_count", 0),
             "session_count": analytics.get("session_count", 0),
+        },
+    }
+
+
+# ────────────────────────────────────────────────────────────
+# 6. Graph builder from UnifiedStore (new data pipeline)
+# ────────────────────────────────────────────────────────────
+
+def build_graph_from_store(store, config: dict) -> dict:
+    """Build the hierarchical knowledge graph from the unified SQLite store.
+
+    Replaces build_graph() which called parse_memories() independently.
+    Now reads from the `entries` table — the single source of truth.
+    """
+    nodes: list[dict] = []
+    links: list[dict] = []
+    node_ids: set[str] = set()
+    link_keys: set[str] = set()
+
+    def add_node(node_id, label, category, description="", primary="", secondary="", group="", access_count=0, importance=0.0, entry_type="memory"):
+        if node_id not in node_ids:
+            nodes.append({
+                "id": node_id,
+                "label": label,
+                "category": category,
+                "description": description,
+                "primary": primary,
+                "secondary": secondary,
+                "group": group or category,
+                "access_count": access_count,
+                "importance": importance,
+                "entry_type": entry_type,
+            })
+            node_ids.add(node_id)
+
+    def add_link(source, target, label="", strength=1.0):
+        if source in node_ids and target in node_ids:
+            key = f"{source}->{target}"
+            if key not in link_keys:
+                links.append({"source": source, "target": target, "label": label, "strength": strength})
+                link_keys.add(key)
+
+    # ── Center node ──
+    center_cfg = config.get("center_node", {
+        "id": "self",
+        "label": "Me",
+        "category": "identity",
+        "description": "Center node — the owner of this memory graph",
+    })
+    center_id = center_cfg["id"]
+    add_node(center_id, center_cfg["label"], "center", center_cfg.get("description", ""), group="center")
+
+    # ── Primary category nodes ──
+    primary_node_ids: dict[str, str] = {}
+    for primary_key, primary_info in TAXONOMY.items():
+        p_id = f"p_{primary_key}"
+        primary_node_ids[primary_key] = p_id
+        add_node(p_id, primary_info["display_name"], "primary",
+                 description=f"{primary_info['display_name']} ({primary_key})", primary=primary_key, group=primary_key)
+        add_link(center_id, p_id, "has_memory_type")
+
+    # ── Read entries from store ──
+    all_entries = store.get_all_entries(status="active")
+
+    # Group by type
+    memory_entries = [e for e in all_entries if e["type"] == "memory"]
+    honcho_obs = [e for e in all_entries if e["type"] == "honcho_obs"]
+    honcho_conc = [e for e in all_entries if e["type"] == "honcho_conc"]
+    skill_entries = [e for e in all_entries if e["type"] == "skill"]
+
+    # ── Collect populated secondaries from memory entries ──
+    populated_secondaries: dict[str, set[str]] = {}
+    for entry in memory_entries:
+        pk = entry.get("primary_cat") or "working"
+        sk = entry.get("secondary_cat") or "active"
+        populated_secondaries.setdefault(pk, set()).add(sk)
+
+    # Also add secondaries for honcho observations
+    for entry in honcho_obs + honcho_conc:
+        pk = entry.get("primary_cat") or "semantic"
+        sk = entry.get("secondary_cat") or "domain"
+        populated_secondaries.setdefault(pk, set()).add(sk)
+
+    # ── Secondary category nodes ──
+    secondary_node_ids: dict[str, str] = {}
+    for pk, sk_set in populated_secondaries.items():
+        for sk in sk_set:
+            combo_key = f"{pk}/{sk}"
+            s_id = f"s_{pk}_{sk}"
+            secondary_node_ids[combo_key] = s_id
+            sub_info = TAXONOMY.get(pk, {}).get("subcategories", {}).get(sk, {})
+            display = sub_info.get("display_name", sk)
+            add_node(s_id, display, "secondary", description=f"{display} ({sk})", primary=pk, secondary=sk, group=pk)
+            parent = primary_node_ids.get(pk, center_id)
+            add_link(parent, s_id, "contains")
+
+    # ── Memory entry nodes ──
+    for entry in memory_entries:
+        pk = entry.get("primary_cat") or "working"
+        sk = entry.get("secondary_cat") or "active"
+        combo_key = f"{pk}/{sk}"
+        parent_id = secondary_node_ids.get(combo_key, primary_node_ids.get(pk, center_id))
+        nid = entry["id"]
+
+        add_node(nid, entry.get("label", entry["content_preview"][:20]), "memory",
+                 description=entry.get("content_preview", ""),
+                 primary=pk, secondary=sk, group=pk,
+                 access_count=entry.get("access_count", 0),
+                 importance=entry.get("importance", 0.5),
+                 entry_type="memory")
+        add_link(parent_id, nid, "contains")
+
+    # ── Honcho observation nodes ──
+    for entry in honcho_obs + honcho_conc:
+        pk = entry.get("primary_cat") or "semantic"
+        sk = entry.get("secondary_cat") or "domain"
+        combo_key = f"{pk}/{sk}"
+        parent_id = secondary_node_ids.get(combo_key, primary_node_ids.get(pk, center_id))
+        nid = entry["id"]
+
+        honcho_type = "honcho_obs" if entry["type"] == "honcho_obs" else "honcho_conc"
+        level = entry.get("honcho_level", "")
+        label_prefix = {"inductive": "💭", "deductive": "💡", "contradiction": "⚡", "conclusion": "📝", "explicit": "👁️"}
+
+        display_label = (label_prefix.get(level, "") + " " + entry.get("label", ""))[:25]
+
+        add_node(nid, display_label, honcho_type,
+                 description=entry.get("content_preview", ""),
+                 primary=pk, secondary=sk, group=pk,
+                 importance=entry.get("importance", 0.5),
+                 entry_type=entry["type"])
+        add_link(parent_id, nid, "contains")
+
+        # Add Honcho peer links: observer → observed
+        observer = entry.get("observer", "")
+        observed = entry.get("observed", "")
+        if observer and observed:
+            obs_node_id = f"peer_{observer}"
+            obd_node_id = f"peer_{observed}"
+            if obs_node_id not in node_ids:
+                add_node(obs_node_id, observer, "peer", description=f"Peer: {observer}", group="social")
+                add_link(center_id, obs_node_id, "observes")
+            if obd_node_id not in node_ids:
+                add_node(obd_node_id, observed, "peer", description=f"Peer: {observed}", group="social")
+                add_link(center_id, obd_node_id, "observed_by")
+            add_link(obs_node_id, nid, "produced")
+
+    # ── Skill nodes ──
+    for entry in skill_entries:
+        cat_dir = entry.get("secondary_cat") or "tools"
+        skill_name = entry.get("label", "skill")
+        proc_sub = _map_skill_to_procedural(cat_dir)
+        combo_key = f"procedural/{proc_sub}"
+        proc_secondary_nid = secondary_node_ids.get(combo_key, primary_node_ids.get("procedural", center_id))
+
+        # Skill category node
+        sc_id = f"sc_{sha256(cat_dir.encode()).hexdigest()[:8]}"
+        if sc_id not in node_ids:
+            add_node(sc_id, cat_dir, "skill_category", description=f"技能分类: {cat_dir}",
+                     primary="procedural", secondary=proc_sub, group="procedural")
+            add_link(proc_secondary_nid, sc_id, "contains")
+
+        # Skill leaf node
+        sk_id = f"sk_{sha256(skill_name.encode()).hexdigest()[:8]}"
+        add_node(sk_id, skill_name, "skill", description=entry.get("content_preview", ""),
+                 primary="procedural", secondary=proc_sub, group="procedural")
+        add_link(sc_id, sk_id, "contains")
+
+    # ── Cross-references (mentions) between memory nodes ──
+    for entry in memory_entries:
+        nid = entry["id"]
+        content = entry.get("content", "")
+        for other in memory_entries:
+            other_id = other["id"]
+            if other_id == nid:
+                continue
+            other_label = other.get("label", "")
+            if len(other_label) >= 2 and other_label in content:
+                add_link(nid, other_id, "mentions")
+
+    # ── Build result ──
+    by_type = {}
+    for e in all_entries:
+        by_type[e["type"]] = by_type.get(e["type"], 0) + 1
+
+    return {
+        "lastUpdated": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        "source": "unified_store",
+        "sources": ["memory_files", "wiki", "honcho_api", "skills"],
+        "nodes": nodes,
+        "links": links,
+        "analytics": {
+            "db_found": True,
+            "total_entries": len(all_entries),
+            "by_type": by_type,
         },
     }

@@ -916,9 +916,6 @@ async function importMemory() {
 
 async function loadHealthData() {
   try {
-    // Auto-sync before loading health data
-    await fetch('/api/meta/sync', {method: 'POST'});
-    
     const [hRes, eRes, oRes] = await Promise.all([
       fetch('/api/meta/health'), fetch('/api/meta/entries?status=active'), fetch('/api/meta/operations?limit=20')
     ]);
@@ -934,15 +931,16 @@ async function loadHealthData() {
 }
 
 function renderHealthCards(h) {
-  const active = h.by_status?.active || 0;
+  const active = h.total_active || 0;
+  const inactive = h.total_inactive || 0;
   const avgDecay = typeof h.avg_decay === 'number' ? (h.avg_decay * 100).toFixed(1) : '0.0';
   const cards = [
-    { icon:'📦', value:h.total||0, label:'总条目', cls:'card-total' },
-    { icon:'✅', value:active, label:'活跃条目', cls:'card-active' },
+    { icon:'📦', value:active, label:'活跃条目', cls:'card-active' },
+    { icon:'⏸️', value:inactive, label:'历史条目', cls:'card-inactive' },
     { icon:'📉', value:avgDecay+'%', label:'平均衰减', cls:'card-decay' },
     { icon:'📌', value:h.pinned||0, label:'已固定', cls:'card-pinned' },
     { icon:'⚠️', value:h.fading_candidates||0, label:'衰减预警', cls:'card-fading' },
-    { icon:'🔁', value:h.potential_duplicates||0, label:'疑似重复', cls:'card-dup' },
+    { icon:'🔄', value:h.version_changes||0, label:'版本变化', cls:'card-version' },
     { icon:'💾', value:h.snapshots||0, label:'快照数', cls:'card-snap' }
   ];
   document.getElementById('healthCards').innerHTML = cards.map(c =>
@@ -951,7 +949,7 @@ function renderHealthCards(h) {
 }
 
 function populateCategoryFilter() {
-  const cats = [...new Set(healthEntries.map(e => e.category).filter(Boolean))].sort();
+  const cats = [...new Set(healthEntries.map(e => e.primary_cat).filter(Boolean))].sort();
   const sel = document.getElementById('healthCatFilter');
   sel.innerHTML = '<option value="">全部分类</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
 }
@@ -961,12 +959,13 @@ function healthFilter() {
   const cat = document.getElementById('healthCatFilter')?.value || '';
   const status = document.getElementById('healthStatusFilter')?.value || '';
   healthFilteredEntries = healthEntries.filter(e => {
-    if (q && !(e.content_preview||'').toLowerCase().includes(q) && !(e.category||'').toLowerCase().includes(q) && !(e.subcategory||'').toLowerCase().includes(q)) return false;
-    if (cat && e.category !== cat) return false;
+    if (q && !(e.content_preview||'').toLowerCase().includes(q) && !(e.primary_cat||'').toLowerCase().includes(q) && !(e.secondary_cat||'').toLowerCase().includes(q)) return false;
+    if (cat && e.primary_cat !== cat) return false;
     if (status === 'healthy' && e.decay_score <= 0.5) return false;
     if (status === 'fading' && (e.decay_score <= 0.2 || e.decay_score > 0.5)) return false;
     if (status === 'danger' && e.decay_score > 0.2) return false;
     if (status === 'pinned' && !e.pinned) return false;
+    if (status === 'inactive' && e.status !== 'inactive') return false;
     return true;
   });
   renderHealthTable();
@@ -981,8 +980,8 @@ function renderHealthTable() {
     return healthSortAsc ? v : -v;
   });
   const cols = [
-    ['content_preview','内容预览'],['category','分类'],['importance','重要度'],
-    ['decay_score','衰减分'],['access_count','访问次数'],['pinned','固定'],['created_at','创建时间']
+    ['content_preview','内容预览'],['primary_cat','分类'],['importance','重要度'],
+    ['decay_score','衰减分'],['access_count','访问次数'],['version','版本'],['pinned','固定'],['created_at','创建时间']
   ];
   document.getElementById('healthTHead').innerHTML = '<tr>' + cols.map(c =>
     `<th class="${healthSortKey===c[0]?'sorted':''}" onclick="healthSort('${c[0]}')">${c[1]} ${healthSortKey===c[0]?(healthSortAsc?'↑':'↓'):''}</th>`
@@ -994,17 +993,19 @@ function renderHealthTable() {
     const ds = e.decay_score || 0;
     const dcClass = ds > 0.5 ? 'green' : ds > 0.2 ? 'yellow' : 'red';
     const preview = (e.content_preview||'').slice(0,50) + ((e.content_preview||'').length>50?'…':'');
-    const catLabel = [e.category, e.subcategory].filter(Boolean).join('/');
+    const catLabel = [e.primary_cat, e.secondary_cat].filter(Boolean).join('/');
+    const statusBadge = e.status === 'inactive' ? '<span class="status-badge inactive">历史</span>' : '';
     return `<tr>
-      <td><div class="preview-text" title="${(e.content_preview||'').replace(/"/g,'&quot;')}">${preview}</div></td>
+      <td><div class="preview-text" title="${(e.content_preview||'').replace(/"/g,'&quot;')}">${preview} ${statusBadge}</div></td>
       <td><span class="cat-tag">${catLabel||'未分类'}</span></td>
       <td><div class="imp-bar"><div class="imp-bar-inner" style="width:${(e.importance||0)*100}%"></div></div></td>
       <td><div class="decay-bar-wrap"><div class="decay-bar"><div class="decay-bar-inner decay-${dcClass}" style="width:${Math.max(ds*100,5)}%"></div></div><span class="decay-pct ${dcClass}">${(ds*100).toFixed(0)}%</span></div></td>
       <td style="text-align:center">${e.access_count||0}</td>
+      <td style="text-align:center;font-size:12px;color:#666">v${e.version||1}</td>
       <td><button class="pin-btn ${e.pinned?'pinned':''}" onclick="healthPin('${e.id}')">${e.pinned?'📌':'○'}</button></td>
       <td style="font-size:11px;color:#999">${(e.created_at||'').slice(0,10)}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="7" style="text-align:center;color:#ccc;padding:30px">暂无数据</td></tr>';
+  }).join('') || '<tr><td colspan="8" style="text-align:center;color:#ccc;padding:30px">暂无数据</td></tr>';
 }
 
 function healthSort(key) {

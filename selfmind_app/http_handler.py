@@ -5,6 +5,9 @@ Handler methods are split into 4 mixins imported from selfmind_app/handlers/:
   - MutationsMixin → documents, memories, meta, agents, import
   - EnginesMixin → consolidator, forgetter, analyzer
   - V1Mixin      → wiki data, v1 API (changes, status, memories, sync)
+
+Evolution-aware: all metadata operations use UnifiedStore (no legacy meta_db).
+Entries use status 'inactive' (not 'deleted') to preserve history.
 """
 
 import json
@@ -19,7 +22,6 @@ from typing import Optional
 from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config, get_enabled_profiles
 from selfmind_app.document_importer import DocumentImporter
 from selfmind_app.memory_store import MemoryStore
-from selfmind_app.metadata_db import MetadataDB
 from selfmind_app.consolidator import Consolidator
 from selfmind_app.forgetter import ForgetterEngine
 from selfmind_app.analyzer import AnalyzerEngine
@@ -50,12 +52,17 @@ def _get_aggregation_engine():
 
 
 # Shared instances (created lazily)
+# NOTE: _store is MemoryStore (legacy file-based), SelfMindHandler._store is UnifiedStore
 _importer = DocumentImporter()
-_store = MemoryStore()
-_meta_db = MetadataDB(str(SELFMIND_DIR / "data" / "selfmind.db"))
+_legacy_store = MemoryStore()  # legacy file-based store (still used by some handlers)
 _consolidator = None
 _forgetter = None
 _analyzer = None
+
+
+def _get_store():
+    """Get UnifiedStore from handler class attribute (set by server.py)."""
+    return getattr(SelfMindHandler, '_store', None)
 
 
 def _node_signature(node: dict) -> str:
@@ -107,69 +114,37 @@ def _apply_node_timestamps(new_data: dict, previous_data: Optional[dict]) -> dic
 
 
 def _merge_metadata(data: dict) -> dict:
-    """Merge metadata (decay_score, status, pinned) into nodes."""
-    # Get all metadata entries
-    meta_entries = _meta_db.get_all_entries()
+    """Merge metadata from UnifiedStore (decay_score, status, pinned) into graph nodes."""
+    store = _get_store()
+    if not store:
+        return data
+
+    # Get active memory entries from unified store
+    store_entries = store.get_entries_by_type("memory", status="active")
     
     # Build lookup by content preview (first 80 chars, normalize ** markers)
     meta_lookup = {}
-    for entry in meta_entries:
+    for entry in store_entries:
         preview = entry.get('content_preview', '')[:80]
         if preview:
-            # Normalize ** markers that parser removes
             normalized = preview.replace('**', '')
             meta_lookup[normalized] = entry
-    
-    # Build secondary lookup by category/subcategory for primary entries
-    # metadata category='primary' + subcategory='social' -> node primary='social'
-    meta_by_cat = {}
-    for entry in meta_entries:
-        if entry.get('category') == 'primary' and entry.get('subcategory'):
-            key = f"primary:{entry['subcategory']}"
-            meta_by_cat[key] = entry
-        elif entry.get('category') == 'secondary' and entry.get('subcategory'):
-            key = f"secondary:{entry['subcategory']}"
-            meta_by_cat[key] = entry
     
     # Merge into nodes
     merged_count = 0
     for node in data.get('nodes', []):
-        node_cat = node.get('category')
-        
-        if node_cat == 'memory':
-            # Try exact match first
+        if node.get('category') == 'memory':
             desc = node.get('description', '')[:80].replace('**', '')
             if desc in meta_lookup:
                 meta = meta_lookup[desc]
-                node['decay_score'] = meta.get('decay_score', 1.0)
+                node['decay_score'] = meta.get('decay_score', 0.25)
                 node['status'] = meta.get('status', 'active')
                 node['pinned'] = bool(meta.get('pinned', 0))
+                node['version'] = meta.get('version', 1)
                 merged_count += 1
-                continue
-            
-            # Fallback: match by primary/secondary
-            primary = node.get('primary', '')
-            secondary = node.get('secondary', '')
-            if primary:
-                key = f"primary:{primary}"
-                if key in meta_by_cat:
-                    meta = meta_by_cat[key]
-                    node['decay_score'] = meta.get('decay_score', 1.0)
-                    node['status'] = meta.get('status', 'active')
-                    node['pinned'] = bool(meta.get('pinned', 0))
-                    merged_count += 1
-                    continue
-            if secondary:
-                key = f"secondary:{secondary}"
-                if key in meta_by_cat:
-                    meta = meta_by_cat[key]
-                    node['decay_score'] = meta.get('decay_score', 1.0)
-                    node['status'] = meta.get('status', 'active')
-                    node['pinned'] = bool(meta.get('pinned', 0))
-                    merged_count += 1
     
     if merged_count > 0:
-        logger.info(f"✅ Merged metadata for {merged_count} nodes")
+        logger.info(f"✅ Merged store metadata for {merged_count} nodes")
     return data
 
 
@@ -219,29 +194,76 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
         elif clean_path == "/api/memories":
             self._handle_memories_list()
         elif clean_path.startswith("/api/memories/stats"):
-            self._json_response(_store.get_stats())
+            store = _get_store()
+            if store:
+                self._json_response(store.get_stats())
+            else:
+                self._json_response(_legacy_store.get_stats())
         elif clean_path.startswith("/api/memories/"):
             entry_id = clean_path.split("/api/memories/")[1]
-            entry = _store.get_entry(entry_id)
+            entry = _legacy_store.get_entry(entry_id)
             if entry:
                 self._json_response(entry)
             else:
                 self._json_response({"error": "Not found"}, code=404)
         elif clean_path == "/api/meta/entries":
-            self._handle_meta_entries()
+            store = _get_store()
+            if store:
+                entries = store.get_all_entries(status="active")
+                self._json_response(entries)
+            else:
+                self._json_response([])
         elif clean_path.startswith("/api/meta/entries/"):
             entry_id = clean_path.split("/api/meta/entries/")[1]
-            entry = _meta_db.get_entry(entry_id)
-            if entry:
-                self._json_response(entry)
+            store = _get_store()
+            if store:
+                entry = store.get_entry(entry_id)
+                if entry:
+                    self._json_response(entry)
+                else:
+                    self._json_response({"error": "Not found"}, code=404)
             else:
-                self._json_response({"error": "Not found"}, code=404)
+                self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/meta/health":
-            self._json_response(_meta_db.get_health_stats())
+            store = _get_store()
+            if store:
+                self._json_response(store.get_stats())
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/meta/snapshots":
-            self._json_response(_meta_db.get_snapshots())
+            store = _get_store()
+            if store:
+                self._json_response(store.get_snapshots())
+            else:
+                self._json_response([])
         elif clean_path == "/api/meta/operations":
-            self._json_response(_meta_db.get_operations_log())
+            store = _get_store()
+            if store:
+                self._json_response(store.get_operations_log())
+            else:
+                self._json_response([])
+        elif clean_path == "/api/meta/evolution":
+            # New endpoint: get evolution summary for an entry
+            store = _get_store()
+            if store:
+                entry_id = self.path.split("?entry=")[1] if "entry=" in self.path else ""
+                if entry_id:
+                    summary = store.get_evolution_summary(entry_id)
+                    if summary:
+                        self._json_response(summary)
+                    else:
+                        self._json_response({"error": "Entry not found"}, code=404)
+                else:
+                    # Return overall evolution stats
+                    stats = store.get_stats()
+                    self._json_response({
+                        "total_active": stats.get("total_active", 0),
+                        "total_inactive": stats.get("total_inactive", 0),
+                        "version_changes": stats.get("version_changes", 0),
+                        "snapshots": stats.get("snapshots", 0),
+                    })
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/consolidate/scan":
             self._handle_consolidate_scan()
         elif clean_path == "/api/consolidate/duplicates":
@@ -373,32 +395,48 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             return
 
         if clean_path == "/api/meta/decay":
-            count = _meta_db.compute_decay_scores()
-            self._json_response({"status": "ok", "updated": count})
+            store = _get_store()
+            if store:
+                count = store.compute_decay_scores()
+                self._json_response({"status": "ok", "updated": count})
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
             return
 
         if clean_path.startswith("/api/meta/entries/") and clean_path.endswith("/pin"):
             entry_id = clean_path.split("/api/meta/entries/")[1].replace("/pin", "")
-            _meta_db.pin_entry(entry_id)
-            self._json_response({"status": "ok", "pinned": True})
+            store = _get_store()
+            if store:
+                store.pin_entry(entry_id)
+                self._json_response({"status": "ok", "pinned": True})
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
             return
 
         if clean_path.startswith("/api/meta/entries/") and clean_path.endswith("/unpin"):
             entry_id = clean_path.split("/api/meta/entries/")[1].replace("/unpin", "")
-            _meta_db.unpin_entry(entry_id)
-            self._json_response({"status": "ok", "pinned": False})
+            store = _get_store()
+            if store:
+                store.unpin_entry(entry_id)
+                self._json_response({"status": "ok", "pinned": False})
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
             return
 
         if clean_path.startswith("/api/meta/snapshots/") and clean_path.endswith("/restore"):
             sid = clean_path.split("/api/meta/snapshots/")[1].replace("/restore", "")
-            try:
-                snap = _meta_db.restore_snapshot(int(sid))
-            except (ValueError, TypeError):
-                snap = None
-            if snap:
-                self._json_response(snap)
+            store = _get_store()
+            if store:
+                try:
+                    snap = store.restore_snapshot(int(sid))
+                except (ValueError, TypeError):
+                    snap = None
+                if snap:
+                    self._json_response(snap)
+                else:
+                    self._json_response({"error": "Snapshot not found"}, code=404)
             else:
-                self._json_response({"error": "Snapshot not found"}, code=404)
+                self._json_response({"error": "Store not available"}, code=503)
             return
 
         if clean_path == "/api/consolidate/llm":
@@ -453,7 +491,7 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
         clean_path = self.path.split("?")[0]
         if clean_path.startswith("/api/memories/"):
             entry_id = clean_path.split("/api/memories/")[1]
-            if _store.delete_entry(entry_id):
+            if _legacy_store.delete_entry(entry_id):
                 self._json_response({"status": "ok", "message": "Entry deleted"})
             else:
                 self._json_response({"error": "Not found"}, code=404)

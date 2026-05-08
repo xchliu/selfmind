@@ -339,34 +339,16 @@ class MutationsMixin:
         self._json_response(_meta_db.get_all_entries(status=status))
 
     def _handle_meta_sync(self):
-        from selfmind_app.http_handler import _meta_db
-        config = load_config()
-        source_cfg = config.get("source", {})
-        active = source_cfg.get("active_profile", "hermes")
-        profile = source_cfg.get("profiles", {}).get(active, {})
-        home = profile.get("home", "")
-        files = profile.get("memory_files", [])
-        memory_path = user_path = None
-        for f in files:
-            full = os.path.join(home, f)
-            if os.path.exists(full):
-                if "MEMORY" in f.upper() or "memory" in f:
-                    memory_path = full
-                elif "USER" in f.upper() or "user" in f:
-                    user_path = full
-        if not memory_path:
-            # Try fallback
-            for f in profile.get("memory_files_fallback", []):
-                full = os.path.join(home, f)
-                if os.path.exists(full):
-                    if "memory" in f.lower():
-                        memory_path = full
-                    elif "user" in f.lower():
-                        user_path = full
-        if not memory_path:
-            self._json_response({"error": "No memory file found"}, code=404)
+        """Sync all data sources into unified store."""
+        from selfmind_app.unified_sync import unified_sync
+        store = getattr(SelfMindHandler, '_store', None)
+        if not store:
+            self._json_response({"error": "Unified store not initialized"}, code=500)
             return
-        result = _meta_db.sync_from_memory_files(memory_path, user_path)
+        config = load_config()
+        result = unified_sync(store, config)
+        # Invalidate cached graph data so next request rebuilds from fresh store
+        SelfMindHandler._graph_data = None
         self._json_response({"status": "ok", **result})
 
     def _handle_meta_create_snapshot(self):

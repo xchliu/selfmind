@@ -194,18 +194,25 @@ class StatsMixin:
         })
 
     def _load_data(self):
+        """Load graph data from unified store (class attribute set by server.py)."""
+        store = getattr(self.__class__, '_store', None)
+        if store:
+            # Check if cached graph data exists
+            cached = getattr(self.__class__, '_graph_data', None)
+            if cached:
+                return cached
+            # Build graph from store
+            from selfmind_app.parser import build_graph_from_store
+            from selfmind_app.config import load_config
+            config = load_config()
+            data = build_graph_from_store(store, config)
+            self.__class__._graph_data = data
+            return data
+        # Fallback: load from data.json
         if DATA_FILE.exists():
             with open(DATA_FILE, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            # Backfill timestamps for old data files that predate createdAt/updatedAt.
-            from selfmind_app.http_handler import _apply_node_timestamps
-            if any("createdAt" not in node or "updatedAt" not in node for node in data.get("nodes", [])):
-                data = _apply_node_timestamps(data, None)
-                with open(DATA_FILE, "w", encoding="utf-8") as f:
-                    json.dump(data, f, ensure_ascii=False, indent=2)
-            return data
-        from selfmind_app.http_handler import refresh_data
-        return refresh_data()
+                return json.load(f)
+        return {"nodes": [], "links": []}
 
     def _scan_skills(self, include_content: bool = False) -> dict:
         """Scan ~/.hermes/skills for SKILL.md files and return skill stats.

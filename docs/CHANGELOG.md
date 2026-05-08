@@ -1,3 +1,31 @@
+## [2.5.0] — 2026-05-08
+
+### Added
+- 📁 **项目文件整理** — index.html 215KB拆为9个静态文件(CSS 4个+JS 6个)，缩减93.7%
+- 🏗️ **http_handler.py模块化拆分** — 1782行拆为4个mixin模块(StatsMixin/MutationsMixin/EnginesMixin/V1Mixin)，缩减73.4%
+- 📚 **Wiki库页面** — 知识图谱tab改为Wiki库，卡片展示+详情弹窗+markdown渲染+编辑保存
+- 📝 **PUT /api/wiki/page API** — 支持wiki页面编辑保存
+- 📂 **wiki_parser.py新增projects扫描** — 支持6种分类(entities/concepts/comparisons/queries/projects/summaries)
+- 🧠 **记忆健康模块修复** — 启动时自动sync + decay公式修正(新条目不再全是0分) + 前端自动触发sync
+- 🔄 **unified_store.py** — SQLite统一数据模型(entries+entry_history+operations_log+snapshots)
+- 🔄 **unified_sync.py** — 统一采集入口，从memory/user/skill文件sync到SQLite
+- 📐 **演变追踪设计** — 核心字段(产生时间+版本+更新时间+记忆强度)，数据源无产生时间则用采集时间
+
+### Changed
+- 标签名'知识图谱'→'Wiki库'
+- `server.py` — 启动时自动sync meta_db
+- 根目录清理 — 删除12个垃圾文件(bak/碎片html/空json/pycache等)，ROADMAP.md移入docs/
+- data.json移入data/子目录
+
+### Fixed
+- 修复wiki_parser缺少projects目录扫描
+- 修复marketization-kpi-2026.md行号格式污染
+- 修复agi-pathfinder-party-brand.md frontmatter type错误
+- 修复metadata_db decay公式(freq=0导致所有新条目decay=0)
+- 修复记忆健康页面数据为空(db重建后未sync)
+
+---
+
 ## [2.4.0] — 2026-05-06
 
 ### Added
