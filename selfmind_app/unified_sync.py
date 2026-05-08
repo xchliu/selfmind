@@ -91,12 +91,19 @@ def parse_memory_file(filepath: str, source_name: str, profile: str) -> list[dic
         if not text or len(text) < 5:
             continue
 
-        # Extract [primary/secondary] tag
+        # Extract [category/subcategory] tag — skip literal 'primary' prefix
         primary_cat = secondary_cat = None
         m = TAG_RE.search(text)
         if m:
-            primary_cat = m.group(1)
-            secondary_cat = m.group(2)
+            parts = [g for g in m.groups() if g]
+            if parts[0] == 'primary' and len(parts) > 1:
+                # [primary/autobiographical/principles] → autobiographical + principles
+                primary_cat = parts[1]
+                secondary_cat = parts[2] if len(parts) > 2 else None
+            else:
+                # [autobiographical/identity] → autobiographical + identity
+                primary_cat = parts[0]
+                secondary_cat = parts[1] if len(parts) > 1 else None
 
         # If no explicit tag, classify via keywords
         if not primary_cat:

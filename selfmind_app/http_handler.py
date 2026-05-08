@@ -20,14 +20,9 @@ from pathlib import Path
 from typing import Optional
 
 from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_config, get_enabled_profiles
-from selfmind_app.document_importer import DocumentImporter
-from selfmind_app.memory_store import MemoryStore
 from selfmind_app.consolidator import Consolidator
 from selfmind_app.forgetter import ForgetterEngine
 from selfmind_app.analyzer import AnalyzerEngine
-from selfmind_app.parser import build_graph
-from selfmind_app.wiki_parser import build_wiki_graph
-from selfmind_app.providers import FileAdapter, SkillsProvider, AggregationEngine
 
 from selfmind_app.handlers.stats_mixin import StatsMixin
 from selfmind_app.handlers.mutations_mixin import MutationsMixin
@@ -36,25 +31,8 @@ from selfmind_app.handlers.v1_mixin import V1Mixin
 
 logger = logging.getLogger(__name__)
 
-# 全局聚合引擎实例
-_aggregation_engine = None
-
-
-def _get_aggregation_engine():
-    """获取或创建聚合引擎"""
-    global _aggregation_engine
-    if _aggregation_engine is None:
-        config = load_config()
-        file_adapter = FileAdapter(config)
-        skills_provider = SkillsProvider(config)
-        _aggregation_engine = AggregationEngine([file_adapter, skills_provider])
-    return _aggregation_engine
-
 
 # Shared instances (created lazily)
-# NOTE: _store is MemoryStore (legacy file-based), SelfMindHandler._store is UnifiedStore
-_importer = DocumentImporter()
-_legacy_store = MemoryStore()  # legacy file-based store (still used by some handlers)
 _consolidator = None
 _forgetter = None
 _analyzer = None
@@ -73,44 +51,6 @@ def _node_signature(node: dict) -> str:
             node.get("description", ""),
         ]
     )
-
-
-def _safe_read_existing_data() -> Optional[dict]:
-    if not DATA_FILE.exists():
-        return None
-    try:
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return None
-
-
-def _apply_node_timestamps(new_data: dict, previous_data: Optional[dict]) -> dict:
-    """Attach createdAt/updatedAt to nodes using previous snapshot as baseline."""
-    now_iso = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-
-    prev_nodes = (previous_data or {}).get("nodes", [])
-    prev_by_id = {node.get("id"): node for node in prev_nodes if node.get("id")}
-
-    for node in new_data.get("nodes", []):
-        node_id = node.get("id")
-        prev = prev_by_id.get(node_id)
-
-        if not prev:
-            node["createdAt"] = now_iso
-            node["updatedAt"] = now_iso
-            continue
-
-        prev_created = prev.get("createdAt") or now_iso
-        prev_updated = prev.get("updatedAt") or prev_created
-
-        node["createdAt"] = prev_created
-        if _node_signature(prev) != _node_signature(node):
-            node["updatedAt"] = now_iso
-        else:
-            node["updatedAt"] = prev_updated
-
-    return new_data
 
 
 def _merge_metadata(data: dict) -> dict:
@@ -150,9 +90,14 @@ def _merge_metadata(data: dict) -> dict:
 
 def refresh_data() -> dict:
     """Rebuild graph from memory files and write to data.json."""
+    from selfmind_app.parser import build_graph_from_store
     config = load_config()
-    previous = _safe_read_existing_data()
-    data = _apply_node_timestamps(build_graph(config), previous)
+    store = _get_store()
+    if store:
+        data = build_graph_from_store(store, config)
+    else:
+        from selfmind_app.parser import build_graph
+        data = build_graph(config)
     # Merge metadata into nodes
     data = _merge_metadata(data)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -198,14 +143,18 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             if store:
                 self._json_response(store.get_stats())
             else:
-                self._json_response(_legacy_store.get_stats())
+                self._json_response({"error": "Store not available"}, code=503)
         elif clean_path.startswith("/api/memories/"):
             entry_id = clean_path.split("/api/memories/")[1]
-            entry = _legacy_store.get_entry(entry_id)
-            if entry:
-                self._json_response(entry)
+            store = _get_store()
+            if store:
+                entry = store.get_entry(entry_id)
+                if entry:
+                    self._json_response(entry)
+                else:
+                    self._json_response({"error": "Not found"}, code=404)
             else:
-                self._json_response({"error": "Not found"}, code=404)
+                self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/meta/entries":
             store = _get_store()
             if store:
@@ -491,10 +440,12 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
         clean_path = self.path.split("?")[0]
         if clean_path.startswith("/api/memories/"):
             entry_id = clean_path.split("/api/memories/")[1]
-            if _legacy_store.delete_entry(entry_id):
-                self._json_response({"status": "ok", "message": "Entry deleted"})
+            store = _get_store()
+            if store:
+                store.update_entry(entry_id, status="inactive")
+                self._json_response({"status": "ok", "message": "Entry inactivated"})
             else:
-                self._json_response({"error": "Not found"}, code=404)
+                self._json_response({"error": "Store not available"}, code=503)
             return
 
         if clean_path.startswith("/api/agents/"):

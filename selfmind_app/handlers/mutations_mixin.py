@@ -11,6 +11,12 @@ from selfmind_app.config import CONFIG_FILE, DATA_FILE, SELFMIND_DIR, load_confi
 logger = logging.getLogger(__name__)
 
 
+def _get_store():
+    """Get UnifiedStore from handler class attribute (set by server.py)."""
+    from selfmind_app.http_handler import SelfMindHandler
+    return getattr(SelfMindHandler, '_store', None)
+
+
 class MutationsMixin:
     """Handler methods for write/mutation operations: documents, memories, meta, agents, import."""
 
@@ -23,7 +29,8 @@ class MutationsMixin:
     def _handle_documents_scan(self):
         """GET /api/documents/scan?dir=... — Scan directory for documents."""
         from urllib.parse import parse_qs, urlparse
-        from selfmind_app.http_handler import _importer
+        from selfmind_app.document_importer import DocumentImporter
+        _importer = DocumentImporter()
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
         dir_path = params.get("dir", [""])[0]
@@ -45,7 +52,8 @@ class MutationsMixin:
     def _handle_extract_stream(self):
         """GET /api/documents/extract-stream?dir=... — SSE stream: scan + extract with progress."""
         from urllib.parse import parse_qs, urlparse
-        from selfmind_app.http_handler import _importer, _store
+        from selfmind_app.document_importer import DocumentImporter
+        _importer = DocumentImporter()
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
         dir_path = params.get("dir", [""])[0]
@@ -159,7 +167,9 @@ class MutationsMixin:
 
         Body: {"dir": "/path/to/docs"} or {"file": "/path/to/file.md"}
         """
-        from selfmind_app.http_handler import _importer, _store
+        from selfmind_app.document_importer import DocumentImporter
+        _importer = DocumentImporter()
+        _store = _get_store()
         try:
             body = self._read_body()
         except Exception as exc:
@@ -218,7 +228,7 @@ class MutationsMixin:
     def _handle_memories_list(self):
         """GET /api/memories?status=...&primary=... — List memories with filters."""
         from urllib.parse import parse_qs, urlparse
-        from selfmind_app.http_handler import _store
+        _store = _get_store()
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
 
@@ -233,7 +243,7 @@ class MutationsMixin:
 
     def _handle_memories_add(self):
         """POST /api/memories — Add memory entries manually."""
-        from selfmind_app.http_handler import _store
+        _store = _get_store()
         try:
             body = self._read_body()
         except Exception as exc:
@@ -254,7 +264,7 @@ class MutationsMixin:
 
     def _handle_memory_update(self, entry_id: str):
         """PUT /api/memories/:id — Update a memory entry."""
-        from selfmind_app.http_handler import _store
+        _store = _get_store()
         try:
             updates = self._read_body()
         except Exception as exc:
@@ -272,7 +282,7 @@ class MutationsMixin:
 
         Body: {"ids": [...], "agent": "hermes"} or {"ids": [...], "agent": "openclaw"}
         """
-        from selfmind_app.http_handler import _store
+        _store = _get_store()
         try:
             body = self._read_body()
         except Exception as exc:
@@ -308,7 +318,7 @@ class MutationsMixin:
 
         Body: {"ids": [...], "status": "approved"}
         """
-        from selfmind_app.http_handler import _store
+        _store = _get_store()
         try:
             body = self._read_body()
         except Exception as exc:
@@ -332,11 +342,15 @@ class MutationsMixin:
 
     def _handle_meta_entries(self):
         from urllib.parse import parse_qs, urlparse
-        from selfmind_app.http_handler import _meta_db
+        from selfmind_app.http_handler import SelfMindHandler
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
         status = params.get("status", [None])[0]
-        self._json_response(_meta_db.get_all_entries(status=status))
+        store = getattr(SelfMindHandler, '_store', None)
+        if store:
+            self._json_response(store.get_all_entries(status=status))
+        else:
+            self._json_response({"error": "Store not available"}, code=503)
 
     def _handle_meta_sync(self):
         """Sync all data sources into unified store."""
@@ -352,7 +366,7 @@ class MutationsMixin:
         self._json_response({"status": "ok", **result})
 
     def _handle_meta_create_snapshot(self):
-        from selfmind_app.http_handler import _meta_db
+        from selfmind_app.http_handler import SelfMindHandler
         config = load_config()
         source_cfg = config.get("source", {})
         active = source_cfg.get("active_profile", "hermes")
@@ -368,8 +382,12 @@ class MutationsMixin:
                     memory_content = content
                 elif "USER" in f.upper() or "user" in f:
                     user_content = content
-        sid = _meta_db.create_snapshot(memory_content, user_content, "manual")
-        self._json_response({"status": "ok", "snapshot_id": sid})
+        store = getattr(SelfMindHandler, '_store', None)
+        if store:
+            sid = store.create_snapshot(memory_content, user_content, "manual")
+            self._json_response({"status": "ok", "snapshot_id": sid})
+        else:
+            self._json_response({"error": "Store not available"}, code=503)
 
     # ========== Agent管理API ==========
 
@@ -506,7 +524,6 @@ class MutationsMixin:
 
     def _import_memory(self):
         """导入记忆文件"""
-        from selfmind_app.http_handler import _safe_read_existing_data
         content_length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_length)
         try:
@@ -543,7 +560,14 @@ class MutationsMixin:
         memory_path = config.get("memory_path", str(Path.home() / ".hermes" / "memories"))
 
         # 追加到现有数据
-        existing = _safe_read_existing_data() or {"nodes": [], "links": []}
+        existing = None
+        if DATA_FILE.exists():
+            try:
+                with open(DATA_FILE, "r", encoding="utf-8") as f:
+                    existing = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                pass
+        existing = existing or {"nodes": [], "links": []}
         existing["nodes"].extend(nodes)
         existing["links"].extend(links)
 

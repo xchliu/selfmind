@@ -178,7 +178,7 @@ class UnifiedStore:
 
         # Check if ID exists with DIFFERENT content (content evolved)
         existing_by_id = self.conn.execute(
-            "SELECT id, content, content_hash, version, status FROM entries WHERE id=?",
+            "SELECT * FROM entries WHERE id=?",
             (entry_id,)
         ).fetchone()
 
@@ -308,7 +308,7 @@ class UnifiedStore:
                     source = entry.get("source", "")
                     entry_id = self._stable_id(content, type_val, source)
                     existing_by_id = self.conn.execute(
-                        "SELECT id, content, content_hash, version, status FROM entries WHERE id=?",
+                        "SELECT * FROM entries WHERE id=?",
                         (entry_id,)
                     ).fetchone()
 

@@ -16,9 +16,9 @@ class EnginesMixin:
     """Handler methods for engine operations: consolidation, forgetting, analysis."""
 
     def _get_consolidator(self) -> Consolidator:
-        from selfmind_app.http_handler import _consolidator, _meta_db
         global_ref = self._get_global_consolidator_ref()
         if global_ref is None:
+            from selfmind_app.http_handler import SelfMindHandler
             config = load_config()
             source_cfg = config.get("source", {})
             active = source_cfg.get("active_profile", "hermes")
@@ -32,7 +32,8 @@ class EnginesMixin:
                         memory_path = full
                     elif "user" in f.lower():
                         user_path = full
-            new_consolidator = Consolidator(_meta_db, memory_path or "", user_path)
+            store = getattr(SelfMindHandler, '_store', None)
+            new_consolidator = Consolidator(store, memory_path or "", user_path)
             self._set_global_consolidator_ref(new_consolidator)
             return new_consolidator
         return global_ref
@@ -79,7 +80,7 @@ class EnginesMixin:
         self._json_response(c.analyze_distribution_from_graph())
 
     def _handle_consolidate_llm(self):
-        from selfmind_app.http_handler import _meta_db
+        from selfmind_app.http_handler import SelfMindHandler
         try:
             body = self._read_body()
         except Exception as exc:
@@ -90,7 +91,11 @@ class EnginesMixin:
         if not entry_ids:
             self._json_response({"error": "Provide 'entry_ids' array"}, code=400)
             return
-        entries = [_meta_db.get_entry(eid) for eid in entry_ids]
+        store = getattr(SelfMindHandler, '_store', None)
+        if not store:
+            self._json_response({"error": "Store not available"}, code=503)
+            return
+        entries = [store.get_entry(eid) for eid in entry_ids]
         entries = [e for e in entries if e]
         if not entries:
             self._json_response({"error": "No valid entries found"}, code=404)
