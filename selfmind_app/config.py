@@ -131,6 +131,30 @@ def load_config() -> dict:
             deep_merge(config, user_config)
         except (json.JSONDecodeError, OSError) as exc:
             print(f"  ⚠️  config.json parse error, using defaults: {exc}")
+
+    # ── Environment variable overrides (highest priority) ──
+    # These override both defaults and config.json values,
+    # ensuring Docker env vars always take effect.
+    env_overrides = {
+        "HERMES_HOME": ("source", "profiles", "hermes", "home"),
+        "OPENCLAW_HOME": ("source", "profiles", "openclaw", "home"),
+        "HONCHO_HOME": ("source", "profiles", "honcho", "home"),
+        "HONCHO_API_URL": ("source", "profiles", "honcho", "api", "base_url"),
+        "HONCHO_WORKSPACE": ("source", "profiles", "honcho", "api", "workspace"),
+        "SELFMIND_WIKI_PATH": ("wiki", "path"),
+        "LLM_BASE_URL": ("llm", "base_url"),
+        "LLM_API_KEY": ("llm", "api_key"),
+        "LLM_MODEL": ("llm", "model"),
+    }
+    for env_key, path in env_overrides.items():
+        val = os.environ.get(env_key)
+        if val:
+            # Walk the nested dict path and set the value
+            d = config
+            for key in path[:-1]:
+                d = d.setdefault(key, {})
+            d[path[-1]] = val
+
     return config
 
 

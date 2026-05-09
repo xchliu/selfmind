@@ -14,7 +14,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, List, Dict
 
-import requests
+from urllib.request import Request, urlopen
+from urllib.error import URLError
 
 from selfmind_app.config import load_config, DATA_FILE
 
@@ -318,22 +319,22 @@ class Consolidator:
         }
 
         try:
-            resp = requests.post(
+            payload = json.dumps({
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": "你是记忆整理助手。只返回JSON，不要多余文字。"},
+                    {"role": "user", "content": prompts.get(task, prompts["merge"])},
+                ],
+                "max_tokens": 1024,
+                "temperature": 0.3,
+            }).encode("utf-8")
+            req = Request(
                 f"{base_url}/chat/completions",
+                data=payload,
                 headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-                json={
-                    "model": model,
-                    "messages": [
-                        {"role": "system", "content": "你是记忆整理助手。只返回JSON，不要多余文字。"},
-                        {"role": "user", "content": prompts.get(task, prompts["merge"])},
-                    ],
-                    "max_tokens": 1024,
-                    "temperature": 0.3,
-                },
-                timeout=30,
             )
-            resp.raise_for_status()
-            text = resp.json()["choices"][0]["message"]["content"].strip()
+            resp = urlopen(req, timeout=30)
+            text = json.loads(resp.read().decode("utf-8"))["choices"][0]["message"]["content"].strip()
             # Try to extract JSON from response
             json_match = re.search(r'\{.*\}', text, re.DOTALL)
             if json_match:

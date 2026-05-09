@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  selfmind:
+    build: .
+    container_name: selfmind
+    ports:
+      - "${SELFMIND_PORT:-3002}:3002"
+    volumes:
+      # SQLite data persistence — DO NOT DELETE this volume's contents
+      - ./data:/app/data
+      # Memory files directory (MEMORY.md, USER.md, etc.)
+      # Mount your agent's memory directory here
+      - ${MEMORIES_PATH:-~/.hermes/memories}:/hermes/memories:ro
+      # Skills directory
+      - ${SKILLS_PATH:-~/.hermes/skills}:/hermes/skills:ro
+      # Wiki content directory
+      # Mount your wiki/knowledge directory here
+      - ${WIKI_PATH:-~/Documents/aiworkspace/wiki}:/hermes/wiki:ro
+      # Config file (optional — if not mounted, defaults are used)
+      # Create config.json from config.example.json and customize
+      - ${CONFIG_PATH:-./config.json}:/app/config.json:ro
+      # Static files & HTML (dev convenience — live reload without rebuild)
+      - ./static:/app/static
+      - ./index.html:/app/index.html:ro
+    environment:
+      - SELFMIND_SOURCE_MODE=${SOURCE_MODE:-auto}
+      - SELFMIND_PROFILE=${ACTIVE_PROFILE:-hermes}
+      - HERMES_HOME=/hermes
+      - SELFMIND_WIKI_PATH=/hermes/wiki
+      - HONCHO_API_URL=${HONCHO_API_URL:-http://host.docker.internal:8000/v3}
+      - HONCHO_WORKSPACE=${HONCHO_WORKSPACE:-hermes}
+      - HONCHO_ENABLED=${HONCHO_ENABLED:-true}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.openai.com/v1}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o-mini}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3002/api/stats')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

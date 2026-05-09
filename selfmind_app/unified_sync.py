@@ -412,8 +412,10 @@ def unified_sync(store: UnifiedStore, config: dict) -> dict:
     source_cfg = config.get("source", {})
     profiles = source_cfg.get("profiles", {})
 
-    # Get home directory from config
-    home = Path(profiles.get("hermes", {}).get("home", Path.home() / ".hermes"))
+    # Resolve active profile and home directory (used by all sources)
+    active_profile = source_cfg.get("active_profile", "hermes")
+    profile_cfg = profiles.get(active_profile, {})
+    home = Path(profile_cfg.get("home", Path.home() / ".hermes"))
 
     # ── Step 0: Create snapshot of source files BEFORE sync ──
     memory_file_path = str(home / "memories" / "MEMORY.md")
@@ -425,11 +427,11 @@ def unified_sync(store: UnifiedStore, config: dict) -> dict:
     logger.info(f"Snapshot #{snapshot_id} created before sync")
 
     # ── Source 1: Memory files ──
-    memory_files = profiles.get("hermes", {}).get("memory_files", ["memories/MEMORY.md", "memories/USER.md"])
+    memory_files = profile_cfg.get("memory_files", ["memories/MEMORY.md", "memories/USER.md"])
     memory_entries = []
     for mf in memory_files:
         filepath = str(home / mf)
-        entries = parse_memory_file(filepath, mf, "hermes")
+        entries = parse_memory_file(filepath, mf, active_profile)
         memory_entries.extend(entries)
 
     if memory_entries:
@@ -437,28 +439,38 @@ def unified_sync(store: UnifiedStore, config: dict) -> dict:
         stats["memory"] = {"entries": len(memory_entries), **result}
 
     # ── Source 2: Wiki pages ──
-    wiki_root = str(home / "wiki")
-    wiki_entries = scan_wiki_directory(wiki_root, "hermes")
+    wiki_root = config.get("wiki", {}).get("path", str(home / "wiki"))
+    wiki_entries = scan_wiki_directory(wiki_root, active_profile)
     if wiki_entries:
         result = store.bulk_upsert(wiki_entries, source_type="wiki")
         stats["wiki"] = {"entries": len(wiki_entries), **result}
 
-    # ── Source 3: Honcho ──
-    api_config = profiles.get("hermes", {}).get("api", {})
-    honcho_enabled = api_config.get("type") == "honcho" and api_config.get("enabled", True)
-    if honcho_enabled:
-        base_url = api_config.get("base_url", "http://localhost:8000/v3")
-        workspace = api_config.get("workspace", "hermes")
-        try:
-            honcho_stats = sync_honcho(store, base_url, workspace, "hermes")
-            stats["honcho"] = honcho_stats
-        except Exception as exc:
-            logger.warning(f"Honcho sync failed: {exc}")
-            stats["honcho"] = {"error": str(exc)}
+    # ── Source 3: Honcho (optional) ──
+    honcho_env = os.environ.get("HONCHO_ENABLED", "true").lower()
+    if honcho_env in ("false", "0", "no", "off"):
+        logger.info("Honcho disabled by HONCHO_ENABLED env var")
+        stats["honcho"] = {"skipped": True, "reason": "disabled by env"}
+    else:
+        active_profile = source_cfg.get("active_profile", "hermes")
+        profile_cfg = profiles.get(active_profile, {})
+        api_config = profile_cfg.get("api", {})
+        honcho_enabled = api_config.get("type") == "honcho" and api_config.get("enabled", True)
+        if honcho_enabled:
+            base_url = api_config.get("base_url", "http://localhost:8000/v3")
+            workspace = api_config.get("workspace", "hermes")
+            try:
+                honcho_stats = sync_honcho(store, base_url, workspace, active_profile)
+                stats["honcho"] = honcho_stats
+            except Exception as exc:
+                logger.warning(f"Honcho sync failed (graceful skip): {exc}")
+                stats["honcho"] = {"skipped": True, "reason": str(exc)}
+        else:
+            logger.info("Honcho not configured for active profile")
+            stats["honcho"] = {"skipped": True, "reason": "not configured"}
 
     # ── Source 4: Skills ──
     skills_root = str(home / "skills")
-    skills_entries = scan_skills_directory(skills_root, "hermes")
+    skills_entries = scan_skills_directory(skills_root, active_profile)
     if skills_entries:
         result = store.bulk_upsert(skills_entries, source_type="skill")
         stats["skills"] = {"entries": len(skills_entries), **result}

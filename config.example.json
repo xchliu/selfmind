@@ -5,44 +5,12 @@
     "profiles": {
       "hermes": {
         "home": "~/.hermes",
-        "memory_files": [
-          "memories/MEMORY.md",
-          "memories/USER.md"
-        ],
-        "memory_files_fallback": [
-          "memory.md",
-          "user.md"
-        ]
-      },
-      "openclaw": {
-        "home": "~/.openclaw",
-        "memory_files": [
-          "memories/MEMORY.md",
-          "memories/USER.md"
-        ],
-        "memory_files_fallback": [
-          "memory.md",
-          "user.md",
-          "memories.md",
-          "profile.md"
-        ]
-      },
-      "honcho": {
-        "home": "~/.honcho",
-        "memory_files": [
-          "memories/MEMORY.md",
-          "memories/USER.md"
-        ],
-        "memory_files_fallback": [
-          "memory.md",
-          "user.md",
-          "memories.md",
-          "profile.md"
-        ]
+        "memory_files": ["memories/MEMORY.md", "memories/USER.md"],
+        "memory_files_fallback": ["memory.md", "user.md"]
       }
     }
   },
-  "section_separator": "§",
+  "section_separator": "\u00a7",
   "center_node": {
     "id": "self",
     "label": "Me",
@@ -50,79 +18,15 @@
     "description": "Center node — the owner of this memory graph"
   },
   "categories": {
-    "identity": {
-      "keywords": [],
-      "color": "#ff6b6b",
-      "description": "Core identity"
-    },
-    "person": {
-      "keywords": [
-        "人",
-        "member",
-        "成员",
-        "name",
-        "角色"
-      ],
-      "color": "#ffa502",
-      "description": "People & relationships"
-    },
-    "project": {
-      "keywords": [
-        "project",
-        "项目",
-        "规划",
-        "战略",
-        "plan"
-      ],
-      "color": "#2ed573",
-      "description": "Projects & plans"
-    },
-    "principle": {
-      "keywords": [
-        "安全",
-        "红线",
-        "规则",
-        "rule",
-        "原则",
-        "准则",
-        "boundary",
-        "行为"
-      ],
-      "color": "#1e90ff",
-      "description": "Rules & principles"
-    },
-    "tool": {
-      "keywords": [
-        "tool",
-        "工具",
-        "日历",
-        "calendar",
-        "公众号",
-        "CLI",
-        "MCP",
-        "API"
-      ],
-      "color": "#a55eea",
-      "description": "Tools & integrations"
-    },
-    "environment": {
-      "keywords": [
-        "timezone",
-        "时区",
-        "style",
-        "风格",
-        "偏好",
-        "prefer",
-        "communication"
-      ],
-      "color": "#778ca3",
-      "description": "Environment & preferences"
-    },
-    "memory": {
-      "keywords": [],
-      "color": "#95a5a6",
-      "description": "General memories"
-    }
+    "identity": {"keywords": [], "color": "#ff6b6b", "description": "Core identity"},
+    "person": {"keywords": ["人", "member", "成员", "name", "角色"], "color": "#ffa502", "description": "People & relationships"},
+    "project": {"keywords": ["project", "项目", "规划", "战略", "plan"], "color": "#2ed573", "description": "Projects & plans"},
+    "principle": {"keywords": ["安全", "红线", "规则", "rule", "原则", "准则", "boundary", "行为"], "color": "#1e90ff", "description": "Rules & principles"},
+    "tool": {"keywords": ["tool", "工具", "日历", "calendar", "公众号", "CLI", "MCP", "API"], "color": "#a55eea", "description": "Tools & integrations"},
+    "environment": {"keywords": ["timezone", "时区", "style", "风格", "偏好", "prefer", "communication"], "color": "#778ca3", "description": "Environment & preferences"},
+    "memory": {"keywords": [], "color": "#95a5a6", "description": "General memories"},
+    "skill": {"keywords": ["skill", "技能"], "color": "#f39c12", "description": "Skills & capabilities"},
+    "skill_category": {"keywords": [], "color": "#e67e22", "description": "Skill categories"}
   },
   "relation_keywords": {
     "管理|负责|老大|boss|manager|lead": "manages",
@@ -130,5 +34,28 @@
     "使用|工具|运营|use|operate": "uses",
     "遵守|规则|原则|follow|rule": "follows",
     "关注|执行|分析|参与|work|focus": "works on"
+  },
+  "llm": {
+    "base_url": "https://api.openai.com/v1",
+    "api_key": "",
+    "model": "gpt-4o-mini",
+    "max_tokens": 4096
+  },
+  "documents": {
+    "watch_dir": ""
+  },
+  "wiki": {
+    "enabled": true,
+    "path": "~/Documents/aiworkspace/wiki",
+    "categories": {
+      "entity": {"color": "#e74c3c", "display_name": "实体", "shape": "circle"},
+      "concept": {"color": "#3498db", "display_name": "概念", "shape": "diamond"},
+      "comparison": {"color": "#2ecc71", "display_name": "对比分析", "shape": "square"},
+      "query": {"color": "#f39c12", "display_name": "查询结果", "shape": "triangle"},
+      "summary": {"color": "#9b59b6", "display_name": "摘要", "shape": "hexagon"},
+      "project": {"color": "#e67e22", "display_name": "项目", "shape": "circle"},
+      "wiki_tag": {"color": "#95a5a6", "display_name": "标签", "shape": "circle"},
+      "wiki_center": {"color": "#e67e22", "display_name": "知识中心", "shape": "circle"}
+    }
   }
 }
