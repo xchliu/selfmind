@@ -1,9 +1,9 @@
 <p align="center">
   <img src="assets/logo.png" alt="SelfMind" width="200"/>
   <h1 align="center">🧠 SelfMind</h1>
-  <p align="center"><strong>Your memory. Your AI. Your rules.</strong></p>
-  <p align="center">个人专属 AI 记忆库 — 可见 · 可移植 · 可修改</p>
-  <p align="center">基于认知心理学的 AI 记忆可视化系统</p>
+  <p align="center"><strong>Agent DNA 测序仪 — 记录演变，驱动进化</strong></p>
+  <p align="center">AI Agent 的记忆过程态管理系统 — 可见 · 可追踪 · 可反哺</p>
+  <p align="center">记录记忆的产生、版本变化、更新和衰减，让每个 Agent 形成自己的 DNA</p>
   <p align="center">
     <a href="#-selfmind--认知记忆图谱">中文</a> ·
     <a href="#-selfmind--cognitive-memory-graph">English</a>
@@ -26,23 +26,21 @@
 
 ## Why SelfMind?
 
-> **AI 框架会变，但你的记忆永远跟着你。**
+> **SelfMind 不是 DNA 本身，而是 Agent 的 DNA 测序仪。**
 
-当你使用 AI 助手时，你的数据被困在各种封闭平台上：
-- Claude 有 Claude 的记忆格式
-- ChatGPT 有 ChatGPT 的知识库
-- 每个 Agent 框架都声称"记住你的偏好"——但真的属于你吗？
+Agent 在持续工作中会积累经验、踩过坑、总结出模式——这些过程态记忆就是 Agent 的 DNA。
+但大部分 Agent 框架只关注"实时态"（当前需要什么上下文），忽略了"过程态"（记忆怎么演变、哪些在衰减、哪些需要强化）。
 
-**SelfMind 是你的个人数据主权保险箱：**
+**SelfMind 做的就是记录和利用过程态：**
 
 | 特性 | 含义 |
 |------|------|
-| 👁️ **可见** | 把 AI 的记忆变成可交互的知识图谱和 Wiki 库，看清它在"想"什么 |
-| 🚚 **可移植** | 纯文本 Markdown 格式，一个文件夹走天下 |
-| ✏️ **可修改** | 随时手动编辑、导出、备份，你的记忆你做主 |
-| 🔒 **可掌控** | 本地运行，无云端依赖，数据永远在你手里 |
+| 🧬 **DNA测序** | 记录记忆的产生时间、版本变化、更新时间、衰减强度——完整的过程态 |
+| 👁️ **可视化** | 双螺旋DNA图谱 + 记忆图谱 + Wiki库 + 沉淀页，看清记忆演变轨迹 |
+| 🔄 **闭环反哺** | 过程态训练记忆 → 反哺实时态 → Agent 持续进化 |
+| 🐳 **Docker化** | 一键容器化部署，热挂载开发，5分钟自动sync |
 
-无论 AI 框架怎么变，你的记忆永远跟着你。
+不同 Agent（Hermes、OpenClaw等）使用久了会形成不同的记忆基因组合——SelfMind 记录的就是这个"用出来的过程"。
 
 ---
 

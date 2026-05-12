@@ -871,7 +871,7 @@ def build_graph_from_store(store, config: dict) -> dict:
     node_ids: set[str] = set()
     link_keys: set[str] = set()
 
-    def add_node(node_id, label, category, description="", primary="", secondary="", group="", access_count=0, importance=0.0, entry_type="memory"):
+    def add_node(node_id, label, category, description="", primary="", secondary="", group="", access_count=0, importance=0.0, entry_type="memory", createdAt="", updatedAt="", decay_score=0.25, version=1):
         if node_id not in node_ids:
             nodes.append({
                 "id": node_id,
@@ -884,6 +884,10 @@ def build_graph_from_store(store, config: dict) -> dict:
                 "access_count": access_count,
                 "importance": importance,
                 "entry_type": entry_type,
+                "createdAt": createdAt,
+                "updatedAt": updatedAt,
+                "decay_score": decay_score,
+                "version": version,
             })
             node_ids.add(node_id)
 
@@ -961,7 +965,11 @@ def build_graph_from_store(store, config: dict) -> dict:
                  primary=pk, secondary=sk, group=pk,
                  access_count=entry.get("access_count", 0),
                  importance=entry.get("importance", 0.5),
-                 entry_type="memory")
+                 entry_type="memory",
+                 createdAt=entry.get("first_seen_at", ""),
+                 updatedAt=entry.get("updated_at", ""),
+                 decay_score=entry.get("decay_score", 0.25),
+                 version=entry.get("version", 1))
         add_link(parent_id, nid, "contains")
 
     # ── Honcho observation nodes ──
@@ -982,7 +990,11 @@ def build_graph_from_store(store, config: dict) -> dict:
                  description=entry.get("content_preview", ""),
                  primary=pk, secondary=sk, group=pk,
                  importance=entry.get("importance", 0.5),
-                 entry_type=entry["type"])
+                 entry_type=entry["type"],
+                 createdAt=entry.get("first_seen_at", ""),
+                 updatedAt=entry.get("updated_at", ""),
+                 decay_score=entry.get("decay_score", 0.25),
+                 version=entry.get("version", 1))
         add_link(parent_id, nid, "contains")
 
         # Add Honcho peer links: observer → observed
@@ -1017,7 +1029,11 @@ def build_graph_from_store(store, config: dict) -> dict:
         # Skill leaf node
         sk_id = f"sk_{sha256(skill_name.encode()).hexdigest()[:8]}"
         add_node(sk_id, skill_name, "skill", description=entry.get("content_preview", ""),
-                 primary="procedural", secondary=proc_sub, group="procedural")
+                 primary="procedural", secondary=proc_sub, group="procedural",
+                 createdAt=entry.get("first_seen_at", ""),
+                 updatedAt=entry.get("updated_at", ""),
+                 decay_score=entry.get("decay_score", 0.25),
+                 version=entry.get("version", 1))
         add_link(sc_id, sk_id, "contains")
 
     # ── Cross-references (mentions) between memory nodes ──

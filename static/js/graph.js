@@ -875,6 +875,7 @@ function switchView(view) {
   document.getElementById('tabHealth').classList.toggle('active', view === 'health');
   document.getElementById('tabAnalyze').classList.toggle('active', view === 'analyze');
   document.getElementById('tabSediment').classList.toggle('active', view === 'sediment');
+  document.getElementById('tabDna').classList.toggle('active', view === 'dna');
 
   // 健康仪表盘显隐
   document.getElementById('healthDashboard').style.display = view === 'health' ? 'block' : 'none';
@@ -886,8 +887,10 @@ function switchView(view) {
   document.getElementById('sedimentDashboard').style.display = view === 'sediment' ? 'block' : 'none';
   // Wiki库面板显隐
   document.getElementById('wikiDashboard').style.display = view === 'wiki' ? 'block' : 'none';
-  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings' || view === 'sediment' || view === 'wiki') ? 'none' : '';
-  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings' || view === 'sediment' || view === 'wiki') ? 'none' : '');
+  // DNA面板显隐
+  document.getElementById('dnaDashboard').style.display = view === 'dna' ? 'block' : 'none';
+  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings' || view === 'sediment' || view === 'wiki' || view === 'dna') ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings' || view === 'sediment' || view === 'wiki' || view === 'dna') ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
@@ -931,6 +934,11 @@ function switchView(view) {
 
   if (view === 'sediment') {
     loadSedimentData();
+    return;
+  }
+
+  if (view === 'dna') {
+    initDnaView();
     return;
   }
 

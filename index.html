@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="/static/css/health.css">
 <link rel="stylesheet" href="/static/css/sediment.css">
   <link rel="stylesheet" href="/static/css/wiki.css">
+<link rel="stylesheet" href="/static/css/dna.css">
 </head>
 <body>
 
@@ -36,6 +37,9 @@
       </button>
       <button class="view-tab" id="tabSediment" onclick="switchView('sediment')">
         <span class="tab-icon">⏳</span>记忆沉淀
+      </button>
+      <button class="view-tab" id="tabDna" onclick="switchView('dna')">
+        <span class="tab-icon">🧬</span>Agent DNA
       </button>
       <button class="view-tab" id="tabSettings" onclick="switchToSettings()">
         <span class="tab-icon">⚙️</span>设置
@@ -351,6 +355,46 @@
   </div>
 </div>
 
+<!-- Agent DNA 页面 -->
+<div id="dnaDashboard" style="display:none;">
+  <div class="dna-header">
+    <h2>🧬 Agent DNA — 记忆进化过程</h2>
+    <div class="dna-agent-label" id="dnaAgentLabel">Hermes</div>
+    <div>
+      <button onclick="loadDnaData()">⟳ 刷新</button>
+    </div>
+  </div>
+  
+  <!-- DNA概览 -->
+  <div class="dna-summary" id="dnaSummary"></div>
+  
+  <!-- DNA双螺旋可视化 -->
+  <div class="dna-helix-container" id="dnaHelixContainer">
+    <svg id="dnaHelixSvg" width="100%" height="400"></svg>
+  </div>
+  
+  <!-- 分类基因图 -->
+  <div class="dna-categories" id="dnaCategories"></div>
+  
+  <!-- 时间线 -->
+  <div class="dna-timeline" id="dnaTimeline"></div>
+  
+  <!-- 演变事件 -->
+  <div class="dna-events" id="dnaEvents"></div>
+  
+  <!-- 记忆条目详情弹窗 -->
+  <div class="dna-modal" id="dnaModal" style="display:none;">
+    <div class="dna-modal-content">
+      <div class="dna-modal-header">
+        <h3 id="dnaModalTitle">记忆详情</h3>
+        <button onclick="closeDnaModal()" class="dna-modal-close">✕</button>
+      </div>
+      <div class="dna-modal-body" id="dnaModalBody"></div>
+      <div class="dna-modal-evolution" id="dnaModalEvolution"></div>
+    </div>
+  </div>
+</div>
+
 <!-- 设置面板 -->
 <div id="settingsDashboard" style="display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
   <div class="settings-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
@@ -422,6 +466,7 @@
 <script src="/static/js/init.js"></script>
 <script src="/static/js/sediment.js"></script>
 <script src="/static/js/wiki.js"></script>
+<script src="/static/js/dna.js"></script>
 
 
 

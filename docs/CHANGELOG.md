@@ -1,3 +1,24 @@
+## [2.6.0] — 2026-05-11
+
+### Added
+- 🐳 **Docker化** — Dockerfile + docker-compose.yml + .env.example + config.example.json，一键容器化部署
+- 🔥 **热挂载+watch脚本** — 开发模式热重载，watch.sh监控文件变更自动重启容器
+- 🔄 **统一数据管道** — unified_store + unified_sync 取代 legacy memory/user/skill 独立存储，SQLite为唯一数据源
+- 🧠 **记忆健康修复** — 分类解析bug修正 + 衰减公式重构(新条目不再归零)
+- 🕸️ **图谱逐级展开** — 默认只显示self + 8个primary节点，点击逐级展开子节点，避免全图爆炸
+- 📇 **Wiki卡片预览加大+表格渲染** — 卡片尺寸增大，支持markdown表格渲染
+- 🧬 **Agent DNA设计文档** — 新增Agent DNA架构设计文档，定义自我进化核心机制
+
+### Changed
+- 数据流从legacy多文件 → unified SQLite单管道
+- 知识图谱默认视图从全量展示 → 逐级展开
+
+### Fixed
+- 修复分类解析bug — wiki_parser类别映射错误导致部分条目缺失
+- 修复衰减公式 — freq=0时所有新条目decay归零问题
+
+---
+
 ## [2.5.0] — 2026-05-08
 
 ### Added

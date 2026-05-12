@@ -213,6 +213,13 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
                     })
             else:
                 self._json_response({"error": "Store not available"}, code=503)
+        elif clean_path == "/api/dna/timeline":
+            # DNA timeline: agent evolution data for DNA visualization
+            store = _get_store()
+            if store:
+                self._json_response(store.get_dna_timeline())
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/consolidate/scan":
             self._handle_consolidate_scan()
         elif clean_path == "/api/consolidate/duplicates":

@@ -53,115 +53,105 @@ class V1Mixin:
         return data
 
     def _handle_v1_api(self, path: str):
-        """处理 v1 API GET 请求"""
-        from datetime import datetime
-        from selfmind_app.http_handler import _get_aggregation_engine
+        """Handle v1 API GET requests — now backed by UnifiedStore."""
+        from selfmind_app.http_handler import _get_store
+
+        store = _get_store()
 
         if path == "/api/v1/changes":
-            # 获取聚合变化
+            # Return recent evolution events from operations_log
             since_str = self._get_query_param("since")
-            since = None
-            if since_str:
-                try:
-                    since = datetime.fromisoformat(since_str.replace("Z", "+00:00"))
-                except ValueError:
-                    self._json_response({"error": "Invalid since parameter"}, code=400)
-                    return
-
-            engine = _get_aggregation_engine()
-            result = engine.aggregate_changes(since)
-
+            if not store:
+                self._json_response({"changes": [], "stats": {}})
+                return
+            ops = store.get_operations_log(limit=50)
+            changes = []
+            for op in ops:
+                changes.append({
+                    "change_id": str(op.get("id", "")),
+                    "item_id": ", ".join(op.get("target_ids", [])),
+                    "source": "selfmind",
+                    "change_type": op.get("operation", ""),
+                    "timestamp": op.get("timestamp", ""),
+                    "detail": op.get("detail", {}),
+                })
+            stats = store.get_stats()
             self._json_response({
-                "changes": [
-                    {
-                        "change_id": c.change_id,
-                        "item_id": c.item_id,
-                        "source": c.source,
-                        "change_type": c.change_type,
-                        "timestamp": c.timestamp.isoformat(),
-                        "content": c.after.content[:200] if c.after else None,
-                        "category": c.after.category if c.after else None,
-                    }
-                    for c in result.changes[:50]  # 限制返回数量
-                ],
-                "providers": [
-                    {
-                        "name": p.name,
-                        "status": p.status,
-                        "item_count": p.item_count,
-                    }
-                    for p in result.providers
-                ],
+                "changes": changes,
+                "providers": [{"name": "selfmind", "status": "active", "item_count": stats.get("total_active", 0)}],
                 "stats": {
-                    "total": result.total_count,
-                    "created": result.created_count,
-                    "updated": result.updated_count,
-                    "deleted": result.deleted_count,
+                    "total": stats.get("total_active", 0) + stats.get("total_inactive", 0),
+                    "created": stats.get("total_active", 0),
+                    "updated": stats.get("version_changes", 0),
+                    "deleted": stats.get("total_inactive", 0),
                 }
             })
             return
 
         if path == "/api/v1/status":
-            # 获取 Provider 状态
-            engine = _get_aggregation_engine()
-            status = engine.get_provider_status()
+            # Return store status
+            if not store:
+                self._json_response({"providers": [], "timestamp": datetime.now().isoformat()})
+                return
+            stats = store.get_stats()
             self._json_response({
-                "providers": status,
+                "providers": [{"name": "selfmind-unified", "status": "active", "item_count": stats.get("total_active", 0)}],
                 "timestamp": datetime.now().isoformat()
             })
             return
 
         if path == "/api/v1/memories":
-            # 获取所有记忆
-            engine = _get_aggregation_engine()
-            items = engine.get_all_memories()
+            # Return all active memory entries
+            if not store:
+                self._json_response({"memories": [], "total": 0})
+                return
+            entries = store.get_all_entries(status="active")
+            memories = [e for e in entries if e.get("type") == "memory"]
             self._json_response({
                 "memories": [
                     {
-                        "id": m.id,
-                        "source": m.source,
-                        "category": m.category,
-                        "content": m.content[:200],
-                        "importance": m.importance,
-                        "tags": m.tags,
-                        "created_at": m.created_at.isoformat(),
-                        "updated_at": m.updated_at.isoformat(),
+                        "id": m.get("id", ""),
+                        "source": m.get("source", ""),
+                        "category": f"{m.get('primary_cat', '')}/{m.get('secondary_cat', '')}",
+                        "content": m.get("content_preview", "")[:200],
+                        "importance": m.get("importance", 0.5),
+                        "decay_score": m.get("decay_score", 0.25),
+                        "version": m.get("version", 1),
+                        "first_seen_at": m.get("first_seen_at", ""),
+                        "updated_at": m.get("updated_at", ""),
                     }
-                    for m in items[:100]
+                    for m in memories[:100]
                 ],
-                "total": len(items)
+                "total": len(memories)
             })
             return
 
         self._json_response({"error": "Not found"}, code=404)
 
     def _handle_v1_api_post(self, path: str):
-        """处理 v1 API POST 请求"""
-        from selfmind_app.http_handler import _get_aggregation_engine, refresh_data
+        """Handle v1 API POST requests."""
+        from selfmind_app.http_handler import _get_store
+        from selfmind_app.unified_sync import UnifiedSync
+
         content_length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_length) if content_length > 0 else b""
 
         if path == "/api/v1/sync":
-            # 触发同步
-            try:
-                body_json = json.loads(body) if body else {}
-            except json.JSONDecodeError:
-                self._json_response({"error": "Invalid JSON"}, code=400)
-                return
-
-            force = body_json.get("force", False)
-
-            # 刷新数据
-            data = refresh_data()
-            engine = _get_aggregation_engine()
-
-            self._json_response({
-                "status": "ok",
-                "message": "Sync completed",
-                "nodes": len(data.get("nodes", [])),
-                "links": len(data.get("links", [])),
-                "providers": engine.get_provider_status()
-            })
+            # Trigger manual sync
+            store = _get_store()
+            if store:
+                sync = UnifiedSync(store)
+                sync.run()
+                data = store.get_stats()
+                self._json_response({
+                    "status": "ok",
+                    "message": "Sync completed",
+                    "total_active": data.get("total_active", 0),
+                    "total_inactive": data.get("total_inactive", 0),
+                    "version_changes": data.get("version_changes", 0),
+                })
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
             return
 
         self._json_response({"error": "Not found"}, code=404)
@@ -222,7 +212,7 @@ class V1Mixin:
         return {"status": "ok", "path": page_path, "updated": fm["updated"]}
 
     def _get_query_param(self, key: str) -> Optional[str]:
-        """获取 URL 查询参数"""
+        """Get URL query parameter."""
         import urllib.parse
         if "?" in self.path:
             query = self.path.split("?")[1]

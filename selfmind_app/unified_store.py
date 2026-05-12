@@ -651,5 +651,138 @@ class UnifiedStore:
         history = self.get_entry_history(entry_id)
         return {"current": current, "history": history}
 
+    # ──────────────── DNA: Agent Evolution Data ────────────────
+
+    def get_dna_timeline(self):
+        """Get DNA timeline data: entries grouped by date with evolution metrics.
+        
+        Returns:
+            - timeline: list of {date, entries_created, entries_updated, avg_decay, by_type}
+            - dna_entries: all active entries with 4 core DNA fields
+            - categories: unique category combinations with counts and avg decay
+            - evolution_events: all version changes and status transitions
+        """
+        # 1. Timeline: group by first_seen_at date
+        rows = self.conn.execute(
+            "SELECT id, type, primary_cat, secondary_cat, label, content_preview, "
+            "importance, decay_score, version, first_seen_at, updated_at, status "
+            "FROM entries ORDER BY first_seen_at ASC"
+        ).fetchall()
+
+        timeline = {}
+        dna_entries = []
+        categories = {}
+        
+        for r in rows:
+            d = dict(r)
+            date_key = d["first_seen_at"][:10] if d["first_seen_at"] else "unknown"
+            
+            # Timeline aggregation
+            if date_key not in timeline:
+                timeline[date_key] = {
+                    "date": date_key,
+                    "entries_created": 0,
+                    "entries_updated": 0,
+                    "avg_decay": 0,
+                    "by_type": {},
+                    "by_status": {},
+                    "decay_values": [],
+                }
+            tl = timeline[date_key]
+            tl["entries_created"] += 1
+            if d["updated_at"] and d["updated_at"][:10] != date_key:
+                tl["entries_updated"] += 1
+            if d["decay_score"] is not None:
+                tl["decay_values"].append(d["decay_score"])
+            tl["by_type"][d["type"]] = tl["by_type"].get(d["type"], 0) + 1
+            tl["by_status"][d["status"]] = tl["by_status"].get(d["status"], 0) + 1
+            
+            # DNA entries (4 core fields + classification)
+            dna_entries.append({
+                "id": d["id"],
+                "type": d["type"],
+                "primary_cat": d["primary_cat"],
+                "secondary_cat": d["secondary_cat"],
+                "label": d["label"] or (d["content_preview"][:40] if d["content_preview"] else ""),
+                "content_preview": d["content_preview"],
+                "importance": d["importance"] or 0.5,
+                "decay_score": d["decay_score"] or 0.25,
+                "version": d["version"] or 1,
+                "first_seen_at": d["first_seen_at"],
+                "updated_at": d["updated_at"],
+                "status": d["status"],
+            })
+            
+            # Categories
+            cat_key = f"{d['primary_cat']}/{d['secondary_cat']}"
+            if cat_key not in categories:
+                categories[cat_key] = {"count": 0, "avg_decay": 0, "avg_importance": 0, "decay_values": [], "importance_values": []}
+            categories[cat_key]["count"] += 1
+            if d["decay_score"] is not None:
+                categories[cat_key]["decay_values"].append(d["decay_score"])
+            if d["importance"] is not None:
+                categories[cat_key]["importance_values"].append(d["importance"])
+        
+        # Finalize timeline averages
+        for tl in timeline.values():
+            tl["avg_decay"] = round(sum(tl["decay_values"]) / len(tl["decay_values"]), 3) if tl["decay_values"] else 0
+            del tl["decay_values"]
+        
+        # Finalize category averages
+        for cat in categories.values():
+            cat["avg_decay"] = round(sum(cat["decay_values"]) / len(cat["decay_values"]), 3) if cat["decay_values"] else 0
+            cat["avg_importance"] = round(sum(cat["importance_values"]) / len(cat["importance_values"]), 3) if cat["importance_values"] else 0
+            del cat["decay_values"]
+            del cat["importance_values"]
+        
+        # 2. Evolution events: version changes + status transitions
+        ops = self.conn.execute(
+            "SELECT id, timestamp, operation, target_ids, detail, auto_or_manual "
+            "FROM operations_log ORDER BY timestamp ASC"
+        ).fetchall()
+        
+        evolution_events = []
+        for op in ops:
+            d = dict(op)
+            try:
+                d["target_ids"] = json.loads(d["target_ids"]) if d["target_ids"] else []
+            except:
+                d["target_ids"] = []
+            try:
+                d["detail"] = json.loads(d["detail"]) if d["detail"] else {}
+            except:
+                d["detail"] = {}
+            evolution_events.append(d)
+        
+        # 3. History versions per entry (for detailed timeline)
+        history_rows = self.conn.execute(
+            "SELECT entry_id, version, content_preview, primary_cat, secondary_cat, "
+            "label, timestamp, trigger FROM entry_history ORDER BY timestamp ASC"
+        ).fetchall()
+        
+        entry_versions = {}
+        for h in history_rows:
+            d = dict(h)
+            eid = d["entry_id"]
+            if eid not in entry_versions:
+                entry_versions[eid] = []
+            entry_versions[eid].append(d)
+        
+        return {
+            "timeline": sorted(timeline.values(), key=lambda x: x["date"]),
+            "dna_entries": dna_entries,
+            "categories": categories,
+            "evolution_events": evolution_events,
+            "entry_versions": entry_versions,
+            "summary": {
+                "total_entries": len(dna_entries),
+                "active": len([e for e in dna_entries if e["status"] == "active"]),
+                "inactive": len([e for e in dna_entries if e["status"] == "inactive"]),
+                "avg_decay": round(sum(e["decay_score"] for e in dna_entries) / len(dna_entries), 3) if dna_entries else 0,
+                "avg_version": round(sum(e["version"] for e in dna_entries) / len(dna_entries), 2) if dna_entries else 1,
+                "total_evolutions": len(evolution_events),
+            }
+        }
+
     def close(self):
         self.conn.close()

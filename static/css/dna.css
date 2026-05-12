@@ -1,0 +1,361 @@
+/* ─── Agent DNA 页面样式 ─── */
+
+.dna-dashboard {
+  padding: 20px 24px;
+  background: #f0f3f8;
+  min-height: calc(100vh - 120px);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.dna-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.dna-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.dna-agent-label {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dna-header button {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* ─── 概览 ─── */
+.dna-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.dna-summary-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.dna-summary-card .label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.dna-summary-card .value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.dna-summary-card .sub {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 2px;
+}
+
+.dna-summary-card.decay .value { color: #10b981; }
+.dna-summary-card.version .value { color: #3b82f6; }
+.dna-summary-card.evolution .value { color: #f59e0b; }
+
+/* ─── 双螺旋 ─── */
+.dna-helix-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+#dnaHelixSvg {
+  overflow: visible;
+}
+
+.dna-helix-node {
+  cursor: pointer;
+  transition: r 0.2s;
+}
+
+.dna-helix-node:hover {
+  filter: brightness(1.2);
+}
+
+/* ─── 分类基因 ─── */
+.dna-categories {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.dna-categories h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.dna-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.dna-cat-card {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dna-cat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.dna-cat-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 6px;
+}
+
+.dna-cat-stats {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.dna-cat-bar {
+  height: 4px;
+  background: #e8e8e8;
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.dna-cat-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s;
+}
+
+/* ─── 时间线 ─── */
+.dna-timeline {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.dna-timeline h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.dna-timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dna-timeline-row:last-child {
+  border-bottom: none;
+}
+
+.dna-tl-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d3436;
+  min-width: 80px;
+}
+
+.dna-tl-bar {
+  flex: 1;
+  height: 20px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  display: flex;
+  overflow: hidden;
+}
+
+.dna-tl-segment {
+  height: 100%;
+  transition: width 0.5s;
+}
+
+.dna-tl-count {
+  font-size: 12px;
+  color: #888;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ─── 演变事件 ─── */
+.dna-events {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.dna-events h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.dna-event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+
+.dna-event-item:last-child {
+  border-bottom: none;
+}
+
+.dna-event-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+.dna-event-dot.version { background: #3b82f6; }
+.dna-event-dot.inactivate { background: #ef4444; }
+.dna-event-dot.activate { background: #10b981; }
+
+.dna-event-time {
+  color: #888;
+  min-width: 80px;
+}
+
+.dna-event-desc {
+  color: #2d3436;
+  flex: 1;
+}
+
+/* ─── 详情弹窗 ─── */
+.dna-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dna-modal-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.dna-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.dna-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.dna-modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+}
+
+.dna-modal-body {
+  margin-bottom: 16px;
+}
+
+.dna-field-row {
+  display: flex;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.dna-field-label {
+  color: #888;
+  min-width: 80px;
+}
+
+.dna-field-value {
+  color: #2d3436;
+  font-weight: 500;
+}
+
+.dna-modal-evolution h4 {
+  margin: 12px 0 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.dna-version-item {
+  padding: 8px 12px;
+  margin: 4px 0;
+  background: #f5f7fa;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.dna-version-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-right: 6px;
+}

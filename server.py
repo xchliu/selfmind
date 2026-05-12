@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SelfMind — Memory Evolution Server.
+"""SelfMind — Memory Evolution Server. (auto-rebuild via dev-watch.py)
 
 Unified data pipeline: all sources (memory files, wiki, Honcho, skills)
 sync into a single SQLite store with evolution tracking.
