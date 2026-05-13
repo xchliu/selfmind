@@ -5,12 +5,13 @@ let dnaData = null;
 async function loadDnaData() {
   try {
     const resp = await fetch('/api/dna/timeline');
-    if (!resp.ok) throw new Error('API failed');
+    if (!resp.ok) throw new Error('API failed: ' + resp.status);
     dnaData = await resp.json();
     renderDnaPage();
   } catch (e) {
     console.error('DNA load error:', e);
-    document.getElementById('dnaSummary').innerHTML = '<p style="color:#ef4444;">加载失败，请刷新重试</p>';
+    const summary = document.getElementById('dnaSummary');
+    if (summary) summary.innerHTML = '<p style="color:#ef4444;">⚠️ 加载失败，请刷新重试</p>';
   }
 }
 
@@ -26,6 +27,7 @@ function renderDnaPage() {
 // ─── 概览 ───
 function renderDnaSummary() {
   const s = dnaData.summary;
+  if (!s) return;
   const container = document.getElementById('dnaSummary');
   container.innerHTML = `
     <div class="dna-summary-card">
@@ -54,16 +56,11 @@ function renderDnaSummary() {
 // ─── 双螺旋可视化 ───
 function renderDnaHelix() {
   const entries = dnaData.dna_entries;
-  if (!entries.length) return;
+  if (!entries || !entries.length) return;
 
   const svg = document.getElementById('dnaHelixSvg');
   const container = document.getElementById('dnaHelixContainer');
-  const width = container.clientWidth - 40;
-  const height = 400;
-
-  svg.setAttribute('width', width);
-  svg.setAttribute('height', height);
-  svg.innerHTML = '';
+  if (!svg || !container) return;
 
   // 分类颜色映射
   const catColors = {
@@ -76,6 +73,9 @@ function renderDnaHelix() {
     'strategic': '#1abc9c',
     'creative': '#e84393',
     'security': '#d63031',
+    'failure': '#d35400',
+    'working': '#00cec9',
+    'spatial': '#636e72',
     'concept': '#00b894',
     'entity': '#6c5ce7',
     'project': '#fd79a8',
@@ -88,9 +88,9 @@ function renderDnaHelix() {
   }
 
   function getDecayColor(decay) {
-    if (decay >= 0.6) return '#10b981'; // 强
-    if (decay >= 0.3) return '#f59e0b'; // 中
-    return '#ef4444';                    // 弱
+    if (decay >= 0.6) return '#10b981';
+    if (decay >= 0.3) return '#f59e0b';
+    return '#ef4444';
   }
 
   // 只展示memory类型条目（核心DNA）
@@ -98,7 +98,9 @@ function renderDnaHelix() {
   const activeMemories = memoryEntries.filter(e => e.status === 'active');
 
   if (!activeMemories.length) {
-    svg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="#aaa" font-size="16">暂无记忆数据</text>';
+    svg.setAttribute('width', 800);
+    svg.setAttribute('height', 100);
+    svg.innerHTML = '<text x="400" y="50" text-anchor="middle" fill="#aaa" font-size="16">暂无记忆数据</text>';
     return;
   }
 
@@ -110,40 +112,47 @@ function renderDnaHelix() {
     byCategory[cat].push(e);
   });
 
-  const categories = Object.keys(byCategory);
+  const categories = Object.keys(byCategory).sort();
+  const width = container.clientWidth - 40;
+  const height = Math.max(categories.length * 32 + 80, 250);
   const centerX = width / 2;
-  const amplitude = 80; // 螺旋振幅
-  const spacingY = 30;  // 每圈间距
-  const startY = 30;
+  const amplitude = Math.min(100, width / 5);
+  const spacingY = 32;
+  const startY = 50;
 
-  // 绘制双螺旋结构
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+  svg.innerHTML = '';
+
   const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   svg.appendChild(g);
 
-  // 过程态链（左侧）
-  let processPath = '';
-  // 关系态链（右侧）
-  let relationPath = '';
-
-  const totalRows = categories.length;
+  // 构建螺旋点数据
   const helixPoints = [];
-
-  categories.forEach((cat, i) => {
+  categories.forEach((catName, i) => {
     const y = startY + i * spacingY;
-    const angle = (i / totalRows) * Math.PI * 4; // 4个半圈
+    const angle = (i / categories.length) * Math.PI * 4;
     const xLeft = centerX - amplitude * Math.cos(angle);
     const xRight = centerX + amplitude * Math.cos(angle);
-
-    helixPoints.push({ cat, y, xLeft, xRight, angle, entries: byCategory[cat] });
-
-    if (i === 0) {
-      processPath = `M ${xLeft} ${y}`;
-      relationPath = `M ${xRight} ${y}`;
-    } else {
-      processPath += ` L ${xLeft} ${y}`;
-      relationPath += ` L ${xRight} ${y}`;
-    }
+    helixPoints.push({
+      catName,
+      y,
+      xLeft,
+      xRight,
+      angle,
+      entries: byCategory[catName]
+    });
   });
+
+  // 过程态链路径（左侧）
+  let processPath = helixPoints.map((p, i) =>
+    i === 0 ? `M ${p.xLeft} ${p.y}` : ` L ${p.xLeft} ${p.y}`
+  ).join('');
+
+  // 关系态链路径（右侧）
+  let relationPath = helixPoints.map((p, i) =>
+    i === 0 ? `M ${p.xRight} ${p.y}` : ` L ${p.xRight} ${p.y}`
+  ).join('');
 
   // 绘制两条螺旋链
   const processLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -151,7 +160,7 @@ function renderDnaHelix() {
   processLine.setAttribute('stroke', '#74b9ff');
   processLine.setAttribute('stroke-width', '3');
   processLine.setAttribute('fill', 'none');
-  processLine.setAttribute('stroke-dasharray', '5,5');
+  processLine.setAttribute('stroke-dasharray', '6,4');
   g.appendChild(processLine);
 
   const relationLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -159,11 +168,11 @@ function renderDnaHelix() {
   relationLine.setAttribute('stroke', '#a29bfe');
   relationLine.setAttribute('stroke-width', '3');
   relationLine.setAttribute('fill', 'none');
-  relationLine.setAttribute('stroke-dasharray', '5,5');
+  relationLine.setAttribute('stroke-dasharray', '6,4');
   g.appendChild(relationLine);
 
   // 绘制碱基对连接线和节点
-  helixPoints.forEach((point, i) => {
+  helixPoints.forEach((point) => {
     const avgDecay = point.entries.reduce((s, e) => s + e.decay_score, 0) / point.entries.length;
     const decayColor = getDecayColor(avgDecay);
     const catColor = getColor(point.entries[0]);
@@ -176,33 +185,34 @@ function renderDnaHelix() {
     connector.setAttribute('y2', point.y);
     connector.setAttribute('stroke', decayColor);
     connector.setAttribute('stroke-width', '2');
-    connector.setAttribute('opacity', '0.6');
+    connector.setAttribute('opacity', '0.5');
     g.appendChild(connector);
 
-    // 过程态节点（左侧）— 显示decay_score
+    // 过程态节点（左侧）— decay_score
     const leftNode = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     leftNode.setAttribute('cx', point.xLeft);
     leftNode.setAttribute('cy', point.y);
-    leftNode.setAttribute('r', 8 + avgDecay * 6);
+    leftNode.setAttribute('r', 6 + avgDecay * 8);
     leftNode.setAttribute('fill', decayColor);
-    leftNode.setAttribute('opacity', '0.8');
+    leftNode.setAttribute('opacity', '0.85');
     leftNode.setAttribute('class', 'dna-helix-node');
-    leftNode.setAttribute('data-entries', JSON.stringify(point.entries.map(e => e.id)));
+    leftNode.setAttribute('cursor', 'pointer');
     leftNode.addEventListener('click', () => showDnaEntryDetail(point.entries[0]));
     g.appendChild(leftNode);
 
-    // 关系态节点（右侧）— 显示分类
+    // 关系态节点（右侧）— 分类颜色
     const rightNode = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     rightNode.setAttribute('cx', point.xRight);
     rightNode.setAttribute('cy', point.y);
-    rightNode.setAttribute('r', 8);
+    rightNode.setAttribute('r', 7);
     rightNode.setAttribute('fill', catColor);
-    rightNode.setAttribute('opacity', '0.8');
+    rightNode.setAttribute('opacity', '0.85');
     rightNode.setAttribute('class', 'dna-helix-node');
+    rightNode.setAttribute('cursor', 'pointer');
     rightNode.addEventListener('click', () => showDnaEntryDetail(point.entries[0]));
     g.appendChild(rightNode);
 
-    // 标签
+    // 标签（中间）
     const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     label.setAttribute('x', centerX);
     label.setAttribute('y', point.y + 4);
@@ -210,26 +220,26 @@ function renderDnaHelix() {
     label.setAttribute('fill', '#2d3436');
     label.setAttribute('font-size', '12');
     label.setAttribute('font-weight', '600');
-    label.textContent = `${cat} (${point.entries.length})`;
+    label.textContent = point.catName + ' (' + point.entries.length + ')';
     g.appendChild(label);
   });
 
   // 标注链名称
   const leftLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   leftLabel.setAttribute('x', 20);
-  leftLabel.setAttribute('y', startY);
+  leftLabel.setAttribute('y', startY - 15);
   leftLabel.setAttribute('fill', '#74b9ff');
-  leftLabel.setAttribute('font-size', '11');
-  leftLabel.setAttribute('font-weight', '600');
+  leftLabel.setAttribute('font-size', '12');
+  leftLabel.setAttribute('font-weight', '700');
   leftLabel.textContent = '过程态链';
   g.appendChild(leftLabel);
 
   const rightLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   rightLabel.setAttribute('x', width - 80);
-  rightLabel.setAttribute('y', startY);
+  rightLabel.setAttribute('y', startY - 15);
   rightLabel.setAttribute('fill', '#a29bfe');
-  rightLabel.setAttribute('font-size', '11');
-  rightLabel.setAttribute('font-weight', '600');
+  rightLabel.setAttribute('font-size', '12');
+  rightLabel.setAttribute('font-weight', '700');
   rightLabel.textContent = '关系态链';
   g.appendChild(rightLabel);
 }
@@ -237,8 +247,9 @@ function renderDnaHelix() {
 // ─── 分类基因图 ───
 function renderDnaCategories() {
   const categories = dnaData.categories;
+  if (!categories) return;
   const container = document.getElementById('dnaCategories');
-  
+
   const catColors = {
     'autobiographical': '#e74c3c',
     'semantic': '#3498db',
@@ -249,6 +260,9 @@ function renderDnaCategories() {
     'strategic': '#1abc9c',
     'creative': '#e84393',
     'security': '#d63031',
+    'failure': '#d35400',
+    'working': '#00cec9',
+    'spatial': '#636e72',
     'concept': '#00b894',
     'entity': '#6c5ce7',
     'project': '#fd79a8',
@@ -257,15 +271,17 @@ function renderDnaCategories() {
   };
 
   let html = '<h3>🧬 基因分类图谱</h3><div class="dna-cat-grid">';
-  
+
   Object.entries(categories).forEach(([key, val]) => {
-    const [primary, secondary] = key.split('/');
+    const parts = key.split('/');
+    const primary = parts[0];
+    const secondary = parts[1] || '-';
     const color = catColors[primary] || '#74b9ff';
     const decayPct = (val.avg_decay * 100).toFixed(0);
-    
+
     html += `
       <div class="dna-cat-card" onclick="filterDnaByCategory('${primary}')">
-        <div class="dna-cat-name" style="color:${color}">${primary}/${secondary || '-'}</div>
+        <div class="dna-cat-name" style="color:${color}">${primary}/${secondary}</div>
         <div class="dna-cat-stats">
           <span>${val.count} 条</span>
           <span>强度 ${decayPct}%</span>
@@ -277,7 +293,7 @@ function renderDnaCategories() {
       </div>
     `;
   });
-  
+
   html += '</div>';
   container.innerHTML = html;
 }
@@ -285,8 +301,9 @@ function renderDnaCategories() {
 // ─── 时间线 ───
 function renderDnaTimeline() {
   const timeline = dnaData.timeline;
+  if (!timeline) return;
   const container = document.getElementById('dnaTimeline');
-  
+
   const typeColors = {
     'memory': '#e74c3c',
     'skill': '#2ecc71',
@@ -294,53 +311,53 @@ function renderDnaTimeline() {
     'honcho_obs': '#9b59b6',
     'honcho_conc': '#f1c40f',
   };
-  
+
   const maxEntries = Math.max(...timeline.map(t => t.entries_created), 1);
-  
+
   let html = '<h3>📅 DNA 时间线 — 记忆增长过程</h3>';
-  
+
   timeline.forEach(t => {
     const widthPct = (t.entries_created / maxEntries * 100).toFixed(1);
     const types = Object.entries(t.by_type || {});
-    
+
     html += `
       <div class="dna-timeline-row">
         <div class="dna-tl-date">${t.date}</div>
         <div class="dna-tl-bar">
           ${types.map(([type, count]) => {
             const pct = (count / t.entries_created * 100).toFixed(1);
-            return `<div class="dna-tl-segment" style="width:${pct}%;background:${typeColors[type] || '#ccc'}"></div>`;
+            return '<div class="dna-tl-segment" style="width:' + pct + '%;background:' + (typeColors[type] || '#ccc') + '"></div>';
           }).join('')}
         </div>
         <div class="dna-tl-count">${t.entries_created} 条</div>
       </div>
     `;
   });
-  
+
   container.innerHTML = html;
 }
 
 // ─── 演变事件 ───
 function renderDnaEvents() {
   const events = dnaData.evolution_events;
+  if (!events) return;
   const container = document.getElementById('dnaEvents');
-  
+
   if (!events.length) {
     container.innerHTML = '<h3>🔄 演变事件</h3><p style="color:#888;font-size:13px;">暂无演变记录</p>';
     return;
   }
-  
-  // 只展示最近20条
+
   const recentEvents = events.slice(-20).reverse();
-  
+
   let html = '<h3>🔄 演变事件 — 最近变化</h3>';
-  
+
   recentEvents.forEach(ev => {
-    const dotClass = ev.operation === 'version_change' ? 'version' : 
+    const dotClass = ev.operation === 'version_change' ? 'version' :
                     ev.operation === 'inactivate' ? 'inactivate' : 'activate';
     const time = ev.timestamp ? ev.timestamp.slice(0, 16) : '--';
     const desc = formatEventDesc(ev);
-    
+
     html += `
       <div class="dna-event-item">
         <div class="dna-event-dot ${dotClass}"></div>
@@ -349,7 +366,7 @@ function renderDnaEvents() {
       </div>
     `;
   });
-  
+
   container.innerHTML = html;
 }
 
@@ -357,35 +374,35 @@ function formatEventDesc(ev) {
   const op = ev.operation;
   const ids = ev.target_ids || [];
   const detail = ev.detail || {};
-  
+
   if (op === 'version_change') {
-    const before = detail.before?.version || '?';
-    const after = detail.after?.version || '?';
-    return `记忆 ${ids[0] || '?'} 版本变化: v${before} → v${after}`;
+    const before = detail.before && detail.before.version ? detail.before.version : '?';
+    const after = detail.after && detail.after.version ? detail.after.version : '?';
+    return '记忆 ' + (ids[0] || '?') + ' 版本变化: v' + before + ' → v' + after;
   }
   if (op === 'inactivate') {
     const reason = detail.reason || 'disappeared_from_source';
-    return `记忆 ${ids[0] || '?'} 变为inactive (${reason})`;
+    return '记忆 ' + (ids[0] || '?') + ' 变为inactive (' + reason + ')';
   }
   if (op === 'activate') {
-    return `记忆 ${ids[0] || '?'} 重新激活`;
+    return '记忆 ' + (ids[0] || '?') + ' 重新激活';
   }
-  return `${op}: ${ids.join(', ')}`;
+  return op + ': ' + ids.join(', ');
 }
 
 // ─── 条目详情弹窗 ───
 function showDnaEntryDetail(entry) {
   if (!entry) return;
-  
+
   const modal = document.getElementById('dnaModal');
   const title = document.getElementById('dnaModalTitle');
   const body = document.getElementById('dnaModalBody');
   const evolution = document.getElementById('dnaModalEvolution');
-  
+
   const decayPct = (entry.decay_score * 100).toFixed(0);
-  const decayColor = entry.decay_score >= 0.6 ? '#10b981' : 
+  const decayColor = entry.decay_score >= 0.6 ? '#10b981' :
                      entry.decay_score >= 0.3 ? '#f59e0b' : '#ef4444';
-  
+
   title.textContent = entry.label || entry.id;
   body.innerHTML = `
     <div class="dna-field-row"><span class="dna-field-label">ID</span><span class="dna-field-value">${entry.id}</span></div>
@@ -401,9 +418,9 @@ function showDnaEntryDetail(entry) {
       ${entry.content_preview || '无内容预览'}
     </div>
   `;
-  
-  // 显示演变历史
-  const versions = dnaData.entry_versions[entry.id] || [];
+
+  // 演变历史
+  const versions = dnaData.entry_versions && dnaData.entry_versions[entry.id] ? dnaData.entry_versions[entry.id] : [];
   if (versions.length > 0) {
     let evoHtml = '<h4>演变时间线</h4>';
     versions.forEach(v => {
@@ -419,7 +436,7 @@ function showDnaEntryDetail(entry) {
   } else {
     evolution.innerHTML = '<h4>演变时间线</h4><p style="color:#888;font-size:13px;">只有1个版本，暂无变化记录</p>';
   }
-  
+
   modal.style.display = 'flex';
 }
 
@@ -435,11 +452,10 @@ function filterDnaByCategory(category) {
 }
 
 // ─── 初始化 ───
-// 在switchView中调用
 function initDnaView() {
   if (!dnaData) {
     loadDnaData();
   } else {
-    renderDnaHelix(); // 重新渲染以适应容器尺寸
+    renderDnaHelix();
   }
 }

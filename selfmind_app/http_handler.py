@@ -314,6 +314,40 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
                 self._json_response({"status": "error", "message": str(exc)}, code=400)
             return
 
+        if clean_path == "/api/agents/config":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length)
+            try:
+                data = json.loads(body)
+                action = data.get("action", "")
+                with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                    config = json.load(f)
+                
+                agents = config.get("agents", [])
+                
+                if action == "add":
+                    agents.append(data["agent"])
+                    config["agents"] = agents
+                elif action == "delete":
+                    config["agents"] = [a for a in agents if a.get("id") != data["agent_id"]]
+                elif action == "update":
+                    for i, a in enumerate(agents):
+                        if a.get("id") == data["agent"].get("id"):
+                            agents[i] = data["agent"]
+                    config["agents"] = agents
+                elif action == "set_default":
+                    config["current_agent"] = data["agent_id"]
+                elif action == "update_global":
+                    config["sync_interval"] = data.get("sync_interval", 5)
+                    config["decay_threshold"] = data.get("decay_threshold", 0.2)
+                
+                with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+                    json.dump(config, f, ensure_ascii=False, indent=2)
+                self._json_response({"status": "ok", "message": "Config saved"})
+            except Exception as exc:
+                self._json_response({"status": "error", "message": str(exc)}, code=400)
+            return
+
         if clean_path == "/api/config":
             content_length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(content_length)

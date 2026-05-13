@@ -26,10 +26,11 @@ class StatsMixin:
     def _handle_stats(self):
         """返回记忆各层的实时状态和关键指标，供 U 型沉淀页面使用。"""
         from pathlib import Path
+        import os
         import subprocess
 
         home = Path.home()
-        hermes_home = home / ".hermes"
+        hermes_home = Path(os.environ.get("HERMES_HOME", str(home / ".hermes")))
         stats = {}
 
         # L1: 对话记忆 — session文件数
@@ -118,7 +119,7 @@ class StatsMixin:
 
         # L5: 程序记忆 — skill数量
         skills_dir = hermes_home / "skills"
-        skill_count = len([d for d in skills_dir.iterdir() if d.is_dir()]) if skills_dir.exists() else 0
+        skill_count = len(list(skills_dir.rglob("SKILL.md"))) if skills_dir.exists() else 0
         stats['L5'] = {
             'status': 'ok',
             'metric': skill_count,
@@ -127,8 +128,9 @@ class StatsMixin:
         }
 
         # L6: 知识库 — wiki实体文件数
-        wiki_dir = Path(home / "Documents" / "aiworkspace" / "wiki" / "entities")
-        entity_count = len([f for f in wiki_dir.iterdir() if f.name.endswith('.md')]) if wiki_dir.exists() else 0
+        wiki_base = Path(os.environ.get("SELFMIND_WIKI_PATH", str(home / "Documents" / "aiworkspace" / "wiki")))
+        wiki_entities_dir = wiki_base / "entities"
+        entity_count = len([f for f in wiki_entities_dir.iterdir() if f.name.endswith('.md')]) if wiki_entities_dir.exists() else 0
         stats['L6'] = {
             'status': 'ok',
             'metric': entity_count,
@@ -215,15 +217,17 @@ class StatsMixin:
         return {"nodes": [], "links": []}
 
     def _scan_skills(self, include_content: bool = False) -> dict:
-        """Scan ~/.hermes/skills for SKILL.md files and return skill stats.
+        """Scan skills directory for SKILL.md files and return skill stats.
         
         Args:
             include_content: If True, include full content for each skill
         """
         from pathlib import Path
+        import os
         import re
 
-        skills_dir = Path.home() / ".hermes" / "skills"
+        hermes_home = Path(os.environ.get("HERMES_HOME", str(Path.home() / ".hermes")))
+        skills_dir = hermes_home / "skills"
         if not skills_dir.exists():
             return {"total": 0, "categories": 0, "category_list": [], "skills": []}
 

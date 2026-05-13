@@ -776,35 +776,90 @@ function healthSwitchTab(tab, btn) {
 }
 
 // ========== 设置功能 ==========
+let settingsAgentConfig = null;
+
 async function loadSettingsData() {
   try {
-    const res = await fetch('/api/agents');
+    const res = await fetch('/api/config');
     const data = await res.json();
+    settingsAgentConfig = data;
     
     const listEl = document.getElementById('agentsList');
     if (!listEl) return;
     
-    if (!data.agents || data.agents.length === 0) {
+    const agents = data.agents || [];
+    if (agents.length === 0) {
       listEl.innerHTML = '<p style="color:#999; font-size:13px;">暂无Agent，点击添加按钮创建</p>';
       return;
     }
     
-    listEl.innerHTML = data.agents.map(agent => `
-      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#f8f9fa; border-radius:8px; border:1px solid ${agent.id === data.currentAgent ? '#667eea' : '#e0e0e0'};">
-        <div>
-          <div style="font-size:14px; font-weight:600; color:#2d3436;">${agent.name} ${agent.id === data.currentAgent ? '<span style="color:#667eea; font-size:12px;">(当前)</span>' : ''}</div>
-          <div style="font-size:12px; color:#666; margin-top:4px;">路径: ${agent.path}</div>
+    listEl.innerHTML = agents.map((agent, idx) => {
+      const isCurrent = agent.id === (data.current_agent || 'hermes');
+      const ext = agent.extensions || {};
+      return `
+      <div class="agent-card" style="background:${isCurrent ? '#f0f4ff' : '#f8f9fa'}; border-radius:12px; border:2px solid ${isCurrent ? '#667eea' : '#e0e0e0'}; overflow:hidden;">
+        <div style="padding:16px 20px; display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:${isCurrent ? '#667eea' : '#e0e0e0'}20; display:flex; align-items:center; justify-content:center; font-size:20px;">${agent.type === 'hermes' ? '🧠' : agent.type === 'openclaw' ? '🤖' : '⚙️'}</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:#2d3436;">${agent.name || agent.id} ${isCurrent ? '<span style="color:#667eea; font-size:12px; background:#667eea15; padding:2px 8px; border-radius:4px;">当前</span>' : ''}</div>
+              <div style="font-size:12px; color:#666; margin-top:2px;">${agent.type || 'other'} · ${agent.gateway || '未配置'}</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button onclick="toggleAgentDetail(${idx})" style="padding:6px 12px; background:#fff; color:#667eea; border:1px solid #667eea; border-radius:6px; cursor:pointer; font-size:12px;">展开</button>
+            ${!isCurrent ? `<button onclick="setDefaultAgent('${agent.id}')" style="padding:6px 12px; background:#667eea; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">设为当前</button>` : ''}
+            ${agent.id !== 'hermes' ? `<button onclick="deleteAgent('${agent.id}')" style="padding:6px 12px; background:#ef4444; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">删除</button>` : ''}
+          </div>
         </div>
-        <div style="display:flex; gap:8px;">
-          ${agent.id !== data.currentAgent ? `<button onclick="setDefaultAgent('${agent.id}')" style="padding:6px 12px; background:#667eea; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">设为默认</button>` : ''}
-          <button onclick="switchToAgent('${agent.id}')" style="padding:6px 12px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">切换</button>
-          ${agent.id !== 'hermes' ? `<button onclick="deleteAgent('${agent.id}')" style="padding:6px 12px; background:#ef4444; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">删除</button>` : ''}
+        <div id="agentDetail_${idx}" style="display:none; padding:16px 20px; border-top:1px solid #e0e0e0; background:#fafbfc;">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div>
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Gateway/API 地址</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="gateway" value="${agent.gateway || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Memory 文件路径</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="memory_path" value="${ext.memory_path || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Skills 路径</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="skills_path" value="${ext.skills_path || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Honcho API 地址</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="honcho_api" value="${ext.honcho_api || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Wiki 路径</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="wiki_path" value="${ext.wiki_path || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Sync 间隔（分钟）</label>
+              <input type="number" class="agent-field" data-agent="${idx}" data-field="sync_interval" value="${ext.sync_interval || 5}" min="1" max="60" style="width:80px; padding:8px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">衰减预警阈值</label>
+              <input type="number" class="agent-field" data-agent="${idx}" data-field="decay_threshold" value="${ext.decay_threshold || 0.2}" min="0" max="1" step="0.05" style="width:80px; padding:8px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+            </div>
+            <div style="display:flex; gap:8px; margin-top:4px;">
+              <button onclick="saveAgentConfig(${idx})" style="padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px;">保存</button>
+              <button onclick="toggleAgentDetail(${idx})" style="padding:8px 16px; background:#e0e0e0; color:#444; border:none; border-radius:6px; cursor:pointer; font-size:13px;">收起</button>
+            </div>
+          </div>
         </div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
   } catch (e) {
     console.error('加载设置失败:', e);
+    const listEl = document.getElementById('agentsList');
+    if (listEl) listEl.innerHTML = '<p style="color:#ef4444;">加载失败</p>';
   }
+}
+
+function toggleAgentDetail(idx) {
+  const el = document.getElementById('agentDetail_' + idx);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
 function showAddAgentForm() {
@@ -814,33 +869,38 @@ function showAddAgentForm() {
 function hideAddAgentForm() {
   document.getElementById('addAgentForm').style.display = 'none';
   document.getElementById('newAgentName').value = '';
-  document.getElementById('newAgentPath').value = '';
+  document.getElementById('newAgentGateway').value = '';
 }
 
 async function addAgent() {
   const name = document.getElementById('newAgentName').value.trim();
-  const path = document.getElementById('newAgentPath').value.trim();
+  const gateway = document.getElementById('newAgentGateway').value.trim();
+  const type = document.getElementById('newAgentType').value;
   
-  if (!name || !path) {
-    alert('请填写名称和路径');
+  if (!name) {
+    showToast('请填写名称', 'error');
     return;
   }
   
   try {
-    const res = await fetch('/api/agents', {
-      method: 'POST',
+    const res = await fetch('/api/agents/config', {
+      method: 'PUT',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name, path})
+      body: JSON.stringify({
+        action: 'add',
+        agent: { id: name.toLowerCase().replace(/\s+/g, '-'), name, type, gateway, extensions: {} }
+      })
     });
     
     if (res.ok) {
       hideAddAgentForm();
       loadSettingsData();
+      showToast('✅ Agent 添加成功', 'success');
     } else {
-      alert('添加失败');
+      showToast('添加失败', 'error');
     }
   } catch (e) {
-    alert('添加失败: ' + e.message);
+    showToast('添加失败: ' + e.message, 'error');
   }
 }
 
@@ -848,69 +908,89 @@ async function deleteAgent(id) {
   if (!confirm('确定要删除这个Agent吗？')) return;
   
   try {
-    const res = await fetch('/api/agents/' + id, {method: 'DELETE'});
+    const res = await fetch('/api/agents/config', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ action: 'delete', agent_id: id })
+    });
     if (res.ok) {
       loadSettingsData();
+      showToast('✅ Agent 已删除', 'success');
     } else {
-      alert('删除失败');
+      showToast('删除失败', 'error');
     }
   } catch (e) {
-    alert('删除失败: ' + e.message);
+    showToast('删除失败: ' + e.message, 'error');
   }
 }
 
 async function setDefaultAgent(id) {
   try {
-    const res = await fetch('/api/agents/' + id + '/default', {method: 'PUT'});
+    const res = await fetch('/api/agents/config', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ action: 'set_default', agent_id: id })
+    });
     if (res.ok) {
       loadSettingsData();
+      showToast('✅ 已设为当前Agent', 'success');
     } else {
-      alert('设置失败');
+      showToast('设置失败', 'error');
     }
   } catch (e) {
-    alert('设置失败: ' + e.message);
+    showToast('设置失败: ' + e.message, 'error');
   }
 }
 
-async function switchToAgent(id) {
-  try {
-    const res = await fetch('/api/agents/' + id + '/switch', {method: 'POST'});
-    if (res.ok) {
-      // 重新加载数据
-      loadData();
-      loadSettingsData();
-      alert('已切换到 ' + id);
-    } else {
-      alert('切换失败');
-    }
-  } catch (e) {
-    alert('切换失败: ' + e.message);
-  }
-}
-
-async function importMemory() {
-  const path = document.getElementById('importPath').value.trim();
-  if (!path) {
-    document.getElementById('importResult').innerHTML = '<span style="color:#ef4444;">请输入路径</span>';
-    return;
-  }
+async function saveAgentConfig(idx) {
+  const fields = document.querySelectorAll(`.agent-field[data-agent="${idx}"]`);
+  const agent = settingsAgentConfig.agents[idx];
+  
+  fields.forEach(f => {
+    const field = f.dataset.field;
+    const val = f.value;
+    if (field === 'gateway') agent.gateway = val;
+    else agent.extensions[field] = val;
+  });
   
   try {
-    const res = await fetch('/api/import', {
-      method: 'POST',
+    const res = await fetch('/api/agents/config', {
+      method: 'PUT',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({path})
+      body: JSON.stringify({ action: 'update', agent: agent })
     });
-    const data = await res.json();
-    
     if (res.ok) {
-      document.getElementById('importResult').innerHTML = '<span style="color:#10b981;">✓ 导入成功，导入了 ' + data.imported + ' 条记忆</span>';
-      loadData();
+      loadSettingsData();
+      showToast('✅ 配置已保存', 'success');
     } else {
-      document.getElementById('importResult').innerHTML = '<span style="color:#ef4444;">导入失败: ' + (data.error || '未知错误') + '</span>';
+      showToast('保存失败', 'error');
     }
   } catch (e) {
-    document.getElementById('importResult').innerHTML = '<span style="color:#ef4444;">导入失败: ' + e.message + '</span>';
+    showToast('保存失败: ' + e.message, 'error');
+  }
+}
+
+async function saveGlobalSettings() {
+  const syncInterval = document.getElementById('globalSyncInterval').value;
+  const decayThreshold = document.getElementById('globalDecayThreshold').value;
+  
+  try {
+    const res = await fetch('/api/agents/config', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'update_global',
+        sync_interval: parseInt(syncInterval),
+        decay_threshold: parseFloat(decayThreshold)
+      })
+    });
+    if (res.ok) {
+      showToast('✅ 全局设置已保存', 'success');
+    } else {
+      showToast('保存失败', 'error');
+    }
+  } catch (e) {
+    showToast('保存失败: ' + e.message, 'error');
   }
 }
 
