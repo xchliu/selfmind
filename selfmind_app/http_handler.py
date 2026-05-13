@@ -248,6 +248,8 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._handle_analyze_full()
         elif clean_path == "/api/agents":
             self._json_response(self._get_agents())
+        elif clean_path.startswith("/api/agents/discover"):
+            self._discover_gateway()
         elif clean_path.startswith("/api/v1/"):
             self._handle_v1_api(clean_path)
         elif clean_path.startswith("/api/agents/"):
@@ -435,6 +437,10 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
 
         if clean_path == "/api/agents":
             self._add_agent()
+            return
+
+        if clean_path.startswith("/api/agents/discover"):
+            self._discover_gateway()
             return
 
         if clean_path.startswith("/api/v1/"):

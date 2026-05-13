@@ -793,9 +793,30 @@ async function loadSettingsData() {
       return;
     }
     
+    // 并行探测所有agent的gateway状态
+    const gatewayStatuses = {};
+    const discoverPromises = agents.map(async (agent) => {
+      if (agent.gateway) {
+        try {
+          const dr = await fetch('/api/agents/discover?gateway=' + encodeURIComponent(agent.gateway));
+          const dd = await dr.json();
+          gatewayStatuses[agent.id] = dd.reachable ? 'online' : 'offline';
+        } catch {
+          gatewayStatuses[agent.id] = 'offline';
+        }
+      } else {
+        gatewayStatuses[agent.id] = 'no_gateway';
+      }
+    });
+    await Promise.all(discoverPromises);
+    
     listEl.innerHTML = agents.map((agent, idx) => {
       const isCurrent = agent.id === (data.current_agent || 'hermes');
       const ext = agent.extensions || {};
+      const gwStatus = gatewayStatuses[agent.id] || 'no_gateway';
+      const statusIcon = gwStatus === 'online' ? '<span style="color:#10b981;">🟢</span>' : 
+                          gwStatus === 'offline' ? '<span style="color:#ef4444;">🔴</span>' : 
+                          '<span style="color:#999;">⚪</span>';
       return `
       <div class="agent-card" style="background:${isCurrent ? '#f0f4ff' : '#f8f9fa'}; border-radius:12px; border:2px solid ${isCurrent ? '#667eea' : '#e0e0e0'}; overflow:hidden;">
         <div style="padding:16px 20px; display:flex; align-items:center; justify-content:space-between;">
@@ -803,7 +824,7 @@ async function loadSettingsData() {
             <div style="width:40px; height:40px; border-radius:10px; background:${isCurrent ? '#667eea' : '#e0e0e0'}20; display:flex; align-items:center; justify-content:center; font-size:20px;">${agent.type === 'hermes' ? '🧠' : agent.type === 'openclaw' ? '🤖' : '⚙️'}</div>
             <div>
               <div style="font-size:15px; font-weight:600; color:#2d3436;">${agent.name || agent.id} ${isCurrent ? '<span style="color:#667eea; font-size:12px; background:#667eea15; padding:2px 8px; border-radius:4px;">当前</span>' : ''}</div>
-              <div style="font-size:12px; color:#666; margin-top:2px;">${agent.type || 'other'} · ${agent.gateway || '未配置'}</div>
+              <div style="font-size:12px; color:#666; margin-top:2px;">${agent.type || 'other'} ${agent.gateway ? '· ' + statusIcon + ' ' + agent.gateway : '· 未配置Gateway'}</div>
             </div>
           </div>
           <div style="display:flex; gap:8px;">
@@ -856,7 +877,6 @@ async function loadSettingsData() {
     if (listEl) listEl.innerHTML = '<p style="color:#ef4444;">加载失败</p>';
   }
 }
-
 function toggleAgentDetail(idx) {
   const el = document.getElementById('agentDetail_' + idx);
   if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
@@ -864,12 +884,93 @@ function toggleAgentDetail(idx) {
 
 function showAddAgentForm() {
   document.getElementById('addAgentForm').style.display = 'block';
+  document.getElementById('discoverResult').style.display = 'none';
 }
 
 function hideAddAgentForm() {
   document.getElementById('addAgentForm').style.display = 'none';
   document.getElementById('newAgentName').value = '';
   document.getElementById('newAgentGateway').value = '';
+  document.getElementById('newAgentType').value = 'hermes';
+  document.getElementById('discoverResult').style.display = 'none';
+}
+
+let discoveredAgentInfo = null;
+
+async function discoverGateway() {
+  const gateway = document.getElementById('newAgentGateway').value.trim();
+  if (!gateway) {
+    showToast('请填写Gateway地址', 'error');
+    return;
+  }
+  
+  const btn = document.getElementById('discoverBtn');
+  btn.textContent = '⏳ 探测中...';
+  btn.disabled = true;
+  
+  try {
+    const res = await fetch('/api/agents/discover?gateway=' + encodeURIComponent(gateway));
+    const data = await res.json();
+    
+    discoveredAgentInfo = data;
+    const resultEl = document.getElementById('discoverResult');
+    const infoEl = document.getElementById('discoverInfo');
+    
+    if (!data.reachable) {
+      resultEl.style.display = 'block';
+      resultEl.style.background = '#fef2f2';
+      resultEl.style.borderColor = '#ef444430';
+      infoEl.innerHTML = `<div style="color:#ef4444; font-weight:600;">❌ Gateway不可达</div>
+        <div style="color:#666; margin-top:4px;">${data.error || '连接失败'}</div>`;
+      btn.textContent = '🔍 探测';
+      btn.disabled = false;
+      return;
+    }
+    
+    // 成功探测
+    resultEl.style.display = 'block';
+    resultEl.style.background = '#f0f4ff';
+    resultEl.style.borderColor = '#667eea30';
+    
+    const ai = data.agent_info || {};
+    const pathsValid = data.paths_valid || {};
+    
+    let infoHtml = `<div style="color:#10b981; font-weight:600; margin-bottom:6px;">✅ Gateway已连接</div>`;
+    infoHtml += `<div style="margin-top:4px;"><strong>平台:</strong> ${ai.platform || 'unknown'} · <strong>类型:</strong> ${ai.type || 'unknown'}</div>`;
+    if (ai.name) infoHtml += `<div><strong>名称:</strong> ${ai.name}</div>`;
+    if (ai.connected_platforms && ai.connected_platforms.length > 0) {
+      infoHtml += `<div><strong>已连接平台:</strong> ${ai.connected_platforms.join(', ')}</div>`;
+    }
+    if (pathsValid && Object.keys(pathsValid).length > 0) {
+      infoHtml += `<div style="margin-top:6px;"><strong>路径验证:</strong></div>`;
+      for (const [k, v] of Object.entries(pathsValid)) {
+        infoHtml += `<div style="color:${v ? '#10b981' : '#ef4444'};">${v ? '✅' : '❌'} ${k}: ${ai[k + '_path'] || '未知'}</div>`;
+      }
+    }
+    if (ai.memory_file_exists !== undefined) {
+      infoHtml += `<div style="color:${ai.memory_file_exists ? '#10b981' : '#ef4444'};">${ai.memory_file_exists ? '✅' : '❌'} MEMORY.md 存在</div>`;
+    }
+    
+    infoEl.innerHTML = infoHtml;
+    
+    // 自动填充表单
+    if (ai.name) {
+      document.getElementById('newAgentName').value = ai.name;
+    }
+    if (ai.type) {
+      document.getElementById('newAgentType').value = ai.type;
+    }
+    
+    showToast('✅ Gateway探测成功', 'success');
+  } catch (e) {
+    showToast('探测失败: ' + e.message, 'error');
+    document.getElementById('discoverResult').style.display = 'block';
+    document.getElementById('discoverResult').style.background = '#fef2f2';
+    document.getElementById('discoverInfo').innerHTML = `<div style="color:#ef4444;">❌ 探测请求失败: ${e.message}</div>`;
+  }
+  
+  btn.textContent = '🔍 探测';
+  btn.disabled = false;
 }
 
 async function addAgent() {
@@ -877,8 +978,8 @@ async function addAgent() {
   const gateway = document.getElementById('newAgentGateway').value.trim();
   const type = document.getElementById('newAgentType').value;
   
-  if (!name) {
-    showToast('请填写名称', 'error');
+  if (!gateway) {
+    showToast('请填写Gateway地址', 'error');
     return;
   }
   
@@ -888,7 +989,20 @@ async function addAgent() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         action: 'add',
-        agent: { id: name.toLowerCase().replace(/\s+/g, '-'), name, type, gateway, extensions: {} }
+        agent: { 
+          id: (name || type).toLowerCase().replace(/\s+/g, '-'), 
+          name: name || type, 
+          type, 
+          gateway, 
+          extensions: discoveredAgentInfo?.agent_info?.home_path ? {
+            memory_path: discoveredAgentInfo.agent_info.memory_path || '',
+            skills_path: discoveredAgentInfo.agent_info.skills_path || '',
+            honcho_api: 'http://localhost:8000',
+            wiki_path: discoveredAgentInfo.agent_info.wiki_path || '',
+            sync_interval: 5,
+            decay_threshold: 0.2
+          } : {}
+        }
       })
     });
     
@@ -897,7 +1011,8 @@ async function addAgent() {
       loadSettingsData();
       showToast('✅ Agent 添加成功', 'success');
     } else {
-      showToast('添加失败', 'error');
+      const errData = await res.json();
+      showToast('添加失败: ' + (errData.error || '未知错误'), 'error');
     }
   } catch (e) {
     showToast('添加失败: ' + e.message, 'error');

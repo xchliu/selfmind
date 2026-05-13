@@ -418,8 +418,134 @@ class MutationsMixin:
             "currentAgent": current
         }
 
+    def _discover_gateway(self):
+        """探测Gateway地址，获取Agent信息
+        
+        GET /api/agents/discover?gateway=http://localhost:8642
+        
+        探测流程：
+        1. GET /health — 检查gateway是否在线
+        2. GET /health/detailed — 获取详细状态（平台类型、PID、配置路径等）
+        3. 尝试推断hermes_home路径（从PID或默认路径）
+        """
+        import urllib.request
+        import urllib.error
+        
+        import urllib.parse as _urlparse
+        gateway_url = _urlparse.unquote(self.path.split("?gateway=")[-1]) if "?gateway=" in self.path else ""
+        # 也支持POST body方式
+        if not gateway_url:
+            content_length = int(self.headers.get("Content-Length", 0))
+            if content_length > 0:
+                body = self.rfile.read(content_length)
+                try:
+                    data = json.loads(body)
+                    gateway_url = data.get("gateway", "").strip()
+                except:
+                    pass
+        
+        if not gateway_url:
+            self._json_response({"error": "Gateway URL required. Use ?gateway=http://host:port"}, code=400)
+            return
+        
+        # Normalize URL: remove trailing slash
+        gateway_url = gateway_url.rstrip("/")
+        
+        # Ensure scheme
+        if not gateway_url.startswith("http://") and not gateway_url.startswith("https://"):
+            gateway_url = "http://" + gateway_url
+        
+        result = {"gateway": gateway_url, "reachable": False, "agent_info": {}}
+        
+        # Step 1: Basic health check
+        try:
+            req = urllib.request.Request(gateway_url + "/health", headers={"Accept": "application/json"})
+            resp = urllib.request.urlopen(req, timeout=5)
+            health_data = json.loads(resp.read())
+            result["reachable"] = True
+            result["agent_info"]["platform"] = health_data.get("platform", "unknown")
+            result["agent_info"]["status"] = health_data.get("status", "unknown")
+        except urllib.error.HTTPError as e:
+            # Server responded but with error code — still reachable
+            result["reachable"] = True
+            result["agent_info"]["status"] = f"http_error_{e.code}"
+        except Exception as e:
+            result["reachable"] = False
+            result["error"] = str(e)
+            self._json_response(result, code=200)
+            return
+        
+        # Step 2: Detailed health check
+        try:
+            req = urllib.request.Request(gateway_url + "/health/detailed", headers={"Accept": "application/json"})
+            resp = urllib.request.urlopen(req, timeout=5)
+            detailed = json.loads(resp.read())
+            result["detailed"] = detailed
+            
+            # Extract agent info
+            platform_type = detailed.get("platform", "")
+            platforms_connected = detailed.get("platforms", {})
+            pid = detailed.get("pid")
+            
+            # Determine agent name and type from platform info
+            if "hermes-agent" in platform_type or "api_server" in platforms_connected:
+                result["agent_info"]["type"] = "hermes"
+                result["agent_info"]["name"] = "Hermes"
+                
+                # Try to infer hermes home path
+                # Check if HERMES_HOME env is accessible (not directly, but guess common paths)
+                home_dir = str(Path.home())
+                hermes_home = os.environ.get("HERMES_HOME", os.path.join(home_dir, ".hermes"))
+                
+                result["agent_info"]["home_path"] = hermes_home
+                result["agent_info"]["memory_path"] = os.path.join(hermes_home, "memories")
+                result["agent_info"]["skills_path"] = os.path.join(hermes_home, "skills")
+                result["agent_info"]["wiki_path"] = os.path.join(home_dir, "Documents", "aiworkspace", "wiki")
+                
+                # Check if these paths actually exist
+                result["paths_valid"] = {
+                    "memory": os.path.isdir(result["agent_info"]["memory_path"]),
+                    "skills": os.path.isdir(result["agent_info"]["skills_path"]),
+                    "wiki": os.path.isdir(result["agent_info"]["wiki_path"])
+                }
+                
+                # Check if MEMORY.md exists
+                mem_file = os.path.join(result["agent_info"]["memory_path"], "MEMORY.md")
+                result["agent_info"]["memory_file_exists"] = os.path.isfile(mem_file)
+                
+            elif "openclaw" in platform_type.lower():
+                result["agent_info"]["type"] = "openclaw"
+                result["agent_info"]["name"] = "OpenClaw"
+                home_dir = str(Path.home())
+                openclaw_home = os.path.join(home_dir, ".openclaw")
+                result["agent_info"]["home_path"] = openclaw_home
+                result["agent_info"]["memory_path"] = os.path.join(openclaw_home, "memories")
+                result["agent_info"]["skills_path"] = os.path.join(openclaw_home, "skills")
+            else:
+                # Unknown platform type — still return info, user fills in paths manually
+                result["agent_info"]["type"] = "other"
+                result["agent_info"]["name"] = platform_type or "Unknown"
+            
+            # Collect connected platform names for display
+            connected_platforms = [name for name, info in platforms_connected.items() 
+                                   if info.get("state") == "connected"]
+            result["agent_info"]["connected_platforms"] = connected_platforms
+            
+        except Exception as e:
+            result["detailed_error"] = str(e)
+            # Still return basic info
+        
+        self._json_response(result)
+
     def _add_agent(self):
-        """添加新Agent"""
+        """添加新Agent — 支持gateway地址自动发现
+        
+        Body格式：
+        - 传统模式: {name, path} — 手动指定路径
+        - Gateway模式: {gateway: "http://localhost:8642", type, name(可选)} — 自动发现路径
+        
+        gateway模式下会自动调用discover获取hermes_home等信息
+        """
         content_length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_length)
         try:
@@ -427,39 +553,120 @@ class MutationsMixin:
         except:
             self._json_response({"error": "Invalid JSON"}, code=400)
             return
-
+        
+        gateway = data.get("gateway", "").strip()
         name = data.get("name", "").strip()
+        type_ = data.get("type", "other")
         path = data.get("path", "").strip()
-
-        if not name or not path:
-            self._json_response({"error": "Name and path required"}, code=400)
+        
+        # Gateway模式：自动发现agent信息
+        if gateway:
+            import urllib.request
+            import urllib.error
+            
+            # Normalize URL
+            gateway = gateway.rstrip("/")
+            if not gateway.startswith("http://") and not gateway.startswith("https://"):
+                gateway = "http://" + gateway
+            
+            # 先探测gateway
+            try:
+                req = urllib.request.Request(gateway + "/health/detailed", headers={"Accept": "application/json"})
+                resp = urllib.request.urlopen(req, timeout=5)
+                detailed = json.loads(resp.read())
+                
+                platform_type = detailed.get("platform", "")
+                
+                # 自动推断agent类型
+                if "hermes-agent" in platform_type:
+                    type_ = "hermes"
+                    if not name:
+                        name = "Hermes"
+                elif "openclaw" in platform_type.lower():
+                    type_ = "openclaw"
+                    if not name:
+                        name = "OpenClaw"
+                else:
+                    if not name:
+                        name = platform_type.title() or "Agent"
+                
+                # 自动推断home路径
+                home_dir = str(Path.home())
+                if type_ == "hermes":
+                    inferred_home = os.environ.get("HERMES_HOME", os.path.join(home_dir, ".hermes"))
+                    path = inferred_home
+                elif type_ == "openclaw":
+                    path = os.path.join(home_dir, ".openclaw")
+                else:
+                    # 其他类型，尝试用gateway host推断
+                    if not path:
+                        path = os.path.join(home_dir, "." + name.lower().replace(" ", "-"))
+                        
+            except Exception as e:
+                self._json_response({"error": f"Gateway discovery failed: {str(e)}", "gateway": gateway}, code=400)
+                return
+        
+        if not name:
+            self._json_response({"error": "Name required"}, code=400)
             return
-
+        
+        if not path:
+            self._json_response({"error": "Path or Gateway required to determine agent home"}, code=400)
+            return
+        
         # 展开路径
         path = str(Path(path).expanduser())
-
-        config = load_config()
-        profiles = config.setdefault("source", {}).setdefault("profiles", {})
+        
+        # 构建agent配置（新格式，带gateway和extensions）
         agent_id = name.lower().replace(" ", "-")
-
+        
+        # 构建extensions（根据type自动填充）
+        extensions = data.get("extensions", {})
+        if type_ == "hermes" and not extensions:
+            hermes_home = path
+            extensions = {
+                "memory_path": os.path.join(hermes_home, "memories"),
+                "skills_path": os.path.join(hermes_home, "skills"),
+                "honcho_api": "http://localhost:8000",
+                "wiki_path": os.path.join(str(Path.home()), "Documents", "aiworkspace", "wiki"),
+                "sync_interval": 5,
+                "decay_threshold": 0.2
+            }
+        
+        # 保存到config.json的agents数组（新格式）
+        config = load_config()
+        agents = config.get("agents", [])
+        
         # 检查是否已存在
-        if agent_id in profiles:
-            self._json_response({"error": "Agent already exists"}, code=400)
+        if any(a.get("id") == agent_id for a in agents):
+            self._json_response({"error": f"Agent '{agent_id}' already exists"}, code=400)
             return
-
-        # 添加到profiles
-        profiles[agent_id] = {
+        
+        new_agent = {
+            "id": agent_id,
             "name": name,
-            "home": path,
-            "memory_files": ["memories/MEMORY.md", "memories/USER.md"],
-            "memory_files_fallback": ["memory.md", "user.md"]
+            "type": type_,
+            "gateway": gateway,
+            "extensions": extensions
         }
-
+        agents.append(new_agent)
+        config["agents"] = agents
+        
+        # 也保存到source.profiles（兼容旧格式，用于unified_sync）
+        profiles = config.setdefault("source", {}).setdefault("profiles", {})
+        if agent_id not in profiles:
+            profiles[agent_id] = {
+                "name": name,
+                "home": path,
+                "memory_files": ["memories/MEMORY.md", "memories/USER.md"],
+                "memory_files_fallback": ["memory.md", "user.md"]
+            }
+        
         # 保存配置
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2, ensure_ascii=False)
-
-        self._json_response({"status": "ok", "agent": {"id": agent_id, "name": name, "path": path}})
+        
+        self._json_response({"status": "ok", "agent": new_agent})
 
     def _delete_agent(self, agent_id):
         """删除Agent"""

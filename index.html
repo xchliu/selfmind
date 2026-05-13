@@ -422,15 +422,23 @@
     <h3 style="margin:0 0 16px; font-size:16px; font-weight:600; color:#2d3436;">➕ 添加新 Agent</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div>
-        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">Agent 名称</label>
-        <input type="text" id="newAgentName" placeholder="例如：Hermes、OpenClaw" style="width:100%; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
+        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">Gateway 地址 <span style="color:#999; font-size:11px;">（必填，SelfMind将自动探测Agent信息）</span></label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="newAgentGateway" placeholder="例如：http://localhost:8642 或 localhost:8642" style="flex:1; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
+          <button onclick="discoverGateway()" id="discoverBtn" style="padding:10px 16px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:13px; font-weight:500; white-space:nowrap;">🔍 探测</button>
+        </div>
+      </div>
+      <!-- 探测结果区域（初始隐藏） -->
+      <div id="discoverResult" style="display:none; background:#f0f4ff; border-radius:8px; padding:16px; border:1px solid #667eea30;">
+        <div style="font-size:13px; font-weight:600; color:#667eea; margin-bottom:8px;">📡 探测结果</div>
+        <div id="discoverInfo" style="font-size:13px; color:#444;"></div>
       </div>
       <div>
-        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">Gateway/API 地址</label>
-        <input type="text" id="newAgentGateway" placeholder="例如：http://localhost:8080" style="width:100%; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
+        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">Agent 名称 <span style="color:#999; font-size:11px;">（可选，探测后自动填充）</span></label>
+        <input type="text" id="newAgentName" placeholder="自动从Gateway探测填充" style="width:100%; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
       </div>
       <div>
-        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">Agent 类型</label>
+        <label style="display:block; margin-bottom:6px; font-size:13px; font-weight:500; color:#444;">Agent 类型 <span style="color:#999; font-size:11px;">（可选，探测后自动填充）</span></label>
         <select id="newAgentType" style="width:100%; padding:10px 12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
           <option value="hermes">Hermes</option>
           <option value="openclaw">OpenClaw</option>
@@ -438,7 +446,7 @@
         </select>
       </div>
       <div style="display:flex; gap:8px;">
-        <button onclick="addAgent()" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500;">保存</button>
+        <button onclick="addAgent()" id="addAgentBtn" style="padding:10px 20px; background:#10b981; color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500;">保存</button>
         <button onclick="hideAddAgentForm()" style="padding:10px 20px; background:#e0e0e0; color:#444; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500;">取消</button>
       </div>
     </div>
