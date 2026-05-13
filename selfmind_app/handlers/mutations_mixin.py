@@ -418,6 +418,61 @@ class MutationsMixin:
             "currentAgent": current
         }
 
+    def _handle_agents_config_get(self):
+        """获取Agent配置详情 — GET /api/agents/config"""
+        config = load_config()
+        profiles = config.get("source", {}).get("profiles", {})
+        custom_agents = config.get("agents", [])
+        
+        # 构建custom_agents的id→agent映射，用于合并字段
+        custom_map = {ca.get("id"): ca for ca in custom_agents}
+        
+        agents = []
+        # 从profiles构建
+        for pid, pdata in profiles.items():
+            agent = {
+                "id": pid,
+                "name": pdata.get("name", pid.title()),
+                "path": pdata.get("home", ""),
+                "type": pdata.get("type", pid),
+                "gateway": pdata.get("gateway", ""),
+                "honcho_url": pdata.get("honcho_url", ""),
+                "wiki_path": pdata.get("wiki_path", ""),
+                "memory_path": pdata.get("memory_path", pdata.get("home", "") + "/memories"),
+                "skills_path": pdata.get("skills_path", pdata.get("home", "") + "/skills"),
+                "is_custom": False
+            }
+            # 合并custom_agents中同id的额外字段（如gateway、extensions）
+            if pid in custom_map:
+                ca = custom_map[pid]
+                if ca.get("gateway"):
+                    agent["gateway"] = ca["gateway"]
+                if ca.get("extensions"):
+                    ext = ca["extensions"]
+                    if ext.get("memory_path"):
+                        agent["memory_path"] = ext["memory_path"]
+                    if ext.get("skills_path"):
+                        agent["skills_path"] = ext["skills_path"]
+                    if ext.get("honcho_api"):
+                        agent["honcho_url"] = ext["honcho_api"]
+                    if ext.get("wiki_path"):
+                        agent["wiki_path"] = ext["wiki_path"]
+            agents.append(agent)
+        
+        # 添加自定义agents（不在profiles中的）
+        for ca in custom_agents:
+            if not any(a["id"] == ca.get("id") for a in agents):
+                ca_copy = dict(ca)
+                ca_copy["is_custom"] = True
+                agents.append(ca_copy)
+        
+        self._json_response({
+            "agents": agents,
+            "currentAgent": config.get("source", {}).get("active_profile", "hermes"),
+            "sync_interval": config.get("sync_interval", 5),
+            "decay_threshold": config.get("decay_threshold", 0.2)
+        })
+
     def _discover_gateway(self):
         """探测Gateway地址，获取Agent信息
         

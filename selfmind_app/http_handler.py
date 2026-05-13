@@ -250,6 +250,8 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._json_response(self._get_agents())
         elif clean_path.startswith("/api/agents/discover"):
             self._discover_gateway()
+        elif clean_path == "/api/agents/config":
+            self._handle_agents_config_get()
         elif clean_path.startswith("/api/v1/"):
             self._handle_v1_api(clean_path)
         elif clean_path.startswith("/api/agents/"):
@@ -509,6 +511,9 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
+
+    def _send_error(self, code, message):
+        self._json_response({"error": message}, code)
 
     def _json_response(self, data, code=200):
         self.send_response(code)

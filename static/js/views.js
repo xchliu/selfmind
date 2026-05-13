@@ -780,7 +780,7 @@ let settingsAgentConfig = null;
 
 async function loadSettingsData() {
   try {
-    const res = await fetch('/api/config');
+    const res = await fetch('/api/agents/config');
     const data = await res.json();
     settingsAgentConfig = data;
     
