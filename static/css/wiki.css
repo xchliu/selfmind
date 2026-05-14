@@ -194,6 +194,25 @@
 .wiki-page-card-preview .wiki-md-link {
   color: #3498db;
   font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px dashed #3498db80;
+  transition: color 0.2s;
+}
+.wiki-page-card-preview .wiki-md-link:hover {
+  color: #1a6b4f;
+  border-bottom-color: #1a6b4f;
+}
+.wiki-page-card-preview .wiki-md-external {
+  color: #7c3aed;
+  font-size: 12px;
+  text-decoration: none;
+  border-bottom: 1px dashed #7c3aed80;
+  transition: color 0.2s;
+}
+.wiki-page-card-preview .wiki-md-external:hover {
+  color: #4a2882;
+  border-bottom-color: #4a2882;
 }
 
 .wiki-page-card-footer {
@@ -380,6 +399,24 @@
   color: #3498db;
   font-weight: 500;
   cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px solid #3498db80;
+  transition: color 0.2s, border-color 0.2s;
+}
+.wiki-detail-content .wiki-md-link:hover {
+  color: #1a6b4f;
+  border-bottom-color: #1a6b4f;
+}
+.wiki-detail-content .wiki-md-external {
+  color: #7c3aed;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid #7c3aed80;
+  transition: color 0.2s, border-color 0.2s;
+}
+.wiki-detail-content .wiki-md-external:hover {
+  color: #4a2882;
+  border-bottom-color: #4a2882;
 }
 
 .wiki-detail-content .wiki-md-list {

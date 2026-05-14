@@ -248,7 +248,8 @@ function simpleMarkdown(text) {
     .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
     .replace(/## (.+)/g, '<span class="wiki-md-h2">$1</span>')
     .replace(/### (.+)/g, '<span class="wiki-md-h3">$1</span>')
-    .replace(/\[\[([^\]]+)\]\]/g, '<span class="wiki-md-link">⟶$1</span>')
+    .replace(/\[\[([^\]]+)\]\]/g, '<a class="wiki-md-link" onclick="openWikiLink(\'$1\')">⟶$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="wiki-md-external" href="$2" target="_blank">$1</a>')
     .replace(/\n/g, '<br>');
 }
 
@@ -267,8 +268,13 @@ function renderMarkdown(text) {
   // Italic
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
 
-  // Wikilinks [[name]]
-  html = html.replace(/\[\[([^\]]+)\]\]/g, '<span class="wiki-md-link">⟶ $1</span>');
+  // Wikilinks [[name]] — clickable, opens matching wiki page
+  html = html.replace(/\[\[([^\]]+)\]\]/g, (match, name) => {
+    return '<a class="wiki-md-link" onclick="openWikiLink(\'' + name.replace(/'/g, "\\'") + '\')">⟶ ' + name + '</a>';
+  });
+
+  // Standard markdown links [text](url) — external link
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="wiki-md-external" href="$2" target="_blank">$1</a>');
 
   // Lists (- item)
   html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
@@ -301,4 +307,63 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+// ---- Wiki link navigation ----
+
+function openWikiLink(linkName) {
+  if (!wikiPagesData || !wikiPagesData.pages) {
+    showToast('❌ Wiki数据未加载', 'error');
+    return;
+  }
+
+  const q = linkName.toLowerCase();
+  const pages = wikiPagesData.pages;
+
+  // 1. Exact title/name match
+  let match = pages.find(p =>
+    (p.title || p.name || '').toLowerCase() === q
+  );
+
+  // 2. Path-based exact match (slug → filename)
+  if (!match) {
+    match = pages.find(p =>
+      (p.path || '').toLowerCase() === q + '.md' ||
+      (p.path || '').toLowerCase() === q
+    );
+  }
+
+  // 3. Path contains slug as whole segment
+  if (!match) {
+    match = pages.find(p =>
+      (p.path || '').toLowerCase().split('/').some(seg => seg === q || seg === q + '.md')
+    );
+  }
+
+  // 4. Title/name contains linkName as substring
+  if (!match) {
+    match = pages.find(p =>
+      (p.title || p.name || '').toLowerCase().includes(q)
+    );
+  }
+
+  // 5. linkName contains title/name as substring (reverse)
+  if (!match) {
+    match = pages.find(p =>
+      q.includes((p.title || p.name || '').toLowerCase())
+    );
+  }
+
+  // 6. Path loosely contains linkName
+  if (!match) {
+    match = pages.find(p =>
+      (p.path || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (match) {
+    openWikiDetail(match);
+  } else {
+    showToast('⚠️ 页面 "' + linkName + '" 不存在或未索引', 'warning');
+  }
 }
