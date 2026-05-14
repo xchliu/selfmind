@@ -784,10 +784,18 @@ async function loadSettingsData() {
     const data = await res.json();
     settingsAgentConfig = data;
     
+    // 根据current_agent更新页面标题
+    const activeAgentId = data.current_agent || 'hermes';
+    const agents = data.agents || [];
+    const activeAgentObj = agents.find(a => a.id === activeAgentId);
+    const activeAgentName = activeAgentObj ? activeAgentObj.name : activeAgentId;
+    document.title = activeAgentName + ' · SelfMind';
+    const titleEl = document.querySelector('#mainTitle') || document.querySelector('.title-text');
+    if (titleEl) titleEl.textContent = activeAgentName + ' · SelfMind';
+    
     const listEl = document.getElementById('agentsList');
     if (!listEl) return;
     
-    const agents = data.agents || [];
     if (agents.length === 0) {
       listEl.innerHTML = '<p style="color:#999; font-size:13px;">暂无Agent，点击添加按钮创建</p>';
       return;
@@ -810,9 +818,9 @@ async function loadSettingsData() {
     });
     await Promise.all(discoverPromises);
     
-    const currentAgent = data.current_agent || 'hermes';
+    const currentAgentId = data.current_agent || 'hermes';
     listEl.innerHTML = agents.map((agent, idx) => {
-      const isCurrent = agent.id === currentAgent;
+      const isCurrent = agent.id === currentAgentId;
       const gwStatus = gatewayStatuses[agent.id] || 'no_gateway';
       const statusIcon = gwStatus === 'online' ? '🟢' : gwStatus === 'offline' ? '🔴' : '⚪';
       const icon = agent.name === '苏格拉底' ? '🧠' : agent.name === '小亚' ? '🤖' : (agent.type === 'hermes' ? '🧠' : '⚙️');
@@ -881,7 +889,7 @@ async function switchAgentView(agentId) {
     if (data.status === 'ok') {
       const agentName = data.agent_name || agentId;
       document.title = agentName + ' · SelfMind';
-      const titleEl = document.querySelector('.header-left .brand-text');
+      const titleEl = document.querySelector('#mainTitle') || document.querySelector('.title-text');
       if (titleEl) titleEl.textContent = agentName + ' · SelfMind';
       const sourceName = document.querySelector('.source-bar .source-name');
       if (sourceName) sourceName.textContent = 'selfmind-' + agentId;
