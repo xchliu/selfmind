@@ -876,7 +876,7 @@ function toggleAgentDetail(idx) {
 async function switchAgentView(agentId) {
   showToast('切换Agent...', 'info');
   try {
-    const res = await fetch('/api/agents/' + agentId + '/switch', { method: 'POST' });
+    const res = await fetch('/api/agents/' + agentId + '/switch', { method: 'PUT' });
     const data = await res.json();
     if (data.status === 'ok') {
       const agentName = data.agent_name || agentId;
@@ -885,7 +885,21 @@ async function switchAgentView(agentId) {
       if (titleEl) titleEl.textContent = agentName + ' · SelfMind';
       const sourceName = document.querySelector('.source-bar .source-name');
       if (sourceName) sourceName.textContent = 'selfmind-' + agentId;
-      await refreshAllViews();
+      // 直接用switch返回的graph_data更新图谱
+      if (data.graph_data && data.graph_data.nodes) {
+        graphNodes = data.graph_data.nodes || [];
+        graphLinks = data.graph_data.links || [];
+        renderMemoryGraph();
+      }
+      // 更新统计数据
+      try {
+        const statsRes = await fetch('/api/stats');
+        const statsData = await statsRes.json();
+        if (statsData) sedimentLiveStats = statsData;
+        // 更新计数显示
+        const countEl = document.querySelector('.source-bar .source-count');
+        if (countEl && statsData) countEl.textContent = (statsData.total_entries || graphNodes.length) + ' 条';
+      } catch (e) { console.error('refresh stats failed:', e); }
       showToast('✅ 已切换到 ' + agentName, 'success');
       loadSettingsData();
     } else {
@@ -898,24 +912,10 @@ async function switchAgentView(agentId) {
 
 async function refreshAllViews() {
   try {
-    const graphRes = await fetch('/api/graph');
-    const graphData = await graphRes.json();
-    if (graphData && graphData.nodes) {
-      graphNodes = graphData.nodes || [];
-      graphLinks = graphData.links || [];
-      renderMemoryGraph();
-    }
-  } catch (e) { console.error('refresh graph failed:', e); }
-  try {
     const statsRes = await fetch('/api/stats');
     const statsData = await statsRes.json();
     if (statsData) sedimentLiveStats = statsData;
   } catch (e) { console.error('refresh stats failed:', e); }
-  try {
-    const iqRes = await fetch('/api/iq');
-    const iqData = await iqRes.json();
-    if (iqData) renderIQPanel(iqData);
-  } catch (e) { console.error('refresh IQ failed:', e); }
 }
 
 function showAddAgentForm() {
