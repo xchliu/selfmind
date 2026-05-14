@@ -796,6 +796,10 @@ class MutationsMixin:
         except Exception as e:
             logging.warning(f"Re-sync after switch failed: {e}")
 
+        # 清除graph缓存，确保后续/api/data请求返回新agent的数据
+        from selfmind_app.http_handler import SelfMindHandler
+        SelfMindHandler._graph_data = None
+
         # 更新 state_hash 触发前端自动刷新
         if store and hasattr(store, 'state_hash'):
             store.state_hash = str(__import__('uuid').uuid4())
@@ -805,7 +809,7 @@ class MutationsMixin:
             "message": "Switched to " + agent_id,
             "agent_id": agent_id,
             "agent_name": agent_name,
-            "graph_data": new_data,
+            "graph_data": new_data or {"nodes": [], "links": []},
             "sync_stats": sync_stats if 'sync_stats' in dir() else None
         })
 
