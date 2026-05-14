@@ -419,56 +419,40 @@ class MutationsMixin:
         }
 
     def _handle_agents_config_get(self):
-        """获取Agent配置详情 — GET /api/agents/config"""
+        """获取Agent配置详情 — 只返回真实运行中的agent（有gateway的）"""
         config = load_config()
         profiles = config.get("source", {}).get("profiles", {})
         custom_agents = config.get("agents", [])
+        current_agent = config.get("current_agent", config.get("source", {}).get("active_profile", "hermes"))
         
-        # 构建custom_agents的id→agent映射，用于合并字段
-        custom_map = {ca.get("id"): ca for ca in custom_agents}
-        
+        # 只返回 config.agents 中配置的agent（真实运行中的）
         agents = []
-        # 从profiles构建
-        for pid, pdata in profiles.items():
-            agent = {
-                "id": pid,
-                "name": pdata.get("name", pid.title()),
-                "path": pdata.get("home", ""),
-                "type": pdata.get("type", pid),
-                "gateway": pdata.get("gateway", ""),
-                "honcho_url": pdata.get("honcho_url", ""),
-                "wiki_path": pdata.get("wiki_path", ""),
-                "memory_path": pdata.get("memory_path", pdata.get("home", "") + "/memories"),
-                "skills_path": pdata.get("skills_path", pdata.get("home", "") + "/skills"),
-                "is_custom": False
-            }
-            # 合并custom_agents中同id的额外字段（如gateway、extensions）
-            if pid in custom_map:
-                ca = custom_map[pid]
-                if ca.get("gateway"):
-                    agent["gateway"] = ca["gateway"]
-                if ca.get("extensions"):
-                    ext = ca["extensions"]
-                    if ext.get("memory_path"):
-                        agent["memory_path"] = ext["memory_path"]
-                    if ext.get("skills_path"):
-                        agent["skills_path"] = ext["skills_path"]
-                    if ext.get("honcho_api"):
-                        agent["honcho_url"] = ext["honcho_api"]
-                    if ext.get("wiki_path"):
-                        agent["wiki_path"] = ext["wiki_path"]
-            agents.append(agent)
-        
-        # 添加自定义agents（不在profiles中的）
         for ca in custom_agents:
-            if not any(a["id"] == ca.get("id") for a in agents):
-                ca_copy = dict(ca)
-                ca_copy["is_custom"] = True
-                agents.append(ca_copy)
+            agent = {
+                "id": ca.get("id", "unknown"),
+                "name": ca.get("name", ca.get("id", "unknown").title()),
+                "type": ca.get("type", "other"),
+                "gateway": ca.get("gateway", ""),
+            }
+            # 从profiles获取home路径
+            pid = ca.get("id", "unknown")
+            if pid in profiles:
+                pdata = profiles[pid]
+                agent["path"] = pdata.get("home", "")
+            # 从extensions获取详细配置
+            ext = ca.get("extensions", {})
+            if ext:
+                agent["memory_path"] = ext.get("memory_path", "")
+                agent["skills_path"] = ext.get("skills_path", "")
+                agent["honcho_url"] = ext.get("honcho_api", "")
+                agent["wiki_path"] = ext.get("wiki_path", "")
+                agent["sync_interval"] = ext.get("sync_interval", 5)
+                agent["decay_threshold"] = ext.get("decay_threshold", 0.2)
+            agents.append(agent)
         
         self._json_response({
             "agents": agents,
-            "currentAgent": config.get("source", {}).get("active_profile", "hermes"),
+            "current_agent": current_agent,
             "sync_interval": config.get("sync_interval", 5),
             "decay_threshold": config.get("decay_threshold", 0.2)
         })
@@ -768,21 +752,62 @@ class MutationsMixin:
         self._json_response({"status": "ok", "message": "Default agent set to " + agent_id})
 
     def _switch_agent(self, agent_id):
-        """切换当前Agent"""
+        """切换当前Agent — 更新配置 + re-sync + re-build graph"""
         config = load_config()
         profiles = config.get("source", {}).get("profiles", {})
 
-        # 验证agent存在
-        if agent_id not in profiles:
+        # 验证agent存在（在profiles或custom_agents中）
+        custom_agents = config.get("agents", [])
+        custom_ids = [a.get("id") for a in custom_agents]
+        if agent_id not in profiles and agent_id not in custom_ids:
             self._json_response({"error": "Agent not found"}, code=404)
             return
 
+        # 更新 source.active_profile 和 current_agent
         config.setdefault("source", {})["active_profile"] = agent_id
+        config["current_agent"] = agent_id
 
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2, ensure_ascii=False)
 
-        self._json_response({"status": "ok", "message": "Switched to " + agent_id})
+        # Re-sync 数据
+        store = _get_store()
+        new_data = None
+        agent_name = agent_id
+        try:
+            from selfmind_app.unified_sync import unified_sync
+            from selfmind_app.parser import build_graph_from_store
+            sync_stats = unified_sync(store, config)
+            new_data = build_graph_from_store(store, config)
+            # 从 agents 列表找名字
+            for a in custom_agents:
+                if a.get("id") == agent_id:
+                    agent_name = a.get("name", agent_id)
+            # 也可能名字在 profiles 中
+            if agent_id in profiles:
+                pdata = profiles[agent_id]
+                # 名字优先从 custom_agents 取
+                for a in custom_agents:
+                    if a.get("id") == agent_id:
+                        agent_name = a.get("name", agent_id)
+                        break
+                if agent_name == agent_id:
+                    agent_name = pdata.get("name", agent_id.title())
+        except Exception as e:
+            logging.warning(f"Re-sync after switch failed: {e}")
+
+        # 更新 state_hash 触发前端自动刷新
+        if store and hasattr(store, 'state_hash'):
+            store.state_hash = str(__import__('uuid').uuid4())
+
+        self._json_response({
+            "status": "ok",
+            "message": "Switched to " + agent_id,
+            "agent_id": agent_id,
+            "agent_name": agent_name,
+            "graph_data": new_data,
+            "sync_stats": sync_stats if 'sync_stats' in dir() else None
+        })
 
     def _import_memory(self):
         """导入记忆文件"""

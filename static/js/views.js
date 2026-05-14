@@ -810,62 +810,51 @@ async function loadSettingsData() {
     });
     await Promise.all(discoverPromises);
     
+    const currentAgent = data.current_agent || 'hermes';
     listEl.innerHTML = agents.map((agent, idx) => {
-      const isCurrent = agent.id === (data.current_agent || 'hermes');
-      const ext = agent.extensions || {};
+      const isCurrent = agent.id === currentAgent;
       const gwStatus = gatewayStatuses[agent.id] || 'no_gateway';
-      const statusIcon = gwStatus === 'online' ? '<span style="color:#10b981;">🟢</span>' : 
-                          gwStatus === 'offline' ? '<span style="color:#ef4444;">🔴</span>' : 
-                          '<span style="color:#999;">⚪</span>';
+      const statusIcon = gwStatus === 'online' ? '🟢' : gwStatus === 'offline' ? '🔴' : '⚪';
+      const icon = agent.name === '苏格拉底' ? '🧠' : agent.name === '小亚' ? '🤖' : (agent.type === 'hermes' ? '🧠' : '⚙️');
       return `
-      <div class="agent-card" style="background:${isCurrent ? '#f0f4ff' : '#f8f9fa'}; border-radius:12px; border:2px solid ${isCurrent ? '#667eea' : '#e0e0e0'}; overflow:hidden;">
-        <div style="padding:16px 20px; display:flex; align-items:center; justify-content:space-between;">
+      <div class="agent-card" style="background:${isCurrent ? '#f0f4ff' : '#fff'}; border-radius:12px; border:2px solid ${isCurrent ? '#667eea' : '#e2e8f0'}; overflow:hidden; margin-bottom:12px; transition:all 0.2s;">
+        <div style="padding:14px 18px; display:flex; align-items:center; justify-content:space-between;">
           <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:40px; height:40px; border-radius:10px; background:${isCurrent ? '#667eea' : '#e0e0e0'}20; display:flex; align-items:center; justify-content:center; font-size:20px;">${agent.type === 'hermes' ? '🧠' : agent.type === 'openclaw' ? '🤖' : '⚙️'}</div>
+            <div style="width:44px; height:44px; border-radius:12px; background:${isCurrent ? '#667eea' : '#f1f5f9'}; display:flex; align-items:center; justify-content:center; font-size:22px; color:${isCurrent ? '#fff' : '#667eea'};">${icon}</div>
             <div>
-              <div style="font-size:15px; font-weight:600; color:#2d3436;">${agent.name || agent.id} ${isCurrent ? '<span style="color:#667eea; font-size:12px; background:#667eea15; padding:2px 8px; border-radius:4px;">当前</span>' : ''}</div>
-              <div style="font-size:12px; color:#666; margin-top:2px;">${agent.type || 'other'} ${agent.gateway ? '· ' + statusIcon + ' ' + agent.gateway : '· 未配置Gateway'}</div>
+              <div style="font-size:16px; font-weight:600; color:#2d3436;">${agent.name} ${isCurrent ? '<span style="color:#667eea; font-size:11px; background:#667eea18; padding:2px 8px; border-radius:4px; margin-left:6px;">正在查看</span>' : ''}</div>
+              <div style="font-size:12px; color:#888; margin-top:2px;">${statusIcon} ${agent.gateway || '未配置'} · ${agent.type || 'hermes'}类型</div>
             </div>
           </div>
           <div style="display:flex; gap:8px;">
-            <button onclick="toggleAgentDetail(${idx})" style="padding:6px 12px; background:#fff; color:#667eea; border:1px solid #667eea; border-radius:6px; cursor:pointer; font-size:12px;">展开</button>
-            ${!isCurrent ? `<button onclick="setDefaultAgent('${agent.id}')" style="padding:6px 12px; background:#667eea; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">设为当前</button>` : ''}
-            ${agent.id !== 'hermes' ? `<button onclick="deleteAgent('${agent.id}')" style="padding:6px 12px; background:#ef4444; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px;">删除</button>` : ''}
+            ${!isCurrent ? '<button onclick="switchAgentView(\'' + agent.id + '\')" style="padding:8px 16px; background:#667eea; color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:13px; font-weight:500;">切换查看</button>' : '<button onclick="toggleAgentDetail(' + idx + ')" style="padding:8px 16px; background:#fff; color:#667eea; border:1px solid #667eea; border-radius:8px; cursor:pointer; font-size:13px;">数据源配置</button>'}
           </div>
         </div>
-        <div id="agentDetail_${idx}" style="display:none; padding:16px 20px; border-top:1px solid #e0e0e0; background:#fafbfc;">
-          <div style="display:flex; flex-direction:column; gap:12px;">
+        <div id="agentDetail_${idx}" style="display:none; padding:14px 18px; border-top:1px solid #e0e0e0; background:#fafbfc;">
+          <div style="display:flex; flex-direction:column; gap:10px;">
             <div>
-              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Gateway/API 地址</label>
-              <input type="text" class="agent-field" data-agent="${idx}" data-field="gateway" value="${agent.gateway || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:3px;">Gateway 地址</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="gateway" value="${agent.gateway || ''}" style="width:100%; padding:7px 11px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
             </div>
             <div>
-              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Memory 文件路径</label>
-              <input type="text" class="agent-field" data-agent="${idx}" data-field="memory_path" value="${ext.memory_path || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:3px;">Memory 路径</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="memory_path" value="${agent.memory_path || ''}" style="width:100%; padding:7px 11px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
             </div>
             <div>
-              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Skills 路径</label>
-              <input type="text" class="agent-field" data-agent="${idx}" data-field="skills_path" value="${ext.skills_path || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:3px;">Skills 路径</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="skills_path" value="${agent.skills_path || ''}" style="width:100%; padding:7px 11px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
             </div>
             <div>
-              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Honcho API 地址</label>
-              <input type="text" class="agent-field" data-agent="${idx}" data-field="honcho_api" value="${ext.honcho_api || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:3px;">Honcho API</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="honcho_url" value="${agent.honcho_url || ''}" style="width:100%; padding:7px 11px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
             </div>
             <div>
-              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Wiki 路径</label>
-              <input type="text" class="agent-field" data-agent="${idx}" data-field="wiki_path" value="${ext.wiki_path || ''}" style="width:100%; padding:8px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
-            </div>
-            <div>
-              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">Sync 间隔（分钟）</label>
-              <input type="number" class="agent-field" data-agent="${idx}" data-field="sync_interval" value="${ext.sync_interval || 5}" min="1" max="60" style="width:80px; padding:8px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
-            </div>
-            <div>
-              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:4px;">衰减预警阈值</label>
-              <input type="number" class="agent-field" data-agent="${idx}" data-field="decay_threshold" value="${ext.decay_threshold || 0.2}" min="0" max="1" step="0.05" style="width:80px; padding:8px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
+              <label style="display:block; font-size:12px; font-weight:500; color:#888; margin-bottom:3px;">Wiki 路径</label>
+              <input type="text" class="agent-field" data-agent="${idx}" data-field="wiki_path" value="${agent.wiki_path || ''}" style="width:100%; padding:7px 11px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px;">
             </div>
             <div style="display:flex; gap:8px; margin-top:4px;">
-              <button onclick="saveAgentConfig(${idx})" style="padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px;">保存</button>
-              <button onclick="toggleAgentDetail(${idx})" style="padding:8px 16px; background:#e0e0e0; color:#444; border:none; border-radius:6px; cursor:pointer; font-size:13px;">收起</button>
+              <button onclick="saveAgentConfig(${idx})" style="padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer;">保存</button>
+              <button onclick="toggleAgentDetail(${idx})" style="padding:8px 16px; background:#e0e0e0; color:#444; border:none; border-radius:6px; cursor:pointer;">收起</button>
             </div>
           </div>
         </div>
@@ -877,9 +866,56 @@ async function loadSettingsData() {
     if (listEl) listEl.innerHTML = '<p style="color:#ef4444;">加载失败</p>';
   }
 }
+
 function toggleAgentDetail(idx) {
   const el = document.getElementById('agentDetail_' + idx);
   if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ========== Agent切换功能 ==========
+async function switchAgentView(agentId) {
+  showToast('切换Agent...', 'info');
+  try {
+    const res = await fetch('/api/agents/' + agentId + '/switch', { method: 'POST' });
+    const data = await res.json();
+    if (data.status === 'ok') {
+      const agentName = data.agent_name || agentId;
+      document.title = agentName + ' · SelfMind';
+      const titleEl = document.querySelector('.header-left .brand-text');
+      if (titleEl) titleEl.textContent = agentName + ' · SelfMind';
+      const sourceName = document.querySelector('.source-bar .source-name');
+      if (sourceName) sourceName.textContent = 'selfmind-' + agentId;
+      await refreshAllViews();
+      showToast('✅ 已切换到 ' + agentName, 'success');
+      loadSettingsData();
+    } else {
+      showToast('切换失败: ' + (data.error || 'unknown'), 'error');
+    }
+  } catch (e) {
+    showToast('切换失败: ' + e.message, 'error');
+  }
+}
+
+async function refreshAllViews() {
+  try {
+    const graphRes = await fetch('/api/graph');
+    const graphData = await graphRes.json();
+    if (graphData && graphData.nodes) {
+      graphNodes = graphData.nodes || [];
+      graphLinks = graphData.links || [];
+      renderMemoryGraph();
+    }
+  } catch (e) { console.error('refresh graph failed:', e); }
+  try {
+    const statsRes = await fetch('/api/stats');
+    const statsData = await statsRes.json();
+    if (statsData) sedimentLiveStats = statsData;
+  } catch (e) { console.error('refresh stats failed:', e); }
+  try {
+    const iqRes = await fetch('/api/iq');
+    const iqData = await iqRes.json();
+    if (iqData) renderIQPanel(iqData);
+  } catch (e) { console.error('refresh IQ failed:', e); }
 }
 
 function showAddAgentForm() {
