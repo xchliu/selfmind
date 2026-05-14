@@ -4,6 +4,22 @@
 
 基于认知心理学的 AI 记忆可视化系统，记录记忆的演变过程。
 
+## 界面预览
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/memory-graph.png" alt="记忆图谱" /><br/><b>🧠 记忆图谱</b> — D3力导向图，节点按分类聚类，时间线播放演变</td>
+<td width="50%"><img src="docs/screenshots/settings-agent-switch.png" alt="Agent切换" /><br/><b>🧬 Agent 测序对象</b> — 一键切换不同Agent，查看各自记忆图谱</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/memory-sedimentation.png" alt="记忆沉淀" /><br/><b>⏳ 记忆沉淀</b> — U型6层沉淀路径，实时健康指标+激活射线</td>
+<td width="50%"><img src="docs/screenshots/wiki-library.png" alt="Wiki库" /><br/><b>📖 Wiki库</b> — 卡片式知识浏览，分类筛选+编辑保存</td>
+</tr>
+<tr>
+<td width="100%"><img src="docs/screenshots/agent-dna.png" alt="Agent DNA" /><br/><b>🧬 Agent DNA</b> — 记忆基因组成分析+演变事件流+时间线增长</td>
+</tr>
+</table>
+
 ## Agent DNA
 
 SelfMind 不是 DNA 本身，而是 **agent 的 DNA 测序仪**。
@@ -17,6 +33,20 @@ Agent（Hermes、OpenClaw 等）在使用过程中会沉淀独特的记忆模式
 不同 agent 使用久了会形成不同的记忆基因组合，SelfMind 让你能看见、理解、干预这个演化过程。
 
 详见 [Agent DNA 设计](docs/AGENT_DNA.md)
+
+## 核心功能
+
+| 功能 | 说明 |
+|------|------|
+| 🧠 记忆图谱 | D3力导向图可视化，节点分类聚类，时间线播放记忆演变 |
+| 🧬 Agent切换 | 标题区下拉菜单一键切换不同Agent（苏格拉底/小亚/Grace等），图谱+DNA+健康数据联动刷新 |
+| 🔍 Gateway发现 | 设置页输入Gateway地址自动探测Agent信息，路径验证+自动填充 |
+| ⏳ 记忆沉淀 | U型6层沉淀路径（L1对话→L2快照→L3推理→L4图谱→L5程序→L6知识），实时健康指标 |
+| 📖 Wiki库 | 卡片式知识浏览，分类筛选+详情弹窗+markdown渲染+编辑保存 |
+| 💊 记忆健康 | 衰减预警、遗忘曲线、演变追踪，SQLite统一数据源 |
+| 🧬 Agent DNA | 记忆基因组成条形图+分类强度+演变事件流+DNA时间线 |
+| 🔄 自动同步 | 5分钟间隔自动sync，前端15秒轮询检测变化 |
+| 🐳 Docker部署 | 纯Python stdlib，零pip install，一键容器化启动 |
 
 ## Quick Start
 
@@ -94,6 +124,19 @@ python3 server.py
 # 4. 打开浏览器
 open http://localhost:3002
 ```
+
+### 添加更多 Agent
+
+SelfMind 支持同时查看多个 Agent 的记忆。每个 Agent 需要有独立的 Hermes gateway：
+
+1. 创建新 profile：`hermes setup --profile <name>`
+2. 配置 gateway 端口：在 profile 的 config.yaml 加 `API_SERVER_ENABLED: true` + `API_SERVER_PORT: <port>`
+3. 启动 gateway：`HERMES_HOME=~/.hermes/profiles/<name> hermes gateway`
+4. SelfMind 设置页输入 Gateway 地址 → 点击探测 → 自动发现 → 确认添加
+
+切换 Agent：标题区下拉菜单一键切换，图谱、DNA、健康数据联动刷新。
+
+端口分配建议：hermes=8642, aris=8643, grace=8644, 依次递增。
 
 ## 环境变量
 
