@@ -885,23 +885,23 @@ async function switchAgentView(agentId) {
       if (titleEl) titleEl.textContent = agentName + ' · SelfMind';
       const sourceName = document.querySelector('.source-bar .source-name');
       if (sourceName) sourceName.textContent = 'selfmind-' + agentId;
-      // 直接用switch返回的graph_data更新图谱
+      // 用switch返回的graph_data赋值给全局graphData，再调用loadData的标准渲染链
       if (data.graph_data && data.graph_data.nodes) {
-        graphNodes = data.graph_data.nodes || [];
-        graphLinks = data.graph_data.links || [];
-        renderMemoryGraph();
+        graphData = data.graph_data;
+        timelinePoints = buildTimelinePoints(graphData);
+        applyTimepoint(timelinePoints.length - 1);
       }
       // 更新统计数据
       try {
         const statsRes = await fetch('/api/stats');
         const statsData = await statsRes.json();
         if (statsData) sedimentLiveStats = statsData;
-        // 更新计数显示
         const countEl = document.querySelector('.source-bar .source-count');
-        if (countEl && statsData) countEl.textContent = (statsData.total_entries || graphNodes.length) + ' 条';
+        if (countEl && statsData) countEl.textContent = (statsData.total_entries || graphData.nodes.length) + ' 条';
       } catch (e) { console.error('refresh stats failed:', e); }
       showToast('✅ 已切换到 ' + agentName, 'success');
       loadSettingsData();
+      loadIQ();
     } else {
       showToast('切换失败: ' + (data.error || 'unknown'), 'error');
     }
