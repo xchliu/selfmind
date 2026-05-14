@@ -1,3 +1,29 @@
+## [2.7.0] — 2026-05-14
+
+### Added
+- 🧬 **Agent切换功能** — 标题区下拉菜单一键切换不同Agent，图谱+DNA+健康数据联动刷新
+- 🔍 **Gateway发现** — 设置页输入Gateway地址自动探测Agent信息（平台类型、路径验证、MEMORY.md存在性）
+- 🤖 **多Agent支持** — 苏格拉底(8642) + 小亚(8643) + Grace(8644)，config.json动态配置
+- 📸 **系统截图** — README新增5张界面截图（图谱/设置/沉淀/Wiki/DNA）
+- 📝 **README重构** — 新增界面预览表格、核心功能列表、添加Agent指南
+
+### Changed
+- 设置页标题从"Agent 数据源配置"改为"Agent 测序对象"，语义从配置工具变为切换主体
+- Agent切换从设置页按钮移至标题区下拉菜单（高频操作放显眼位置，低频配置放设置页）
+- `_handle_agents_config_get()` 只返回真实运行Agent（有gateway的），不返回纯数据源profile
+- `_switch_agent()` 新增 `_graph_data = None` 缓存清除 + re-sync + re-build graph
+- `init.js` 新增页面初始化时调用 `loadSettingsData()` 设置标题
+
+### Fixed
+- 修复切换后图谱数据不更新 — `_graph_data`类缓存不清除导致 `/api/data` 返回旧数据
+- 修复切换后标题不变化 — HTML硬编码标题 + JS selector错误 + init.js缓存
+- 修复 `renderMemoryGraph()`/`renderIQPanel()` 不存在 — 改用正确的渲染链 `applyTimepoint()`
+- 修复 URL双重编码 — 前端encodeURIComponent + 后端http://拼接导致 `http://http%3A%2F%2F`
+- 修复 `/api/agents/config` GET路由未注册 + `_send_error` 方法不存在
+- 修复 `__pycache__` 导致代码改动不生效 — 每次重启前必须清除.pyc文件
+
+---
+
 ## [2.6.0] — 2026-05-11
 
 ### Added
