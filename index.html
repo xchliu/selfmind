@@ -21,6 +21,10 @@
   <div class="title-section">
     <div class="title-icon"></div>
     <span class="title-text" id="mainTitle">SelfMind</span>
+    <select id="agentSelector" class="agent-selector" onchange="switchAgentView(this.value)" title="切换测序对象">
+      <option value="hermes">🧠 苏格拉底</option>
+      <option value="aris">🤖 小亚</option>
+    </select>
     <span class="title-sub">SELFMIND</span>
     <div class="view-tabs">
       <button class="view-tab active" id="tabMemory" onclick="switchView('memory')">
@@ -470,9 +474,9 @@
 </div>
 
 
-<script src="/static/js/app.js?v=20260514c"></script>
-<script src="/static/js/graph.js?v=20260514c"></script>
-<script src="/static/js/views.js?v=20260514c"></script>
+<script src="/static/js/app.js?v=20260514d"></script>
+<script src="/static/js/graph.js?v=20260514d"></script>
+<script src="/static/js/views.js?v=20260514d"></script>
 <!-- 底部状态栏 -->
 <div id="pollBar" class="poll-bar">
   <div class="poll-left">
@@ -487,10 +491,10 @@
 </div>
 
 
-<script src="/static/js/init.js?v=20260514c"></script>
-<script src="/static/js/sediment.js?v=20260514c"></script>
-<script src="/static/js/wiki.js?v=20260514c"></script>
-<script src="/static/js/dna.js?v=20260514c"></script>
+<script src="/static/js/init.js?v=20260514d"></script>
+<script src="/static/js/sediment.js?v=20260514d"></script>
+<script src="/static/js/wiki.js?v=20260514d"></script>
+<script src="/static/js/dna.js?v=20260514d"></script>
 
 
 

@@ -792,6 +792,11 @@ async function loadSettingsData() {
     document.title = activeAgentName + ' · SelfMind';
     const titleEl = document.querySelector('#mainTitle') || document.querySelector('.title-text');
     if (titleEl) titleEl.textContent = activeAgentName + ' · SelfMind';
+    const selector = document.getElementById('agentSelector');
+    if (selector && agents.length > 0) {
+      selector.innerHTML = agents.map(a => `<option value="${a.id}">${a.type === 'hermes' ? '🧠' : '🤖'} ${a.name}</option>`).join('');
+      selector.value = activeAgentId;
+    }
     
     const listEl = document.getElementById('agentsList');
     if (!listEl) return;
@@ -835,7 +840,7 @@ async function loadSettingsData() {
             </div>
           </div>
           <div style="display:flex; gap:8px;">
-            ${!isCurrent ? '<button onclick="switchAgentView(\'' + agent.id + '\')" style="padding:8px 16px; background:#667eea; color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:13px; font-weight:500;">切换查看</button>' : '<button onclick="toggleAgentDetail(' + idx + ')" style="padding:8px 16px; background:#fff; color:#667eea; border:1px solid #667eea; border-radius:8px; cursor:pointer; font-size:13px;">数据源配置</button>'}
+            ${isCurrent ? '<span style="padding:4px 10px; background:#667eea; color:#fff; border-radius:6px; font-size:12px; font-weight:500;">✅ 当前</span>' : ''}
           </div>
         </div>
         <div id="agentDetail_${idx}" style="display:none; padding:14px 18px; border-top:1px solid #e0e0e0; background:#fafbfc;">
@@ -882,7 +887,9 @@ function toggleAgentDetail(idx) {
 
 // ========== Agent切换功能 ==========
 async function switchAgentView(agentId) {
-  showToast('切换Agent...', 'info');
+  showToast('切换测序对象...', 'info');
+  // 暂停autoPoll防止切换期间poll覆盖新数据
+  if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
   try {
     const res = await fetch('/api/agents/' + agentId + '/switch', { method: 'PUT' });
     const data = await res.json();
@@ -891,15 +898,15 @@ async function switchAgentView(agentId) {
       document.title = agentName + ' · SelfMind';
       const titleEl = document.querySelector('#mainTitle') || document.querySelector('.title-text');
       if (titleEl) titleEl.textContent = agentName + ' · SelfMind';
+      const selector = document.getElementById('agentSelector');
+      if (selector) selector.value = agentId;
       const sourceName = document.querySelector('.source-bar .source-name');
       if (sourceName) sourceName.textContent = 'selfmind-' + agentId;
-      // 用switch返回的graph_data赋值给全局graphData，再调用loadData的标准渲染链
       if (data.graph_data && data.graph_data.nodes) {
         graphData = data.graph_data;
         timelinePoints = buildTimelinePoints(graphData);
         applyTimepoint(timelinePoints.length - 1);
       }
-      // 更新统计数据
       try {
         const statsRes = await fetch('/api/stats');
         const statsData = await statsRes.json();
@@ -910,11 +917,15 @@ async function switchAgentView(agentId) {
       showToast('✅ 已切换到 ' + agentName, 'success');
       loadSettingsData();
       loadIQ();
+      lastPollHash = null;
+      startPolling();
     } else {
       showToast('切换失败: ' + (data.error || 'unknown'), 'error');
+      startPolling();
     }
   } catch (e) {
     showToast('切换失败: ' + e.message, 'error');
+    startPolling();
   }
 }
 
