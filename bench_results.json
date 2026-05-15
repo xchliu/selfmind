@@ -1,0 +1,95 @@
+{
+  "io": {
+    "write_batch_1": {
+      "total_entries": 500,
+      "batch_size": 1,
+      "elapsed_sec": 0.464,
+      "ops_per_sec": 0.0,
+      "written": 0
+    },
+    "write_batch_10": {
+      "total_entries": 500,
+      "batch_size": 10,
+      "elapsed_sec": 0.044,
+      "ops_per_sec": 0.0,
+      "written": 0
+    },
+    "write_batch_50": {
+      "total_entries": 500,
+      "batch_size": 50,
+      "elapsed_sec": 0.021,
+      "ops_per_sec": 0.0,
+      "written": 0
+    },
+    "write_batch_100": {
+      "total_entries": 500,
+      "batch_size": 100,
+      "elapsed_sec": 0.021,
+      "ops_per_sec": 0.0,
+      "written": 0
+    },
+    "read_single": {
+      "queries": 243,
+      "elapsed_sec": 0.005,
+      "ops_per_sec": 48917.1,
+      "hits": 243
+    },
+    "read_all": {
+      "total_entries": 243,
+      "elapsed_sec": 0.003
+    },
+    "read_by_type": {
+      "type": "memory",
+      "count": 100,
+      "elapsed_sec": 0.001
+    },
+    "read_stats": {
+      "elapsed_sec": 0.002,
+      "total_active": 243
+    },
+    "concurrent_read": {
+      "threads": 4,
+      "queries_per_thread": 500,
+      "total_queries": 2000,
+      "total_elapsed_sec": 0.114,
+      "ops_per_sec": 17547.1,
+      "total_hits": 2000,
+      "per_thread_avg_sec": 0.071
+    }
+  },
+  "cpu": {
+    "graph_build": {
+      "iterations": 5,
+      "avg_elapsed_sec": 0.008,
+      "min_elapsed_sec": 0.007,
+      "max_elapsed_sec": 0.008,
+      "avg_nodes": 251,
+      "avg_links": 10150,
+      "std_elapsed": 0.0
+    },
+    "search_by_id": {
+      "iterations": 100,
+      "elapsed_sec": 0.001,
+      "ops_per_sec": 142967.9
+    },
+    "search_by_category": {
+      "iterations": 100,
+      "unique_categories": 6,
+      "elapsed_sec": 0.001,
+      "ops_per_sec": 142806.1
+    },
+    "search_by_text": {
+      "iterations": 100,
+      "elapsed_sec": 0.007,
+      "ops_per_sec": 14394.3
+    },
+    "concurrent_graph_build": {
+      "threads": 4,
+      "total_elapsed_sec": 0.04,
+      "avg_per_thread_sec": 0.031,
+      "avg_nodes": 251,
+      "max_thread_sec": 0.04
+    }
+  },
+  "meta": {}
+}

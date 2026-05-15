@@ -531,7 +531,7 @@ class AnalyzerEngine:
                 if age_days < 30:
                     score += 0.15
                     reasons.append("近期创建")
-            except:
+            except Exception:
                 pass
             
             scored.append({
@@ -565,7 +565,7 @@ class AnalyzerEngine:
                 if created:
                     dt = datetime.fromisoformat(created.replace('Z', '+00:00'))
                     dates.append(dt.replace(tzinfo=None))
-            except:
+            except Exception:
                 continue
         
         timeline_span = 0

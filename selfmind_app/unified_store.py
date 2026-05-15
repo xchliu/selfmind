@@ -770,11 +770,11 @@ class UnifiedStore:
             d = dict(op)
             try:
                 d["target_ids"] = json.loads(d["target_ids"]) if d["target_ids"] else []
-            except:
+            except (json.JSONDecodeError, KeyError):
                 d["target_ids"] = []
             try:
                 d["detail"] = json.loads(d["detail"]) if d["detail"] else {}
-            except:
+            except (json.JSONDecodeError, KeyError):
                 d["detail"] = {}
             evolution_events.append(d)
         

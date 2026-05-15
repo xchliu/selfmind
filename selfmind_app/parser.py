@@ -181,6 +181,23 @@ TAXONOMY: dict[str, dict] = {
             },
         },
     },
+    "security": {
+        "display_name": "安全规则",
+        "subcategories": {
+            "rules": {
+                "display_name": "安全红线",
+                "keywords": ["红线", "安全", "原则", "不回答", "边界", "底线", "不对外", "隐私", "密码", "授权", "权限"],
+            },
+            "identity": {
+                "display_name": "身份验证",
+                "keywords": ["暗号", "验证", "身份", "确认", "user_id"],
+            },
+            "data": {
+                "display_name": "数据保护",
+                "keywords": ["数据", "删除", "敏感", "泄露", "保护"],
+            },
+        },
+    },
 }
 
 # Mapping from skill directory categories to procedural subcategories
@@ -586,11 +603,12 @@ def build_graph(config: dict) -> dict:
             })
             node_ids.add(node_id)
 
-    def add_link(source: str, target: str, label: str = "", strength: float = 1.0) -> None:
+    def add_link(source: str, target: str, label: str = "", strength: float = 1.0, type: str = "") -> None:
         if source in node_ids and target in node_ids:
             key = f"{source}->{target}"
             if key not in link_keys:
-                links.append({"source": source, "target": target, "label": label, "strength": strength})
+                link_type = type or label or "unknown"
+                links.append({"source": source, "target": target, "label": label, "type": link_type, "strength": strength})
                 link_keys.add(key)
 
     # ── Center node ──
@@ -871,9 +889,9 @@ def build_graph_from_store(store, config: dict) -> dict:
     node_ids: set[str] = set()
     link_keys: set[str] = set()
 
-    def add_node(node_id, label, category, description="", primary="", secondary="", group="", access_count=0, importance=0.0, entry_type="memory", createdAt="", updatedAt="", decay_score=0.25, version=1):
+    def add_node(node_id, label, category, description="", primary="", secondary="", group="", access_count=0, importance=0.0, entry_type="memory", createdAt="", updatedAt="", decay_score=0.25, version=1, graph_id=""):
         if node_id not in node_ids:
-            nodes.append({
+            node_dict = {
                 "id": node_id,
                 "label": label,
                 "category": category,
@@ -888,14 +906,18 @@ def build_graph_from_store(store, config: dict) -> dict:
                 "updatedAt": updatedAt,
                 "decay_score": decay_score,
                 "version": version,
-            })
+            }
+            if graph_id:
+                node_dict["graph_id"] = graph_id
+            nodes.append(node_dict)
             node_ids.add(node_id)
 
-    def add_link(source, target, label="", strength=1.0):
+    def add_link(source, target, label="", strength=1.0, type=""):
         if source in node_ids and target in node_ids:
             key = f"{source}->{target}"
             if key not in link_keys:
-                links.append({"source": source, "target": target, "label": label, "strength": strength})
+                link_type = type or label or "unknown"
+                links.append({"source": source, "target": target, "label": label, "type": link_type, "strength": strength})
                 link_keys.add(key)
 
     # ── Center node ──
@@ -913,8 +935,14 @@ def build_graph_from_store(store, config: dict) -> dict:
     for primary_key, primary_info in TAXONOMY.items():
         p_id = f"p_{primary_key}"
         primary_node_ids[primary_key] = p_id
+        # Build enriched description: display_name + English key + subcategory list + keywords
+        sub_names = [f"{v['display_name']}({k})" for k, v in primary_info["subcategories"].items()]
+        all_keywords = []
+        for v in primary_info["subcategories"].values():
+            all_keywords.extend(v.get("keywords", []))
+        enriched_desc = f"{primary_info['display_name']} ({primary_key}) | 子分类: {', '.join(sub_names)} | 关键词: {', '.join(all_keywords[:15])}"
         add_node(p_id, primary_info["display_name"], "primary",
-                 description=f"{primary_info['display_name']} ({primary_key})", primary=primary_key, group=primary_key)
+                 description=enriched_desc, primary=primary_key, group=primary_key)
         add_link(center_id, p_id, "has_memory_type")
 
     # ── Read entries from store ──
@@ -941,6 +969,14 @@ def build_graph_from_store(store, config: dict) -> dict:
 
     # ── Secondary category nodes ──
     secondary_node_ids: dict[str, str] = {}
+    # Group entries by secondary category for keyword enrichment
+    entries_by_combo: dict[str, list] = {}
+    for entry in memory_entries + honcho_obs + honcho_conc:
+        pk = entry.get("primary_cat") or ("working" if entry["type"] == "memory" else "semantic")
+        sk = entry.get("secondary_cat") or ("active" if entry["type"] == "memory" else "domain")
+        combo_key = f"{pk}/{sk}"
+        entries_by_combo.setdefault(combo_key, []).append(entry)
+
     for pk, sk_set in populated_secondaries.items():
         for sk in sk_set:
             combo_key = f"{pk}/{sk}"
@@ -948,7 +984,17 @@ def build_graph_from_store(store, config: dict) -> dict:
             secondary_node_ids[combo_key] = s_id
             sub_info = TAXONOMY.get(pk, {}).get("subcategories", {}).get(sk, {})
             display = sub_info.get("display_name", sk)
-            add_node(s_id, display, "secondary", description=f"{display} ({sk})", primary=pk, secondary=sk, group=pk)
+            sub_keywords = sub_info.get("keywords", [])
+            # Enrich description with taxonomy keywords + entry content_preview keywords
+            base_desc = f"{display} ({sk})"
+            if sub_keywords:
+                base_desc += f" | 关键词: {', '.join(sub_keywords)}"
+            # Add top 3 entry content_preview snippets
+            combo_entries = entries_by_combo.get(combo_key, [])
+            previews = [e.get("content_preview", "")[:30] for e in combo_entries[:3] if e.get("content_preview")]
+            if previews:
+                base_desc += f" | 条目摘要: {', '.join(previews)}"
+            add_node(s_id, display, "secondary", description=base_desc, primary=pk, secondary=sk, group=pk)
             parent = primary_node_ids.get(pk, center_id)
             add_link(parent, s_id, "contains")
 
@@ -1012,6 +1058,8 @@ def build_graph_from_store(store, config: dict) -> dict:
             add_link(obs_node_id, nid, "produced")
 
     # ── Skill nodes ──
+    # Map skill_category_id by cat_dir to reuse across entries
+    skill_category_ids: dict[str, str] = {}
     for entry in skill_entries:
         cat_dir = entry.get("secondary_cat") or "tools"
         skill_name = entry.get("label", "skill")
@@ -1019,24 +1067,37 @@ def build_graph_from_store(store, config: dict) -> dict:
         combo_key = f"procedural/{proc_sub}"
         proc_secondary_nid = secondary_node_ids.get(combo_key, primary_node_ids.get("procedural", center_id))
 
-        # Skill category node
-        sc_id = f"sc_{sha256(cat_dir.encode()).hexdigest()[:8]}"
-        if sc_id not in node_ids:
-            add_node(sc_id, cat_dir, "skill_category", description=f"技能分类: {cat_dir}",
-                     primary="procedural", secondary=proc_sub, group="procedural")
-            add_link(proc_secondary_nid, sc_id, "contains")
+        # Skill category node — use cat_dir directly as label, deterministic readable ID
+        if cat_dir not in skill_category_ids:
+            sc_id = f"sc_{cat_dir}"
+            skill_category_ids[cat_dir] = sc_id
+            if sc_id not in node_ids:
+                add_node(sc_id, cat_dir, "skill_category", description=f"技能分类: {cat_dir}",
+                         primary="procedural", secondary=proc_sub, group="procedural")
+                add_link(proc_secondary_nid, sc_id, "contains")
 
-        # Skill leaf node
-        sk_id = f"sk_{sha256(skill_name.encode()).hexdigest()[:8]}"
+        sc_id = skill_category_ids[cat_dir]
+
+        # Skill leaf node — use entry["id"] as primary ID, keep sk_xxx as graph_id
+        sk_graph_id = f"sk_{sha256(skill_name.encode()).hexdigest()[:8]}"
+        sk_id = entry["id"]
         add_node(sk_id, skill_name, "skill", description=entry.get("content_preview", ""),
                  primary="procedural", secondary=proc_sub, group="procedural",
                  createdAt=entry.get("first_seen_at", ""),
                  updatedAt=entry.get("updated_at", ""),
                  decay_score=entry.get("decay_score", 0.25),
-                 version=entry.get("version", 1))
+                 version=entry.get("version", 1),
+                 graph_id=sk_graph_id)
         add_link(sc_id, sk_id, "contains")
 
     # ── Cross-references (mentions) between memory nodes ──
+    # Build a lookup of memory entry labels for cross-type mentions
+    memory_label_map: dict[str, str] = {}
+    for m_entry in memory_entries:
+        m_label = m_entry.get("label", "")
+        if len(m_label) >= 2:
+            memory_label_map[m_label] = m_entry["id"]
+
     for entry in memory_entries:
         nid = entry["id"]
         content = entry.get("content", "")
@@ -1047,6 +1108,22 @@ def build_graph_from_store(store, config: dict) -> dict:
             other_label = other.get("label", "")
             if len(other_label) >= 2 and other_label in content:
                 add_link(nid, other_id, "mentions")
+
+    # ── Cross-type mentions: skill → memory ──
+    for entry in skill_entries:
+        sk_id = entry["id"]
+        skill_text = entry.get("content_preview", "") + " " + entry.get("label", "")
+        for m_label, m_id in memory_label_map.items():
+            if m_label in skill_text:
+                add_link(sk_id, m_id, "mentions")
+
+    # ── Cross-type mentions: honcho → memory ──
+    for entry in honcho_obs + honcho_conc:
+        h_id = entry["id"]
+        h_text = entry.get("content", "") + " " + entry.get("content_preview", "")
+        for m_label, m_id in memory_label_map.items():
+            if m_label in h_text:
+                add_link(h_id, m_id, "mentions")
 
     # ── Build result ──
     by_type = {}

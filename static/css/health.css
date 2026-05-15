@@ -849,8 +849,8 @@
 .decay-overview-desc { font-size:13px; color:#888; margin-bottom:16px; }
 
 /* 单条记忆衰减曲线模态 */
-.entry-decay-modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); z-index:500; }
-.entry-decay-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:480px; max-height:90vh; background:#fff; border-radius:14px; box-shadow:0 12px 40px rgba(0,0,0,0.15); z-index:501; padding:24px; overflow:auto; }
+.entry-decay-modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.75); z-index:9999; }
+.entry-decay-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:480px; max-height:90vh; background:#fff; border-radius:14px; box-shadow:0 12px 40px rgba(0,0,0,0.15); z-index:10000; padding:24px; overflow:auto; }
 .entry-decay-modal-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
 .entry-decay-modal-cat { font-size:14px; font-weight:600; }
 .entry-decay-modal-preview { font-size:13px; color:#666; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }

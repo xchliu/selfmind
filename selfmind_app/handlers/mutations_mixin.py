@@ -480,7 +480,7 @@ class MutationsMixin:
                 try:
                     data = json.loads(body)
                     gateway_url = data.get("gateway", "").strip()
-                except:
+                except (json.JSONDecodeError, KeyError):
                     pass
         
         if not gateway_url:
@@ -589,7 +589,7 @@ class MutationsMixin:
         body = self.rfile.read(content_length)
         try:
             data = json.loads(body)
-        except:
+        except json.JSONDecodeError:
             self._json_response({"error": "Invalid JSON"}, code=400)
             return
         
@@ -819,7 +819,7 @@ class MutationsMixin:
         body = self.rfile.read(content_length)
         try:
             data = json.loads(body)
-        except:
+        except json.JSONDecodeError:
             self._json_response({"error": "Invalid JSON"}, code=400)
             return
 

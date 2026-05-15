@@ -1,0 +1,233 @@
+{
+  "timestamp": "2026-05-15 16:52:12",
+  "data_scale": {
+    "db_active_entries": 144,
+    "db_inactive_entries": 809,
+    "graph_nodes": 152,
+    "graph_links": 151
+  },
+  "structure": {
+    "connected_nodes": 152,
+    "isolated_nodes": 0,
+    "broken_links": 0,
+    "self_loops": 0,
+    "duplicate_links": 0,
+    "density": 0.0066,
+    "avg_degree": 2.0,
+    "connectivity_pct": 100.0,
+    "link_integrity_pct": 1.0
+  },
+  "mapping": {
+    "id_overlap_pct": 0.7,
+    "content_overlap_pct": 81.9,
+    "id_overlap_count": 1,
+    "content_overlap_count": 118,
+    "db_not_in_graph": 143,
+    "graph_not_in_db": 151
+  },
+  "category_mapping": {
+    "project": {
+      "db_count": 6,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "\"concept\"": {
+      "db_count": 1,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "benchmark": {
+      "db_count": 1,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 100.0
+    },
+    "skill": {
+      "db_count": 117,
+      "graph_count": 117,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 100.0
+    },
+    "skill_category": {
+      "db_count": 0,
+      "graph_count": 24,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "primary": {
+      "db_count": 0,
+      "graph_count": 8,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "concept": {
+      "db_count": 6,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "\"entity\"": {
+      "db_count": 1,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "comparison": {
+      "db_count": 1,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "entity": {
+      "db_count": 8,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "secondary": {
+      "db_count": 0,
+      "graph_count": 1,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "memory": {
+      "db_count": 0,
+      "graph_count": 1,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "center": {
+      "db_count": 0,
+      "graph_count": 1,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "query": {
+      "db_count": 2,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    },
+    "summary": {
+      "db_count": 1,
+      "graph_count": 0,
+      "id_recall_pct": 0.0,
+      "content_recall_pct": 0.0
+    }
+  },
+  "search_accuracy": {
+    "安全": {
+      "ground_truth_count": 0,
+      "search_result_count": 0,
+      "precision_pct": 0.0,
+      "recall_pct": 0.0,
+      "f1_pct": 0,
+      "content_verified_hits": 0
+    },
+    "身份": {
+      "ground_truth_count": 0,
+      "search_result_count": 0,
+      "precision_pct": 0.0,
+      "recall_pct": 0.0,
+      "f1_pct": 0,
+      "content_verified_hits": 0
+    },
+    "技能": {
+      "ground_truth_count": 117,
+      "search_result_count": 25,
+      "precision_pct": 48.0,
+      "recall_pct": 0.9,
+      "f1_pct": 1.7,
+      "content_verified_hits": 12
+    },
+    "社交": {
+      "ground_truth_count": 0,
+      "search_result_count": 1,
+      "precision_pct": 0.0,
+      "recall_pct": 0.0,
+      "f1_pct": 0,
+      "content_verified_hits": 0
+    },
+    "配置": {
+      "ground_truth_count": 0,
+      "search_result_count": 3,
+      "precision_pct": 0.0,
+      "recall_pct": 0.0,
+      "f1_pct": 0,
+      "content_verified_hits": 0
+    },
+    "项目": {
+      "ground_truth_count": 6,
+      "search_result_count": 2,
+      "precision_pct": 0.0,
+      "recall_pct": 66.7,
+      "f1_pct": 0.0,
+      "content_verified_hits": 0
+    },
+    "语义": {
+      "ground_truth_count": 0,
+      "search_result_count": 1,
+      "precision_pct": 0.0,
+      "recall_pct": 0.0,
+      "f1_pct": 0,
+      "content_verified_hits": 0
+    },
+    "工作": {
+      "ground_truth_count": 0,
+      "search_result_count": 7,
+      "precision_pct": 0.0,
+      "recall_pct": 0.0,
+      "f1_pct": 0,
+      "content_verified_hits": 0
+    },
+    "概念": {
+      "ground_truth_count": 6,
+      "search_result_count": 0,
+      "precision_pct": 0.0,
+      "recall_pct": 33.3,
+      "f1_pct": 0.0,
+      "content_verified_hits": 0
+    },
+    "实体": {
+      "ground_truth_count": 8,
+      "search_result_count": 0,
+      "precision_pct": 0.0,
+      "recall_pct": 0.0,
+      "f1_pct": 0,
+      "content_verified_hits": 0
+    }
+  },
+  "relation_quality": {
+    "link_type_distribution": {
+      "unknown": 151
+    },
+    "category_pair_distribution": {
+      "skill_category→skill": 117,
+      "primary→skill_category": 24,
+      "center→primary": 8,
+      "center→secondary": 1,
+      "secondary→memory": 1
+    },
+    "total_links": 151,
+    "avg_weight": 1.0
+  },
+  "performance": {
+    "graph_build_avg_ms": 3.03,
+    "graph_build_min_ms": 2.52,
+    "graph_build_max_ms": 4.76,
+    "db_single_query_ops_per_sec": 40351.3,
+    "db_full_query_ms": 2.5,
+    "graph_text_search_ops_per_sec": 18876.0
+  },
+  "key_findings": [
+    "🔴 ID体系不一致: DB用hash ID(如4178d51bc351), 图谱用语义ID(如sk_6beb3fbe, p_autobiographical, self) — ID映射率仅0.7%",
+    "🟡 内容级映射较好: 通过content_preview匹配可达81.9%, 说明数据本身是连通的, 只是ID桥断了",
+    "🟢 结构完整性优秀: 100%连通, 0断链, 0自环, 0重复链",
+    "🟡 图谱密度低(0.0066): 平均度数2.0, 大部分节点只有1-2条边 — 关系网络偏稀疏",
+    "🔴 边类型缺失: 100%边类型为'unknown' — 缺乏语义标注(如:属于/包含/依赖/引用)",
+    "🟡 检索命中率低: 文本检索依赖description字段, 但许多节点的description是分类名而非实际内容",
+    "🟢 性能优秀: 图谱构建2.78ms, DB查询42K ops/s, 文本检索14394 ops/s"
+  ]
+}

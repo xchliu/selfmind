@@ -234,35 +234,97 @@ def scan_wiki_directory(wiki_root: str, profile: str) -> list[dict]:
 def fetch_honcho_documents(base_url: str, workspace: str, page_size: int = 200) -> list[dict]:
     """Fetch Honcho documents via PostgreSQL direct query (more reliable than API)."""
     try:
-        result = subprocess.run(
-            ["psql", "-h", "localhost", "-U", "postgres",
-             "-c", f"SELECT id, observer, observed, level, content FROM documents "
-                    f"WHERE workspace_name='{workspace}' "
-                    f"AND level IN ('inductive','deductive','contradiction') "
-                    f"AND deleted_at IS NULL ORDER BY created_at DESC",
-             ],
-            capture_output=True, text=True, timeout=15,
-            env={**os.environ, "PGPASSWORD": "postgres"},
-        )
-        if result.returncode != 0:
-            logger.warning(f"psql query failed: {result.stderr}")
-            return []
-        # Parse psql tabular output
-        lines = result.stdout.strip().split("\n")
-        docs = []
-        for line in lines[2:]:
-            if line.startswith("(") or not line.strip() or line.count("|") < 4:
-                continue
-            parts = line.split("|")
-            if len(parts) >= 5:
+        # 安全地获取 Honcho 文档 - 修复 SQL 注入漏洞
+        use_subprocess = False
+        
+        # 方法1：使用 psycopg2（如果可用）
+        try:
+            import psycopg2
+            conn = psycopg2.connect(
+                host="localhost",
+                user="postgres",
+                password="postgres",
+                database="postgres"
+            )
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, observer, observed, level, content 
+                FROM documents 
+                WHERE workspace_name = %s 
+                AND level IN ('inductive','deductive','contradiction') 
+                AND deleted_at IS NULL 
+                ORDER BY created_at DESC
+            """, (workspace,))
+            
+            docs = []
+            for row in cursor.fetchall():
                 docs.append({
-                    "id": parts[0].strip(),
-                    "observer": parts[1].strip(),
-                    "observed": parts[2].strip(),
-                    "level": parts[3].strip(),
-                    "content": parts[4].strip(),
+                    "id": row[0],
+                    "observer": row[1],
+                    "observed": row[2],
+                    "level": row[3],
+                    "content": row[4],
                 })
-        return docs
+            
+            cursor.close()
+            conn.close()
+            return docs
+            
+        except ImportError:
+            # psycopg2 不可用，使用安全的 subprocess 方法
+            logger.info("psycopg2 not available, using subprocess with validation")
+            use_subprocess = True
+        except Exception as e:
+            # 其他错误（如连接失败）
+            logger.info(f"psycopg2 failed, using subprocess: {e}")
+            use_subprocess = True
+        
+        if use_subprocess:
+            # 只允许字母、数字、下划线、短横线
+            import re
+            if not re.match(r'^[a-zA-Z0-9_-]+$', workspace):
+                logger.warning(f"Invalid workspace name (potential SQL injection): {workspace}")
+                return []
+            
+            # 使用 -c 参数，但 workspace 已经过验证
+            query = f"""
+                SELECT id, observer, observed, level, content 
+                FROM documents 
+                WHERE workspace_name = '{workspace}' 
+                AND level IN ('inductive','deductive','contradiction') 
+                AND deleted_at IS NULL 
+                ORDER BY created_at DESC
+            """
+            
+            # 清理查询字符串（移除换行符，确保单行）
+            query = ' '.join(query.strip().split())
+            
+            result = subprocess.run(
+                ["psql", "-h", "localhost", "-U", "postgres", "-c", query],
+                capture_output=True, text=True, timeout=15,
+                env={**os.environ, "PGPASSWORD": "postgres"},
+            )
+            
+            if result.returncode != 0:
+                logger.warning(f"psql query failed: {result.stderr}")
+                return []
+            
+            # Parse psql tabular output
+            lines = result.stdout.strip().split("\n")
+            docs = []
+            for line in lines[2:]:
+                if line.startswith("(") or not line.strip() or line.count("|") < 4:
+                    continue
+                parts = line.split("|")
+                if len(parts) >= 5:
+                    docs.append({
+                        "id": parts[0].strip(),
+                        "observer": parts[1].strip(),
+                        "observed": parts[2].strip(),
+                        "level": parts[3].strip(),
+                        "content": parts[4].strip(),
+                    })
+            return docs
     except (subprocess.TimeoutExpired, FileNotFoundError) as exc:
         logger.warning(f"psql not available or timed out: {exc}")
         return _fetch_honcho_via_api(base_url, workspace, page_size)
