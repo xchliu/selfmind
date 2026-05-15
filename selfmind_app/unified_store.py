@@ -526,27 +526,51 @@ class UnifiedStore:
         self.conn.commit()
 
     def compute_decay_scores(self):
-        """Recalculate decay scores for active memory entries."""
+        """Recalculate decay scores for ALL active entries.
+
+        Formula: decay = importance * (base + recency_weight * recency + type_weight * type_factor)
+        - importance: category-based (security=0.9, autobiographical=0.7, skill=0.6, etc.)
+        - recency: exp(-0.03 * days_since_update) — recently updated entries are stronger
+        - type_factor: memory=0.7 (human-curated core), skill=0.5 (procedural), wiki=0.4 (reference)
+        No longer uses content-length as frequency proxy (skills are inherently long).
+        """
         rows = self.conn.execute(
-            "SELECT id, access_count, last_accessed, importance FROM entries WHERE status='active' AND type='memory'"
+            "SELECT id, importance, updated_at, first_seen_at, type FROM entries WHERE status='active'"
         ).fetchall()
         if not rows:
             return 0
 
-        max_ac = max(r["access_count"] for r in rows) or 1
+        # Type factor: human-curated memories are inherently more "vital"
+        TYPE_FACTOR = {
+            "memory": 0.7,    # human-curated, core identity
+            "honcho_obs": 0.5,  # derived observations
+            "skill": 0.5,     # procedural, learnable
+            "wiki": 0.4,      # reference material
+        }
+
         now = datetime.now()
         updated = 0
 
         for r in rows:
-            la = r["last_accessed"]
+            # ── Recency: use updated_at ──
+            ts = r["updated_at"] or r["first_seen_at"]
             try:
-                last = datetime.strptime(la, "%Y-%m-%dT%H:%M:%S")
+                last = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S") if ts else now
             except (ValueError, TypeError):
                 last = now
             days = max((now - last).total_seconds() / 86400, 0)
-            recency = math.exp(-0.05 * days)
-            freq = math.log(1 + r["access_count"]) / math.log(1 + max_ac) if max_ac > 0 else 0
-            decay = r["importance"] * (0.5 + 0.5 * freq * recency)
+            recency = math.exp(-0.03 * days)  # e^(-0.03*d): 0.74 at 10d, 0.50 at 23d, 0.22 at 50d
+
+            # ── Type factor ──
+            entry_type = r["type"] or "memory"
+            type_factor = TYPE_FACTOR.get(entry_type, 0.5)
+
+            # ── Decay formula ──
+            # importance * (base + recency_contribution + type_contribution)
+            # base=0.3: minimum vitality even for old/forgotten entries
+            # recency_weight=0.4: recent updates boost strength
+            # type_weight=0.3: entry type affects baseline vitality
+            decay = r["importance"] * (0.3 + 0.4 * recency + 0.3 * type_factor)
             decay = max(0.0, min(1.0, decay))
             self.conn.execute("UPDATE entries SET decay_score=? WHERE id=?", (round(decay, 4), r["id"]))
             updated += 1

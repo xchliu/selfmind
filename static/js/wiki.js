@@ -96,7 +96,7 @@ function renderWikiView(data) {
       const updated = page.updated || page.created || '';
 
       // Simple markdown-to-HTML for card preview (bold, headers, links)
-      const previewHtml = simpleMarkdown(preview);
+      const previewHtml = simpleMarkdown(preview, page.path);
 
       card.innerHTML = `
         <div class="wiki-page-card-title">${title}</div>
@@ -145,7 +145,7 @@ function openWikiDetail(page) {
   // Render full markdown content
   const fullContent = page.content || page.content_preview || '（无内容）';
   document.getElementById('wikiDetailBody').innerHTML = `
-    <div class="wiki-detail-content">${renderMarkdown(fullContent)}</div>
+    <div class="wiki-detail-content">${renderMarkdown(fullContent, page.path)}</div>
   `;
 
   // Show edit button
@@ -241,20 +241,31 @@ async function saveWikiPage() {
 
 // ---- Markdown rendering ----
 
-function simpleMarkdown(text) {
+function simpleMarkdown(text, pagePath) {
   // Minimal renderer for card preview
+  // pagePath: e.g. "projects/marketization-kpi-2026.md" — used to resolve local file links
+  const pageDir = pagePath ? pagePath.replace(/[^/]*$/, '') : '';
   return text
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
     .replace(/## (.+)/g, '<span class="wiki-md-h2">$1</span>')
     .replace(/### (.+)/g, '<span class="wiki-md-h3">$1</span>')
     .replace(/\[\[([^\]]+)\]\]/g, '<a class="wiki-md-link" onclick="openWikiLink(\'$1\')">⟶$1</a>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="wiki-md-external" href="$2" target="_blank">$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+      // Local file link (not http/https) → rewrite to /api/wiki/file/
+      if (!url.match(/^https?:\/\//i)) {
+        const resolvedUrl = '/api/wiki/file/' + (pageDir + url);
+        return '<a class="wiki-md-external" href="' + resolvedUrl + '" target="_blank">' + linkText + '</a>';
+      }
+      return '<a class="wiki-md-external" href="' + url + '" target="_blank">' + linkText + '</a>';
+    })
     .replace(/\n/g, '<br>');
 }
 
-function renderMarkdown(text) {
+function renderMarkdown(text, pagePath) {
   // Full markdown renderer for detail view
+  // pagePath: e.g. "projects/marketization-kpi-2026.md" — used to resolve local file links
+  const pageDir = pagePath ? pagePath.replace(/[^/]*$/, '') : '';
   let html = escapeHtml(text);
 
   // Headers (### first to avoid ## matching inside ###)
@@ -273,8 +284,14 @@ function renderMarkdown(text) {
     return '<a class="wiki-md-link" onclick="openWikiLink(\'' + name.replace(/'/g, "\\'") + '\')">⟶ ' + name + '</a>';
   });
 
-  // Standard markdown links [text](url) — external link
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="wiki-md-external" href="$2" target="_blank">$1</a>');
+  // Standard markdown links [text](url) — rewrite local file links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+    if (!url.match(/^https?:\/\//i)) {
+      const resolvedUrl = '/api/wiki/file/' + (pageDir + url);
+      return '<a class="wiki-md-external" href="' + resolvedUrl + '" target="_blank">' + linkText + '</a>';
+    }
+    return '<a class="wiki-md-external" href="' + url + '" target="_blank">' + linkText + '</a>';
+  });
 
   // Lists (- item)
   html = html.replace(/^- (.+)$/gm, '<li>$1</li>');

@@ -260,6 +260,7 @@
     <button class="health-tab" onclick="healthSwitchTab('consolidate',this)">🧹 巩固整理</button>
     <button class="health-tab" onclick="healthSwitchTab('snapshots',this)">💾 快照管理</button>
     <button class="health-tab" onclick="healthSwitchTab('ops',this)">📋 操作日志</button>
+    <button class="health-tab" onclick="healthSwitchTab('decayCurve',this)">📉 衰减曲线</button>
   </div>
   <div id="healthSectionEntries" class="health-section active">
     <div class="health-filter-bar">
@@ -305,6 +306,15 @@
     <div class="health-ops">
       <h3>📋 操作日志</h3>
       <div class="health-ops-list" id="healthOps"></div>
+    </div>
+  </div>
+  <div id="healthSectionDecayCurve" class="health-section">
+    <div class="decay-curve-panel">
+      <h3>📉 记忆衰减曲线</h3>
+      <p class="decay-curve-desc">记忆随时间自然衰减，衰减曲线展示各类记忆的强度分布和演变趋势</p>
+      <div id="decayCurveChart" class="decay-curve-chart"></div>
+      <div id="decayBucketChart" class="decay-bucket-chart"></div>
+      <div id="decayTimelineChart" class="decay-timeline-chart"></div>
     </div>
   </div>
 </div>
@@ -477,6 +487,7 @@
 <script src="/static/js/app.js?v=20260514d"></script>
 <script src="/static/js/graph.js?v=20260514d"></script>
 <script src="/static/js/views.js?v=20260514d"></script>
+  <script src="/static/js/decay_curve.js?v=20260515"></script>
 <!-- 底部状态栏 -->
 <div id="pollBar" class="poll-bar">
   <div class="poll-left">

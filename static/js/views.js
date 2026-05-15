@@ -770,9 +770,12 @@ let healthFilteredEntries = [];
 function healthSwitchTab(tab, btn) {
   document.querySelectorAll('.health-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.health-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('healthSection' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  const sectionId = 'healthSection' + tab.charAt(0).toUpperCase() + tab.slice(1);
+  const section = document.getElementById(sectionId);
+  if (section) section.classList.add('active');
   btn.classList.add('active');
   if (tab === 'snapshots') loadHealthSnapshots();
+  if (tab === 'decayCurve') renderDecayCurve();
 }
 
 // ========== 设置功能 ==========

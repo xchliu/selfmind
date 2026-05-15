@@ -252,6 +252,8 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._discover_gateway()
         elif clean_path == "/api/agents/config":
             self._handle_agents_config_get()
+        elif clean_path.startswith("/api/wiki/file/"):
+            self._serve_wiki_file(clean_path)
         elif clean_path.startswith("/api/v1/"):
             self._handle_v1_api(clean_path)
         elif clean_path.startswith("/api/agents/"):

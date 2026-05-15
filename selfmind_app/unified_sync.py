@@ -111,6 +111,14 @@ def parse_memory_file(filepath: str, source_name: str, profile: str) -> list[dic
 
         label = extract_label(text, max_len=20)
 
+        # Importance based on category hierarchy
+        IMPORTANCE_BY_CAT = {
+            "security": 0.9, "identity": 0.9,
+            "autobiographical": 0.7, "procedural": 0.6, "skill": 0.6,
+            "semantic": 0.5, "social": 0.5, "working": 0.4,
+        }
+        importance = IMPORTANCE_BY_CAT.get(primary_cat, 0.5)
+
         entries.append({
             "content": text,
             "type": "memory",
@@ -119,6 +127,7 @@ def parse_memory_file(filepath: str, source_name: str, profile: str) -> list[dic
             "primary_cat": primary_cat,
             "secondary_cat": secondary_cat,
             "label": label,
+            "importance": importance,
         })
 
     return entries
@@ -176,6 +185,13 @@ def parse_wiki_page(filepath: str, wiki_root: str, profile: str) -> Optional[dic
 
     label = title[:25]
 
+    # Importance by wiki page type
+    WIKI_IMPORTANCE = {
+        "entity": 0.5, "concept": 0.5, "comparison": 0.4,
+        "query": 0.4, "project": 0.6, "summary": 0.3,
+    }
+    importance = WIKI_IMPORTANCE.get(wiki_type, 0.4)
+
     return {
         "content": body.strip(),
         "type": "wiki",
@@ -185,6 +201,7 @@ def parse_wiki_page(filepath: str, wiki_root: str, profile: str) -> Optional[dic
         "secondary_cat": dir_name,
         "label": label,
         "tags": json.dumps(tags),
+        "importance": importance,
     }
 
 
@@ -386,6 +403,7 @@ def scan_skills_directory(skills_root: str, profile: str) -> list[dict]:
                 "primary_cat": "skill",
                 "secondary_cat": category_dir,
                 "label": skill_dir[:25],
+                "importance": 0.6,
             })
 
     return entries

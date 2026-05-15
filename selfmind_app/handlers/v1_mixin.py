@@ -220,3 +220,48 @@ class V1Mixin:
             result = params.get(key, [])
             return result[0] if result else None
         return None
+
+    def _serve_wiki_file(self, clean_path: str):
+        """Serve a static file from the wiki directory (html, pdf, images, etc)."""
+        import mimetypes
+        import urllib.parse
+
+        # Extract relative path: /api/wiki/file/projects/pcbl-flywheel.html → projects/pcbl-flywheel.html
+        rel_path = clean_path.split("/api/wiki/file/")[1]
+        rel_path = urllib.parse.unquote(rel_path)
+
+        config = load_config()
+        wiki_path = config.get("wiki", {}).get("path", "")
+        if not wiki_path:
+            self._send_error(404, "Wiki not configured")
+            return
+
+        full_path = Path(wiki_path) / rel_path
+
+        # Security: ensure resolved path is within wiki directory (prevent path traversal)
+        try:
+            full_path.resolve().relative_to(Path(wiki_path).resolve())
+        except ValueError:
+            self._send_error(403, "Access denied: path outside wiki directory")
+            return
+
+        if not full_path.exists() or not full_path.is_file():
+            self._send_error(404, f"File not found: {rel_path}")
+            return
+
+        # Determine content type
+        content_type, _ = mimetypes.guess_type(str(full_path))
+        if content_type is None:
+            content_type = "application/octet-stream"
+
+        # Read and serve the file
+        try:
+            with open(full_path, "rb") as f:
+                content = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(content)))
+            self.end_headers()
+            self.wfile.write(content)
+        except OSError as e:
+            self._send_error(500, f"Error reading file: {e}")
