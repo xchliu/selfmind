@@ -1179,6 +1179,8 @@ async function loadHealthData() {
     populateCategoryFilter();
     healthFilter();
     renderHealthOps(ops);
+    // 衰减曲线是默认tab，自动渲染
+    if (typeof renderDecayCurve === 'function') renderDecayCurve();
     showToast('健康数据已加载', 'success');
   } catch(e) { console.error('Health load error', e); showToast('加载失败: ' + e.message, 'error'); }
 }
