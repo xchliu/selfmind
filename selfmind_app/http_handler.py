@@ -274,7 +274,35 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self.path = "/index.html"
             super().do_GET()
         else:
-            super().do_GET()
+            # For non-API paths, first try SelfMind static dir, then fallback to wiki dir
+            target_name = clean_path.lstrip("/")
+            if not target_name:
+                # Root path "/" → serve index.html
+                self.path = "/index.html"
+                super().do_GET()
+            else:
+                local_file = Path(SELFMIND_DIR) / target_name
+                if local_file.exists() and local_file.is_file():
+                    super().do_GET()
+                else:
+                    # Fallback: search wiki directory for the requested filename
+                    config = load_config()
+                    wiki_path = config.get("wiki", {}).get("path", "")
+                    if wiki_path:
+                        wiki_dir = Path(wiki_path)
+                        # Only search for files with an extension (html, pdf, png, etc.)
+                        if Path(target_name).suffix:
+                            matches = list(wiki_dir.rglob(target_name))
+                            if matches:
+                                rel_path = str(matches[0].relative_to(wiki_dir))
+                                wiki_api_path = "/api/wiki/file/" + rel_path
+                                self._serve_wiki_file(wiki_api_path)
+                            else:
+                                super().do_GET()
+                        else:
+                            super().do_GET()
+                    else:
+                        super().do_GET()
 
     def do_POST(self):
         clean_path = self.path.split("?")[0]

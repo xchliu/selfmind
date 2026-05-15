@@ -1254,7 +1254,7 @@ function renderHealthTable() {
       <td><div class="preview-text" title="${(e.content_preview||'').replace(/"/g,'&quot;')}">${preview} ${statusBadge}</div></td>
       <td><span class="cat-tag">${catLabel||'未分类'}</span></td>
       <td><div class="imp-bar"><div class="imp-bar-inner" style="width:${(e.importance||0)*100}%"></div></div></td>
-      <td><div class="decay-bar-wrap"><div class="decay-bar"><div class="decay-bar-inner decay-${dcClass}" style="width:${Math.max(ds*100,5)}%"></div></div><span class="decay-pct ${dcClass}">${(ds*100).toFixed(0)}%</span></div></td>
+      <td><div class="decay-bar-wrap" onclick="showEntryDecayCurve('${e.id}')" style="cursor:pointer" title="点击查看衰减曲线"><div class="decay-bar"><div class="decay-bar-inner decay-${dcClass}" style="width:${Math.max(ds*100,5)}%"></div></div><span class="decay-pct ${dcClass}">${(ds*100).toFixed(0)}%</span></div></td>
       <td style="text-align:center">${e.access_count||0}</td>
       <td style="text-align:center;font-size:12px;color:#666">v${e.version||1}</td>
       <td><button class="pin-btn ${e.pinned?'pinned':''}" onclick="healthPin('${e.id}')">${e.pinned?'📌':'○'}</button></td>

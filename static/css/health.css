@@ -835,11 +835,31 @@
 .decay-curve-panel { background:#fff; border-radius:12px; }
 .decay-curve-panel h3 { margin:0 0 6px; font-size:18px; font-weight:700; color:#2d3436; }
 .decay-curve-desc { font-size:13px; color:#888; margin:0 0 20px; }
-.decay-curve-chart { background:#f8f9ff; border:1px solid #eee; border-radius:10px; padding:20px; margin-bottom:20px; }
-.decay-bucket-chart { background:#f8f9ff; border:1px solid #eee; border-radius:10px; padding:20px; margin-bottom:20px; }
-.decay-timeline-chart { background:#f8f9ff; border:1px solid #eee; border-radius:10px; padding:20px; }
+.decay-curve-chart { background:#f8f9ff; border:1px solid #eee; border-radius:10px; padding:20px; }
+.decay-bucket-chart { display:none; }
+.decay-timeline-chart { display:none; }
 .decay-curve-title { font-size:14px; font-weight:600; color:#2d3436; margin-bottom:14px; }
 .decay-legend { display:flex; gap:12px; flex-wrap:wrap; margin-top:14px; }
 .decay-legend-item { display:flex; align-items:center; gap:5px; font-size:12px; color:#666; }
 .decay-legend-dot { width:10px; height:10px; border-radius:50%; }
+
+/* 衰减总览条形图 */
+.decay-overview-container { padding:0; }
+.decay-overview-title { font-size:16px; font-weight:700; color:#2d3436; margin-bottom:6px; }
+.decay-overview-desc { font-size:13px; color:#888; margin-bottom:16px; }
+
+/* 单条记忆衰减曲线模态 */
+.entry-decay-modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); z-index:500; }
+.entry-decay-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:480px; max-height:90vh; background:#fff; border-radius:14px; box-shadow:0 12px 40px rgba(0,0,0,0.15); z-index:501; padding:24px; overflow:auto; }
+.entry-decay-modal-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.entry-decay-modal-cat { font-size:14px; font-weight:600; }
+.entry-decay-modal-preview { font-size:13px; color:#666; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.entry-decay-modal-close { border:none; background:none; font-size:20px; color:#999; cursor:pointer; padding:4px 8px; }
+.entry-decay-modal-close:hover { color:#333; }
+.entry-decay-modal-stats { display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
+.entry-decay-stat { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.entry-decay-stat-label { font-size:11px; color:#888; }
+.entry-decay-stat-value { font-size:18px; font-weight:700; color:#2d3436; }
+.entry-decay-modal-chart { background:#f8f9ff; border:1px solid #eee; border-radius:10px; padding:16px; margin-bottom:12px; }
+.entry-decay-modal-formula { font-size:11px; color:#999; text-align:center; }
 
