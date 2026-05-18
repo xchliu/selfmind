@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS entries (
     created_at TEXT,                           -- when this DB row was created
     updated_at TEXT,                           -- last field update
     last_accessed TEXT,
+    last_recalled TEXT,                       -- last time this entry was recalled by an agent
     last_synced_at TEXT,                       -- last time source confirmed this entry exists
     status TEXT DEFAULT 'active',              -- active/inactive/archived (NOT deleted!)
     pinned INTEGER DEFAULT 0
@@ -106,6 +107,36 @@ CREATE INDEX IF NOT EXISTS idx_entries_observer ON entries(observer);
 CREATE INDEX IF NOT EXISTS idx_entries_honcho_level ON entries(honcho_level);
 CREATE INDEX IF NOT EXISTS idx_history_entry ON entry_history(entry_id);
 CREATE INDEX IF NOT EXISTS idx_history_timestamp ON entry_history(timestamp);
+
+-- Decay history: records decay_score changes over time
+CREATE TABLE IF NOT EXISTS decay_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    entry_id TEXT NOT NULL,
+    timestamp TEXT NOT NULL,
+    decay_score REAL NOT NULL,
+    trigger TEXT DEFAULT 'auto',
+    FOREIGN KEY (entry_id) REFERENCES entries(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_decay_hist_entry ON decay_history(entry_id);
+CREATE INDEX IF NOT EXISTS idx_decay_hist_timestamp ON decay_history(timestamp);
+
+-- Agent recall log: tracks when an agent's inference references a SelfMind entry
+CREATE TABLE IF NOT EXISTS agent_recall_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    entry_id TEXT NOT NULL,                        -- references entries.id
+    agent_id TEXT NOT NULL,                        -- which agent (hermes, aris, etc.)
+    timestamp TEXT NOT NULL,                       -- when the recall happened
+    source TEXT DEFAULT 'session_log',             -- how we detected it
+    confidence REAL DEFAULT 1.0,                   -- match confidence (0-1)
+    context_snippet TEXT DEFAULT '',               -- what context triggered it
+    match_method TEXT DEFAULT 'keyword',           -- hash, keyword, semantic
+    FOREIGN KEY (entry_id) REFERENCES entries(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_recall_entry ON agent_recall_log(entry_id);
+CREATE INDEX IF NOT EXISTS idx_recall_agent ON agent_recall_log(agent_id);
+CREATE INDEX IF NOT EXISTS idx_recall_timestamp ON agent_recall_log(timestamp);
 """
 
 
@@ -404,7 +435,7 @@ class UnifiedStore:
     # ──────────────── Read operations ────────────────
 
     def get_all_entries(self, status=None, type=None):
-        """Get entries filtered by status and/or type."""
+        """Get entries filtered by status and/or type, with recall_count appended."""
         query = "SELECT * FROM entries"
         conditions = []
         params = []
@@ -418,7 +449,23 @@ class UnifiedStore:
             query += " WHERE " + " AND ".join(conditions)
         query += " ORDER BY created_at DESC"
         rows = self.conn.execute(query, params).fetchall()
-        return [dict(r) for r in rows]
+        entries = [dict(r) for r in rows]
+
+        # Batch-fetch recall counts for all entry IDs
+        if entries:
+            entry_ids = [e["id"] for e in entries]
+            recall_rows = self.conn.execute(
+                """SELECT entry_id, COUNT(*) as recall_count
+                FROM agent_recall_log WHERE entry_id IN ({}) GROUP BY entry_id""".format(
+                    ",".join(["?"] * len(entry_ids))
+                ),
+                entry_ids
+            ).fetchall()
+            recall_map = {r["entry_id"]: r["recall_count"] for r in recall_rows}
+            for e in entries:
+                e["recall_count"] = recall_map.get(e["id"], 0)
+
+        return entries
 
     def get_entry(self, entry_id):
         row = self.conn.execute("SELECT * FROM entries WHERE id=?", (entry_id,)).fetchone()
@@ -528,17 +575,31 @@ class UnifiedStore:
     def compute_decay_scores(self):
         """Recalculate decay scores for ALL active entries.
 
-        Formula: decay = importance * (base + recency_weight * recency + type_weight * type_factor)
+        Formula: decay = importance * (base + recall_weight * recall_recency + type_weight * type_factor)
         - importance: category-based (security=0.9, autobiographical=0.7, skill=0.6, etc.)
-        - recency: exp(-0.03 * days_since_update) — recently updated entries are stronger
-        - type_factor: memory=0.7 (human-curated core), skill=0.5 (procedural), wiki=0.4 (reference)
-        No longer uses content-length as frequency proxy (skills are inherently long).
+        - recall_recency: exp(-0.05 * days_since_last_recall) — recently recalled entries jump up
+        - recall_freq: min(1.0, 0.3 + 0.1 * recall_count) — more recalls = stronger memory
+        - type_factor: memory=0.7, skill=0.5, wiki=0.4
+
+        If an entry has never been recalled (no agent_recall_log), falls back to updated_at.
         """
         rows = self.conn.execute(
             "SELECT id, importance, updated_at, first_seen_at, type FROM entries WHERE status='active'"
         ).fetchall()
         if not rows:
             return 0
+
+        # Preload recall data: last_recalled and recall_count per entry
+        recall_data = {}
+        recall_rows = self.conn.execute(
+            """SELECT entry_id, MAX(timestamp) as last_recall, COUNT(*) as recall_count 
+            FROM agent_recall_log GROUP BY entry_id"""
+        ).fetchall()
+        for rr in recall_rows:
+            recall_data[rr["entry_id"]] = {
+                "last_recall": rr["last_recall"],
+                "recall_count": rr["recall_count"],
+            }
 
         # Type factor: human-curated memories are inherently more "vital"
         TYPE_FACTOR = {
@@ -550,33 +611,102 @@ class UnifiedStore:
 
         now = datetime.now()
         updated = 0
+        history_recorded = 0
+        now_str = self._now()
 
         for r in rows:
-            # ── Recency: use updated_at ──
-            ts = r["updated_at"] or r["first_seen_at"]
-            try:
-                last = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S") if ts else now
-            except (ValueError, TypeError):
-                last = now
-            days = max((now - last).total_seconds() / 86400, 0)
-            recency = math.exp(-0.03 * days)  # e^(-0.03*d): 0.74 at 10d, 0.50 at 23d, 0.22 at 50d
+            entry_id = r["id"]
+
+            # ── Recall-based recency ──
+            rd = recall_data.get(entry_id)
+            if rd and rd["last_recall"]:
+                # Has been recalled by agent — use recall timestamp
+                try:
+                    last_recall = datetime.strptime(rd["last_recall"], "%Y-%m-%dT%H:%M:%S.%f")
+                except ValueError:
+                    try:
+                        last_recall = datetime.strptime(rd["last_recall"], "%Y-%m-%dT%H:%M:%S")
+                    except (ValueError, TypeError):
+                        last_recall = now
+                days_since_recall = max((now - last_recall).total_seconds() / 86400, 0)
+                recall_recency = math.exp(-0.05 * days_since_recall)
+                # recall frequency boosts the weight
+                recall_count = rd["recall_count"]
+                recall_freq = min(1.0, 0.3 + 0.1 * recall_count)
+            else:
+                # Never recalled — fall back to updated_at (traditional decay)
+                ts = r["updated_at"] or r["first_seen_at"]
+                try:
+                    last = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S") if ts else now
+                except (ValueError, TypeError):
+                    last = now
+                days = max((now - last).total_seconds() / 86400, 0)
+                recall_recency = math.exp(-0.03 * days)
+                recall_freq = 0.3  # low baseline frequency for unrecalled entries
 
             # ── Type factor ──
             entry_type = r["type"] or "memory"
             type_factor = TYPE_FACTOR.get(entry_type, 0.5)
 
             # ── Decay formula ──
-            # importance * (base + recency_contribution + type_contribution)
-            # base=0.3: minimum vitality even for old/forgotten entries
-            # recency_weight=0.4: recent updates boost strength
-            # type_weight=0.3: entry type affects baseline vitality
-            decay = r["importance"] * (0.3 + 0.4 * recency + 0.3 * type_factor)
+            # recalled memories: higher recency weight (0.5) because recall boosts them
+            # unrecalled memories: lower recency weight (0.4), slower decay curve
+            recency_weight = 0.5 if rd else 0.4
+            decay = r["importance"] * (0.3 + recency_weight * recall_freq * recall_recency + 0.3 * type_factor)
             decay = max(0.0, min(1.0, decay))
-            self.conn.execute("UPDATE entries SET decay_score=? WHERE id=?", (round(decay, 4), r["id"]))
+            new_decay = round(decay, 4)
+
+            # ── Record decay history when score changes > threshold ──
+            cur_row = self.conn.execute(
+                "SELECT decay_score FROM entries WHERE id=?", (r["id"],)
+            ).fetchone()
+            old_decay = cur_row["decay_score"] if cur_row else None
+
+            # Check if this entry has ANY history records (seed if not)
+            has_history = self.conn.execute(
+                "SELECT COUNT(*) FROM decay_history WHERE entry_id=?", (r["id"],)
+            ).fetchone()[0]
+
+            should_record = False
+            trigger_type = "auto"
+            if has_history == 0:
+                # No history yet -- seed the first record so curve has a starting point
+                should_record = True
+                trigger_type = "seed"
+            elif old_decay is None or old_decay == 0:
+                should_record = True
+                trigger_type = "first"
+            elif abs(new_decay - old_decay) > 0.01:
+                should_record = True
+                trigger_type = rd and rd["recall_count"] > 0 and new_decay > old_decay and "recall_boost" or "decay_change"
+
+            self.conn.execute("UPDATE entries SET decay_score=? WHERE id=?", (new_decay, r["id"]))
             updated += 1
+
+            if should_record:
+                self.conn.execute(
+                    "INSERT INTO decay_history (entry_id, timestamp, decay_score, trigger) VALUES (?,?,?,?)",
+                    (r["id"], now_str, new_decay, trigger_type)
+                )
+                history_recorded += 1
 
         self.conn.commit()
         return updated
+
+    def get_decay_history(self, entry_id):
+        """Get decay score history for a specific entry, ordered by timestamp."""
+        rows = self.conn.execute(
+            "SELECT timestamp, decay_score, trigger FROM decay_history WHERE entry_id=? ORDER BY timestamp",
+            (entry_id,)
+        ).fetchall()
+        return [{"timestamp": r["timestamp"], "decay_score": r["decay_score"], "trigger": r["trigger"]} for r in rows]
+
+    def get_all_decay_history(self):
+        """Get all decay history entries for bulk export."""
+        rows = self.conn.execute(
+            "SELECT entry_id, timestamp, decay_score, trigger FROM decay_history ORDER BY timestamp"
+        ).fetchall()
+        return [dict(r) for r in rows]
 
     # ──────────────── History & Snapshot ────────────────
 

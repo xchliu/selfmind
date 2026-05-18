@@ -137,14 +137,7 @@ body {
   box-shadow: 0 4px 12px rgba(46, 213, 115, 0.15);
 }
 
-.btn-save {
-  border-color: rgba(30, 144, 255, 0.4);
-}
-
-.btn-save:hover {
-  border-color: #1e90ff;
-  box-shadow: 0 4px 12px rgba(30, 144, 255, 0.15);
-}
+/* btn-save removed (btnSave button removed from HTML) */
 
 .btn.loading {
   opacity: 0.5;
@@ -246,4 +239,73 @@ body {
 }
 .poll-interval {
   color: #bbb;
+}
+
+/* ===== 洞察面板操作按钮 ===== */
+.insight-action-btn {
+  padding: 7px 16px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.8);
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.insight-action-btn:hover {
+  background: rgba(255,255,255,1);
+  border-color: rgba(30, 144, 255, 0.5);
+  color: #333;
+  transform: translateY(-1px);
+}
+
+/* ===== 洞察面板操作下拉菜单 ===== */
+.insight-action-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 8px 0;
+  min-width: 160px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+.insight-action-dropdown button {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.insight-action-dropdown button:hover {
+  background: rgba(0,0,0,0.04);
+  color: #333;
+}
+
+/* ===== 可折叠section toggle图标 ===== */
+.section-toggle {
+  font-size: 12px;
+  color: #999;
+  margin-left: 6px;
+  transition: transform 0.2s;
+}
+
+/* ===== 折叠时section内容隐藏 ===== */
+.collapsed-section > *:not(h3) {
+  display: none;
+}
+.collapsed-section h3 {
+  cursor: pointer;
+  user-select: none;
+}
+.collapsed-section h3:hover {
+  color: #333;
 }

@@ -43,6 +43,11 @@ def _get_store():
     return getattr(SelfMindHandler, '_store', None)
 
 
+def _get_recall_scanner():
+    """Get RecallScanner from handler class attribute (set by server.py)."""
+    return getattr(SelfMindHandler, '_recall_scanner', None)
+
+
 def _node_signature(node: dict) -> str:
     return "|".join(
         [
@@ -163,22 +168,58 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             else:
                 self._json_response([])
         elif clean_path.startswith("/api/meta/entries/"):
-            entry_id = clean_path.split("/api/meta/entries/")[1]
-            store = _get_store()
-            if store:
-                entry = store.get_entry(entry_id)
-                if entry:
-                    self._json_response(entry)
+            # Check for decay-history sub-path first
+            if clean_path.endswith("/decay-history"):
+                entry_id = clean_path.replace("/api/meta/entries/", "").replace("/decay-history", "")
+                store = _get_store()
+                if store:
+                    history = store.get_decay_history(entry_id)
+                    self._json_response(history)
                 else:
-                    self._json_response({"error": "Not found"}, code=404)
+                    self._json_response({"error": "Store not available"}, code=503)
+            elif clean_path.endswith("/recall-history"):
+                # Recall history for a specific entry
+                entry_id = clean_path.replace("/api/meta/entries/", "").replace("/recall-history", "")
+                scanner = _get_recall_scanner()
+                if scanner:
+                    history = scanner.get_entry_recall_history(entry_id)
+                    self._json_response(history)
+                else:
+                    self._json_response({"error": "RecallScanner not available"}, code=503)
             else:
-                self._json_response({"error": "Store not available"}, code=503)
+                entry_id = clean_path.split("/api/meta/entries/")[1]
+                # Skip pin/unpin paths handled elsewhere
+                if entry_id.endswith("/pin") or entry_id.endswith("/unpin"):
+                    pass  # handled in do_POST
+                else:
+                    store = _get_store()
+                    if store:
+                        entry = store.get_entry(entry_id)
+                        if entry:
+                            self._json_response(entry)
+                        else:
+                            self._json_response({"error": "Not found"}, code=404)
+                    else:
+                        self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/meta/health":
             store = _get_store()
             if store:
                 self._json_response(store.get_stats())
             else:
                 self._json_response({"error": "Store not available"}, code=503)
+        elif clean_path == "/api/recall/stats":
+            scanner = _get_recall_scanner()
+            if scanner:
+                self._json_response(scanner.get_recall_stats())
+            else:
+                self._json_response({"error": "RecallScanner not available"}, code=503)
+        elif clean_path == "/api/recall/scan":
+            scanner = _get_recall_scanner()
+            if scanner:
+                result = scanner.scan()
+                self._json_response(result)
+            else:
+                self._json_response({"error": "RecallScanner not available"}, code=503)
         elif clean_path == "/api/meta/snapshots":
             store = _get_store()
             if store:

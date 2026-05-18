@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SelfMind</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<link rel="stylesheet" href="/static/css/global.css">
-<link rel="stylesheet" href="/static/css/graph.css">
-<link rel="stylesheet" href="/static/css/health.css?v=20260515b">
-<link rel="stylesheet" href="/static/css/sediment.css">
-  <link rel="stylesheet" href="/static/css/wiki.css">
-<link rel="stylesheet" href="/static/css/dna.css">
+<link rel="stylesheet" href="/static/css/global.css?v=13">
+<link rel="stylesheet" href="/static/css/graph.css?v=13">
+<link rel="stylesheet" href="/static/css/health.css?v=13">
+<link rel="stylesheet" href="/static/css/sediment.css?v=13">
+  <link rel="stylesheet" href="/static/css/wiki.css?v=13">
+<link rel="stylesheet" href="/static/css/dna.css?v=13">
 </head>
 <body>
 
@@ -33,18 +33,10 @@
       <button class="view-tab" id="tabWiki" onclick="switchView('wiki')">
         <span class="tab-icon">📖</span>Wiki库
       </button>
-      <button class="view-tab" id="tabHealth" onclick="switchView('health')">
-        <span class="tab-icon">💊</span>记忆健康
+      <button class="view-tab" id="tabInsight" onclick="switchView('insight')">
+        <span class="tab-icon">💡</span>记忆洞察
       </button>
-      <button class="view-tab" id="tabAnalyze" onclick="switchView('analyze')">
-        <span class="tab-icon">🔍</span>AI 分析
-      </button>
-      <button class="view-tab" id="tabSediment" onclick="switchView('sediment')">
-        <span class="tab-icon">⏳</span>记忆沉淀
-      </button>
-      <button class="view-tab" id="tabDna" onclick="switchView('dna')">
-        <span class="tab-icon">🧬</span>Agent DNA
-      </button>
+      
       <button class="view-tab" id="tabSettings" onclick="switchToSettings()">
         <span class="tab-icon">⚙️</span>设置
       </button>
@@ -61,19 +53,6 @@
       <span class="btn-icon">🔄</span>
       <span class="spinner"></span>
       刷新记忆
-    </button>
-    <button class="btn btn-save" onclick="handleSave()" id="btnSave">
-      <span class="btn-icon">💾</span>
-      <span class="spinner"></span>
-      保存快照
-    </button>
-    <button class="btn" onclick="toggleAllNodes()" id="btnToggleAll" style="border-color: rgba(16,185,129,0.4); color: #10B981;">
-      <span class="btn-icon" id="toggleAllIcon">📂</span>
-      <span id="toggleAllText">展开全部</span>
-    </button>
-    <button class="btn btn-memory" onclick="toggleMemoryPanel()" id="btnMemory">
-      <span class="btn-icon">🧠</span>
-      记忆管理
     </button>
   </div>
 </div>
@@ -196,22 +175,7 @@
   </div>
 </div>
 
-<!-- 记忆管理面板 -->
-<div class="memory-overlay" id="memoryOverlay" onclick="toggleMemoryPanel()"></div>
-<div class="memory-panel" id="memoryPanel">
-  <div class="memory-panel-header">
-    <h3>🧠 记忆管理</h3>
-    <button class="memory-panel-close" onclick="toggleMemoryPanel()">✕</button>
-  </div>
-  <div class="memory-tabs">
-    <button class="memory-tab active" id="memTabImport" onclick="switchMemoryTab('import')">📥 文档导入</button>
-    <button class="memory-tab" id="memTabList" onclick="switchMemoryTab('list')">📋 记忆列表</button>
-    <button class="memory-tab" id="memTabSync" onclick="switchMemoryTab('sync')">🔄 同步管理</button>
-  </div>
-  <div class="memory-content" id="memoryContentArea">
-    <!-- Dynamic content rendered by JS -->
-  </div>
-</div>
+
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
@@ -245,24 +209,42 @@
     <div class="wiki-detail-body" id="wikiDetailBody"></div>
   </div>
 </div>
-<div id="healthDashboard">
-  <div class="health-header">
-    <h2>🧠 <span>记忆健康</span> 仪表盘</h2>
-    <div class="health-toolbar">
-      <button onclick="healthSync()">🔄 同步元数据</button>
-      <button onclick="healthDecay()">📉 重算衰减</button>
-      <button onclick="loadHealthData()">♻️ 刷新数据</button>
+<!-- 记忆洞察面板（2个子tab：生命周期 + 记忆管理） -->
+<div id="insightDashboard" style="display:none;">
+  <div class="insight-header">
+    <h2>💡 <span>记忆洞察</span></h2>
+    <div class="insight-toolbar">
+      <button class="insight-action-btn" onclick="insightActionMenu()">⚡ 操作</button>
     </div>
   </div>
-  <div class="health-cards" id="healthCards"></div>
-  <div class="health-sections">
-    <button class="health-tab active" onclick="healthSwitchTab('decayCurve',this)">📉 衰减曲线</button>
-    <button class="health-tab" onclick="healthSwitchTab('entries',this)">📊 记忆条目</button>
-    <button class="health-tab" onclick="healthSwitchTab('consolidate',this)">🧹 巩固整理</button>
-    <button class="health-tab" onclick="healthSwitchTab('snapshots',this)">💾 快照管理</button>
-    <button class="health-tab" onclick="healthSwitchTab('ops',this)">📋 操作日志</button>
+  <div class="insight-cards" id="insightCards"></div>
+  <div class="insight-sections">
+    <button class="insight-tab active" onclick="insightSwitchTab('lifecycle',this)">📉 生命周期</button>
+    <button class="insight-tab" onclick="insightSwitchTab('manage',this)">📊 记忆管理</button>
   </div>
-  <div id="healthSectionEntries" class="health-section">
+  <!-- 生命周期（衰减+沉淀+进化+分类DNA） -->
+  <div id="insightSectionLifecycle" class="insight-section active">
+    <!-- 总览层：按分类看衰减 -->
+    <div id="categoryOverviewPanel" class="category-overview-panel">
+      <div id="categoryOverviewContent"></div>
+    </div>
+    <!-- 详情层：某个分类的细节 -->
+    <div id="categoryDetailPanel" class="category-detail-panel" style="display:none;">
+      <div class="category-detail-header">
+        <button class="category-back-btn" onclick="showCategoryOverview()">← 返回总览</button>
+        <h3 id="categoryDetailTitle"></h3>
+      </div>
+      <div id="categoryDetailStats"></div>
+      <div id="categoryDetailEntries"></div>
+    </div>
+  </div>
+  <!-- 记忆管理（条目+巩固+快照+文档导入+同步管理） -->
+  <div id="insightSectionManage" class="insight-section">
+    <!-- 文档导入（紧凑一行式） -->
+    <div id="memoryImportArea" class="import-compact">
+      <!-- Dynamic content rendered by JS -->
+    </div>
+    <!-- 记忆条目管理 -->
     <div class="health-filter-bar">
       <input type="text" class="health-search" id="healthSearch" placeholder="搜索记忆内容、分类..." oninput="healthFilter()">
       <select class="health-filter-select" id="healthCatFilter" onchange="healthFilter()">
@@ -283,131 +265,38 @@
         <tbody id="healthTBody"></tbody>
       </table>
     </div>
-  </div>
-  <div id="healthSectionConsolidate" class="health-section">
-    <div class="consolidate-panel">
+    <!-- 巩固整理 -->
+    <div class="consolidate-panel" style="margin-top:24px;">
+      <h3>🧹 巩固整理</h3>
       <div class="consolidate-toolbar">
-        <button class="consolidate-btn" onclick="runConsolidateScan()">🔍 全面扫描</button>
-        <button class="consolidate-btn" onclick="loadConsolidateDupes()">🔗 查找重复</button>
-        <button class="consolidate-btn" onclick="loadConsolidateConflicts()">⚡ 检测冲突</button>
-        <button class="consolidate-btn" onclick="loadConsolidateDist()">📊 分布分析</button>
+        <button class="consolidate-btn" onclick="runConsolidateScan()">🔍 扫描</button>
+        <button class="consolidate-btn" onclick="loadConsolidateDupes()">🔗 重复</button>
+        <button class="consolidate-btn" onclick="loadConsolidateConflicts()">⚡ 冲突</button>
+        <button class="consolidate-btn" onclick="loadConsolidateDist()">📊 分布</button>
       </div>
       <div id="consolidateSummary" class="consolidate-summary"></div>
       <div id="consolidateResults" class="consolidate-results"></div>
+      <div class="analyze-duplicates" id="analyzeDuplicates"></div>
     </div>
-  </div>
-  <div id="healthSectionSnapshots" class="health-section">
-    <div class="health-snapshots">
+    <!-- 同步管理 -->
+    <div class="sync-section" style="margin-top:24px;">
+      <h3>🔄 同步管理</h3>
+      <div id="syncManageArea" style="font-size:13px;color:#888;"></div>
+    </div>
+    <!-- 快照管理 -->
+    <div class="health-snapshots" style="margin-top:24px;">
       <h3>💾 快照管理 <button class="snap-create-btn" onclick="healthCreateSnapshot()">+ 创建快照</button></h3>
       <div class="snap-list" id="healthSnapList"></div>
     </div>
-  </div>
-  <div id="healthSectionOps" class="health-section">
-    <div class="health-ops">
+    <!-- 操作日志 -->
+    <div class="health-ops" style="margin-top:16px;">
       <h3>📋 操作日志</h3>
       <div class="health-ops-list" id="healthOps"></div>
     </div>
   </div>
-  <div id="healthSectionDecayCurve" class="health-section active">
-    <div class="decay-curve-panel">
-      <h3>📉 记忆衰减曲线</h3>
-      <p class="decay-curve-desc">记忆随时间自然衰减，衰减曲线展示各类记忆的强度分布和演变趋势</p>
-      <div id="decayCurveChart" class="decay-curve-chart"></div>
-      <div id="decayBucketChart" class="decay-bucket-chart"></div>
-      <div id="decayTimelineChart" class="decay-timeline-chart"></div>
-    </div>
-  </div>
 </div>
 
-<!-- AI分析面板 -->
-<div id="analyzeDashboard" style="display:none;">
-  <div class="analyze-header">
-    <h2>🔍 <span>AI 分析引擎</span></h2>
-    <div class="analyze-toolbar">
-      <button onclick="loadAnalyzeData()">🔄 刷新分析</button>
-    </div>
-  </div>
-  <div class="analyze-cards" id="analyzeCards"></div>
-  <div class="analyze-sections">
-    <button class="analyze-tab active" onclick="analyzeSwitchTab('overview',this)">📊 整体概览</button>
-    <button class="analyze-tab" onclick="analyzeSwitchTab('importance',this)">⭐ 重要性分析</button>
-    <button class="analyze-tab" onclick="analyzeSwitchTab('duplicates',this)">🔄 重复检测</button>
-    <button class="analyze-tab" onclick="analyzeSwitchTab('forget',this)">🗑️ 遗忘分析</button>
-    <button class="analyze-tab" onclick="analyzeSwitchTab('insights',this)">💡 洞察</button>
-  </div>
-  <div id="analyzeSectionOverview" class="analyze-section active">
-    <div class="analyze-overview" id="analyzeOverview"></div>
-  </div>
-  <div id="analyzeSectionImportance" class="analyze-section">
-    <div class="analyze-importance" id="analyzeImportance"></div>
-  </div>
-  <div id="analyzeSectionDuplicates" class="analyze-section">
-    <div class="analyze-duplicates" id="analyzeDuplicates"></div>
-  </div>
-  <div id="analyzeSectionForget" class="analyze-section">
-    <div class="analyze-forget" id="analyzeForget"></div>
-  </div>
-  <div id="analyzeSectionInsights" class="analyze-section">
-    <div class="analyze-insights" id="analyzeInsights"></div>
-  </div>
-</div>
 
-<!-- U型记忆沉淀面板 -->
-<div id="sedimentDashboard">
-  <div class="sed-header">
-    <h2>⏳ 记忆沉淀 U 型结构</h2>
-    <div>
-      <button onclick="loadSedimentData()">⟳ 刷新</button>
-      <button onclick="sedimentRunCheck()">⌕ 检查</button>
-    </div>
-  </div>
-  <div class="sed-canvas" id="sedCanvas">
-    <!-- Full-page SVG: U curve + rays -->
-    <svg id="sedSvg" width="100%" height="100%" style="position:absolute;top:0;left:0;"></svg>
-    <!-- Node cards (positioned by JS) -->
-    <div id="sedNodes"></div>
-  </div>
-</div>
-
-<!-- Agent DNA 页面 -->
-<div id="dnaDashboard" style="display:none;">
-  <div class="dna-header">
-    <h2>🧬 Agent DNA — 记忆进化过程</h2>
-    <div class="dna-agent-label" id="dnaAgentLabel">Hermes</div>
-    <div>
-      <button onclick="loadDnaData()">⟳ 刷新</button>
-    </div>
-  </div>
-  
-  <!-- DNA概览 -->
-  <div class="dna-summary" id="dnaSummary"></div>
-  
-  <!-- DNA双螺旋可视化 -->
-  <div class="dna-helix-container" id="dnaHelixContainer">
-    <svg id="dnaHelixSvg" width="100%" height="400"></svg>
-  </div>
-  
-  <!-- 分类基因图 -->
-  <div class="dna-categories" id="dnaCategories"></div>
-  
-  <!-- 时间线 -->
-  <div class="dna-timeline" id="dnaTimeline"></div>
-  
-  <!-- 演变事件 -->
-  <div class="dna-events" id="dnaEvents"></div>
-  
-  <!-- 记忆条目详情弹窗 -->
-  <div class="dna-modal" id="dnaModal" style="display:none;">
-    <div class="dna-modal-content">
-      <div class="dna-modal-header">
-        <h3 id="dnaModalTitle">记忆详情</h3>
-        <button onclick="closeDnaModal()" class="dna-modal-close">✕</button>
-      </div>
-      <div class="dna-modal-body" id="dnaModalBody"></div>
-      <div class="dna-modal-evolution" id="dnaModalEvolution"></div>
-    </div>
-  </div>
-</div>
 
 <!-- 设置面板 -->
 <div id="settingsDashboard" style="display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
@@ -484,10 +373,10 @@
 </div>
 
 
-<script src="/static/js/app.js?v=2"></script>
-<script src="/static/js/graph.js?v=2"></script>
-<script src="/static/js/views.js?v=2"></script>
-  <script src="/static/js/decay_curve.js?v=2"></script>
+<script src="/static/js/app.js?v=13"></script>
+<script src="/static/js/graph.js?v=13"></script>
+<script src="/static/js/views.js?v=13"></script>
+  <script src="/static/js/decay_curve.js?v=13"></script>
 <!-- 底部状态栏 -->
 <div id="pollBar" class="poll-bar">
   <div class="poll-left">
@@ -502,10 +391,10 @@
 </div>
 
 
-<script src="/static/js/init.js?v=2"></script>
-<script src="/static/js/sediment.js?v=2"></script>
-<script src="/static/js/wiki.js?v=2"></script>
-<script src="/static/js/dna.js?v=2"></script>
+<script src="/static/js/init.js?v=13"></script>
+<script src="/static/js/sediment.js?v=13"></script>
+<script src="/static/js/wiki.js?v=13"></script>
+<script src="/static/js/dna.js?v=13"></script>
 
 
 

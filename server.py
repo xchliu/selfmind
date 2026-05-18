@@ -54,11 +54,49 @@ def main():
     data = build_graph_from_store(store, config)
     print(f"   📊 {len(data['nodes'])} nodes, {len(data['links'])} links")
 
+    # ── Initialize recall scanner ──
+    from selfmind_app.recall_capture import RecallScanner, HermesAdapter
+    recall_scanner = RecallScanner(store, adapters=[HermesAdapter()])
+
     # ── Wire up http handler ──
     from selfmind_app.http_handler import SelfMindHandler
     SelfMindHandler._store = store
     SelfMindHandler._graph_data = data
     SelfMindHandler._config = config
+    SelfMindHandler._recall_scanner = recall_scanner
+
+    # ── Background sync thread (periodic sync + recall scan) ──
+    import threading
+
+    def periodic_sync():
+        """Periodic sync cycle: resync data + scan recall + rebuild graph."""
+        while True:
+            try:
+                import time
+                time.sleep(300)  # 5 minutes
+                
+                # Step 1: Resync all sources
+                sync_stats = unified_sync(store, config)
+                total_active = sync_stats.get("total_active", 0)
+                
+                # Step 2: Scan agent recall
+                recall_result = recall_scanner.scan()
+                recalls = recall_result.get("recalls_recorded", 0)
+                
+                # Step 3: Recompute decay (now uses recall data)
+                store.compute_decay_scores()
+                
+                # Step 4: Rebuild graph
+                new_data = build_graph_from_store(store, config)
+                SelfMindHandler._graph_data = new_data
+                
+                print(f"   [Auto-sync] {total_active} active, {recalls} recalls, graph rebuilt")
+            except Exception as e:
+                print(f"   [Auto-sync] Error: {e}")
+
+    sync_thread = threading.Thread(target=periodic_sync, daemon=True)
+    sync_thread.start()
+    print(f"   🔄 Auto-sync thread started (5 min interval)")
 
     print(f"   📂 Data: {SELFMIND_DIR}")
     print(f"   🌐 http://localhost:{port}")

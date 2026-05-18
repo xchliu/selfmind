@@ -270,9 +270,16 @@ function renderDnaCategories() {
     'comparison': '#fdcb6e',
   };
 
-  let html = '<h3>🧬 基因分类图谱</h3><div class="dna-cat-grid">';
+  // 按条目数排序，top 10 显示，其余折叠
+  const sorted = Object.entries(categories).sort((a, b) => b[1].count - a[1].count);
+  const TOP_N = 10;
+  const showAll = container.dataset.showAll === 'true';
+  const visible = showAll ? sorted : sorted.slice(0, TOP_N);
+  const hiddenCount = sorted.length - TOP_N;
 
-  Object.entries(categories).forEach(([key, val]) => {
+  let html = '<div class="dna-cat-grid">';
+
+  visible.forEach(([key, val]) => {
     const parts = key.split('/');
     const primary = parts[0];
     const secondary = parts[1] || '-';
@@ -295,6 +302,11 @@ function renderDnaCategories() {
   });
 
   html += '</div>';
+  if (!showAll && hiddenCount > 0) {
+    html += `<button onclick="showAllDnaCategories()" style="margin-top:12px;padding:8px 16px;border:1px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#667eea;">▸ 展开全部 ${sorted.length} 个分类（还有 ${hiddenCount} 个）</button>`;
+  } else if (showAll && hiddenCount > 0) {
+    html += `<button onclick="collapseDnaCategories()" style="margin-top:12px;padding:8px 16px;border:1px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#667eea;">▸ 只显示前 ${TOP_N} 个</button>`;
+  }
   container.innerHTML = html;
 }
 
@@ -449,6 +461,18 @@ function filterDnaByCategory(category) {
   if (entries.length > 0) {
     showDnaEntryDetail(entries[0]);
   }
+}
+
+function showAllDnaCategories() {
+  const container = document.getElementById('dnaCategories');
+  container.dataset.showAll = 'true';
+  renderDnaCategories();
+}
+
+function collapseDnaCategories() {
+  const container = document.getElementById('dnaCategories');
+  container.dataset.showAll = 'false';
+  renderDnaCategories();
 }
 
 // ─── 初始化 ───

@@ -163,107 +163,80 @@ function renderCurrentMemoryTab() {
   else if (currentMemoryTab === 'sync') { loadMemoryStats(); }
 }
 
-// ===== Tab 1: 文档导入 =====
-function renderImportTab() {
-  const area = document.getElementById('memoryContentArea');
-  let html = `
-    <div class="memory-input-group">
-      <input type="text" id="memDocDir" placeholder="输入文档目录路径，如 /path/to/docs" value="">
-      <button class="memory-btn memory-btn-primary" onclick="startAutoImport()" ${autoImporting ? 'disabled' : ''}>
-        ${autoImporting ? '⏳ 导入中...' : '🚀 一键导入'}
-      </button>
-      <button class="memory-btn memory-btn-secondary" onclick="scanDocuments()" ${memoryScanning || autoImporting ? 'disabled' : ''} title="手动扫描并选择文件">
-        ${memoryScanning ? '⏳' : '🔍'}
-      </button>
-    </div>`;
+// ===== 文档导入 =====
+function renderImportArea() {
+  const area = document.getElementById('memoryImportArea');
+  if (!area) return;
+  renderImportContent(area);
+}
 
-  // Auto import progress
+function renderImportTab() {
+  const area = document.getElementById('memoryImportArea') || document.getElementById('memoryContentArea');
+  if (!area) return;
+  renderImportContent(area);
+}
+
+function renderImportContent(area) {
+  let html = '';
+
+  // Auto import progress — expanded view
   if (autoImporting && autoImportProgress) {
     const p = autoImportProgress;
     const pct = p.total > 0 ? Math.round((p.current / p.total) * 100) : 0;
-    html += `<div class="auto-import-progress">
-      <div class="auto-import-header">
-        <span class="auto-import-status">${p.phase || '处理中...'}</span>
-        <span class="auto-import-counter">${p.current || 0}/${p.total || 0} 文件</span>
-      </div>
-      <div class="auto-import-bar-wrap">
-        <div class="auto-import-bar" style="width:${pct}%"></div>
-      </div>
-      <div class="auto-import-file">${p.file ? `📄 ${escapeHtml(p.file)}` : ''}</div>
-      <div class="auto-import-extracted">已提取 <strong>${p.totalExtracted || 0}</strong> 条记忆</div>
-      ${p.log && p.log.length > 0 ? `<div class="auto-import-log">${p.log.map(l => `<div class="auto-import-log-line ${l.type}">${escapeHtml(l.text)}</div>`).join('')}</div>` : ''}
-      <button class="memory-btn memory-btn-danger" onclick="stopAutoImport()" style="margin-top:8px">
-        ⏹ 停止导入
-      </button>
+    html += `<div class="import-progress-compact">
+      <div class="import-progress-bar" style="width:${pct}%"></div>
+      <span>${p.phase || '处理中...'} · ${p.totalExtracted || 0} 条</span>
+      <button class="import-btn-stop" onclick="stopAutoImport()">⏹</button>
     </div>`;
   } else if (autoImportProgress && autoImportProgress.done) {
     const p = autoImportProgress;
-    html += `<div class="auto-import-result">
-      <div class="auto-import-result-icon">✅</div>
-      <div class="auto-import-result-text">
-        导入完成！共处理 <strong>${p.processed || 0}</strong> 个文件，
-        提取 <strong>${p.totalExtracted || 0}</strong> 条记忆
-        ${p.skipped ? `，跳过 ${p.skipped} 个` : ''}
-      </div>
-      <div class="auto-import-result-actions">
-        <button class="memory-btn memory-btn-primary" onclick="switchMemoryTab('list')">📋 查看记忆</button>
-        <button class="memory-btn memory-btn-secondary" onclick="autoImportProgress=null;renderImportTab()">↩ 重新导入</button>
-      </div>
+    html += `<div class="import-result-compact">
+      ✅ ${p.processed || 0} 文件 → ${p.totalExtracted || 0} 条记忆
+      <button class="import-btn-small" onclick="autoImportProgress=null;renderImportTab()">重新导入</button>
     </div>`;
   } else if (memoryScanning) {
-    html += `<div class="memory-progress">
-      <div class="memory-progress-spinner"></div>
-      <div class="memory-progress-text">正在扫描目录...</div>
-    </div>`;
-  } else if (scannedFiles.length === 0 && !autoImporting) {
-    html += `<div class="memory-empty">
-      <div class="memory-empty-icon">📂</div>
-      <div>输入目录路径，点击「🚀 一键导入」自动扫描并提取记忆</div>
-      <div style="margin-top:8px;font-size:12px;opacity:0.6">或点击 🔍 手动扫描选择文件</div>
+    html += `<div class="import-progress-compact">
+      <div class="import-progress-spinner-inline"></div>
+      <span>扫描中...</span>
     </div>`;
   } else if (scannedFiles.length > 0) {
-    // Manual mode: file list with checkboxes
-    html += `<div class="doc-select-bar">
-      <label>
-        <input type="checkbox" id="memSelectAllFiles"
-          onchange="toggleAllFiles(this.checked)"
-          ${selectedFileIndices.size === scannedFiles.length && scannedFiles.length > 0 ? 'checked' : ''}>
-        全选
-      </label>
-      <span>共 ${scannedFiles.length} 个文件，已选 ${selectedFileIndices.size} 个</span>
-    </div>
-    <div class="doc-file-list">`;
-    scannedFiles.forEach((f, i) => {
-      const checked = selectedFileIndices.has(i) ? 'checked' : '';
-      const sizeStr = f.size ? formatFileSize(f.size) : '';
-      const typeStr = f.type || f.name.split('.').pop() || '';
-      html += `<div class="doc-file-item">
-        <input type="checkbox" ${checked} onchange="toggleFileSelect(${i}, this.checked)">
-        <div class="doc-file-name" title="${escapeHtml(f.path || f.name)}">${escapeHtml(f.name)}</div>
-        ${sizeStr ? `<span class="doc-file-meta">${sizeStr}</span>` : ''}
-        ${typeStr ? `<span class="doc-file-type">${escapeHtml(typeStr)}</span>` : ''}
-      </div>`;
-    });
-    html += `</div>`;
-
-    if (memoryExtracting) {
-      html += `<div class="memory-progress">
-        <div class="memory-progress-spinner"></div>
-        <div class="memory-progress-text">正在提取记忆... 这可能需要一些时间</div>
-      </div>`;
-    } else {
-      html += `<button class="memory-btn memory-btn-success" onclick="extractMemories()"
-        style="width:100%;padding:10px" ${selectedFileIndices.size === 0 ? 'disabled' : ''}>
-        🧬 提取记忆 (${selectedFileIndices.size} 个文件)
-      </button>`;
+    // Manual mode: compact file list
+    html += `<div class="import-file-select-compact">
+      <span>${scannedFiles.length} 文件 · 已选 ${selectedFileIndices.size}</span>
+      <button class="import-btn-small" onclick="selectedFileIndices.size===0?'':extractMemories()" ${selectedFileIndices.size === 0 ? 'disabled' : ''}>🧬 提取</button>
+      <button class="import-btn-small" onclick="toggleImportFileList()">展开</button>
+    </div>`;
+    if (importFileListExpanded) {
+      html += `<div class="import-file-list-mini">`;
+      scannedFiles.forEach((f, i) => {
+        const checked = selectedFileIndices.has(i) ? 'checked' : '';
+        html += `<div class="import-file-item-mini">
+          <input type="checkbox" ${checked} onchange="toggleFileSelect(${i}, this.checked)">
+          <span>${escapeHtml(f.name)}</span>
+        </div>`;
+      });
+      html += `</div>`;
     }
-
     if (extractResultCount !== null) {
-      html += `<div class="memory-result-count">✅ 成功提取 ${extractResultCount} 条记忆</div>`;
+      html += `<div class="import-result-compact">✅ 提取 ${extractResultCount} 条</div>`;
     }
+  } else {
+    // Default: single-line input + button
+    html += `<div class="import-line">
+      <input type="text" id="memDocDir" placeholder="目录路径" value="" class="import-input">
+      <button class="import-btn" onclick="startAutoImport()" ${autoImporting ? 'disabled' : ''}>🚀 导入</button>
+      <button class="import-btn-secondary" onclick="scanDocuments()" ${memoryScanning || autoImporting ? 'disabled' : ''} title="手动扫描">🔍</button>
+    </div>`;
   }
 
   area.innerHTML = html;
+}
+
+// File list expand/collapse toggle
+let importFileListExpanded = false;
+function toggleImportFileList() {
+  importFileListExpanded = !importFileListExpanded;
+  renderImportTab();
 }
 
 function startAutoImport() {
@@ -618,7 +591,8 @@ async function bulkAction(action) {
 
 // ===== Tab 3: 同步管理 =====
 async function loadMemoryStats() {
-  const area = document.getElementById('memoryContentArea');
+  const area = document.getElementById('syncManageArea');
+  if (!area) return;
   area.innerHTML = `<div class="memory-progress">
     <div class="memory-progress-spinner"></div>
     <div class="memory-progress-text">加载统计数据...</div>
@@ -638,11 +612,12 @@ async function loadMemoryStats() {
   } catch (e) {
     memoryStats._approvedEntries = [];
   }
-  renderSyncTab();
+  renderSyncArea();
 }
 
-function renderSyncTab() {
-  const area = document.getElementById('memoryContentArea');
+function renderSyncArea() {
+  const area = document.getElementById('syncManageArea');
+  if (!area) return;
   const s = memoryStats || { total: 0, pending: 0, approved: 0, synced: 0, rejected: 0 };
   const approvedEntries = s._approvedEntries || [];
 
@@ -716,7 +691,7 @@ function renderSyncTab() {
 
 function selectSyncAgent(agent) {
   syncTargetAgent = agent;
-  renderSyncTab();
+  renderSyncArea();
 }
 
 function toggleAllSyncItems(checked) {
@@ -724,13 +699,13 @@ function toggleAllSyncItems(checked) {
   if (checked && memoryStats && memoryStats._approvedEntries) {
     memoryStats._approvedEntries.forEach(m => selectedSyncIds.add(m.id));
   }
-  renderSyncTab();
+  renderSyncArea();
 }
 
 function toggleSyncItem(id, checked) {
   if (checked) selectedSyncIds.add(id);
   else selectedSyncIds.delete(id);
-  renderSyncTab();
+  renderSyncArea();
 }
 
 async function syncMemories() {
@@ -1179,26 +1154,21 @@ async function loadHealthData() {
     populateCategoryFilter();
     healthFilter();
     renderHealthOps(ops);
-    // 衰减曲线是默认tab，自动渲染
-    if (typeof renderDecayCurve === 'function') renderDecayCurve();
+    // 渲染分类衰减总览
+    if (typeof renderCategoryOverview === 'function') renderCategoryOverview();
     showToast('健康数据已加载', 'success');
   } catch(e) { console.error('Health load error', e); showToast('加载失败: ' + e.message, 'error'); }
 }
 
 function renderHealthCards(h) {
   const active = h.total_active || 0;
-  const inactive = h.total_inactive || 0;
-  const avgDecay = typeof h.avg_decay === 'number' ? (h.avg_decay * 100).toFixed(1) : '0.0';
+  const avgDecay = typeof h.avg_decay === 'number' ? Math.round(h.avg_decay * 100) : 0;
   const cards = [
-    { icon:'📦', value:active, label:'活跃条目', cls:'card-active' },
-    { icon:'⏸️', value:inactive, label:'历史条目', cls:'card-inactive' },
-    { icon:'📉', value:avgDecay+'%', label:'平均衰减', cls:'card-decay' },
-    { icon:'📌', value:h.pinned||0, label:'已固定', cls:'card-pinned' },
-    { icon:'⚠️', value:h.fading_candidates||0, label:'衰减预警', cls:'card-fading' },
-    { icon:'🔄', value:h.version_changes||0, label:'版本变化', cls:'card-version' },
+    { icon:'📦', value:active, label:'活跃记忆', cls:'card-active' },
+    { icon:'📉', value:avgDecay+'%', label:'平均强度', cls:'card-decay' },
     { icon:'💾', value:h.snapshots||0, label:'快照数', cls:'card-snap' }
   ];
-  document.getElementById('healthCards').innerHTML = cards.map(c =>
+  document.getElementById('insightCards').innerHTML = cards.map(c =>
     `<div class="health-card ${c.cls}"><div class="hc-icon">${c.icon}</div><div class="hc-value">${c.value}</div><div class="hc-label">${c.label}</div></div>`
   ).join('');
 }
@@ -1214,7 +1184,7 @@ function healthFilter() {
   const cat = document.getElementById('healthCatFilter')?.value || '';
   const status = document.getElementById('healthStatusFilter')?.value || '';
   healthFilteredEntries = healthEntries.filter(e => {
-    if (q && !(e.content_preview||'').toLowerCase().includes(q) && !(e.primary_cat||'').toLowerCase().includes(q) && !(e.secondary_cat||'').toLowerCase().includes(q)) return false;
+    if (q && !(extractPreview(e.content_preview)).toLowerCase().includes(q) && !(e.primary_cat||'').toLowerCase().includes(q) && !(e.secondary_cat||'').toLowerCase().includes(q)) return false;
     if (cat && e.primary_cat !== cat) return false;
     if (status === 'healthy' && e.decay_score <= 0.5) return false;
     if (status === 'fading' && (e.decay_score <= 0.2 || e.decay_score > 0.5)) return false;
@@ -1247,11 +1217,11 @@ function renderHealthTable() {
   document.getElementById('healthTBody').innerHTML = sorted.map(e => {
     const ds = e.decay_score || 0;
     const dcClass = ds > 0.5 ? 'green' : ds > 0.2 ? 'yellow' : 'red';
-    const preview = (e.content_preview||'').slice(0,50) + ((e.content_preview||'').length>50?'…':'');
+    const preview = extractPreview(e.content_preview).slice(0,50) + (extractPreview(e.content_preview).length>50?'…':'');
     const catLabel = [e.primary_cat, e.secondary_cat].filter(Boolean).join('/');
     const statusBadge = e.status === 'inactive' ? '<span class="status-badge inactive">历史</span>' : '';
     return `<tr>
-      <td><div class="preview-text" title="${(e.content_preview||'').replace(/"/g,'&quot;')}">${preview} ${statusBadge}</div></td>
+      <td><div class="preview-text" title="${extractPreview(e.content_preview).replace(/"/g,'&quot;')}">${preview} ${statusBadge}</div></td>
       <td><span class="cat-tag">${catLabel||'未分类'}</span></td>
       <td><div class="imp-bar"><div class="imp-bar-inner" style="width:${(e.importance||0)*100}%"></div></div></td>
       <td><div class="decay-bar-wrap" onclick="showEntryDecayCurve('${e.id}')" style="cursor:pointer" title="点击查看衰减曲线"><div class="decay-bar"><div class="decay-bar-inner decay-${dcClass}" style="width:${Math.max(ds*100,5)}%"></div></div><span class="decay-pct ${dcClass}">${(ds*100).toFixed(0)}%</span></div></td>
@@ -1337,141 +1307,8 @@ function analyzeSwitchTab(tab, btn) {
 }
 
 async function loadAnalyzeData() {
-  try {
-    const [distRes, dupRes, forgetRes, impRes] = await Promise.all([
-      fetch('/api/consolidate/distribution'),
-      fetch('/api/consolidate/duplicates'),
-      fetch('/api/forget/analyze'),
-      fetch('/api/analyze/importance')
-    ]);
-    
-    const distribution = await distRes.json();
-    const duplicates = await dupRes.json();
-    const forget = await forgetRes.json();
-    const importance = await impRes.json();
-    
-    // Render cards
-    const totalNodes = distribution.total_memory_nodes || 0;
-    const dupCount = duplicates.duplicates ? duplicates.duplicates.length : 0;
-    const forgetCount = forget.to_forget ? forget.to_forget.length : 0;
-    const highImp = (importance.high_importance || 0) + (importance.importance_distribution?.['0.8-1.0'] || 0);
-    
-    document.getElementById('analyzeCards').innerHTML = `
-      <div class="analyze-card">
-        <span class="ac-value">${totalNodes}</span>
-        <span class="ac-label">总记忆节点</span>
-      </div>
-      <div class="analyze-card ${dupCount > 0 ? 'ac-highlight' : ''}">
-        <span class="ac-value">${dupCount}</span>
-        <span class="ac-label">重复记忆</span>
-        <span class="ac-sub">建议合并</span>
-      </div>
-      <div class="analyze-card ${forgetCount > 0 ? 'ac-highlight' : ''}">
-        <span class="ac-value">${forgetCount}</span>
-        <span class="ac-label">可遗忘项</span>
-        <span class="ac-sub">低价值记忆</span>
-      </div>
-      <div class="analyze-card">
-        <span class="ac-value">${highImp}</span>
-        <span class="ac-label">高重要性</span>
-        <span class="ac-sub">核心记忆</span>
-      </div>
-    `;
-    
-    // Render overview
-    document.getElementById('analyzeOverview').innerHTML = `
-      <div class="analyze-stat-grid">
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">记忆分类分布</div>
-          <div class="analyze-bar-chart">
-            ${Object.entries(distribution.by_primary_category || {}).map(([cat, count]) => `
-              <div class="analyze-bar-row">
-                <span class="analyze-bar-label">${cat}</span>
-                <div class="analyze-bar-track"><div class="analyze-bar-fill" style="width:${totalNodes ? (count/totalNodes*100) : 0}%"></div></div>
-                <span class="analyze-bar-value">${count}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">平均重要性</div>
-          <div class="analyze-stat-value">${(distribution.avg_importance || 0).toFixed(2)}</div>
-          <div style="font-size:12px;color:#888">满分 1.0</div>
-        </div>
-      </div>
-    `;
-    
-    // Render duplicates
-    const dupHtml = duplicates.duplicates && duplicates.duplicates.length > 0 
-      ? duplicates.duplicates.map(g => `
-        <div class="cr-group">
-          <div class="cr-group-title">🔄 相似记忆 (${g.length})</div>
-          <ul class="cr-group-list">
-            ${g.map(m => `<li>${m.content_preview || m.label || '未命名'}</li>`).join('')}
-          </ul>
-        </div>
-      `).join('')
-      : '<div style="color:#ccc;text-align:center;padding:30px">未发现重复记忆 ✓</div>';
-    document.getElementById('analyzeDuplicates').innerHTML = dupHtml;
-    
-    // Render forget
-    document.getElementById('analyzeForget').innerHTML = `
-      <div class="analyze-stat-grid">
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">高风险遗忘</div>
-          <div class="analyze-stat-value" style="color:#ef4444">${forget.score_distribution?.high_risk || 0}</div>
-        </div>
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">中风险遗忘</div>
-          <div class="analyze-stat-value" style="color:#f59e0b">${forget.score_distribution?.medium_risk || 0}</div>
-        </div>
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">低风险遗忘</div>
-          <div class="analyze-stat-value" style="color:#10b981">${forget.score_distribution?.low_risk || 0}</div>
-        </div>
-      </div>
-    `;
-    
-    // Render importance
-    const impDist = importance.importance_distribution || {};
-    const highImpCount = (impDist['0.8-1.0'] || 0);
-    const medImpCount = (impDist['0.4-0.6'] || 0) + (impDist['0.6-0.8'] || 0);
-    const lowImpCount = (impDist['0-0.2'] || 0) + (impDist['0.2-0.4'] || 0);
-    document.getElementById('analyzeImportance').innerHTML = `
-      <div class="analyze-stat-grid">
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">高重要性 (0.8-1.0)</div>
-          <div class="analyze-stat-value" style="color:#8b5cf6">${highImpCount}</div>
-        </div>
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">中重要性 (0.4-0.8)</div>
-          <div class="analyze-stat-value" style="color:#3b82f6">${medImpCount}</div>
-        </div>
-        <div class="analyze-stat-item">
-          <div class="analyze-stat-label">低重要性 (0-0.4)</div>
-          <div class="analyze-stat-value" style="color:#9ca3af">${lowImpCount}</div>
-        </div>
-      </div>
-    `;
-    
-    // Render insights placeholder
-    document.getElementById('analyzeInsights').innerHTML = `
-      <div style="color:#666;line-height:1.8">
-        <h3 style="margin-top:0">💡 分析洞察</h3>
-        <ul style="padding-left:20px">
-          <li>您的记忆库目前有 <strong>${totalNodes}</strong> 个节点</li>
-          <li>其中 <strong>${highImp}</strong> 个是高重要性记忆，值得重点巩固</li>
-          ${dupCount > 0 ? `<li>发现 <strong>${dupCount}</strong> 组相似记忆，建议合并以减少冗余</li>` : ''}
-          ${forgetCount > 0 ? `<li>有 <strong>${forgetCount}</strong> 个记忆衰减严重，可以考虑归档或遗忘</li>` : ''}
-        </ul>
-      </div>
-    `;
-    
-    showToast('分析完成', 'success');
-  } catch(e) {
-    console.error(e);
-    showToast('分析加载失败', 'error');
-  }
+  // 已废弃——分类衰减总览已替代分析模块
+  // 数据现在由 renderCategoryOverview 直接从 healthEntries 计算
 }
 
 // ========== 巩固引擎 ==========
@@ -1548,8 +1385,8 @@ function renderDuplicates(dupes) {
       const e1 = d.entries?.[0] || {}, e2 = d.entries?.[1] || {};
       return `<div class="cr-item">
         <div class="cr-pair">
-          <div class="cr-entry"><div class="cr-id">${d.pair[0]}</div>${(e1.content_preview||'').slice(0,80)}</div>
-          <div class="cr-entry"><div class="cr-id">${d.pair[1]}</div>${(e2.content_preview||'').slice(0,80)}</div>
+          <div class="cr-entry"><div class="cr-id">${d.pair[0]}</div>${extractPreview(e1.content_preview).slice(0,80)}</div>
+          <div class="cr-entry"><div class="cr-id">${d.pair[1]}</div>${extractPreview(e2.content_preview).slice(0,80)}</div>
         </div>
         <span class="cr-sim ${simCls}">相似度 ${(d.similarity*100).toFixed(0)}%</span>
         <div class="cr-suggestion">💡 ${d.suggestion}</div>
@@ -1567,8 +1404,8 @@ function renderConflicts(conflicts) {
       const e1 = c.entries?.[0] || {}, e2 = c.entries?.[1] || {};
       return `<div class="cr-item">
         <div class="cr-pair">
-          <div class="cr-entry"><div class="cr-id">${c.pair[0]}</div>${(e1.content_preview||'').slice(0,80)}</div>
-          <div class="cr-entry"><div class="cr-id">${c.pair[1]}</div>${(e2.content_preview||'').slice(0,80)}</div>
+          <div class="cr-entry"><div class="cr-id">${c.pair[0]}</div>${extractPreview(e1.content_preview).slice(0,80)}</div>
+          <div class="cr-entry"><div class="cr-id">${c.pair[1]}</div>${extractPreview(e2.content_preview).slice(0,80)}</div>
         </div>
         <div class="cr-suggestion">💡 ${c.suggestion}</div>
       </div>`;
@@ -1916,5 +1753,275 @@ function startPolling() {
   pollingInterval = setInterval(pollCheck, POLL_INTERVAL_MS);
   // 更新时间显示（每秒更新）
   setInterval(updatePollTime, 1000);
+}
+
+// ========== 记忆洞察模块（合并：生命周期+管理+DNA） ==========
+let currentInsightTab = 'lifecycle';
+
+function insightSwitchTab(tab, btnEl) {
+  currentInsightTab = tab;
+  // 更新按钮样式
+  document.querySelectorAll('.insight-tab').forEach(t => t.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  // 切换section显隐
+  const tabMap = {
+    'lifecycle': 'insightSectionLifecycle',
+    'manage': 'insightSectionManage'
+  };
+  document.querySelectorAll('.insight-section').forEach(s => s.classList.remove('active'));
+  const targetId = tabMap[tab];
+  if (targetId) document.getElementById(targetId).classList.add('active');
+  
+  // 触发数据加载
+  if (tab === 'lifecycle') {
+    loadHealthData();
+  }
+  if (tab === 'manage') {
+    loadHealthData();
+    renderImportArea();
+    loadMemoryStats();
+    renderSyncArea();
+    loadHealthSnapshots();
+  }
+}
+
+// 洞察面板操作下拉菜单
+function insightActionMenu() {
+  // 移除已存在的下拉菜单
+  const existing = document.querySelector('.insight-action-dropdown');
+  if (existing) { existing.remove(); return; }
+
+  const toolbar = document.querySelector('.insight-toolbar');
+  if (!toolbar) return;
+
+  const dropdown = document.createElement('div');
+  dropdown.className = 'insight-action-dropdown';
+  dropdown.innerHTML = `
+    <button onclick="healthSync(); insightActionMenuClose()">🔄 同步元数据</button>
+    <button onclick="healthDecay(); insightActionMenuClose()">📉 重算衰减</button>
+    <button onclick="loadHealthData(); insightActionMenuClose()">♻️ 刷新数据</button>
+  `;
+  toolbar.appendChild(dropdown);
+
+  // 点击外部关闭
+  setTimeout(() => {
+    document.addEventListener('click', insightActionMenuCloseOnce, { once: true });
+  }, 10);
+}
+
+function insightActionMenuClose() {
+  const dropdown = document.querySelector('.insight-action-dropdown');
+  if (dropdown) dropdown.remove();
+}
+
+function insightActionMenuCloseOnce(e) {
+  const dropdown = document.querySelector('.insight-action-dropdown');
+  if (dropdown && !dropdown.contains(e.target)) dropdown.remove();
+}
+
+// ========== 分类衰减总览 + 钻入详情 ==========
+
+// 从content_preview提取人类可读文字
+function extractPreview(raw) {
+  if (!raw) return '—';
+  // YAML格式: "--- name: xxx description: xxx ..."
+  if (raw.startsWith('---') || raw.indexOf('name:') < 20 && raw.indexOf('description:') > -1) {
+    const descMatch = raw.match(/description:\s*"([^"]*)"|description:\s*'([^']*)'|description:\s*(.+?)(?:\n|version:|tags:|trigger:|author:|$)/);
+    if (descMatch) {
+      const desc = (descMatch[1] || descMatch[2] || descMatch[3] || '').trim();
+      return desc.length > 0 ? desc : raw.replace(/^---\s*/, '').replace(/name:\s*\S+\s*/, '').trim().substring(0, 80);
+    }
+    const nameMatch = raw.match(/name:\s*(\S+)/);
+    if (nameMatch) return nameMatch[1];
+  }
+  // 普通文本直接截断
+  return raw;
+}
+
+function renderCategoryOverview() {
+  if (!healthEntries || healthEntries.length === 0) {
+    document.getElementById('categoryOverviewContent').innerHTML = '<div style="color:#999;text-align:center;padding:40px">请先加载健康数据</div>';
+    return;
+  }
+
+  // 按分类聚合
+  const catData = {};
+  healthEntries.forEach(function(e) {
+    const cat = e.primary_cat || 'unknown';
+    const ds = e.decay_score || 0;
+    const imp = e.importance || 0;
+    const rc = e.recall_count || 0;
+    if (!catData[cat]) catData[cat] = { count: 0, decays: [], importances: [], entries: [], totalRecall: 0 };
+    catData[cat].count++;
+    catData[cat].decays.push(ds);
+    catData[cat].importances.push(imp);
+    catData[cat].entries.push(e);
+    catData[cat].totalRecall += rc;
+  });
+
+  const catList = [];
+  for (const cat in catData) {
+    const avgDecay = catData[cat].decays.reduce(function(a,b){return a+b;},0) / catData[cat].decays.length;
+    const avgImp = catData[cat].importances.reduce(function(a,b){return a+b;},0) / catData[cat].importances.length;
+    const minDecay = Math.min.apply(null, catData[cat].decays);
+    const maxDecay = Math.max.apply(null, catData[cat].decays);
+    const healthyCount = catData[cat].decays.filter(function(d){return d > 0.5;}).length;
+    const fadingCount = catData[cat].decays.filter(function(d){return d > 0.2 && d <= 0.5;}).length;
+    const dangerCount = catData[cat].decays.filter(function(d){return d <= 0.2;}).length;
+    catList.push({
+      cat: cat,
+      count: catData[cat].count,
+      avgDecay: avgDecay,
+      avgImp: avgImp,
+      minDecay: minDecay,
+      maxDecay: maxDecay,
+      healthyCount: healthyCount,
+      fadingCount: fadingCount,
+      dangerCount: dangerCount,
+      totalRecall: catData[cat].totalRecall,
+      entries: catData[cat].entries
+    });
+  }
+  // 按平均衰减排序（强的在前）
+  catList.sort(function(a,b){return b.avgDecay - a.avgDecay;});
+
+  const color = DECAY_COLORS || {};
+  const names = DECAY_NAMES || {};
+
+  // 整体统计
+  const totalEntries = healthEntries.length;
+  const totalAvgDecay = healthEntries.reduce(function(a,e){return a + (e.decay_score||0);},0) / totalEntries;
+  const totalRecallCount = healthEntries.reduce(function(a,e){return a + (e.recall_count||0);},0);
+
+  let html = '';
+
+  // 总体摘要
+  const overallPct = Math.round(totalAvgDecay * 100);
+  const overallColor = overallPct > 50 ? '#00b894' : overallPct > 20 ? '#f0932b' : '#e74c3c';
+  html += '<div class="category-overall-bar">';
+  html += '<div class="category-overall-label">整体记忆强度</div>';
+  html += '<div class="category-overall-meter"><div class="category-overall-fill" style="width:' + overallPct + '%;background:' + overallColor + '"></div><span class="category-overall-value">' + overallPct + '%</span></div>';
+  html += '<div class="category-overall-info">' + totalEntries + ' 条活跃记忆 · <span style="color:#00b894">↑' + totalRecallCount + ' recall</span></div>';
+  html += '</div>';
+
+  // 分类卡片网格
+  html += '<div class="category-grid">';
+  catList.forEach(function(c) {
+    const cColor = (color[c.cat]) || '#636e72';
+    const cName = (names[c.cat]) || c.cat;
+    const pct = Math.round(c.avgDecay * 100);
+    const statusLabel = pct > 50 ? '强' : pct > 20 ? '中' : '弱';
+    const statusColor = pct > 50 ? '#00b894' : pct > 20 ? '#f0932b' : '#e74c3c';
+
+    html += '<div class="category-card" onclick="showCategoryDetail(\'' + c.cat + '\')" style="border-left:4px solid ' + cColor + '">';
+    html += '<div class="category-card-header">';
+    html += '<span class="category-card-name" style="color:' + cColor + '">' + cName + '</span>';
+    html += '<span class="category-card-count">' + c.count + '条</span>';
+    if (c.totalRecall > 0) {
+      html += '<span class="category-card-recall" style="color:#00b894;font-size:11px;margin-left:4px">↑' + c.totalRecall + 'recall</span>';
+    }
+    html += '</div>';
+    html += '<div class="category-card-meter">';
+    html += '<div class="category-card-fill" style="width:' + pct + '%;background:' + statusColor + '"></div>';
+    html += '<span class="category-card-pct">' + pct + '%</span>';
+    html += '</div>';
+    // 状态分布条（健康/褪色/危险）
+    if (c.count > 1) {
+      const hPct = Math.round(c.healthyCount / c.count * 100);
+      const fPct = Math.round(c.fadingCount / c.count * 100);
+      const dPct = Math.round(c.dangerCount / c.count * 100);
+      html += '<div class="category-card-dist">';
+      if (c.healthyCount > 0) html += '<div style="flex:' + hPct + ';background:#00b894;min-width:4px" title="强 ' + c.healthyCount + '条"></div>';
+      if (c.fadingCount > 0) html += '<div style="flex:' + fPct + ';background:#f0932b;min-width:4px" title="中 ' + c.fadingCount + '条"></div>';
+      if (c.dangerCount > 0) html += '<div style="flex:' + dPct + ';background:#e74c3c;min-width:4px" title="弱 ' + c.dangerCount + '条"></div>';
+      html += '</div>';
+    }
+    html += '<div class="category-card-status" style="color:' + statusColor + '">' + statusLabel + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  document.getElementById('categoryOverviewContent').innerHTML = html;
+  // 显示总览层，隐藏详情层
+  document.getElementById('categoryOverviewPanel').style.display = 'block';
+  document.getElementById('categoryDetailPanel').style.display = 'none';
+}
+
+function showCategoryDetail(cat) {
+  if (!healthEntries) return;
+  const entries = healthEntries.filter(function(e){return (e.primary_cat || 'unknown') === cat;});
+  if (entries.length === 0) return;
+
+  const color = (DECAY_COLORS && DECAY_COLORS[cat]) || '#636e72';
+  const name = (DECAY_NAMES && DECAY_NAMES[cat]) || cat;
+
+  // 统计
+  const decays = entries.map(function(e){return e.decay_score || 0;});
+  const avgDecay = decays.reduce(function(a,b){return a+b;},0) / decays.length;
+  const avgImp = entries.map(function(e){return e.importance||0;}).reduce(function(a,b){return a+b;},0) / entries.length;
+  const minD = Math.min.apply(null, decays);
+  const maxD = Math.max.apply(null, decays);
+  const healthy = decays.filter(function(d){return d > 0.5;}).length;
+  const fading = decays.filter(function(d){return d > 0.2 && d <= 0.5;}).length;
+  const danger = decays.filter(function(d){return d <= 0.2;}).length;
+
+  // 标题
+  document.getElementById('categoryDetailTitle').innerHTML = '<span style="color:' + color + '">' + name + '</span> · 衰减详情';
+
+  // 统计卡片
+  const statsHtml = [
+    {label:'平均强度', value:Math.round(avgDecay*100)+'%', color: avgDecay>0.5?'#00b894':avgDecay>0.2?'#f0932b':'#e74c3c'},
+    {label:'最高强度', value:Math.round(maxD*100)+'%', color:'#00b894'},
+    {label:'最低强度', value:Math.round(minD*100)+'%', color:'#e74c3c'},
+    {label:'条目数', value:entries.length+'条', color:color},
+    {label:'强(>50%)', value:healthy+'条', color:'#00b894'},
+    {label:'中(20-50%)', value:fading+'条', color:'#f0932b'},
+    {label:'弱(<20%)', value:danger+'条', color:'#e74c3c'}
+  ].map(function(s) {
+    return '<div class="detail-stat-card"><div class="detail-stat-value" style="color:' + s.color + '">' + s.value + '</div><div class="detail-stat-label">' + s.label + '</div></div>';
+  }).join('');
+  document.getElementById('categoryDetailStats').innerHTML = '<div class="detail-stats-row">' + statsHtml + '</div>';
+
+  // 条目列表
+  const sorted = entries.sort(function(a,b){return (b.decay_score||0) - (a.decay_score||0);});
+  let listHtml = '<div class="detail-entries-list">';
+  sorted.forEach(function(e) {
+    const ds = e.decay_score || 0;
+    const pct = Math.round(ds * 100);
+    const barColor = ds > 0.5 ? '#00b894' : ds > 0.2 ? '#f0932b' : '#e74c3c';
+    const preview = extractPreview(e.content_preview).substring(0, 60) + (extractPreview(e.content_preview).length > 60 ? '…' : '');
+    const impPct = Math.round((e.importance || 0) * 100);
+    const version = e.version || 1;
+    listHtml += '<div class="detail-entry-row" onclick="showEntryDecayCurve(\'' + e.id + '\')" style="cursor:pointer">';
+    listHtml += '<div class="detail-entry-bar"><div class="detail-entry-fill" style="width:' + pct + '%;background:' + barColor + '"></div><span class="detail-entry-pct">' + pct + '%</span></div>';
+    listHtml += '<div class="detail-entry-preview">' + preview + '</div>';
+    listHtml += '<div class="detail-entry-meta">重要度 ' + impPct + '% · v' + version + '</div>';
+    listHtml += '</div>';
+  });
+  listHtml += '</div>';
+  document.getElementById('categoryDetailEntries').innerHTML = listHtml;
+
+  // 显示详情层，隐藏总览层
+  document.getElementById('categoryOverviewPanel').style.display = 'none';
+  document.getElementById('categoryDetailPanel').style.display = 'block';
+}
+
+function showCategoryOverview() {
+  document.getElementById('categoryOverviewPanel').style.display = 'block';
+  document.getElementById('categoryDetailPanel').style.display = 'none';
+}
+
+// 洞察面板section折叠/展开
+function toggleInsightSection(h3El) {
+  const section = h3El.parentElement;
+  const toggle = h3El.querySelector('.section-toggle');
+  const isCollapsed = section.classList.contains('collapsed-section');
+  if (isCollapsed) {
+    section.classList.remove('collapsed-section');
+    if (toggle) toggle.textContent = '▼';
+  } else {
+    section.classList.add('collapsed-section');
+    if (toggle) toggle.textContent = '▶';
+  }
 }
 

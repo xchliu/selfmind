@@ -238,18 +238,17 @@ function toggleAllNodes() {
   updateTimelineRuler();
 }
 
-// 更新按钮文字
+// 更新按钮文字（btnToggleAll已从HTML移除，保留函数以防引用）
 function updateToggleAllButton() {
   const data = getActiveData();
   if (!data) return;
-  const collapsibleNodes = data.nodes.filter(n => isCollapsible(n, data.links));
-  const anyExpanded = collapsibleNodes.some(n => expandedNodes.has(n.id));
   const icon = document.getElementById('toggleAllIcon');
   const text = document.getElementById('toggleAllText');
-  if (icon && text) {
-    icon.textContent = anyExpanded ? '📁' : '📂';
-    text.textContent = anyExpanded ? '折叠全部' : '展开全部';
-  }
+  if (!icon || !text) return; // 按钮已移除
+  const collapsibleNodes = data.nodes.filter(n => isCollapsible(n, data.links));
+  const anyExpanded = collapsibleNodes.some(n => expandedNodes.has(n.id));
+  icon.textContent = anyExpanded ? '📁' : '📂';
+  text.textContent = anyExpanded ? '折叠全部' : '展开全部';
 }
 
 function parseTs(ts) {
@@ -595,6 +594,7 @@ async function handleRefresh() {
 // 保存 — 调用后端 API
 async function handleSave() {
   const btn = document.getElementById('btnSave');
+  if (!btn) { showToast('保存功能已移至快照管理', 'info'); return; }
   btn.classList.add('loading');
   try {
     const res = await fetch('/api/save', {
@@ -611,7 +611,7 @@ async function handleSave() {
   } catch (e) {
     showToast(`❌ 网络错误: ${e.message}`, 'error');
   }
-  btn.classList.remove('loading');
+  if (btn) btn.classList.remove('loading');
 }
 
 // 搜索

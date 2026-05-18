@@ -863,3 +863,84 @@
 .entry-decay-modal-chart { background:#f8f9ff; border:1px solid #eee; border-radius:10px; padding:16px; margin-bottom:12px; }
 .entry-decay-modal-formula { font-size:11px; color:#999; text-align:center; }
 
+/* ========== 记忆洞察面板（合并健康+分析+DNA） ========== */
+.insight-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+.insight-header h2 { margin:0; font-size:20px; font-weight:700; color:#2d3436; }
+.insight-header h2 span { color:#6c5ce7; }
+.insight-toolbar { display:flex; gap:8px; flex-wrap:wrap; position:relative; }
+.insight-toolbar button { padding:8px 16px; border:1px solid #e0e0e0; border-radius:8px; background:#fff; cursor:pointer; font-size:13px; font-weight:500; display:flex; align-items:center; gap:5px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.insight-toolbar button:hover { background:#f0f4ff; border-color:#667eea; }
+.insight-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:14px; margin-bottom:22px; }
+.insight-sections { display:flex; gap:8px; margin-bottom:16px; overflow-x:auto; }
+.insight-tab { padding:8px 18px; border:none; border-radius:8px; background:#e8e8e8; cursor:pointer; font-size:13px; font-weight:600; color:#666; transition:all .2s; }
+.insight-tab.active { background:#6c5ce7; color:#fff; box-shadow:0 2px 8px rgba(108,92,231,0.25); }
+.insight-tab:hover:not(.active) { background:#d5d5d5; }
+.insight-section { display:none; }
+.insight-section.active { display:block; }
+
+/* ========== 紧凑文档导入 ========== */
+.import-compact { margin-bottom:12px; }
+.import-line { display:flex; gap:6px; align-items:center; }
+.import-input { flex:1; padding:6px 10px; border:1px solid rgba(0,0,0,0.1); border-radius:6px; font-size:13px; background:#fff; outline:none; font-family:inherit; }
+.import-input:focus { border-color:#6c5ce7; }
+.import-btn { padding:6px 14px; border:none; border-radius:6px; font-size:13px; font-weight:500; cursor:pointer; background:#6c5ce7; color:#fff; white-space:nowrap; }
+.import-btn:hover { background:#5a4bd1; }
+.import-btn:disabled { opacity:0.5; cursor:default; }
+.import-btn-secondary { padding:6px 10px; border:1px solid rgba(0,0,0,0.1); border-radius:6px; font-size:13px; cursor:pointer; background:#fff; }
+.import-btn-secondary:hover { background:#f0f4ff; }
+.import-btn-small { padding:4px 10px; border:1px solid rgba(0,0,0,0.1); border-radius:5px; font-size:12px; cursor:pointer; background:#fff; }
+.import-btn-small:hover { background:#f0f4ff; }
+.import-btn-small:disabled { opacity:0.4; cursor:default; }
+.import-btn-stop { padding:4px 10px; border:none; border-radius:5px; font-size:12px; cursor:pointer; background:#e74c3c; color:#fff; }
+.import-progress-compact { display:flex; align-items:center; gap:8px; padding:6px 12px; background:#f8f9ff; border-radius:6px; font-size:13px; position:relative; overflow:hidden; }
+.import-progress-bar { position:absolute; left:0; top:0; height:100%; background:rgba(108,92,231,0.12); border-radius:6px; transition:width 0.3s; }
+.import-progress-compact span { position:relative; z-index:1; }
+.import-progress-spinner-inline { width:16px; height:16px; border:2px solid #ddd; border-top:2px solid #6c5ce7; border-radius:50%; animation:spin 0.6s linear infinite; }
+.import-result-compact { display:flex; align-items:center; gap:10px; padding:6px 12px; background:#f0fff4; border-radius:6px; font-size:13px; color:#27ae60; }
+.import-file-select-compact { display:flex; align-items:center; gap:8px; padding:6px 12px; background:#f8f9ff; border-radius:6px; font-size:13px; }
+.import-file-list-mini { max-height:120px; overflow-y:auto; padding:4px 0; border:1px solid #eee; border-radius:6px; margin-top:4px; }
+.import-file-item-mini { display:flex; align-items:center; gap:6px; padding:2px 8px; font-size:12px; }
+.import-file-item-mini input { margin:0; }
+
+/* ========== 分类衰减总览 ========== */
+.category-overall-bar { display:flex; align-items:center; gap:16px; padding:12px 16px; background:#f8f9ff; border-radius:10px; margin-bottom:20px; }
+.category-overall-label { font-size:14px; font-weight:600; color:#333; white-space:nowrap; }
+.category-overall-meter { flex:1; height:24px; background:rgba(0,0,0,0.06); border-radius:8px; position:relative; overflow:hidden; }
+.category-overall-fill { height:100%; border-radius:8px; transition:width 0.3s; }
+.category-overall-value { position:absolute; right:8px; top:4px; font-size:13px; font-weight:700; color:#333; }
+.category-overall-info { font-size:13px; color:#666; white-space:nowrap; }
+
+.category-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; }
+.category-card { padding:14px 16px; background:#fff; border-radius:10px; cursor:pointer; transition:all 0.2s; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+.category-card:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+.category-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.category-card-name { font-size:15px; font-weight:700; }
+.category-card-count { font-size:12px; color:#999; }
+.category-card-meter { height:18px; background:rgba(0,0,0,0.06); border-radius:6px; position:relative; overflow:hidden; margin-bottom:6px; }
+.category-card-fill { height:100%; border-radius:6px; transition:width 0.3s; }
+.category-card-pct { position:absolute; right:6px; top:2px; font-size:11px; font-weight:700; color:#333; }
+.category-card-dist { display:flex; gap:0; height:6px; border-radius:3px; overflow:hidden; margin-bottom:4px; }
+.category-card-dist > div { border-radius:3px; }
+.category-card-status { font-size:13px; font-weight:600; text-align:right; }
+
+/* ========== 分类衰减详情 ========== */
+.category-detail-panel { padding:0; }
+.category-detail-header { display:flex; align-items:center; gap:12px; padding:8px 0; }
+.category-back-btn { padding:6px 14px; border:1px solid rgba(0,0,0,0.1); border-radius:6px; font-size:13px; cursor:pointer; background:#fff; color:#6c5ce7; font-weight:500; transition:all 0.2s; }
+.category-back-btn:hover { background:#f8f9ff; border-color:#6c5ce7; }
+.category-detail-header h3 { font-size:18px; margin:0; }
+
+.detail-stats-row { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
+.detail-stat-card { padding:10px 14px; background:#f8f9ff; border-radius:8px; text-align:center; min-width:90px; }
+.detail-stat-value { font-size:16px; font-weight:700; }
+.detail-stat-label { font-size:11px; color:#999; margin-top:2px; }
+
+.detail-entries-list { display:flex; flex-direction:column; gap:8px; }
+.detail-entry-row { display:flex; align-items:center; gap:12px; padding:8px 12px; background:#fff; border-radius:8px; border:1px solid rgba(0,0,0,0.06); transition:all 0.2s; }
+.detail-entry-row:hover { border-color:#6c5ce7; box-shadow:0 2px 8px rgba(108,92,231,0.1); }
+.detail-entry-bar { width:100px; height:16px; background:rgba(0,0,0,0.06); border-radius:4px; position:relative; overflow:hidden; }
+.detail-entry-fill { height:100%; border-radius:4px; }
+.detail-entry-pct { position:absolute; right:4px; top:1px; font-size:10px; font-weight:700; }
+.detail-entry-preview { font-size:13px; color:#333; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.detail-entry-meta { font-size:11px; color:#999; white-space:nowrap; }
+

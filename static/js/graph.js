@@ -831,24 +831,21 @@ function animateNumber(el, target, duration) {
   }
   requestAnimationFrame(step);
 }
-
 function switchToSettings() {
+  hideDetail();
   currentView = 'settings';
   
   // 更新 Tab 样式
   document.getElementById('tabMemory').classList.remove('active');
   document.getElementById('tabWiki').classList.remove('active');
-  document.getElementById('tabHealth').classList.remove('active');
-  document.getElementById('tabAnalyze').classList.remove('active');
+  document.getElementById('tabInsight').classList.remove('active');
   document.getElementById('tabSettings').classList.add('active');
   
   // 隐藏其他视图元素
   document.getElementById('settingsDashboard').style.display = 'block';
-  document.getElementById('healthDashboard').style.display = 'none';
-  document.getElementById('analyzeDashboard').style.display = 'none';
+  document.getElementById('insightDashboard').style.display = 'none';
   document.getElementById('graph').style.display = 'none';
   document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = 'none');
-  if (document.getElementById('btnMemory')) document.getElementById('btnMemory').style.display = 'none';
   if (document.getElementById('btnRefresh')) document.getElementById('btnRefresh').style.display = 'none';
   if (document.getElementById('timelineRuler')) document.getElementById('timelineRuler').style.display = 'none';
   
@@ -872,25 +869,16 @@ function switchView(view) {
   // 更新 Tab 样式
   document.getElementById('tabMemory').classList.toggle('active', view === 'memory');
   document.getElementById('tabWiki').classList.toggle('active', view === 'wiki');
-  document.getElementById('tabHealth').classList.toggle('active', view === 'health');
-  document.getElementById('tabAnalyze').classList.toggle('active', view === 'analyze');
-  document.getElementById('tabSediment').classList.toggle('active', view === 'sediment');
-  document.getElementById('tabDna').classList.toggle('active', view === 'dna');
+  document.getElementById('tabInsight').classList.toggle('active', view === 'insight');
 
-  // 健康仪表盘显隐
-  document.getElementById('healthDashboard').style.display = view === 'health' ? 'block' : 'none';
-  // AI分析面板显隐
-  document.getElementById('analyzeDashboard').style.display = view === 'analyze' ? 'block' : 'none';
+  // 洞察面板显隐
+  document.getElementById('insightDashboard').style.display = view === 'insight' ? 'block' : 'none';
   // 设置面板显隐
   document.getElementById('settingsDashboard').style.display = view === 'settings' ? 'block' : 'none';
-  // U型沉淀面板显隐
-  document.getElementById('sedimentDashboard').style.display = view === 'sediment' ? 'block' : 'none';
   // Wiki库面板显隐
   document.getElementById('wikiDashboard').style.display = view === 'wiki' ? 'block' : 'none';
-  // DNA面板显隐
-  document.getElementById('dnaDashboard').style.display = view === 'dna' ? 'block' : 'none';
-  document.getElementById('graph').style.display = (view === 'health' || view === 'analyze' || view === 'settings' || view === 'sediment' || view === 'wiki' || view === 'dna') ? 'none' : '';
-  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'health' || view === 'settings' || view === 'sediment' || view === 'wiki' || view === 'dna') ? 'none' : '');
+  document.getElementById('graph').style.display = (view === 'insight' || view === 'settings' || view === 'wiki') ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'insight' || view === 'settings' || view === 'wiki') ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
@@ -905,11 +893,7 @@ function switchView(view) {
   // 切换刷新按钮文字
   const refreshBtn = document.getElementById('btnRefresh');
   refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新Wiki' : '刷新记忆'}`;
-  refreshBtn.style.display = (view === 'health' || view === 'settings' || view === 'sediment' || view === 'wiki') ? 'none' : '';
-
-  // 切换记忆管理按钮可见性（仅记忆视图显示）
-  const memBtn = document.getElementById('btnMemory');
-  if (memBtn) memBtn.style.display = view === 'memory' ? '' : 'none';
+  refreshBtn.style.display = (view === 'insight' || view === 'settings' || view === 'wiki') ? 'none' : '';
 
   // 切换时间刻度线可见性（仅记忆视图显示）
   const timelineRuler = document.getElementById('timelineRuler');
@@ -922,23 +906,8 @@ function switchView(view) {
   expandedNodes.clear();
   _nodePositions = {};
 
-  if (view === 'health') {
+  if (view === 'insight') {
     loadHealthData();
-    return;
-  }
-  
-  if (view === 'analyze') {
-    loadAnalyzeData();
-    return;
-  }
-
-  if (view === 'sediment') {
-    loadSedimentData();
-    return;
-  }
-
-  if (view === 'dna') {
-    initDnaView();
     return;
   }
 
