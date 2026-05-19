@@ -207,6 +207,12 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
                 self._json_response(store.get_stats())
             else:
                 self._json_response({"error": "Store not available"}, code=503)
+        elif clean_path == "/api/decay-trend":
+            store = _get_store()
+            if store:
+                self._json_response(store.get_overall_decay_trend(days=30))
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/recall/stats":
             scanner = _get_recall_scanner()
             if scanner:
@@ -586,12 +592,25 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
     def _send_error(self, code, message):
         self._json_response({"error": message}, code)
 
+    def _sanitize_for_json(self, obj):
+        """Recursively clean control characters from strings for valid JSON output."""
+        import re
+        _ctrl_re = re.compile(r'[\x00-\x08\x0b\x0c\x0e-\x1f]')
+        if isinstance(obj, str):
+            return _ctrl_re.sub('', obj)
+        if isinstance(obj, dict):
+            return {self._sanitize_for_json(k): self._sanitize_for_json(v) for k, v in obj.items()}
+        if isinstance(obj, (list, tuple)):
+            return [self._sanitize_for_json(i) for i in obj]
+        return obj
+
     def _json_response(self, data, code=200):
         self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
-        self.wfile.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
+        clean = self._sanitize_for_json(data)
+        self.wfile.write(json.dumps(clean, ensure_ascii=False).encode("utf-8"))
 
     def log_message(self, format, *args):
         print(f"  [{datetime.now().strftime('%H:%M:%S')}] {args[0]}")

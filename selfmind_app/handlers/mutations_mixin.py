@@ -226,11 +226,14 @@ class MutationsMixin:
             self._json_response({"error": "Provide 'dir' or 'file' in request body"}, code=400)
 
     def _handle_memories_list(self):
-        """GET /api/memories?status=...&primary=... — List memories with filters."""
+        """GET /api/memories?status=...&primary=...&limit=N&offset=M — List memories with filters and pagination."""
         from urllib.parse import parse_qs, urlparse
         _store = _get_store()
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
+
+        limit = min(int(params.get("limit", ["200"])[0]), 500)
+        offset = int(params.get("offset", ["0"])[0])
 
         filters = {}
         for key in ("status", "primary", "secondary", "source_file"):
@@ -239,7 +242,9 @@ class MutationsMixin:
                 filters[key] = val[0] if len(val) == 1 else val
 
         entries = _store.get_entries(filters if filters else None)
-        self._json_response({"entries": entries, "total": len(entries)})
+        total = len(entries)
+        paginated = entries[offset:offset + limit]
+        self._json_response({"entries": paginated, "total": total, "limit": limit, "offset": offset})
 
     def _handle_memories_add(self):
         """POST /api/memories — Add memory entries manually."""
@@ -346,9 +351,14 @@ class MutationsMixin:
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
         status = params.get("status", [None])[0]
+        limit = min(int(params.get("limit", ["200"])[0]), 500)
+        offset = int(params.get("offset", ["0"])[0])
         store = getattr(SelfMindHandler, '_store', None)
         if store:
-            self._json_response(store.get_all_entries(status=status))
+            entries = store.get_all_entries(status=status)
+            total = len(entries)
+            paginated = entries[offset:offset + limit]
+            self._json_response({"entries": paginated, "total": total, "limit": limit, "offset": offset})
         else:
             self._json_response({"error": "Store not available"}, code=503)
 

@@ -708,6 +708,31 @@ class UnifiedStore:
         ).fetchall()
         return [dict(r) for r in rows]
 
+    def get_overall_decay_trend(self, days=30):
+        """Get daily average decay score trend across all entries."""
+        rows = self.conn.execute(
+            "SELECT DATE(timestamp) as day, AVG(decay_score) as avg_decay, COUNT(*) as sample_count "
+            "FROM decay_history WHERE timestamp >= DATE('now', ?) "
+            "GROUP BY DATE(timestamp) ORDER BY day",
+            (f"-{days} days",)
+        ).fetchall()
+        result = [{"day": r["day"], "avg_decay": round(r["avg_decay"], 4), "sample_count": r["sample_count"]} for r in rows]
+        # Append today's live average as the latest point
+        today_str = self._now()[:10]
+        if result and result[-1]["day"] != today_str:
+            current = self.conn.execute(
+                "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active'"
+            ).fetchone()
+            if current and current["cnt"] > 0:
+                result.append({"day": today_str, "avg_decay": round(current["avg_decay"], 4), "sample_count": current["cnt"]})
+        elif not result:
+            current = self.conn.execute(
+                "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active'"
+            ).fetchone()
+            if current and current["cnt"] > 0:
+                result.append({"day": today_str, "avg_decay": round(current["avg_decay"], 4), "sample_count": current["cnt"]})
+        return result
+
     # ──────────────── History & Snapshot ────────────────
 
     def _record_history(self, existing_row, trigger="sync"):

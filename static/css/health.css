@@ -903,12 +903,13 @@
 .import-file-item-mini input { margin:0; }
 
 /* ========== 分类衰减总览 ========== */
-.category-overall-bar { display:flex; align-items:center; gap:16px; padding:12px 16px; background:#f8f9ff; border-radius:10px; margin-bottom:20px; }
-.category-overall-label { font-size:14px; font-weight:600; color:#333; white-space:nowrap; }
-.category-overall-meter { flex:1; height:24px; background:rgba(0,0,0,0.06); border-radius:8px; position:relative; overflow:hidden; }
-.category-overall-fill { height:100%; border-radius:8px; transition:width 0.3s; }
-.category-overall-value { position:absolute; right:8px; top:4px; font-size:13px; font-weight:700; color:#333; }
-.category-overall-info { font-size:13px; color:#666; white-space:nowrap; }
+.category-overall-bar { padding:16px; background:#f8f9ff; border-radius:10px; margin-bottom:20px; }
+.category-overall-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.category-overall-label { font-size:14px; font-weight:600; color:#333; }
+.category-overall-info { font-size:13px; color:#666; }
+.category-overall-chart-wrap { position:relative; }
+.category-overall-chart { height:120px; position:relative; overflow:hidden; }
+.category-overall-current { position:absolute; right:4px; top:0; font-size:20px; font-weight:700; }
 
 .category-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; }
 .category-card { padding:14px 16px; background:#fff; border-radius:10px; cursor:pointer; transition:all 0.2s; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
