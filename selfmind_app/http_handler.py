@@ -210,7 +210,21 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
         elif clean_path == "/api/decay-trend":
             store = _get_store()
             if store:
-                self._json_response(store.get_overall_decay_trend(days=30))
+                agent_filter = self._get_query_param("agent")
+                self._json_response(store.get_overall_decay_trend(days=30, agent=agent_filter))
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
+        elif clean_path == "/api/decay-trend-by-category":
+            store = _get_store()
+            if store:
+                agent_filter = self._get_query_param("agent")
+                self._json_response(store.get_category_decay_trend(days=30, agent=agent_filter))
+            else:
+                self._json_response({"error": "Store not available"}, code=503)
+        elif clean_path == "/api/decay-trend-by-agent":
+            store = _get_store()
+            if store:
+                self._json_response(store.get_agent_decay_trend(days=30))
             else:
                 self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/recall/stats":

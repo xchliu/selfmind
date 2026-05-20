@@ -381,6 +381,18 @@ class MemoryStore:
         """
         return self._sync_entries(entry_ids, openclaw_home, "openclaw")
 
+    def sync_to_plato(self, entry_ids: list[str], plato_home: str) -> dict:
+        """Sync approved entries to Plato MEMORY.md file.
+
+        Args:
+            entry_ids: IDs of entries to sync.
+            plato_home: Plato home directory (e.g. ``~/.hermes/profiles/plato``).
+
+        Returns:
+            Summary dict with synced/skipped counts and any errors.
+        """
+        return self._sync_entries(entry_ids, plato_home, "plato")
+
     # ── Stats ──────────────────────────────────────────────────────
 
     def get_stats(self) -> dict:

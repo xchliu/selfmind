@@ -97,141 +97,183 @@
   color: #666;
 }
 
-/* Category section */
-.wiki-category-section {
-  margin-bottom: 24px;
+/* ===== Zone labels ===== */
+.wiki-zone-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
 }
 
-.wiki-category-header {
+/* ===== 焦点区 ===== */
+.wiki-focus-zone {
+  margin-bottom: 28px;
+}
+
+.wiki-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 16px;
+}
+
+.wiki-focus-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  border: 2px solid transparent;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.wiki-focus-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  border-color: #3498db44;
+}
+
+.wiki-focus-card-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e8ecef;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.wiki-category-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.wiki-category-icon {
-  font-size: 18px;
-}
-
-.wiki-category-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #2d3436;
-}
-
-.wiki-category-count {
+.wiki-focus-card-type {
   font-size: 12px;
-  color: #666;
-  background: #eee;
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-left: 4px;
-}
-
-/* Page list */
-.wiki-page-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 12px;
-}
-
-/* Page card */
-.wiki-page-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  transition: transform 0.15s, box-shadow 0.15s;
-  border: 1px solid #e8ecef;
-}
-
-.wiki-page-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  border-color: #c0c8d0;
-}
-
-.wiki-page-card-title {
-  font-size: 15px;
+  padding: 4px 10px;
+  border-radius: 8px;
   font-weight: 600;
+}
+
+.wiki-focus-card-date {
+  font-size: 11px;
+  color: #aaa;
+}
+
+.wiki-focus-card-title {
+  font-size: 16px;
+  font-weight: 700;
   color: #2d3436;
   margin-bottom: 8px;
   line-height: 1.4;
 }
 
-.wiki-page-card-preview {
+.wiki-focus-card-preview {
   font-size: 13px;
   color: #666;
   line-height: 1.6;
-  margin-bottom: 10px;
-  max-height: 120px;
+  margin-bottom: 12px;
+  max-height: 100px;
   overflow: hidden;
 }
 
-/* Markdown inline styles in card preview */
-.wiki-page-card-preview b {
+.wiki-focus-card-preview b { color: #2d3436; }
+.wiki-focus-card-preview .wiki-md-h2,
+.wiki-focus-card-preview .wiki-md-h3 {
+  font-weight: 600; color: #444; display: block; margin: 4px 0;
+}
+.wiki-focus-card-preview .wiki-md-link {
+  color: #3498db; font-size: 12px; cursor: pointer;
+  text-decoration: none; border-bottom: 1px dashed #3498db80;
+}
+.wiki-focus-card-preview .wiki-md-external {
+  color: #7c3aed; font-size: 12px; text-decoration: none;
+  border-bottom: 1px dashed #7c3aed80;
+}
+
+.wiki-focus-card-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* ===== 档案区 ===== */
+.wiki-archive-zone {
+  margin-bottom: 24px;
+}
+
+.wiki-archive-section {
+  margin-bottom: 8px;
+}
+
+.wiki-archive-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: background 0.15s;
+}
+
+.wiki-archive-header:hover {
+  background: #f8f9fa;
+}
+
+.wiki-archive-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.wiki-archive-icon {
+  font-size: 16px;
+}
+
+.wiki-archive-name {
+  font-size: 14px;
+  font-weight: 600;
   color: #2d3436;
 }
 
-.wiki-page-card-preview .wiki-md-h2,
-.wiki-page-card-preview .wiki-md-h3 {
-  font-weight: 600;
-  color: #444;
-  display: block;
-  margin: 4px 0;
+.wiki-archive-count {
+  font-size: 11px;
+  color: #666;
+  background: #eee;
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
-.wiki-page-card-preview .wiki-md-link {
-  color: #3498db;
+.wiki-archive-toggle {
   font-size: 12px;
-  cursor: pointer;
-  text-decoration: none;
-  border-bottom: 1px dashed #3498db80;
-  transition: color 0.2s;
-}
-.wiki-page-card-preview .wiki-md-link:hover {
-  color: #1a6b4f;
-  border-bottom-color: #1a6b4f;
-}
-.wiki-page-card-preview .wiki-md-external {
-  color: #7c3aed;
-  font-size: 12px;
-  text-decoration: none;
-  border-bottom: 1px dashed #7c3aed80;
-  transition: color 0.2s;
-}
-.wiki-page-card-preview .wiki-md-external:hover {
-  color: #4a2882;
-  border-bottom-color: #4a2882;
+  color: #999;
+  margin-left: auto;
 }
 
-.wiki-page-card-footer {
+.wiki-archive-list {
+  padding: 4px 0;
+}
+
+.wiki-archive-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 4px;
+  padding: 8px 16px;
+  margin: 2px 0;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.12s;
 }
 
-.wiki-page-card-tags {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+.wiki-archive-item:hover {
+  background: #f0f3f8;
 }
 
-.wiki-page-card-date {
-  font-size: 11px;
+.wiki-archive-item-title {
+  color: #444;
+  font-weight: 500;
+}
+
+.wiki-archive-item-date {
   color: #aaa;
+  font-size: 11px;
 }
 
 /* Tags */

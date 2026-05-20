@@ -313,6 +313,12 @@ class MutationsMixin:
             result = _store.sync_to_hermes(entry_ids, agent_home)
         elif agent == "openclaw":
             result = _store.sync_to_openclaw(entry_ids, agent_home)
+        elif agent == "plato":
+            result = _store.sync_to_plato(entry_ids, agent_home)
+        elif agent == "aris":
+            result = _store.sync_to_hermes(entry_ids, agent_home)
+        elif agent == "grace":
+            result = _store.sync_to_hermes(entry_ids, agent_home)
         else:
             result = _store.sync_to_hermes(entry_ids, agent_home)
 

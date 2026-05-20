@@ -9,6 +9,12 @@ const WIKI_TYPE_CONFIG = {
   comparison:  { icon: '⚖️', color: '#2ecc71', name: '对比分析' },
   query:       { icon: '🔍', color: '#f39c12', name: '查询结果' },
   summary:     { icon: '📝', color: '#9b59b6', name: '摘要' },
+  project:     { icon: '🚀', color: '#00cec9', name: '项目' },
+  promotion:   { icon: '📣', color: '#fd79a8', name: '推广' },
+  nous:        { icon: '🧠', color: '#6c5ce7', name: 'Nous' },
+  blackboard:  { icon: '📋', color: '#e17055', name: '黑板' },
+  daily_report: { icon: '📊', color: '#55a3e8', name: '日报' },
+  raw:         { icon: '📦', color: '#b2bec3', name: '原始素材' },
   uncategorized: { icon: '📄', color: '#78909c', name: '未分类' },
   page:        { icon: '📑', color: '#607d8b', name: '页面' },
 };
@@ -27,6 +33,10 @@ async function loadWikiPages() {
   }
   renderWikiView(wikiPagesData);
 }
+
+// 优先级分组：焦点区 vs 档案区
+const WIKI_FOCUS_TYPES = ['project', 'blackboard', 'query', 'comparison'];
+const WIKI_ARCHIVE_TYPES = ['entity', 'concept', 'daily_report', 'promotion', 'nous', 'manifesto', 'summary', 'raw', 'uncategorized', 'page', 'wiki_tag'];
 
 function renderWikiView(data) {
   if (!data || !data.categories) return;
@@ -52,72 +62,127 @@ function renderWikiView(data) {
   const sortedCats = Object.entries(data.categories)
     .sort((a, b) => b[1].length - a[1].length);
 
-  for (const [catType, pages] of sortedCats) {
-    const config = WIKI_TYPE_CONFIG[catType] || { icon: '📄', color: '#78909c', name: catType };
-
-    let filteredPages = pages;
-    if (wikiSearchText) {
+  // 搜索模式：回到原始平铺布局
+  if (wikiSearchText) {
+    for (const [catType, pages] of sortedCats) {
+      const config = WIKI_TYPE_CONFIG[catType] || { icon: '📄', color: '#78909c', name: catType };
       const q = wikiSearchText.toLowerCase();
-      filteredPages = pages.filter(p =>
+      const filteredPages = pages.filter(p =>
         (p.title || p.name || '').toLowerCase().includes(q) ||
         (p.tags || []).some(t => t.toLowerCase().includes(q)) ||
         (p.content || p.content_preview || '').toLowerCase().includes(q)
       );
+      if (filteredPages.length === 0) continue;
+      container.appendChild(_buildArchiveSection(catType, filteredPages, config));
     }
+    if (container.children.length === 0) {
+      container.innerHTML = `<div class="wiki-empty">没有找到匹配 "${wikiSearchText}" 的Wiki页面</div>`;
+    }
+    return;
+  }
 
-    if (filteredPages.length === 0) continue;
+  // ===== 焦点区 =====
+  const focusCats = sortedCats.filter(([catType]) => WIKI_FOCUS_TYPES.includes(catType));
+  if (focusCats.length > 0) {
+    const focusZone = document.createElement('div');
+    focusZone.className = 'wiki-focus-zone';
+    focusZone.innerHTML = `<div class="wiki-zone-label">🎯 焦点</div>`;
+    const focusGrid = document.createElement('div');
+    focusGrid.className = 'wiki-focus-grid';
 
-    const section = document.createElement('div');
-    section.className = 'wiki-category-section';
+    for (const [catType, pages] of focusCats) {
+      const config = WIKI_TYPE_CONFIG[catType] || { icon: '📄', color: '#78909c', name: catType };
+      for (const page of pages) {
+        focusGrid.appendChild(_buildFocusCard(page, config));
+      }
+    }
+    focusZone.appendChild(focusGrid);
+    container.appendChild(focusZone);
+  }
 
-    const header = document.createElement('div');
-    header.className = 'wiki-category-header';
-    header.innerHTML = `
-      <div class="wiki-category-dot" style="background:${config.color}"></div>
-      <span class="wiki-category-icon">${config.icon}</span>
-      <span class="wiki-category-name">${config.name}</span>
-      <span class="wiki-category-count">${filteredPages.length}</span>
+  // ===== 档案区 =====
+  const archiveCats = sortedCats.filter(([catType]) => WIKI_ARCHIVE_TYPES.includes(catType));
+  if (archiveCats.length > 0) {
+    const archiveZone = document.createElement('div');
+    archiveZone.className = 'wiki-archive-zone';
+    archiveZone.innerHTML = `<div class="wiki-zone-label">📁 档案</div>`;
+
+    for (const [catType, pages] of archiveCats) {
+      const config = WIKI_TYPE_CONFIG[catType] || { icon: '📄', color: '#78909c', name: catType };
+      archiveZone.appendChild(_buildArchiveSection(catType, pages, config));
+    }
+    container.appendChild(archiveZone);
+  }
+}
+
+// 焦点区大卡片：标题+类型+摘要+tags+时间，视觉突出
+function _buildFocusCard(page, config) {
+  const card = document.createElement('div');
+  card.className = 'wiki-focus-card';
+  card.onclick = () => openWikiDetail(page);
+
+  const title = page.title || page.name || 'Untitled';
+  const fullContent = page.content || page.content_preview || '';
+  const preview = fullContent.substring(0, 180);
+  const previewHtml = simpleMarkdown(preview, page.path);
+  const tags = (page.tags || []).slice(0, 4);
+  const updated = page.updated || page.created || '';
+
+  card.innerHTML = `
+    <div class="wiki-focus-card-header">
+      <span class="wiki-focus-card-type" style="background:${config.color}18;color:${config.color}">${config.icon} ${config.name}</span>
+      ${updated ? `<span class="wiki-focus-card-date">${updated}</span>` : ''}
+    </div>
+    <div class="wiki-focus-card-title">${title}</div>
+    <div class="wiki-focus-card-preview">${previewHtml}</div>
+    <div class="wiki-focus-card-tags">
+      ${tags.map(t => `<span class="wiki-tag" style="background:${config.color}22;color:${config.color}">${t}</span>`).join('')}
+    </div>
+  `;
+  return card;
+}
+
+// 档案区折叠列表：分类名+条目列表，点击展开/收起
+function _buildArchiveSection(catType, pages, config) {
+  const section = document.createElement('div');
+  section.className = 'wiki-archive-section';
+
+  const header = document.createElement('div');
+  header.className = 'wiki-archive-header';
+  header.innerHTML = `
+    <div class="wiki-archive-dot" style="background:${config.color}"></div>
+    <span class="wiki-archive-icon">${config.icon}</span>
+    <span class="wiki-archive-name">${config.name}</span>
+    <span class="wiki-archive-count">${pages.length}</span>
+    <span class="wiki-archive-toggle">▸</span>
+  `;
+  header.onclick = () => {
+    const list = section.querySelector('.wiki-archive-list');
+    const toggle = header.querySelector('.wiki-archive-toggle');
+    const isOpen = list.style.display !== 'none';
+    list.style.display = isOpen ? 'none' : 'block';
+    toggle.textContent = isOpen ? '▸' : '▾';
+  };
+  section.appendChild(header);
+
+  const list = document.createElement('div');
+  list.className = 'wiki-archive-list';
+  list.style.display = 'none'; // 默认折叠
+
+  for (const page of pages) {
+    const item = document.createElement('div');
+    item.className = 'wiki-archive-item';
+    item.onclick = () => openWikiDetail(page);
+    const title = page.title || page.name || 'Untitled';
+    const updated = page.updated || page.created || '';
+    item.innerHTML = `
+      <span class="wiki-archive-item-title">${title}</span>
+      ${updated ? `<span class="wiki-archive-item-date">${updated}</span>` : ''}
     `;
-    section.appendChild(header);
-
-    const list = document.createElement('div');
-    list.className = 'wiki-page-list';
-
-    for (const page of filteredPages) {
-      const card = document.createElement('div');
-      card.className = 'wiki-page-card';
-      card.onclick = () => openWikiDetail(page);
-
-      const title = page.title || page.name || 'Untitled';
-      // Use full content for preview, display up to 300 chars in card
-      const fullContent = page.content || page.content_preview || '';
-      const preview = fullContent.substring(0, 300);
-      const tags = (page.tags || []).slice(0, 4);
-      const updated = page.updated || page.created || '';
-
-      // Simple markdown-to-HTML for card preview (bold, headers, links)
-      const previewHtml = simpleMarkdown(preview, page.path);
-
-      card.innerHTML = `
-        <div class="wiki-page-card-title">${title}</div>
-        <div class="wiki-page-card-preview">${previewHtml}</div>
-        <div class="wiki-page-card-footer">
-          <div class="wiki-page-card-tags">
-            ${tags.map(t => `<span class="wiki-tag" style="background:${config.color}22;color:${config.color}">${t}</span>`).join('')}
-          </div>
-          ${updated ? `<span class="wiki-page-card-date">${updated}</span>` : ''}
-        </div>
-      `;
-      list.appendChild(card);
-    }
-
-    section.appendChild(list);
-    container.appendChild(section);
+    list.appendChild(item);
   }
-
-  if (wikiSearchText && container.children.length === 0) {
-    container.innerHTML = `<div class="wiki-empty">没有找到匹配 "${wikiSearchText}" 的Wiki页面</div>`;
-  }
+  section.appendChild(list);
+  return section;
 }
 
 function wikiSearchFilter(value) {

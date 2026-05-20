@@ -93,6 +93,13 @@ const WIKI_COLORS = {
   comparison:  { name: '对比分析', icon: '⚖️', color: '#2ecc71' },
   query:       { name: '查询结果', icon: '🔍', color: '#f39c12' },
   summary:     { name: '摘要',     icon: '📝', color: '#9b59b6' },
+  project:     { name: '项目',     icon: '🚀', color: '#00cec9' },
+  promotion:   { name: '推广',     icon: '📣', color: '#fd79a8' },
+  nous:        { name: 'Nous',     icon: '🧠', color: '#6c5ce7' },
+  manifesto:   { name: '宣言',     icon: '📜', color: '#6c5ce7' },
+  blackboard:  { name: '黑板',     icon: '📋', color: '#e17055' },
+  daily_report: { name: '日报',    icon: '📊', color: '#55a3e8' },
+  raw:         { name: '原始素材', icon: '📦', color: '#b2bec3' },
   wiki_tag:    { name: '标签',     icon: '🏷️', color: '#95a5a6' },
   uncategorized: { name: '未分类', icon: '📄', color: '#78909c' },
 };

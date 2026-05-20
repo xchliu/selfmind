@@ -708,30 +708,113 @@ class UnifiedStore:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    def get_overall_decay_trend(self, days=30):
-        """Get daily average decay score trend across all entries."""
-        rows = self.conn.execute(
-            "SELECT DATE(timestamp) as day, AVG(decay_score) as avg_decay, COUNT(*) as sample_count "
-            "FROM decay_history WHERE timestamp >= DATE('now', ?) "
-            "GROUP BY DATE(timestamp) ORDER BY day",
-            (f"-{days} days",)
-        ).fetchall()
-        result = [{"day": r["day"], "avg_decay": round(r["avg_decay"], 4), "sample_count": r["sample_count"]} for r in rows]
-        # Append today's live average as the latest point
-        today_str = self._now()[:10]
-        if result and result[-1]["day"] != today_str:
+    def get_overall_decay_trend(self, days=30, agent=None):
+        """Get daily average decay score trend. If agent specified, filter by source_profile."""
+        if agent:
+            rows = self.conn.execute(
+                "SELECT DATE(dh.timestamp) as day, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
+                "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
+                "WHERE dh.timestamp >= DATE('now', ?) AND e.source_profile = ? "
+                "GROUP BY DATE(dh.timestamp) ORDER BY day",
+                (f"-{days} days", agent)
+            ).fetchall()
+            today_str = self._now()[:10]
+            current = self.conn.execute(
+                "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' AND source_profile = ?",
+                (agent,)
+            ).fetchone()
+        else:
+            rows = self.conn.execute(
+                "SELECT DATE(timestamp) as day, AVG(decay_score) as avg_decay, COUNT(*) as sample_count "
+                "FROM decay_history WHERE timestamp >= DATE('now', ?) "
+                "GROUP BY DATE(timestamp) ORDER BY day",
+                (f"-{days} days",)
+            ).fetchall()
+            today_str = self._now()[:10]
             current = self.conn.execute(
                 "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active'"
             ).fetchone()
+        result = [{"day": r["day"], "avg_decay": round(r["avg_decay"], 4), "sample_count": r["sample_count"]} for r in rows]
+        if result and result[-1]["day"] != today_str:
             if current and current["cnt"] > 0:
                 result.append({"day": today_str, "avg_decay": round(current["avg_decay"], 4), "sample_count": current["cnt"]})
         elif not result:
-            current = self.conn.execute(
-                "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active'"
-            ).fetchone()
             if current and current["cnt"] > 0:
                 result.append({"day": today_str, "avg_decay": round(current["avg_decay"], 4), "sample_count": current["cnt"]})
         return result
+
+    def get_category_decay_trend(self, days=30, agent=None):
+        """Get per-category daily average decay score trend. If agent specified, filter by source_profile."""
+        if agent:
+            rows = self.conn.execute(
+                "SELECT DATE(dh.timestamp) as day, e.primary_cat, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
+                "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
+                "WHERE dh.timestamp >= DATE('now', ?) AND e.source_profile = ? "
+                "GROUP BY DATE(dh.timestamp), e.primary_cat ORDER BY day",
+                (f"-{days} days", agent)
+            ).fetchall()
+            live_rows = self.conn.execute(
+                "SELECT primary_cat, AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' AND source_profile = ? GROUP BY primary_cat",
+                (agent,)
+            ).fetchall()
+        else:
+            rows = self.conn.execute(
+                "SELECT DATE(dh.timestamp) as day, e.primary_cat, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
+                "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
+                "WHERE dh.timestamp >= DATE('now', ?) "
+                "GROUP BY DATE(dh.timestamp), e.primary_cat ORDER BY day",
+                (f"-{days} days",)
+            ).fetchall()
+            live_rows = self.conn.execute(
+                "SELECT primary_cat, AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' GROUP BY primary_cat"
+            ).fetchall()
+        # Group by category
+        cat_trends = {}
+        for r in rows:
+            cat = r["primary_cat"] or "unknown"
+            if cat not in cat_trends:
+                cat_trends[cat] = []
+            cat_trends[cat].append({"day": r["day"], "avg_decay": round(r["avg_decay"], 4), "sample_count": r["sample_count"]})
+        # Append today's live per-category average as latest point
+        today_str = self._now()[:10]
+        for lr in live_rows:
+            cat = lr["primary_cat"] or "unknown"
+            if cat not in cat_trends:
+                cat_trends[cat] = []
+            trend = cat_trends[cat]
+            if not trend or trend[-1]["day"] != today_str:
+                trend.append({"day": today_str, "avg_decay": round(lr["avg_decay"], 4), "sample_count": lr["cnt"]})
+        return cat_trends
+
+    def get_agent_decay_trend(self, days=30):
+        """Get per-agent (source_profile) daily average decay score trend."""
+        rows = self.conn.execute(
+            "SELECT DATE(dh.timestamp) as day, e.source_profile, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
+            "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
+            "WHERE dh.timestamp >= DATE('now', ?) "
+            "GROUP BY DATE(dh.timestamp), e.source_profile ORDER BY day",
+            (f"-{days} days",)
+        ).fetchall()
+        # Group by agent
+        agent_trends = {}
+        for r in rows:
+            agent = r["source_profile"] or "unknown"
+            if agent not in agent_trends:
+                agent_trends[agent] = []
+            agent_trends[agent].append({"day": r["day"], "avg_decay": round(r["avg_decay"], 4), "sample_count": r["sample_count"]})
+        # Append today's live per-agent average as latest point
+        today_str = self._now()[:10]
+        live_rows = self.conn.execute(
+            "SELECT source_profile, AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' GROUP BY source_profile"
+        ).fetchall()
+        for lr in live_rows:
+            agent = lr["source_profile"] or "unknown"
+            if agent not in agent_trends:
+                agent_trends[agent] = []
+            trend = agent_trends[agent]
+            if not trend or trend[-1]["day"] != today_str:
+                trend.append({"day": today_str, "avg_decay": round(lr["avg_decay"], 4), "sample_count": lr["cnt"]})
+        return agent_trends
 
     # ──────────────── History & Snapshot ────────────────
 

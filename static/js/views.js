@@ -1,3 +1,6 @@
+// Current agent ID for filtering decay curves
+var selfmindCurrentAgent = 'hermes';
+
 async function loadWikiData() {
   try {
     const res = await fetch('/api/wiki/data?t=' + Date.now());
@@ -51,7 +54,7 @@ function buildWikiFilterBar() {
   bar.appendChild(allChip);
 
   // Wiki 分类
-  const wikiFilterCats = ['entity', 'concept', 'comparison', 'query', 'summary', 'wiki_tag'];
+  const wikiFilterCats = ['entity', 'concept', 'comparison', 'query', 'summary', 'project', 'promotion', 'nous', 'manifesto', 'blackboard', 'daily_report', 'raw', 'wiki_tag'];
   wikiFilterCats.forEach(key => {
     const cat = WIKI_COLORS[key];
     if (!cat) return;
@@ -119,6 +122,12 @@ let selectedFileIndices = new Set();
 let memoryFilters = { status: 'all', primary: 'all' };
 let memoryStats = null;
 let syncTargetAgent = 'hermes';
+const SYNC_AGENT_LABELS = {
+  hermes: { icon: '🏛️', name: 'Hermes', desc: '通用智能助手' },
+  openclaw: { icon: '🦀', name: 'OpenClaw', desc: '专业编程助手' },
+  plato: { icon: '🏛️', name: '柏拉图', desc: '架构评审专家' },
+  aris: { icon: '🤖', name: '小亚', desc: '开发写作助手' },
+};
 let memoryExtracting = false;
 let memoryScanning = false;
 let extractResultCount = null;
@@ -642,18 +651,15 @@ function renderSyncArea() {
   </div>`;
 
   html += `<div class="memory-section-title">🤖 同步目标</div>
-  <div class="memory-agent-grid">
-    <div class="memory-agent-card ${syncTargetAgent === 'hermes' ? 'selected' : ''}" onclick="selectSyncAgent('hermes')">
-      <div class="memory-agent-icon">🏛️</div>
-      <div class="memory-agent-name">Hermes</div>
-      <div class="memory-agent-desc">通用智能助手</div>
-    </div>
-    <div class="memory-agent-card ${syncTargetAgent === 'openclaw' ? 'selected' : ''}" onclick="selectSyncAgent('openclaw')">
-      <div class="memory-agent-icon">🦀</div>
-      <div class="memory-agent-name">OpenClaw</div>
-      <div class="memory-agent-desc">专业编程助手</div>
-    </div>
-  </div>`;
+  <div class="memory-agent-grid">`;
+  for (const [id, info] of Object.entries(SYNC_AGENT_LABELS)) {
+    html += `<div class="memory-agent-card ${syncTargetAgent === id ? 'selected' : ''}" onclick="selectSyncAgent('${id}')">
+      <div class="memory-agent-icon">${info.icon}</div>
+      <div class="memory-agent-name">${info.name}</div>
+      <div class="memory-agent-desc">${info.desc}</div>
+    </div>`;
+  }
+  html += `</div>`;
 
   html += `<div class="memory-section-title">📋 待同步条目 (已通过)</div>`;
   if (approvedEntries.length === 0) {
@@ -682,7 +688,7 @@ function renderSyncArea() {
     html += `</div>
     <button class="memory-btn memory-btn-primary" onclick="syncMemories()"
       style="width:100%;padding:10px" ${selectedSyncIds.size === 0 ? 'disabled' : ''}>
-      🚀 同步到 ${syncTargetAgent === 'hermes' ? 'Hermes' : 'OpenClaw'} (${selectedSyncIds.size} 条)
+      🚀 同步到 ${SYNC_AGENT_LABELS[syncTargetAgent]?.name || syncTargetAgent} (${selectedSyncIds.size} 条)
     </button>`;
   }
 
@@ -722,7 +728,7 @@ async function syncMemories() {
     });
     const json = await res.json();
     const syncedCount = json.synced || json.count || ids.length;
-    showToast(`🚀 已同步 ${syncedCount} 条记忆到 ${syncTargetAgent === 'hermes' ? 'Hermes' : 'OpenClaw'}`, 'success');
+    showToast(`🚀 已同步 ${syncedCount} 条记忆到 ${SYNC_AGENT_LABELS[syncTargetAgent]?.name || syncTargetAgent}`, 'success');
     selectedSyncIds.clear();
     loadMemoryStats();
   } catch (e) {
@@ -764,6 +770,7 @@ async function loadSettingsData() {
     
     // 根据current_agent更新页面标题
     const activeAgentId = data.current_agent || 'hermes';
+    selfmindCurrentAgent = activeAgentId;
     const agents = data.agents || [];
     const activeAgentObj = agents.find(a => a.id === activeAgentId);
     const activeAgentName = activeAgentObj ? activeAgentObj.name : activeAgentId;
@@ -893,8 +900,12 @@ async function switchAgentView(agentId) {
         if (countEl && statsData) countEl.textContent = (statsData.total_entries || graphData.nodes.length) + ' 条';
       } catch (e) { console.error('refresh stats failed:', e); }
       showToast('✅ 已切换到 ' + agentName, 'success');
+      selfmindCurrentAgent = agentId;
       loadSettingsData();
       loadIQ();
+      // Reload decay curves for new agent
+      _loadOverallDecayCurve();
+      _loadCategoryDecayCurves();
       lastPollHash = null;
       startPolling();
     } else {
@@ -1923,21 +1934,10 @@ function renderCategoryOverview() {
       html += '<span class="category-card-recall" style="color:#00b894;font-size:11px;margin-left:4px">↑' + c.totalRecall + 'recall</span>';
     }
     html += '</div>';
-    html += '<div class="category-card-meter">';
-    html += '<div class="category-card-fill" style="width:' + pct + '%;background:' + statusColor + '"></div>';
-    html += '<span class="category-card-pct">' + pct + '%</span>';
-    html += '</div>';
-    // 状态分布条（健康/褪色/危险）
-    if (c.count > 1) {
-      const hPct = Math.round(c.healthyCount / c.count * 100);
-      const fPct = Math.round(c.fadingCount / c.count * 100);
-      const dPct = Math.round(c.dangerCount / c.count * 100);
-      html += '<div class="category-card-dist">';
-      if (c.healthyCount > 0) html += '<div style="flex:' + hPct + ';background:#00b894;min-width:4px" title="强 ' + c.healthyCount + '条"></div>';
-      if (c.fadingCount > 0) html += '<div style="flex:' + fPct + ';background:#f0932b;min-width:4px" title="中 ' + c.fadingCount + '条"></div>';
-      if (c.dangerCount > 0) html += '<div style="flex:' + dPct + ';background:#e74c3c;min-width:4px" title="弱 ' + c.dangerCount + '条"></div>';
-      html += '</div>';
-    }
+    // Sparkline curve container (replaces progress bar + dist bar)
+    var safeId = encodeURIComponent(c.cat).replace(/[^a-zA-Z0-9]/g, '_');
+    html += '<div class="category-card-sparkline" id="catSpark_' + safeId + '" data-cat="' + c.cat + '" data-color="' + statusColor + '" data-pct="' + pct + '"></div>';
+    html += '<div class="category-card-pct-label" style="color:' + statusColor + '">' + pct + '%</div>';
     html += '<div class="category-card-status" style="color:' + statusColor + '">' + statusLabel + '</div>';
     html += '</div>';
   });
@@ -1949,57 +1949,70 @@ function renderCategoryOverview() {
   document.getElementById('categoryDetailPanel').style.display = 'none';
   // 异步加载趋势数据绘制曲线图
   _loadOverallDecayCurve();
+  // 异步加载分类级别趋势数据绘制 sparkline
+  _loadCategoryDecayCurves();
 }
 
 async function _loadOverallDecayCurve() {
   const chartEl = document.getElementById('overallDecayChart');
   if (!chartEl) return;
+  const agent = selfmindCurrentAgent || 'hermes';
+  const AGENT_COLORS = {
+    hermes: '#0984e3',
+    openclaw: '#6c5ce7',
+    plato: '#e17055',
+    aris: '#00b894',
+    grace: '#fdcb6e',
+    unknown: '#636e72'
+  };
   try {
-    const res = await fetch('/api/decay-trend');
+    const res = await fetch('/api/decay-trend?agent=' + encodeURIComponent(agent));
     const trend = await res.json();
     if (!Array.isArray(trend) || trend.length === 0) return;
+
+    var allVals = trend.map(function(d){ return d.avg_decay; });
+    var allDays = trend.map(function(d){ return d.day; });
+
     const W = chartEl.offsetWidth || 280;
-    const H = chartEl.offsetHeight || 100;
+    const H = chartEl.offsetHeight || 120;
     const leftPad = 40, rightPad = 12, topPad = 10, bottomPad = 20;
     const plotW = W - leftPad - rightPad, plotH = H - topPad - bottomPad;
-    const n = trend.length;
-    // Dynamic Y range — auto-scale to data with 10% padding
-    const vals = trend.map(function(d){ return d.avg_decay; });
-    var minD = Math.min.apply(null, vals);
-    var maxD = Math.max.apply(null, vals);
+    const n = allDays.length;
+    var minD = Math.min.apply(null, allVals);
+    var maxD = Math.max.apply(null, allVals);
     var rangePad = (maxD - minD) * 0.15 || 0.05;
     minD = Math.max(0, minD - rangePad);
     maxD = Math.min(1, maxD + rangePad);
-    // If range too small (flat data), expand to show meaningful scale
     if (maxD - minD < 0.1) {
       var center = (maxD + minD) / 2;
       minD = Math.max(0, center - 0.15);
       maxD = Math.min(1, center + 0.15);
     }
-    // Map data to points
-    const pts = trend.map(function(d, i) {
-      const x = leftPad + (i / (n - 1 || 1)) * plotW;
-      const y = topPad + plotH - ((d.avg_decay - minD) / (maxD - minD || 0.01)) * plotH;
-      return [x, y];
+
+    // Build points
+    var pts = [];
+    trend.forEach(function(d, idx) {
+      var x = leftPad + (idx / (n - 1 || 1)) * plotW;
+      var y = topPad + plotH - ((d.avg_decay - minD) / (maxD - minD || 0.01)) * plotH;
+      pts.push([x, y, d.avg_decay]);
     });
-    // Build path — use smooth curve if >=4 points, polyline if fewer
+
+    // Build smooth curve path
     var pathD = '';
-    if (n === 1) {
+    if (pts.length === 1) {
       pathD = 'M' + pts[0][0] + ',' + pts[0][1];
-    } else if (n <= 3) {
-      // Straight polyline for few points
+    } else if (pts.length <= 3) {
       pathD = 'M' + pts[0][0] + ',' + pts[0][1];
-      for (var i = 1; i < pts.length; i++) {
-        pathD += ' L' + pts[i][0] + ',' + pts[i][1];
+      for (var ii = 1; ii < pts.length; ii++) {
+        pathD += ' L' + pts[ii][0] + ',' + pts[ii][1];
       }
     } else {
-      // Catmull-Rom smooth curve
       pathD = 'M' + pts[0][0] + ',' + pts[0][1];
-      for (var i = 0; i < pts.length - 1; i++) {
-        var p0 = pts[Math.max(i - 1, 0)];
-        var p1 = pts[i];
-        var p2 = pts[i + 1];
-        var p3 = pts[Math.min(i + 2, pts.length - 1)];
+      for (var ii = 0; ii < pts.length - 1; ii++) {
+        var p0 = pts[Math.max(ii - 1, 0)];
+        var p1 = pts[ii];
+        var p2 = pts[ii + 1];
+        var p3 = pts[Math.min(ii + 2, pts.length - 1)];
         var cp1x = p1[0] + (p2[0] - p0[0]) / 6;
         var cp1y = p1[1] + (p2[1] - p0[1]) / 6;
         var cp2x = p2[0] - (p3[0] - p1[0]) / 6;
@@ -2007,13 +2020,14 @@ async function _loadOverallDecayCurve() {
         pathD += ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2[0] + ',' + p2[1];
       }
     }
-    var curveColor = chartEl.dataset.color || '#00b894';
+
+    var color = AGENT_COLORS[agent] || '#636e72';
     var svg = '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">';
-    // Y-axis line (left border)
+    // Y-axis
     svg += '<line x1="' + leftPad + '" y1="' + topPad + '" x2="' + leftPad + '" y2="' + (topPad + plotH) + '" stroke="#ccc" stroke-width="1"/>';
-    // X-axis line (bottom border)
+    // X-axis
     svg += '<line x1="' + leftPad + '" y1="' + (topPad + plotH) + '" x2="' + (leftPad + plotW) + '" y2="' + (topPad + plotH) + '" stroke="#ccc" stroke-width="1"/>';
-    // Y grid lines + labels (auto-scale to data range)
+    // Y grid lines
     var ySteps = 4;
     for (var s = 0; s <= ySteps; s++) {
       var yVal = minD + (maxD - minD) * s / ySteps;
@@ -2021,39 +2035,127 @@ async function _loadOverallDecayCurve() {
       svg += '<line x1="' + leftPad + '" y1="' + yy + '" x2="' + (leftPad + plotW) + '" y2="' + yy + '" stroke="#e8e8e8" stroke-width="0.5" stroke-dasharray="3,3"/>';
       svg += '<text x="' + (leftPad - 4) + '" y="' + (yy + 3) + '" font-size="10" fill="#888" text-anchor="end">' + Math.round(yVal * 100) + '%</text>';
     }
-    // NO area fill — pure line chart like stock ticker
-    // Thin shadow line below curve for depth
-    svg += '<path d="' + pathD + '" fill="none" stroke="' + curveColor + '" stroke-width="1" opacity="0.2" transform="translate(0,2)"/>';
-    // Main curve stroke — thicker, crisp
-    svg += '<path d="' + pathD + '" fill="none" stroke="' + curveColor + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
-    // Vertical dashed lines from each data point down to X-axis
+    // Shadow line for depth
+    svg += '<path d="' + pathD + '" fill="none" stroke="' + color + '" stroke-width="1" opacity="0.15" transform="translate(0,2)"/>';
+    // Main curve
+    svg += '<path d="' + pathD + '" fill="none" stroke="' + color + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    // Data points
     pts.forEach(function(pt, idx) {
-      svg += '<line x1="' + pt[0] + '" y1="' + pt[1] + '" x2="' + pt[0] + '" y2="' + (topPad + plotH) + '" stroke="' + curveColor + '" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.3"/>';
+      var r = idx === pts.length - 1 ? 5 : 3;
+      svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + r + '" fill="' + color + '"/>';
+      svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + Math.max(r - 1.5, 0.5) + '" fill="white"/>';
+      svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="0.8" fill="' + color + '"/>';
     });
-    // Data point dots — outer circle + white inner ring (clearly NOT a bar)
-    pts.forEach(function(pt, idx) {
-      var r = idx === pts.length - 1 ? 5 : 4;
-      // Outer filled circle
-      svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + r + '" fill="' + curveColor + '"/>';
-      // White inner ring to make it a "data node" look
-      svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + (r - 1.5) + '" fill="white"/>';
-      // Tiny center dot
-      svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="1" fill="' + curveColor + '"/>';
-      // Value label above each point
-      var pctVal = Math.round(trend[idx].avg_decay * 100);
-      svg += '<text x="' + pt[0] + '" y="' + (pt[1] - 12) + '" font-size="11" fill="' + curveColor + '" text-anchor="middle" font-weight="600">' + pctVal + '%</text>';
-    });
-    // Current value pulse ring on last point
+    // Pulse ring on last point
     var lastPt = pts[pts.length - 1];
-    svg += '<circle cx="' + lastPt[0] + '" cy="' + lastPt[1] + '" r="9" fill="' + curveColor + '" opacity="0.12"/>';
+    svg += '<circle cx="' + lastPt[0] + '" cy="' + lastPt[1] + '" r="9" fill="' + color + '" opacity="0.12"/>';
+    var lastDecay = Math.round(lastPt[2] * 100);
+    svg += '<text x="' + (lastPt[0] + 12) + '" y="' + (lastPt[1] + 4) + '" font-size="11" fill="' + color + '" font-weight="600">' + lastDecay + '%</text>';
     // X-axis date labels
-    var firstDate = trend[0].day.slice(5);
-    var lastDate = trend[trend.length - 1].day.slice(5);
-    svg += '<text x="' + leftPad + '" y="' + (H - 2) + '" font-size="11" fill="#666">' + firstDate + '</text>';
-    svg += '<text x="' + (leftPad + plotW) + '" y="' + (H - 2) + '" font-size="11" fill="#666" text-anchor="end">' + lastDate + '</text>';
+    if (allDays.length > 0) {
+      svg += '<text x="' + leftPad + '" y="' + (H - 2) + '" font-size="11" fill="#666">' + allDays[0].slice(5) + '</text>';
+      svg += '<text x="' + (leftPad + plotW) + '" y="' + (H - 2) + '" font-size="11" fill="#666" text-anchor="end">' + allDays[allDays.length - 1].slice(5) + '</text>';
+    }
     svg += '</svg>';
     chartEl.innerHTML = svg;
   } catch(e) { console.error('Decay trend load error', e); }
+}
+
+async function _loadCategoryDecayCurves() {
+  const agent = selfmindCurrentAgent || 'hermes';
+  try {
+    const res = await fetch('/api/decay-trend-by-category?agent=' + encodeURIComponent(agent));
+    const catTrends = await res.json();
+    if (!catTrends || typeof catTrends !== 'object') return;
+
+    // For each category, render a mini sparkline in its card
+    for (const cat in catTrends) {
+      const trend = catTrends[cat];
+      if (!Array.isArray(trend) || trend.length === 0) continue;
+
+      const el = document.getElementById('catSpark_' + encodeURIComponent(cat).replace(/[^a-zA-Z0-9]/g, '_'));
+      if (!el) continue;
+
+      const curveColor = el.dataset.color || '#636e72';
+      const pctVal = el.dataset.pct || '0';
+
+      // Mini sparkline dimensions
+      const W = el.offsetWidth || 160;
+      const H = 48;
+      const leftPad = 6, rightPad = 6, topPad = 8, bottomPad = 4;
+      const plotW = W - leftPad - rightPad;
+      const plotH = H - topPad - bottomPad;
+
+      const vals = trend.map(function(d){ return d.avg_decay; });
+      var minD = Math.min.apply(null, vals);
+      var maxD = Math.max.apply(null, vals);
+      var rangePad = (maxD - minD) * 0.15 || 0.05;
+      minD = Math.max(0, minD - rangePad);
+      maxD = Math.min(1, maxD + rangePad);
+      if (maxD - minD < 0.1) {
+        var center = (maxD + minD) / 2;
+        minD = Math.max(0, center - 0.15);
+        maxD = Math.min(1, center + 0.15);
+      }
+
+      const n = trend.length;
+      const pts = trend.map(function(d, i) {
+        const x = leftPad + (i / (n - 1 || 1)) * plotW;
+        const y = topPad + plotH - ((d.avg_decay - minD) / (maxD - minD || 0.01)) * plotH;
+        return [x, y];
+      });
+
+      // Build path
+      var pathD = '';
+      if (n === 1) {
+        pathD = 'M' + pts[0][0] + ',' + pts[0][1];
+      } else if (n <= 3) {
+        pathD = 'M' + pts[0][0] + ',' + pts[0][1];
+        for (var i = 1; i < pts.length; i++) {
+          pathD += ' L' + pts[i][0] + ',' + pts[i][1];
+        }
+      } else {
+        pathD = 'M' + pts[0][0] + ',' + pts[0][1];
+        for (var i = 0; i < pts.length - 1; i++) {
+          var p0 = pts[Math.max(i - 1, 0)];
+          var p1 = pts[i];
+          var p2 = pts[i + 1];
+          var p3 = pts[Math.min(i + 2, pts.length - 1)];
+          var cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+          var cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+          var cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+          var cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+          pathD += ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2[0] + ',' + p2[1];
+        }
+      }
+
+      var svg = '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">';
+      // NO area fill — pure line
+      // Thin shadow line for depth
+      svg += '<path d="' + pathD + '" fill="none" stroke="' + curveColor + '" stroke-width="1" opacity="0.2" transform="translate(0,2)"/>';
+      // Main curve
+      svg += '<path d="' + pathD + '" fill="none" stroke="' + curveColor + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      // Vertical dashed lines from points to baseline
+      pts.forEach(function(pt) {
+        svg += '<line x1="' + pt[0] + '" y1="' + pt[1] + '" x2="' + pt[0] + '" y2="' + (topPad + plotH) + '" stroke="' + curveColor + '" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.3"/>';
+      });
+      // Data point dots — outer + white inner + center
+      pts.forEach(function(pt, idx) {
+        var r = idx === pts.length - 1 ? 4 : 3;
+        svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + r + '" fill="' + curveColor + '"/>';
+        svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + (r - 1.5) + '" fill="white"/>';
+        svg += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="1" fill="' + curveColor + '"/>';
+      });
+      // Current value pulse on last point
+      var lastPt = pts[pts.length - 1];
+      svg += '<circle cx="' + lastPt[0] + '" cy="' + lastPt[1] + '" r="7" fill="' + curveColor + '" opacity="0.12"/>';
+      // Baseline (bottom reference line)
+      svg += '<line x1="' + leftPad + '" y1="' + (topPad + plotH) + '" x2="' + (leftPad + plotW) + '" y2="' + (topPad + plotH) + '" stroke="#ccc" stroke-width="0.5"/>';
+      svg += '</svg>';
+
+      el.innerHTML = svg;
+    }
+  } catch(e) { console.error('Category decay trend load error', e); }
 }
 
 function showCategoryDetail(cat) {
