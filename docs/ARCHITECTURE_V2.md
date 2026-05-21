@@ -47,7 +47,8 @@
 │  │ Sources: MEMORY.md + Honcho API + Wiki   │   │
 │  └──────────────────────────────────────────┘   │
 ├─────────────────────────────────────────────────┤
-│                  数据层 (SQLite)                  │
+│                  数据层 (SQLite per-agent)        │
+│  selfmind_{agent_id}.db (独立数据库)              │
 │  entries / entry_history / snapshots             │
 │  operations_log / decay_history / agent_recall_log│
 └─────────────────────────────────────────────────┘
@@ -116,7 +117,13 @@ unified_sync(store, config)
 
 Provider interface (`providers/base.py` → `MemoryProvider`) 存在但未被 unified_sync 使用，属于遗留代码。
 
-### 4.2 SQLite 元数据库 (selfmind.db) — 6 张表
+### 4.2 SQLite 元数据库 (per-agent 独立) — 6 张表
+
+**多Agent独立数据库架构**：每个Agent拥有独立数据库 `selfmind_{agent_id}.db`（如 selfmind_hermes.db, selfmind_aris.db），切换Agent时通过 `store.switch_db(new_path)` 切换到对应数据库，wiki数据保持共享（所有Agent共享同一套wiki目录文件）。
+
+**衰减历史迁移**：切换Agent时，`_switch_agent` 自动从旧数据库迁移匹配的 decay_history 和 snapshots 记录，保留历史趋势连续性。
+
+**旧数据库**：`selfmind.db`（原共享数据库）保留作为历史数据迁移源，不再作为活跃数据库使用。
 
 ```sql
 -- 1. entries: 统一记忆条目表（所有数据源写入此表）
@@ -247,14 +254,21 @@ CREATE INDEX idx_recall_timestamp ON agent_recall_log(timestamp);
 
 ```
 ┌─────────────────────────────────────────┐
-│  记忆健康度: 78/100  ████████░░          │
+│  记忆健康度: 78/100                      │
 │                                         │
-│  活跃: 42  │  衰退中: 8  │  归档: 15    │
+│  活跃: 42  │  衰退中: 8  │  彘档: 15    │
 │                                         │
 │  ⚠️ 3 条可合并  │  ⚠️ 2 条可能过时       │
-│  📊 衰减曲线: /api/decay-trend ✅       │
+│  📊 衰减曲线(per-agent): ✅              │
+│  📊 分类sparkline: ✅                    │
+│  🔄 Agent切换联动: ✅                    │
 └─────────────────────────────────────────┘
 ```
+
+衰减曲线特点：
+- 每个Agent独立曲线，切换时自动刷新（颜色：hermes蓝、aris绿、plato橙红、grace黄）
+- Y轴固定0~100%，不同Agent数据差异可见
+- 整体曲线 + 分类sparkline（分类卡片迷你曲线替代进度条）
 
 ### 5.2 审查面板
 
@@ -305,6 +319,16 @@ unified_sync(store, config)
 - [x] Recall Capture（agent_recall_log + scanner.py）
 - [x] Manual Import（document_importer.py + /api/documents/scan）
 
+### Phase 1.5：多Agent基础设施 ✅ 已完成
+- [x] 每个Agent独立数据库（selfmind_{agent_id}.db，wiki共享）
+- [x] UnifiedStore.switch_db() 方法（切换时关闭旧连接、打开新数据库）
+- [x] _switch_agent 衰减历史迁移（从旧数据库拷贝匹配的decay_history和snapshots）
+- [x] 分类衰减曲线API（/api/decay-trend-by-category）
+- [x] Wiki parser 扩展（13个目录：含promotion/nous/blackboard/daily-report）
+- [x] 同步目标扩展（Hermes/OpenClaw/柏拉图/小亚四卡片数据驱动）
+- [x] 每日自动git提交cron（独立脚本，不依赖LLM/企微）
+- [x] 理论基础论文任务启动（柏拉图Kanban t_0f730a82）
+
 ### Phase 2：巩固引擎 🔄 代码框架存在，未接入运行
 - [x] 基础文本相似度检测（SequenceMatcher）
 - [ ] 语义相似度计算（embedding）— 未实现
@@ -325,6 +349,10 @@ unified_sync(store, config)
 ### Phase 4：前端升级 ✅ 大部分完成
 - [x] 健康仪表盘（衰减曲线可视化）
 - [x] 图谱视觉增强（透明度、大小映射）
+- [x] 分类sparkline曲线（替代进度条）
+- [x] Wiki库双区布局（焦点区+档案区）
+- [x] 多Agent独立数据库联动
+- [x] Y轴固定0~100%
 - [ ] 审查面板（巩固建议列表）— 未实现
 - [ ] 浅色主题重写 — 未实现
 - [ ] 节点交互优化 — 未实现
