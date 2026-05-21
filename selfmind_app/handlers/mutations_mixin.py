@@ -768,41 +768,97 @@ class MutationsMixin:
         self._json_response({"status": "ok", "message": "Default agent set to " + agent_id})
 
     def _switch_agent(self, agent_id):
-        """切换当前Agent — 更新配置 + re-sync + re-build graph"""
+        """切换当前Agent — 切换到对应独立数据库 + re-sync + seed decay history + re-build graph"""
         config = load_config()
         profiles = config.get("source", {}).get("profiles", {})
-
-        # 验证agent存在（在profiles或custom_agents中）
         custom_agents = config.get("agents", [])
         custom_ids = [a.get("id") for a in custom_agents]
         if agent_id not in profiles and agent_id not in custom_ids:
             self._json_response({"error": "Agent not found"}, code=404)
             return
 
-        # 更新 source.active_profile 和 current_agent
         config.setdefault("source", {})["active_profile"] = agent_id
         config["current_agent"] = agent_id
 
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2, ensure_ascii=False)
 
-        # Re-sync 数据
+        # 切换到agent对应的独立数据库
         store = _get_store()
         new_data = None
         agent_name = agent_id
+        old_db_path = store.db_path  # 记住旧数据库路径，用于迁移历史数据
         try:
             from selfmind_app.unified_sync import unified_sync
             from selfmind_app.parser import build_graph_from_store
+            from pathlib import Path
+            import sqlite3
+
+            # 每个agent独立数据库: selfmind_{agent_id}.db
+            data_dir = Path(store.db_path).parent
+            new_db_path = str(data_dir / f"selfmind_{agent_id}.db")
+            store.switch_db(new_db_path)
+
             sync_stats = unified_sync(store, config)
+
+            # 计算衰减分数并种子decay_history
+            store.compute_decay_scores()
+
+            # 从旧数据库拷贝匹配的decay_history历史记录
+            if old_db_path and os.path.exists(old_db_path) and old_db_path != new_db_path:
+                try:
+                    old_conn = sqlite3.connect(old_db_path)
+                    old_conn.row_factory = sqlite3.Row
+                    # 获取新数据库中所有entry_id
+                    new_ids = set(r[0] for r in store.conn.execute("SELECT id FROM entries").fetchall())
+                    # 从旧数据库拷贝匹配的decay_history
+                    old_rows = old_conn.execute(
+                        "SELECT entry_id, timestamp, decay_score, trigger FROM decay_history"
+                    ).fetchall()
+                    copied = 0
+                    for or_ in old_rows:
+                        if or_[0] in new_ids:
+                            # 避免重复插入（同entry_id+timestamp）
+                            exists = store.conn.execute(
+                                "SELECT COUNT(*) FROM decay_history WHERE entry_id=? AND timestamp=?",
+                                (or_[0], or_[1])
+                            ).fetchone()[0]
+                            if exists == 0:
+                                store.conn.execute(
+                                    "INSERT INTO decay_history (entry_id, timestamp, decay_score, trigger) VALUES (?,?,?,?)",
+                                    (or_[0], or_[1], or_[2], or_[3])
+                                )
+                                copied += 1
+                    store.conn.commit()
+                    if copied > 0:
+                        logger.info(f"Migrated {copied} decay_history records from {old_db_path}")
+                    # 也拷贝snapshots（历史快照）
+                    old_snaps = old_conn.execute("SELECT timestamp, memory_md, user_md, trigger, stats FROM snapshots").fetchall()
+                    snap_copied = 0
+                    for sn in old_snaps:
+                        exists = store.conn.execute(
+                            "SELECT COUNT(*) FROM snapshots WHERE timestamp=? AND trigger=?",
+                            (sn[0], sn[3])
+                        ).fetchone()[0]
+                        if exists == 0:
+                            store.conn.execute(
+                                "INSERT INTO snapshots (timestamp, memory_md, user_md, trigger, stats) VALUES (?,?,?,?,?)",
+                                (sn[0], sn[1], sn[2], sn[3], sn[4])
+                            )
+                            snap_copied += 1
+                    store.conn.commit()
+                    if snap_copied > 0:
+                        logger.info(f"Migrated {snap_copied} snapshots from {old_db_path}")
+                    old_conn.close()
+                except Exception as migrate_err:
+                    logger.warning(f"Decay history migration failed: {migrate_err}")
+
             new_data = build_graph_from_store(store, config)
-            # 从 agents 列表找名字
             for a in custom_agents:
                 if a.get("id") == agent_id:
                     agent_name = a.get("name", agent_id)
-            # 也可能名字在 profiles 中
             if agent_id in profiles:
                 pdata = profiles[agent_id]
-                # 名字优先从 custom_agents 取
                 for a in custom_agents:
                     if a.get("id") == agent_id:
                         agent_name = a.get("name", agent_id)
@@ -810,13 +866,10 @@ class MutationsMixin:
                 if agent_name == agent_id:
                     agent_name = pdata.get("name", agent_id.title())
         except Exception as e:
-            logging.warning(f"Re-sync after switch failed: {e}")
+            logging.warning(f"Switch agent failed: {e}")
 
-        # 清除graph缓存，确保后续/api/data请求返回新agent的数据
         from selfmind_app.http_handler import SelfMindHandler
         SelfMindHandler._graph_data = None
-
-        # 更新 state_hash 触发前端自动刷新
         if store and hasattr(store, 'state_hash'):
             store.state_hash = str(__import__('uuid').uuid4())
 

@@ -34,7 +34,9 @@ def main():
     from selfmind_app.unified_sync import unified_sync
     from selfmind_app.parser import build_graph_from_store
 
-    db_path = str(data_dir / "selfmind.db")
+    # ── 每个agent独立数据库 ──
+    active_profile = config.get("source", {}).get("active_profile", "hermes")
+    db_path = str(data_dir / f"selfmind_{active_profile}.db")
     store = UnifiedStore(db_path)
 
     # ── Run unified sync (all sources → SQLite) ──

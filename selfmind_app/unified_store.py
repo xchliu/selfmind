@@ -487,7 +487,7 @@ class UnifiedStore:
         return [dict(r) for r in rows]
 
     def get_stats(self):
-        """Compute comprehensive stats across all entry types."""
+        """Compute comprehensive stats across all entry types in the current agent's database."""
         stats = {}
 
         # Counts by type and status
@@ -530,11 +530,11 @@ class UnifiedStore:
         ).fetchone()
         stats["fading_candidates"] = row["cnt"]
 
-        # Version changes count
+        # Version changes count (not agent-specific, global)
         row = self.conn.execute("SELECT COUNT(*) as cnt FROM entry_history").fetchone()
         stats["version_changes"] = row["cnt"]
 
-        # Snapshot count
+        # Snapshot count (not agent-specific, global)
         row = self.conn.execute("SELECT COUNT(*) as cnt FROM snapshots").fetchone()
         stats["snapshots"] = row["cnt"]
 
@@ -708,32 +708,18 @@ class UnifiedStore:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    def get_overall_decay_trend(self, days=30, agent=None):
-        """Get daily average decay score trend. If agent specified, filter by source_profile."""
-        if agent:
-            rows = self.conn.execute(
-                "SELECT DATE(dh.timestamp) as day, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
-                "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
-                "WHERE dh.timestamp >= DATE('now', ?) AND e.source_profile = ? "
-                "GROUP BY DATE(dh.timestamp) ORDER BY day",
-                (f"-{days} days", agent)
-            ).fetchall()
-            today_str = self._now()[:10]
-            current = self.conn.execute(
-                "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' AND source_profile = ?",
-                (agent,)
-            ).fetchone()
-        else:
-            rows = self.conn.execute(
-                "SELECT DATE(timestamp) as day, AVG(decay_score) as avg_decay, COUNT(*) as sample_count "
-                "FROM decay_history WHERE timestamp >= DATE('now', ?) "
-                "GROUP BY DATE(timestamp) ORDER BY day",
-                (f"-{days} days",)
-            ).fetchall()
-            today_str = self._now()[:10]
-            current = self.conn.execute(
-                "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active'"
-            ).fetchone()
+    def get_overall_decay_trend(self, days=30):
+        """Get daily average decay score trend from current agent's database."""
+        rows = self.conn.execute(
+            "SELECT DATE(timestamp) as day, AVG(decay_score) as avg_decay, COUNT(*) as sample_count "
+            "FROM decay_history WHERE timestamp >= DATE('now', ?) "
+            "GROUP BY DATE(timestamp) ORDER BY day",
+            (f"-{days} days",)
+        ).fetchall()
+        today_str = self._now()[:10]
+        current = self.conn.execute(
+            "SELECT AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active'"
+        ).fetchone()
         result = [{"day": r["day"], "avg_decay": round(r["avg_decay"], 4), "sample_count": r["sample_count"]} for r in rows]
         if result and result[-1]["day"] != today_str:
             if current and current["cnt"] > 0:
@@ -743,31 +729,18 @@ class UnifiedStore:
                 result.append({"day": today_str, "avg_decay": round(current["avg_decay"], 4), "sample_count": current["cnt"]})
         return result
 
-    def get_category_decay_trend(self, days=30, agent=None):
-        """Get per-category daily average decay score trend. If agent specified, filter by source_profile."""
-        if agent:
-            rows = self.conn.execute(
-                "SELECT DATE(dh.timestamp) as day, e.primary_cat, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
-                "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
-                "WHERE dh.timestamp >= DATE('now', ?) AND e.source_profile = ? "
-                "GROUP BY DATE(dh.timestamp), e.primary_cat ORDER BY day",
-                (f"-{days} days", agent)
-            ).fetchall()
-            live_rows = self.conn.execute(
-                "SELECT primary_cat, AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' AND source_profile = ? GROUP BY primary_cat",
-                (agent,)
-            ).fetchall()
-        else:
-            rows = self.conn.execute(
-                "SELECT DATE(dh.timestamp) as day, e.primary_cat, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
-                "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
-                "WHERE dh.timestamp >= DATE('now', ?) "
-                "GROUP BY DATE(dh.timestamp), e.primary_cat ORDER BY day",
-                (f"-{days} days",)
-            ).fetchall()
-            live_rows = self.conn.execute(
-                "SELECT primary_cat, AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' GROUP BY primary_cat"
-            ).fetchall()
+    def get_category_decay_trend(self, days=30):
+        """Get per-category daily average decay score trend from current agent's database."""
+        rows = self.conn.execute(
+            "SELECT DATE(dh.timestamp) as day, e.primary_cat, AVG(dh.decay_score) as avg_decay, COUNT(*) as sample_count "
+            "FROM decay_history dh JOIN entries e ON dh.entry_id = e.id "
+            "WHERE dh.timestamp >= DATE('now', ?) "
+            "GROUP BY DATE(dh.timestamp), e.primary_cat ORDER BY day",
+            (f"-{days} days",)
+        ).fetchall()
+        live_rows = self.conn.execute(
+            "SELECT primary_cat, AVG(decay_score) as avg_decay, COUNT(*) as cnt FROM entries WHERE status='active' GROUP BY primary_cat"
+        ).fetchall()
         # Group by category
         cat_trends = {}
         for r in rows:
@@ -1045,6 +1018,21 @@ class UnifiedStore:
                 "total_evolutions": len(evolution_events),
             }
         }
+
+    
+
+    def switch_db(self, new_db_path):
+        """切换到另一个数据库（每个agent独立数据库）"""
+        self.conn.close()
+        self.db_path = new_db_path
+        os.makedirs(os.path.dirname(new_db_path), exist_ok=True)
+        self.conn = sqlite3.connect(new_db_path, check_same_thread=False)
+        self.conn.row_factory = sqlite3.Row
+        self.conn.executescript(SCHEMA_SQL)
+        self.conn.commit()
+        # 重置state_hash触发前端刷新
+        if hasattr(self, 'state_hash'):
+            self.state_hash = str(__import__('uuid').uuid4())
 
     def close(self):
         self.conn.close()

@@ -906,6 +906,8 @@ async function switchAgentView(agentId) {
       // Reload decay curves for new agent
       _loadOverallDecayCurve();
       _loadCategoryDecayCurves();
+      // Reload health data after re-sync
+      if (typeof loadHealthData === 'function') loadHealthData();
       lastPollHash = null;
       startPolling();
     } else {
@@ -1156,7 +1158,9 @@ async function saveGlobalSettings() {
 async function loadHealthData() {
   try {
     const [hRes, eRes, oRes] = await Promise.all([
-      fetch('/api/meta/health'), fetch('/api/meta/entries?status=active'), fetch('/api/meta/operations?limit=20')
+      fetch('/api/meta/health'),
+      fetch('/api/meta/entries?status=active'),
+      fetch('/api/meta/operations?limit=20')
     ]);
     const health = await hRes.json(), entries = await eRes.json(), ops = await oRes.json();
     healthEntries = entries;
@@ -1956,17 +1960,12 @@ function renderCategoryOverview() {
 async function _loadOverallDecayCurve() {
   const chartEl = document.getElementById('overallDecayChart');
   if (!chartEl) return;
-  const agent = selfmindCurrentAgent || 'hermes';
   const AGENT_COLORS = {
-    hermes: '#0984e3',
-    openclaw: '#6c5ce7',
-    plato: '#e17055',
-    aris: '#00b894',
-    grace: '#fdcb6e',
+    hermes: '#0984e3', openclaw: '#6c5ce7', plato: '#e17055', aris: '#00b894', grace: '#fdcb6e',
     unknown: '#636e72'
   };
   try {
-    const res = await fetch('/api/decay-trend?agent=' + encodeURIComponent(agent));
+    const res = await fetch('/api/decay-trend');
     const trend = await res.json();
     if (!Array.isArray(trend) || trend.length === 0) return;
 
@@ -1978,16 +1977,9 @@ async function _loadOverallDecayCurve() {
     const leftPad = 40, rightPad = 12, topPad = 10, bottomPad = 20;
     const plotW = W - leftPad - rightPad, plotH = H - topPad - bottomPad;
     const n = allDays.length;
-    var minD = Math.min.apply(null, allVals);
-    var maxD = Math.max.apply(null, allVals);
-    var rangePad = (maxD - minD) * 0.15 || 0.05;
-    minD = Math.max(0, minD - rangePad);
-    maxD = Math.min(1, maxD + rangePad);
-    if (maxD - minD < 0.1) {
-      var center = (maxD + minD) / 2;
-      minD = Math.max(0, center - 0.15);
-      maxD = Math.min(1, center + 0.15);
-    }
+    // Fixed Y-axis range 0-100% for consistent cross-agent comparison
+    var minD = 0;
+    var maxD = 1;
 
     // Build points
     var pts = [];
@@ -2021,7 +2013,7 @@ async function _loadOverallDecayCurve() {
       }
     }
 
-    var color = AGENT_COLORS[agent] || '#636e72';
+    var color = AGENT_COLORS[selfmindCurrentAgent || 'hermes'] || '#636e72';
     var svg = '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">';
     // Y-axis
     svg += '<line x1="' + leftPad + '" y1="' + topPad + '" x2="' + leftPad + '" y2="' + (topPad + plotH) + '" stroke="#ccc" stroke-width="1"/>';
@@ -2062,9 +2054,8 @@ async function _loadOverallDecayCurve() {
 }
 
 async function _loadCategoryDecayCurves() {
-  const agent = selfmindCurrentAgent || 'hermes';
   try {
-    const res = await fetch('/api/decay-trend-by-category?agent=' + encodeURIComponent(agent));
+    const res = await fetch('/api/decay-trend-by-category');
     const catTrends = await res.json();
     if (!catTrends || typeof catTrends !== 'object') return;
 
