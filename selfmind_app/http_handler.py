@@ -219,6 +219,8 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
                 self._json_response(store.get_agent_decay_trend(days=30))
             else:
                 self._json_response({"error": "Store not available"}, code=503)
+        elif clean_path == "/api/kanban/tasks":
+            self._handle_kanban_tasks()
         elif clean_path == "/api/recall/stats":
             scanner = _get_recall_scanner()
             if scanner:
@@ -609,6 +611,47 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
         if isinstance(obj, (list, tuple)):
             return [self._sanitize_for_json(i) for i in obj]
         return obj
+
+    def _handle_kanban_tasks(self):
+        """Read kanban tasks from Hermes kanban.db."""
+        import sqlite3
+        kanban_path = os.path.expanduser("~/.hermes/kanban.db")
+        if not os.path.exists(kanban_path):
+            # Try alternate path
+            kanban_path = os.path.expanduser("~/.hermes/kanban/kanban.db")
+        if not os.path.exists(kanban_path):
+            self._json_response({"tasks": [], "error": "kanban.db not found"})
+            return
+        try:
+            conn = sqlite3.connect(kanban_path)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            # Check table schema first
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            tables = [row[0] for row in cursor.fetchall()]
+            if 'tasks' not in tables:
+                self._json_response({"tasks": [], "error": "no tasks table"})
+                conn.close()
+                return
+            cursor.execute("PRAGMA table_info(tasks)")
+            columns = [row[1] for row in cursor.fetchall()]
+            cursor.execute("SELECT * FROM tasks ORDER BY created_at DESC")
+            rows = cursor.fetchall()
+            tasks = []
+            for row in rows:
+                task = {}
+                for col in columns:
+                    val = row[columns.index(col)]
+                    # Convert datetime strings for JSON
+                    if val and col in ('created_at', 'updated_at'):
+                        task[col] = str(val)
+                    else:
+                        task[col] = val
+                tasks.append(task)
+            conn.close()
+            self._json_response({"tasks": tasks, "total": len(tasks)})
+        except Exception as e:
+            self._json_response({"tasks": [], "error": str(e)})
 
     def _json_response(self, data, code=200):
         self.send_response(code)
