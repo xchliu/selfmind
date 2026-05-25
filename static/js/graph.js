@@ -892,8 +892,8 @@ function switchView(view) {
 
   // 切换刷新按钮文字
   const refreshBtn = document.getElementById('btnRefresh');
-  refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新Wiki' : '刷新记忆'}`;
-  refreshBtn.style.display = (view === 'insight' || view === 'settings' || view === 'wiki') ? 'none' : '';
+  refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新Wiki' : view === 'insight' ? '刷新洞察' : '刷新记忆'}`;
+  refreshBtn.style.display = (view === 'settings') ? 'none' : '';
 
   // 切换时间刻度线可见性（仅记忆视图显示）
   const timelineRuler = document.getElementById('timelineRuler');
@@ -908,6 +908,8 @@ function switchView(view) {
 
   if (view === 'insight') {
     loadHealthData();
+    _loadOverallDecayCurve();
+    _loadCategoryDecayCurves();
     return;
   }
 

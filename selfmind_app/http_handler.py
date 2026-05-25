@@ -221,6 +221,12 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
                 self._json_response({"error": "Store not available"}, code=503)
         elif clean_path == "/api/kanban/tasks":
             self._handle_kanban_tasks()
+        elif clean_path == "/api/blackboard":
+            self._handle_blackboard()
+        elif clean_path == "/api/wiki/index":
+            self._handle_wiki_index()
+        elif clean_path == "/api/proxy/agents":
+            self._handle_proxy_agents()
         elif clean_path == "/api/recall/stats":
             scanner = _get_recall_scanner()
             if scanner:
@@ -615,13 +621,22 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
     def _handle_kanban_tasks(self):
         """Read kanban tasks from Hermes kanban.db."""
         import sqlite3
-        kanban_path = os.path.expanduser("~/.hermes/kanban.db")
-        if not os.path.exists(kanban_path):
-            # Try alternate path
+        # Priority: env var > ~/.hermes/kanban.db > ~/.hermes/kanban/kanban.db
+        kanban_path = os.environ.get("HERMES_KANBAN_DB", "")
+        if kanban_path and os.path.exists(kanban_path):
+            pass  # use the env var path
+        elif os.path.exists(os.path.expanduser("~/.hermes/kanban.db")):
+            kanban_path = os.path.expanduser("~/.hermes/kanban.db")
+        elif os.path.exists(os.path.expanduser("~/.hermes/kanban/kanban.db")):
             kanban_path = os.path.expanduser("~/.hermes/kanban/kanban.db")
-        if not os.path.exists(kanban_path):
-            self._json_response({"tasks": [], "error": "kanban.db not found"})
-            return
+        else:
+            # Fallback: try absolute known path
+            fallback = "/Users/liuxiaocheng/.hermes/kanban.db"
+            if os.path.exists(fallback):
+                kanban_path = fallback
+            else:
+                self._json_response({"tasks": [], "error": "kanban.db not found"})
+                return
         try:
             conn = sqlite3.connect(kanban_path)
             conn.row_factory = sqlite3.Row
@@ -652,6 +667,177 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._json_response({"tasks": tasks, "total": len(tasks)})
         except Exception as e:
             self._json_response({"tasks": [], "error": str(e)})
+
+    def _handle_blackboard(self):
+        """Read blackboard notification files and return parsed notice list."""
+        import re
+        wiki_base = Path(os.environ.get(
+            "SELFMIND_WIKI_PATH",
+            "/Users/liuxiaocheng/Documents/aiworkspace/wiki"
+        ))
+
+        # Define blackboard files: owner -> file path
+        board_files = [
+            ("小亚", wiki_base / "blackboard" / "for-aris.md"),
+            ("小亚", wiki_base / "nous" / "for-aris.md"),
+            ("柏拉图", wiki_base / "nous" / "for-plato.md"),
+        ]
+
+        boards = {}
+        for owner, fpath in board_files:
+            if not fpath.exists():
+                continue
+            try:
+                content = fpath.read_text(encoding="utf-8")
+            except Exception:
+                continue
+
+            # Strip YAML frontmatter if present
+            body = content
+            fm_match = re.match(r"^---\s*$.*?^---\s*$(.*)", content, re.DOTALL | re.MULTILINE)
+            if fm_match:
+                body = fm_match.group(1).strip()
+
+            # Parse sections: each ## heading is a notification
+            notices = []
+            sections = re.split(r"^##\s+", body, flags=re.MULTILINE)
+            for sec in sections:
+                sec = sec.strip()
+                if not sec:
+                    continue
+                lines = sec.split("\n")
+                header = lines[0].strip()
+                body_text = "\n".join(l[2:] if l.startswith("> ") else l for l in lines[1:] if l.strip()).strip()
+
+                # Extract date and optional emoji tag
+                date_match = re.match(
+                    r"(\d{4}-\d{2}-\d{2})\s+(.*)", header
+                )
+                if date_match:
+                    date = date_match.group(1)
+                    title = date_match.group(2).strip()
+                else:
+                    date = None
+                    title = header
+
+                notices.append({
+                    "date": date,
+                    "title": title,
+                    "content": body_text,
+                    "source": fpath.name,
+                })
+
+            boards.setdefault(owner, []).extend(notices)
+
+        self._json_response({"boards": boards, "total_notices": sum(len(v) for v in boards.values())})
+
+    def _handle_wiki_index(self):
+        """Read wiki/index.md and return document category tree."""
+        import re
+        wiki_base = Path(os.environ.get(
+            "SELFMIND_WIKI_PATH",
+            "/Users/liuxiaocheng/Documents/aiworkspace/wiki"
+        ))
+        index_path = wiki_base / "index.md"
+
+        if not index_path.exists():
+            self._json_response({"categories": [], "total_pages": 0})
+            return
+
+        content = index_path.read_text(encoding="utf-8")
+        lines = content.split("\n")
+
+        categories = []
+        current_category = None
+        current_docs = []
+
+        # Parse header metadata
+        header = {}
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("> Last updated:"):
+                date_part = stripped.replace("> Last updated:", "").strip()
+                header["last_updated"] = date_part.split("|")[0].strip()
+            if "Total pages:" in stripped:
+                m = re.search(r"Total pages:\s*(\d+)", stripped)
+                if m:
+                    header["total_pages"] = int(m.group(1))
+
+        for line in lines:
+            stripped = line.strip()
+            # Detect category heading
+            if stripped.startswith("## ") and not stripped.startswith("### "):
+                if current_category and current_docs:
+                    categories.append({
+                        "name": current_category,
+                        "documents": current_docs,
+                        "count": len(current_docs),
+                    })
+                    current_docs = []
+                current_category = stripped[3:].strip()
+            elif stripped.startswith("- [[") and current_category:
+                # Parse: - [[PageName]] - description
+                m = re.match(r"- \[\[(.+?)\]\]\s*-\s*(.*)", stripped)
+                if m:
+                    page_name = m.group(1).strip()
+                    description = m.group(2).strip()
+                else:
+                    m2 = re.match(r"- \[\[(.+?)\]\]\s*(.*)", stripped)
+                    page_name = m2.group(1).strip() if m2 else stripped
+                    description = m2.group(2).strip() if m2 else ""
+                current_docs.append({
+                    "name": page_name,
+                    "description": description,
+                })
+
+        # Flush last category
+        if current_category and current_docs:
+            categories.append({
+                "name": current_category,
+                "documents": current_docs,
+                "count": len(current_docs),
+            })
+
+        total_pages = sum(c["count"] for c in categories)
+        self._json_response({
+            "categories": categories,
+            "total_pages": total_pages,
+            "meta": header,
+        })
+
+    def _handle_proxy_agents(self):
+        """Proxy agent health checks — fetch all Hermes agent health endpoints
+        and return aggregated results. Solves CORS issues when dashboard is
+        served from a different origin than the agents."""
+        import subprocess
+        import json
+        agents = [
+            {"id": "socrates", "name": "苏格拉底", "port": 8642},
+            {"id": "aris",     "name": "小亚",     "port": 8643},
+            {"id": "plato",    "name": "柏拉图",   "port": 8645},
+            {"id": "grace",    "name": "Grace",    "port": 8644},
+            {"id": "gateway",  "name": "Gateway",  "port": 8000},
+        ]
+        results = {}
+        for a in agents:
+            try:
+                url = f"http://localhost:{a['port']}/health"
+                # Use curl with --noproxy to bypass system proxy for localhost
+                proc = subprocess.run(
+                    ["curl", "-s", "--max-time", "3", "--noproxy", "*", url],
+                    capture_output=True, text=True, timeout=5
+                )
+                if proc.returncode == 0 and proc.stdout:
+                    data = json.loads(proc.stdout)
+                    if data.get("status") == "ok":
+                        results[a["id"]] = data
+                    else:
+                        results[a["id"]] = None
+                else:
+                    results[a["id"]] = None
+            except Exception:
+                results[a["id"]] = None
+        self._json_response(results)
 
     def _json_response(self, data, code=200):
         self.send_response(code)

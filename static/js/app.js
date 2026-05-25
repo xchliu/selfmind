@@ -580,6 +580,12 @@ function showToast(msg, type = 'info') {
 // 刷新 — 调用后端 API
 async function handleRefresh() {
   if (currentView === 'wiki') return handleWikiRefresh();
+  if (currentView === 'insight') {
+    loadHealthData();
+    _loadOverallDecayCurve();
+    _loadCategoryDecayCurves();
+    return;
+  }
   const btn = document.getElementById('btnRefresh');
   btn.classList.add('loading');
   try {
