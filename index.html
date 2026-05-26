@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/static/css/sediment.css?v=15">
   <link rel="stylesheet" href="/static/css/wiki.css?v=15">
 <link rel="stylesheet" href="/static/css/dna.css?v=15">
+<link rel="stylesheet" href="/static/css/roundtable.css?v=15">
 </head>
 <body>
 
@@ -41,6 +42,9 @@
       
       <button class="view-tab" id="tabSettings" onclick="switchToSettings()">
         <span class="tab-icon">⚙️</span>设置
+      </button>
+      <button class="view-tab" id="tabRoundTable" onclick="switchToRoundTable()">
+        <span class="tab-icon">🪑</span>圆桌
       </button>
     </div>
   </div>
@@ -300,6 +304,61 @@
 
 
 
+<!-- 圆桌议事 Dashboard -->
+<div id="roundtableDashboard" style="display:none;">
+  <div class="rt-header">
+    <h2>🪑 <span>圆桌议事</span> <span class="rt-last-update" id="rtLastUpdate"></span></h2>
+    <div class="rt-toolbar">
+      <span style="font-size:11px;color:#999;">信号 <strong id="rtSignalCount" style="color:#555;">0</strong></span>
+      <button class="rt-btn" onclick="loadRoundTableData()" id="rtRefreshBtn">🔄 刷新</button>
+    </div>
+  </div>
+
+  <div class="rt-main">
+    <!-- 左侧：圆桌 + 信号 -->
+    <div class="rt-roundtable-section">
+      <div class="rt-table-area">
+        <div class="rt-table-title">🤝 团队圆桌 · 实时状态</div>
+        <div class="rt-table-svg-wrap" id="rtTableSvg"></div>
+      </div>
+      <div class="rt-signal-bubbles" id="rtSignals">
+        <div class="rt-signals-empty">
+          <div class="rt-signals-empty-icon">📡</div>
+          <div>加载信号中...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：看板墙 -->
+    <div class="rt-board-section">
+      <div class="rt-board-header">
+        <h3>📋 看板墙</h3>
+        <span style="font-size:11px;color:#999;">总计 <strong id="rtBoardTotal">0</strong> · 进行中 <strong id="rtBoardRunning">0</strong></span>
+      </div>
+      <div class="rt-board-columns" id="rtBoardColumns">
+        <div class="rt-col">
+          <div class="rt-col-header"><span class="rt-col-title">加载中...</span></div>
+        </div>
+      </div>
+      <div class="rt-board-footer">
+        <span>🏷️ <strong id="rtBoardTotal">0</strong> 总任务</span>
+        <span>🔄 <strong id="rtBoardRunning">0</strong> 进行中</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 信号详情弹窗 -->
+  <div class="rt-signal-modal-overlay" id="rtModalOverlay" onclick="closeSignalModal()"></div>
+  <div class="rt-signal-modal" id="rtModal">
+    <div class="rt-signal-modal-header">
+      <h3 id="rtModalTitle">通知详情</h3>
+      <button class="rt-signal-modal-close" onclick="closeSignalModal()">×</button>
+    </div>
+    <div class="rt-signal-modal-body" id="rtModalBody"></div>
+    <div class="rt-signal-modal-source" id="rtModalSource" style="padding:8px 20px 12px;"></div>
+  </div>
+</div>
+
 <!-- 设置面板 -->
 <div id="settingsDashboard" style="display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
   <div class="settings-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
@@ -397,6 +456,7 @@
 <script src="/static/js/sediment.js?v=15"></script>
 <script src="/static/js/wiki.js?v=15"></script>
 <script src="/static/js/dna.js?v=15"></script>
+<script src="/static/js/roundtable.js?v=15"></script>
 
 
 
