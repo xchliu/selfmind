@@ -945,3 +945,79 @@ class MutationsMixin:
             json.dump(existing, f, indent=2, ensure_ascii=False)
 
         self._json_response({"status": "ok", "imported": len(nodes), "message": f"Imported {len(nodes)} nodes"})
+
+    # ──────────────── Manual intervention handlers ────────────────
+
+    def _handle_manual_add(self):
+        """POST /api/manual/memories — Manually add a memory entry."""
+        _store = _get_store()
+        if not _store:
+            self._json_response({"error": "Store not available"}, code=503)
+            return
+        try:
+            body = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+        content = body.get("content", "").strip()
+        if not content:
+            self._json_response({"error": "content required"}, code=400)
+            return
+        result = _store.manual_add_entry(
+            content=content,
+            label=body.get("label", ""),
+            primary_cat=body.get("primary_cat"),
+            secondary_cat=body.get("secondary_cat"),
+            tags=body.get("tags"),
+            importance=body.get("importance", 0.5),
+            operator=body.get("operator", "human"),
+        )
+        if "error" in result:
+            self._json_response(result, code=400)
+        else:
+            self._json_response({"status": "ok", "entry": result["entry"]})
+
+    def _handle_manual_update(self, entry_id: str):
+        """PUT /api/manual/memories/:id — Manually update a memory entry's content."""
+        _store = _get_store()
+        if not _store:
+            self._json_response({"error": "Store not available"}, code=503)
+            return
+        try:
+            body = self._read_body()
+        except Exception as exc:
+            self._json_response({"error": f"Invalid JSON: {exc}"}, code=400)
+            return
+        new_content = body.get("content", "").strip()
+        if not new_content:
+            self._json_response({"error": "content required"}, code=400)
+            return
+        result = _store.manual_update_content(
+            entry_id=entry_id,
+            new_content=new_content,
+            label=body.get("label"),
+            primary_cat=body.get("primary_cat"),
+            secondary_cat=body.get("secondary_cat"),
+            tags=body.get("tags"),
+            importance=body.get("importance"),
+            operator=body.get("operator", "human"),
+        )
+        if "error" in result:
+            self._json_response(result, code=400)
+        else:
+            self._json_response({"status": "ok", "entry": result["entry"]})
+
+    def _handle_manual_delete(self, entry_id: str):
+        """POST /api/manual/memories/:id/delete — Manually soft-delete a memory entry."""
+        _store = _get_store()
+        if not _store:
+            self._json_response({"error": "Store not available"}, code=503)
+            return
+        result = _store.manual_delete_entry(
+            entry_id=entry_id,
+            operator="human",
+        )
+        if "error" in result:
+            self._json_response(result, code=400)
+        else:
+            self._json_response({"status": "ok", "entry_id": entry_id, "status": result["status"]})

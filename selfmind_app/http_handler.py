@@ -549,6 +549,16 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._switch_agent(agent_id)
             return
 
+        # ── Manual intervention CRUD ───────────────────────────
+        if clean_path == "/api/manual/memories":
+            self._handle_manual_add()
+            return
+
+        if clean_path.startswith("/api/manual/memories/") and clean_path.endswith("/delete"):
+            entry_id = clean_path.split("/api/manual/memories/")[1].replace("/delete", "")
+            self._handle_manual_delete(entry_id)
+            return
+
         self._json_response({"error": "Not found"}, code=404)
 
     def do_PUT(self):
@@ -569,9 +579,9 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._set_default_agent(agent_id)
             return
 
-        if clean_path.startswith("/api/agents/") and clean_path.endswith("/switch"):
-            agent_id = clean_path.split("/api/agents/")[1].replace("/switch", "")
-            self._switch_agent(agent_id)
+        if clean_path.startswith("/api/manual/memories/"):
+            entry_id = clean_path.split("/api/manual/memories/")[1]
+            self._handle_manual_update(entry_id)
             return
 
         self._json_response({"error": "Not found"}, code=404)

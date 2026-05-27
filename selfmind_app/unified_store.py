@@ -554,6 +554,221 @@ class UnifiedStore:
         self.conn.commit()
         return True
 
+    # ──────────────── Manual intervention CRUD ────────────────
+
+    def manual_add_entry(self, content: str, *, label: str = "", primary_cat: str = None,
+                         secondary_cat: str = None, tags: list = None,
+                         source: str = "manual", importance: float = 0.5,
+                         operator: str = "human") -> dict:
+        """Manually add a memory entry. Returns the created entry dict.
+
+        - Content is required (min 5 chars).
+        - Source is set to 'manual' so it's traceable.
+        - All mutations write to operations_log with auto_or_manual='manual'.
+        """
+        content = content.strip()
+        if len(content) < 5:
+            return {"error": "Content too short (min 5 chars)"}
+
+        # Reuse upsert_entry for core logic, but force manual source + trigger
+        entry_id = self.upsert_entry(
+            content=content,
+            type="memory",
+            source=source or "manual",
+            label=label or content[:20],
+            primary_cat=primary_cat,
+            secondary_cat=secondary_cat,
+            tags=json.dumps(tags) if tags else "[]",
+            importance=importance,
+            _trigger="manual",
+        )
+        if not entry_id:
+            return {"error": "Failed to create entry"}
+
+        # Overwrite the ops_log entry to mark as manual
+        entry = self.get_entry(entry_id)
+        if entry:
+            self._log_op(
+                "manual_add", [entry_id],
+                None,
+                {"type": "memory", "source": "manual", "content_preview": content[:80]},
+                reason=f"manual_add_by_{operator}",
+                auto_or_manual="manual"
+            )
+            self.conn.commit()
+
+        return {"id": entry_id, "entry": entry}
+
+    def manual_update_content(self, entry_id: str, new_content: str,
+                               *, label: str = None, primary_cat: str = None,
+                               secondary_cat: str = None, tags: list = None,
+                               importance: float = None,
+                               operator: str = "human") -> dict:
+        """Manually update the content of an existing entry.
+
+        - Records old content in entry_history with trigger='manual'.
+        - Creates a new version.
+        - Writes audit log with auto_or_manual='manual'.
+        """
+        existing = self.get_entry(entry_id)
+        if not existing:
+            return {"error": "Entry not found"}
+
+        new_content = new_content.strip()
+        if len(new_content) < 5:
+            return {"error": "Content too short (min 5 chars)"}
+
+        new_hash = self._hash(new_content)
+        if new_hash == existing["content_hash"]:
+            return {"error": "Content unchanged"}
+
+        # Record old version in history
+        self._record_history(existing, trigger="manual")
+
+        # Build update fields
+        now = self._now()
+        old_version = existing["version"]
+        new_version = old_version + 1
+        preview = new_content[:120].replace("\n", " ")
+
+        update_fields = {
+            "content": new_content,
+            "content_hash": new_hash,
+            "content_preview": preview,
+            "version": new_version,
+            "updated_at": now,
+        }
+        if label is not None:
+            update_fields["label"] = label
+        if primary_cat is not None:
+            update_fields["primary_cat"] = primary_cat
+        if secondary_cat is not None:
+            update_fields["secondary_cat"] = secondary_cat
+        if tags is not None:
+            update_fields["tags"] = json.dumps(tags)
+        if importance is not None:
+            update_fields["importance"] = importance
+
+        sets = ", ".join(f"{k}=?" for k in update_fields)
+        vals = list(update_fields.values()) + [entry_id]
+        self.conn.execute(f"UPDATE entries SET {sets} WHERE id=?", vals)
+
+        self._log_op(
+            "manual_update", [entry_id],
+            {
+                "version": old_version,
+                "content_preview": existing["content_preview"],
+            },
+            {
+                "version": new_version,
+                "content_preview": preview,
+            },
+            reason=f"manual_update_by_{operator}",
+            auto_or_manual="manual"
+        )
+        self.conn.commit()
+
+        updated_entry = self.get_entry(entry_id)
+        return {"id": entry_id, "entry": updated_entry, "old_version": old_version, "new_version": new_version}
+
+    def manual_delete_entry(self, entry_id: str, operator: str = "human") -> dict:
+        """Manually delete (soft-delete) an entry.
+
+        - Sets status to 'inactive' (never hard-deletes).
+        - Records in entry_history before inactivating.
+        - Writes audit log.
+        """
+        existing = self.get_entry(entry_id)
+        if not existing:
+            return {"error": "Entry not found"}
+
+        if existing["status"] != "active":
+            return {"error": "Entry is already inactive"}
+
+        now = self._now()
+
+        # Record in history before inactivating
+        self.conn.execute(
+            "INSERT INTO entry_history (entry_id, version, content_hash, content, content_preview, "
+            "primary_cat, secondary_cat, label, tags, timestamp, trigger) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            (
+                entry_id, existing["version"],
+                existing["content_hash"], existing["content"],
+                existing["content_preview"],
+                existing["primary_cat"], existing["secondary_cat"],
+                existing["label"], existing["tags"],
+                now, "manual_delete",
+            )
+        )
+
+        # Soft delete
+        self.conn.execute(
+            "UPDATE entries SET status='inactive', updated_at=? WHERE id=?",
+            (now, entry_id)
+        )
+
+        self._log_op(
+            "manual_delete", [entry_id],
+            {"status": "active", "content_preview": existing["content_preview"]},
+            {"status": "inactive"},
+            reason=f"manual_delete_by_{operator}",
+            auto_or_manual="manual"
+        )
+        self.conn.commit()
+
+        return {"id": entry_id, "status": "inactivated"}
+
+    def modify_entry_content(self, entry_id, new_content, trigger="manual"):
+        """Update entry content with version tracking. Records old version in history.
+        Returns updated entry dict or None if not found."""
+        existing = self.conn.execute(
+            "SELECT * FROM entries WHERE id=?",
+            (entry_id,)
+        ).fetchone()
+        if not existing:
+            return None
+        existing_dict = dict(existing)
+        new_content = new_content.strip()
+        new_hash = self._hash(new_content)
+        if existing_dict["content_hash"] == new_hash:
+            return existing_dict  # Content unchanged
+        # Record old version in history
+        self._record_history(existing_dict, trigger=trigger)
+        new_version = existing_dict["version"] + 1
+        new_preview = new_content[:120].replace("\n", " ")
+        now = self._now()
+        self.conn.execute(
+            """UPDATE entries SET
+                content=?, content_hash=?, content_preview=?,
+                version=?, updated_at=?, last_synced_at=?
+            WHERE id=?""",
+            (new_content, new_hash, new_preview,
+             new_version, now, now, entry_id)
+        )
+        self._log_op("version_change", [entry_id],
+                     {"version": existing_dict["version"]},
+                     {"version": new_version, "trigger": trigger},
+                     auto_or_manual="manual")
+        self.conn.commit()
+        return dict(self.conn.execute("SELECT * FROM entries WHERE id=?", (entry_id,)).fetchone())
+
+    def delete_entry(self, entry_id):
+        """Mark an entry as inactive (soft delete). Returns True if found."""
+        existing = self.conn.execute("SELECT id FROM entries WHERE id=?", (entry_id,)).fetchone()
+        if not existing:
+            return False
+        now = self._now()
+        self.conn.execute(
+            "UPDATE entries SET status='inactive', updated_at=? WHERE id=?",
+            (now, entry_id)
+        )
+        self._log_op("inactivate", [entry_id],
+                     {"status": "active"}, {"status": "inactive"},
+                     reason="manual_intervention", auto_or_manual="manual")
+        self.conn.commit()
+        return True
+
     def pin_entry(self, entry_id):
         self.conn.execute("UPDATE entries SET pinned=1 WHERE id=?", (entry_id,))
         self.conn.commit()
