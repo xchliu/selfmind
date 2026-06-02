@@ -11,6 +11,11 @@ from selfmind_app.analyzer import AnalyzerEngine
 
 logger = logging.getLogger(__name__)
 
+def _get_store():
+    """Get UnifiedStore from handler class attribute (set by server.py)."""
+    from selfmind_app.http_handler import SelfMindHandler
+    return getattr(SelfMindHandler, '_store', None)
+
 
 class EnginesMixin:
     """Handler methods for engine operations: consolidation, forgetting, analysis."""
@@ -179,4 +184,15 @@ class EnginesMixin:
         """完整分析"""
         a = self._get_analyzer()
         result = a.run_full_analysis()
+        self._json_response(result)
+
+    def _handle_should_know_gaps(self):
+        """认知差距检测 — 信号B推理+差距匹配（每天≤3条）"""
+        from selfmind_app.should_know import ShouldKnowEngine
+        store = _get_store()
+        if not store:
+            self._json_response({"error": "Store not available"}, code=503)
+            return
+        engine = ShouldKnowEngine(store)
+        result = engine.analyze_gaps()
         self._json_response(result)

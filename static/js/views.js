@@ -1770,7 +1770,7 @@ function startPolling() {
   setInterval(updatePollTime, 1000);
 }
 
-// ========== 记忆洞察模块（合并：生命周期+管理+DNA） ==========
+// ========== 记忆洞察模块（合并：生命周期+管理+DNA+认知差距） ==========
 let currentInsightTab = 'lifecycle';
 
 function insightSwitchTab(tab, btnEl) {
@@ -1781,7 +1781,8 @@ function insightSwitchTab(tab, btnEl) {
   // 切换section显隐
   const tabMap = {
     'lifecycle': 'insightSectionLifecycle',
-    'manage': 'insightSectionManage'
+    'manage': 'insightSectionManage',
+    'gap': 'insightSectionGap'
   };
   document.querySelectorAll('.insight-section').forEach(s => s.classList.remove('active'));
   const targetId = tabMap[tab];
@@ -1797,6 +1798,9 @@ function insightSwitchTab(tab, btnEl) {
     loadMemoryStats();
     renderSyncArea();
     loadHealthSnapshots();
+  }
+  if (tab === 'gap') {
+    loadShouldKnowData();
   }
 }
 
@@ -2225,5 +2229,80 @@ function toggleInsightSection(h3El) {
     section.classList.add('collapsed-section');
     if (toggle) toggle.textContent = '▶';
   }
+}
+
+// ========== 认知差距模块 ==========
+
+async function loadShouldKnowData() {
+  const container = document.getElementById('shouldKnowContent');
+  if (!container) return;
+  container.innerHTML = '<div class="gap-loading">分析认知差距...</div>';
+  try {
+    const res = await fetch('/api/analyze/should-know-gaps');
+    const data = await res.json();
+    renderShouldKnowContent(data);
+  } catch (e) {
+    container.innerHTML = '<div class="gap-error">加载失败: ' + e.message + '</div>';
+    console.error('Should-know load error', e);
+  }
+}
+
+function renderShouldKnowContent(data) {
+  const container = document.getElementById('shouldKnowContent');
+  if (!container) return;
+
+  const totalTopics = data.total_topics || 0;
+  const known = data.green_count || 0;
+  const blind = data.red_count || 0;
+  const gapItems = data.gaps || [];
+  const alerts = data.top3 || [];
+
+  // 汇总卡片
+  const summaryHtml = `
+    <div class="gap-summary">
+      <div class="gap-card gap-card-total">
+        <div class="gap-card-icon">📚</div>
+        <div class="gap-card-value">${totalTopics}</div>
+        <div class="gap-card-label">认知主题</div>
+      </div>
+      <div class="gap-card gap-card-known">
+        <div class="gap-card-icon">🟢</div>
+        <div class="gap-card-value">${known}</div>
+        <div class="gap-card-label">已覆盖</div>
+      </div>
+      <div class="gap-card gap-card-blind">
+        <div class="gap-card-icon">🔴</div>
+        <div class="gap-card-value">${blind}</div>
+        <div class="gap-card-label">盲区</div>
+      </div>
+    </div>
+  `;
+
+  // 今日提醒（最多3条）
+  let alertsHtml = '';
+  if (alerts.length > 0) {
+    alertsHtml = '<div class="gap-alerts"><div class="gap-alerts-title">📢 今日认知提醒</div>';
+    alertsHtml += alerts.map(a => `<div class="gap-alert-item"><strong>🔴 [${a.domain}] ${a.label}</strong><br>${a.reason}</div>`).join('');
+    alertsHtml += '</div>';
+  } else {
+    alertsHtml = '<div class="gap-alerts"><div class="gap-alerts-title">✅ 今日无认知盲区</div></div>';
+  }
+
+  // 主题列表
+  const rowsHtml = gapItems.map(r => {
+    const labelText = r.status === 'green' ? '已覆盖' : r.status === 'yellow' ? '需刷新' : '盲区';
+    const dotClass = 'gap-dot-' + (r.status || 'green');
+    const detailText = r.detail || '';
+    return `
+      <div class="gap-row">
+        <span class="gap-dot ${dotClass}"></span>
+        <span class="gap-topic">${r.label}</span>
+        <span class="gap-label-tag ${dotClass}">${labelText}</span>
+        ${detailText ? `<span class="gap-detail">${detailText}</span>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = summaryHtml + alertsHtml + '<div class="gap-list">' + rowsHtml + '</div>';
 }
 

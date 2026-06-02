@@ -7,8 +7,9 @@
   <p align="center">
     <img src="images/selfmind-screenshot.png" alt="SelfMind Memory Graph" width="600"/>
   </p>
-  <p align="center">AI Agent 的记忆过程态管理系统 — 可见 · 可追踪 · 可反哺</p>
+  <p align="center">AI Agent 的记忆过程态管理系统 — 可见 · 可追踪 · 可反哺 · 可探测</p>
   <p align="center">记录记忆的产生、版本变化、更新和衰减，让每个 Agent 形成自己的 DNA</p>
+  <p align="center">更主动探测认知盲区——从"我知道什么"到"我应该知道什么"</p>
   <p align="center">
     <img src="images/selfmind-screenshot.png" alt="SelfMind 记忆图谱" width="600"/>
   </p>
@@ -49,6 +50,7 @@ Agent 在持续工作中会积累经验、踩过坑、总结出模式——这�
 | 🐳 **Docker化** | 一键容器化部署，热挂载开发，5分钟自动sync |
 | 🔀 **多Agent切换** | 一键切换不同Agent（苏格拉底、小亚、Grace等），查看各自记忆图谱 |
 | 📡 **Gateway发现** | 输入Gateway地址自动探测Agent信息，验证路径后一键添加 |
+| 🔍 **认知差距** | 主动界定"你应该知道什么"，从OKR/项目/Memory推理信号B，标记绿（覆盖）/黄（过期）/红（盲区），每日≤3条提醒 |
 
 不同 Agent（Hermes、OpenClaw等）使用久了会形成不同的记忆基因组合——SelfMind 记录的就是这个"用出来的过程"。
 
@@ -56,9 +58,13 @@ Agent 在持续工作中会积累经验、踩过坑、总结出模式——这�
 
 ## What is SelfMind?
 
-**SelfMind 把 AI 的记忆变成可视化的、可交互的知识图谱和 Wiki 库。**
+**两个引擎的叠加：向后看 + 向前看**
 
-每条记忆是一个节点，关系是连线，分类是颜色。Wiki 库以卡片展示知识，支持详情弹窗、Markdown 渲染和编辑保存。基于认知心理学的 8 大记忆系统分类，让你看清 AI 大脑的全貌。
+**引擎1 — 记忆可视化（向后看）**
+把 AI 的记忆变成可视化的、可交互的知识图谱和 Wiki 库。每条记忆是一个节点，关系是连线，分类是颜色。Wiki 库以卡片展示知识，支持详情弹窗、Markdown 渲染和编辑保存。基于认知心理学的 8 大记忆系统分类，让你看清 AI 大脑的全貌。
+
+**引擎2 — 认知差距检测（向前看）**
+主动界定"你应该知道什么"——从 OKR、项目、Memory 中推理出认知边界，再对比已有图谱，标记盲区。自动感知认知缺口，每天≤3条提醒，回答"我还缺什么"。
 
 ## Cognitive Memory System
 
@@ -105,13 +111,15 @@ SelfMind 内置 AI 智商评估系统，参考人类 IQ 分布（均值 100，�
 
 ## 核心架构
 
-> **核心理念：可视化 → 管理 → 服务**
+> **核心理念：可视化 → 感知差距 → 管理 → 服务**
 
 ```
-SelfMind v1.0 ──→ v2.0 ──→ v3.0
-   (看到)        (管到)      (用到)
-   toC          toB       to开发者
+SelfMind v1.0 ──→ v1.4 ──→ v2.0 ──→ v3.0
+   (看到)      (感知)     (管到)     (用到)
+   toC         toC       toB      to开发者
 ```
+
+> v1.4 新增认知差距检测：从"我记得什么"到"我应该知道什么"，变被动为主动。
 
 ---
 
@@ -134,11 +142,12 @@ SelfMind v1.0 ──→ v2.0 ──→ v3.0
 - 🧠 **认知记忆体系** — 8 大分类 24 子类，基于认知心理学
 - 🕸️ **力导向图谱** — D3.js 驱动，物理模拟，层级自然聚集
 - 🧬 **IQ 智商系统** — 参考人类标准的 AI 智商评估，6 维度计算
-- 📖 **Wiki 库** — 卡片展示 + 详情弹窗 + Markdown 渲染 + 编辑保存，替代知识图谱
+- 📖 **Wiki 库** — 卡片展示 + 详情弹窗 + Markdown 渲染 + 编辑保存
 - 📊 **记忆健康仪表盘** — 30 条数据、衰减公式修正、启动自动 sync
 - 📉 **记忆沉淀** — U 型 6 层路径 + 激活路径可视化
 - 🔍 **焦点模式** — 时间线播放时自动对焦到新增节点，变化高亮（节点✦标记+绿色脉冲光环，连线荧光绿高亮）
-- 🔄 **实时感知** — 自动检测 MEMORY.md/USER.md 变化并刷新图谱，无需手动操作
+- 🔄 **实时感知** — 自动检测 MEMORY.md/USER.md 变化并刷新图谱
+- 🔍 **认知差距检测** — 主动界定"你应该知道什么"，从现有数据管道推理信号B，匹配图谱输出三色标签，每日≤3条盲区提醒
 - 🔄 **演变追踪** — 核心字段：产生时间 + 版本 + 更新时间 + 记忆强度
 
 ---
@@ -305,6 +314,7 @@ selfmind/
 | `/api/agents/config` | GET | Agent 列表与配置（含 Gateway 状态） |
 | `/api/agents/{id}/switch` | PUT | 切换当前 Agent（re-sync + 重建图谱） |
 | `/api/agents/discover` | GET/POST | Gateway 自动探测 Agent 信息 |
+| `/api/analyze/should-know-gaps` | GET | 认知差距分析：返回信号B推理结果 + 红/黄/绿标匹配 |
 
 ### 配置
 
@@ -351,7 +361,8 @@ Memory Files              Backend                    Browser
 5. **解析 Wiki** — 扫描 Wiki 目录，解析 frontmatter + `[[wikilinks]]`，构建卡片展示
 6. **记忆健康** — 衰减公式计算、30 条健康数据、启动自动 sync
 7. **记忆沉淀** — U 型 6 层路径 + 激活路径可视化
-8. **渲染展示** — D3.js 力导向图，Wiki 库 tab，分类着色，交互式探索
+8. **认知差距检测** — 从 Memory/Wiki/项目中推理"你应该知道什么"，对比图谱输出红/黄/绿标
+9. **渲染展示** — D3.js 力导向图，Wiki 库 tab，分类着色，认知差距面板，交互式探索
 
 ### Backend Structure
 
@@ -372,6 +383,7 @@ selfmind_app/
 ├── analytics.py         # V2 遗忘引擎（衰减分数计算）
 ├── unified_store.py     # 统一数据管道（SQLite 为唯一数据源）
 ├── unified_sync.py      # 统一同步逻辑（启动自动 sync）
+├── should_know.py       # 认知差距检测引擎（信号B推理 + 红/黄/绿标匹配）
 
 server.py                # 服务入口（默认 3002 端口）
 ```

@@ -584,6 +584,9 @@ async function handleRefresh() {
     loadHealthData();
     _loadOverallDecayCurve();
     _loadCategoryDecayCurves();
+    if (typeof currentInsightTab !== 'undefined' && currentInsightTab === 'gap') {
+      loadShouldKnowData();
+    }
     return;
   }
   const btn = document.getElementById('btnRefresh');

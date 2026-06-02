@@ -307,6 +307,8 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._handle_analyze_completeness()
         elif clean_path == "/api/analyze/full":
             self._handle_analyze_full()
+        elif clean_path == "/api/analyze/should-know-gaps":
+            self._handle_should_know_gaps()
         elif clean_path == "/api/agents":
             self._json_response(self._get_agents())
         elif clean_path.startswith("/api/agents/discover"):
