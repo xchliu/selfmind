@@ -22,11 +22,12 @@ logger = logging.getLogger(__name__)
 # 不依赖外部采集器。keywords用于在entries表中做内容匹配。
 
 SHOULD_KNOW_TOPICS = [
-    # ── 战略/项目类 ──
+    # ── 战略/项目类 (B类：需坦哥决策) ──
     {
         "id": "finna-platform",
         "label": "Finna全行级平台",
         "domain": "project",
+        "gap_type": "B",
         "priority": 5,
         "keywords": ["Finna", "全行级", "智能体平台", "AIA"],
         "reason": "年度核心战略，全行级Agent平台5000+ agent目标"
@@ -35,6 +36,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "meet-miaojie",
         "label": "Meet妙记C端",
         "domain": "project",
+        "gap_type": "B",
         "priority": 5,
         "keywords": ["Meet", "妙记", "妙计", "C端", "陈兴隆"],
         "reason": "2026聚焦方向之一，用户量+有效会议>1w"
@@ -43,6 +45,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "enterprise-graph",
         "label": "企业图谱B端",
         "domain": "project",
+        "gap_type": "B",
         "priority": 5,
         "keywords": ["企业图谱", "陪练签约", "B端", "尹晨轩"],
         "reason": "2026聚焦方向之一，陪练签约+图谱用户商机"
@@ -51,6 +54,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "selfmind",
         "label": "SelfMind智能体记忆系统",
         "domain": "project",
+        "gap_type": "A",
         "priority": 5,
         "keywords": ["SelfMind", "记忆", "智能体记忆", "衰减", "元记忆"],
         "reason": "核心产品，理论+研发+推广持续迭代"
@@ -59,6 +63,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "ai-five-year-plan",
         "label": "AI五年发展规划",
         "domain": "project",
+        "gap_type": "B",
         "priority": 4,
         "keywords": ["五年规划", "AI规划", "三位一体"],
         "reason": "员工筑底+中枢强基+场景增效，需跟进执行"
@@ -67,6 +72,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "marketization-kpi",
         "label": "2026市场化KPI",
         "domain": "project",
+        "gap_type": "B",
         "priority": 4,
         "keywords": ["市场化", "KPI", "900万", "PCBL"],
         "reason": "900万目标，PCBL四腿战略推进"
@@ -75,6 +81,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "agi-pathfinder",
         "label": "AGI探路者党建品牌",
         "domain": "project",
+        "gap_type": "B",
         "priority": 3,
         "keywords": ["AGI探路者", "党建", "党支部"],
         "reason": "AI特色党支部品牌，方案规划阶段"
@@ -83,16 +90,18 @@ SHOULD_KNOW_TOPICS = [
         "id": "ai-rank-assessment",
         "label": "AI职级考核体系",
         "domain": "project",
+        "gap_type": "B",
         "priority": 4,
         "keywords": ["职级", "考核", "AI能力", "L0", "L1", "L2"],
         "reason": "全员AI能力基本门槛，需落地推进"
     },
 
-    # ── 团队管理类 ──
+    # ── 团队管理类 (B类：需坦哥决策) ──
     {
         "id": "team-org",
         "label": "AI部门组织架构和团队分工",
         "domain": "management",
+        "gap_type": "B",
         "priority": 4,
         "keywords": ["组织架构", "团队", "部门", "实验室", "平台", "产品", "场景"],
         "reason": "5团队×4重点工作，营收结构+能力流传导"
@@ -101,6 +110,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "management-june",
         "label": "6月管理关注事项",
         "domain": "management",
+        "gap_type": "B",
         "priority": 5,
         "keywords": ["6月管理", "非首钢办公", "反洗钱", "招聘", "问题员工"],
         "reason": "6条关键管理事项，需每周追踪进度"
@@ -109,6 +119,7 @@ SHOULD_KNOW_TOPICS = [
         "id": "anti-money-laundering",
         "label": "反洗钱项目",
         "domain": "management",
+        "gap_type": "B",
         "priority": 4,
         "keywords": ["反洗钱", "王庚午", "尹辰轩"],
         "reason": "管理关注事项之一，需跟进王庚午/尹辰轩"
@@ -117,16 +128,18 @@ SHOULD_KNOW_TOPICS = [
         "id": "recruitment",
         "label": "人员招聘和问题员工",
         "domain": "management",
+        "gap_type": "B",
         "priority": 3,
         "keywords": ["招聘", "问题员工", "人员"],
         "reason": "团队建设持续性事项"
     },
 
-    # ── 认知/身份类 ──
+    # ── 认知/身份类 (C类：需坦哥本人写) ──
     {
         "id": "identity-db-ai",
         "label": "数据库人带AI部门 — 身份认同重建",
         "domain": "identity",
+        "gap_type": "C",
         "priority": 4,
         "keywords": ["身份认同", "identity lag", "数据库人", "DB+AI"],
         "reason": "核心矛盾：自认数据库人但实际是AI负责人，需要成果叙事"
@@ -135,16 +148,18 @@ SHOULD_KNOW_TOPICS = [
         "id": "career-review",
         "label": "职业生涯复盘和自我叙事",
         "domain": "identity",
+        "gap_type": "C",
         "priority": 4,
         "keywords": ["职业复盘", "tange-career-review", "自我叙事", "成果叙事"],
         "reason": "从「我要做什么」转向「我做了什么」"
     },
 
-    # ── 行业/认知类 ──
+    # ── 行业/认知类 (A类：可自主调研补充) ──
     {
         "id": "ai-agent-trends",
         "label": "AI Agent行业动态",
         "domain": "knowledge",
+        "gap_type": "A",
         "priority": 4,
         "keywords": ["AI Agent", "智能体", "Agent形态", "多智能体"],
         "reason": "作为AI部门负责人，需持续跟踪Agent技术发展方向"
@@ -153,16 +168,18 @@ SHOULD_KNOW_TOPICS = [
         "id": "ai-employee-management",
         "label": "AI员工管理研究",
         "domain": "knowledge",
+        "gap_type": "A",
         "priority": 3,
         "keywords": ["AI员工", "企业AI管理", "靠谱", "信任", "授权飞轮"],
         "reason": "坦哥计划系统研究的方向，可能产出框架性文章"
     },
 
-    # ── Nous团队 ──
+    # ── Nous团队 (B类：需坦哥决策) ──
     {
         "id": "nous-team-status",
         "label": "Nous团队协作状态",
         "domain": "nous",
+        "gap_type": "B",
         "priority": 4,
         "keywords": ["Nous", "小亚", "柏拉图", "苏格拉底", "多智能体协作"],
         "reason": "三成员协作链运转情况，需常态化关注"
@@ -172,6 +189,19 @@ SHOULD_KNOW_TOPICS = [
 # 阈值定义
 DECAY_THRESHOLD_YELLOW = 0.30  # 衰减分数低于此值 → 黄标（需刷新）
 RECALL_STALE_DAYS = 30         # 超过此天数未被回忆 → 黄标
+
+# 缺口分类体系
+GAP_TYPE_LABELS = {
+    "A": "🟢 可自主补充 — 外部信息类",
+    "B": "🟡 需坦哥决策 — 内部决策类",
+    "C": "🔴 需坦哥本人 — 个人反思类",
+}
+
+GAP_TYPE_ACTIONS = {
+    "A": "自动派小亚调研 → 我审核 → 入库转绿",
+    "B": "我整理问题 → 问坦哥 → 坦哥回答 → 入库转绿",
+    "C": "仅提醒不代劳 → 等坦哥自愿补充",
+}
 
 
 class ShouldKnowEngine:
@@ -239,6 +269,9 @@ class ShouldKnowEngine:
                 "domain": topic["domain"],
                 "priority": topic["priority"],
                 "reason": topic["reason"],
+                "gap_type": topic.get("gap_type", "B"),
+                "gap_type_label": GAP_TYPE_LABELS.get(topic.get("gap_type", "B"), ""),
+                "gap_type_action": GAP_TYPE_ACTIONS.get(topic.get("gap_type", "B"), ""),
             }
 
             if not matches:
