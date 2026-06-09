@@ -116,6 +116,227 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(SELFMIND_DIR), **kwargs)
 
+    def _build_social_graph(self):
+        """Build social graph from wiki entity files."""
+        import yaml
+        entities_dir = Path.home() / "aiworkspace" / "aiknowledge" / "entities"
+        nodes = []
+        edges = []
+        node_map = {}
+
+        # 核心节点：坦哥
+        core = {
+            "id": "tange",
+            "name": "刘小成",
+            "type": "person",
+            "role": "core",
+            "team": "core",
+            "department": "AI部 - 负责人",
+            "social_rank": "core",
+            "interaction_count": 999,
+            "title": "AI部门负责人"
+        }
+        nodes.append(core)
+        node_map["tange"] = core
+
+        # AI Agent 节点
+        agents = [
+            {"id": "socrates", "name": "苏格拉底", "type": "agent", "role": "ai_assistant", "team": "ai", "department": "AI助手", "social_rank": "self"},
+            {"id": "aris", "name": "小亚", "type": "agent", "role": "ai_assistant", "team": "ai", "department": "AI助手", "social_rank": "peer"},
+            {"id": "plato", "name": "柏拉图", "type": "agent", "role": "ai_assistant", "team": "ai", "department": "AI助手", "social_rank": "peer"},
+        ]
+        for a in agents:
+            a["interaction_count"] = 999 if a["id"] == "socrates" else 50
+            nodes.append(a)
+            node_map[a["id"]] = a
+
+        # AI→坦哥边
+        for a in agents:
+            edges.append({"source": a["id"], "target": "tange", "type": "ai_assistant", "weight": 5})
+
+        # AI→AI边
+        edges.append({"source": "socrates", "target": "aris", "type": "collaboration", "weight": 3})
+        edges.append({"source": "socrates", "target": "plato", "type": "collaboration", "weight": 2})
+
+        # 团队分组映射
+        team_map = {
+            "core": { "name": "核心", "color": "#e74c3c" },
+            "ai":   { "name": "AI部门", "color": "#3498db" },
+            "lab":  { "name": "实验室", "color": "#2ecc71" },
+            "platform": { "name": "平台", "color": "#f39c12" },
+            "product":  { "name": "产品", "color": "#9b59b6" },
+            "project":  { "name": "项目", "color": "#1abc9c" },
+            "external": { "name": "外部", "color": "#95a5a6" },
+        }
+
+        # 读取 entity 文件
+        if entities_dir.exists():
+            for fpath in sorted(entities_dir.glob("*.md")):
+                fname = fpath.stem
+                if fname in ("social-mechanism", "social-circle", "_template", "xiaoya", "tange"):
+                    continue
+                try:
+                    raw_content = fpath.read_text(encoding="utf-8")
+                    # 清理前端：去掉可能的编辑器污染（如首行有|遗漏）
+                    content = raw_content.lstrip("|\n\t ")
+                    # 提取 YAML frontmatter
+                    if content.startswith("---"):
+                        parts = content.split("---", 2)
+                        if len(parts) >= 3:
+                            meta = yaml.safe_load(parts[1]) or {}
+                    else:
+                        meta = {}
+                    if not isinstance(meta, dict):
+                        meta = {}
+                except Exception:
+                    meta = {}
+
+                name = meta.get("title", fname).split("(")[0].strip()
+                # 如果名字还是文件ID，尝试从基本信息提取
+                if name == fname or not name:
+                    import re as _re
+                    name_match = _re.search(r'\*\*姓名\*\*[：:]\s*(.+?)(?:\n|$)', content)
+                    if name_match:
+                        name = name_match.group(1).strip()
+                    else:
+                        name = fname
+                social_rank = meta.get("social_rank", "B")
+                wecom_id = meta.get("wecom_id", "")
+                last_interaction = meta.get("last_interaction", "")
+                next_action = meta.get("next_action", "")
+                interaction_count = meta.get("interaction_count", 0) or 0
+
+                # 处理 YAML 类型转换：date → str
+                if isinstance(last_interaction, datetime):
+                    last_interaction = last_interaction.strftime("%Y-%m-%d")
+                elif not isinstance(last_interaction, str):
+                    last_interaction = str(last_interaction) if last_interaction else ""
+                tags = meta.get("tags", [])
+
+                # 推断团队
+                dept_info = ""
+                if "实验室" in content or fname in ("wangyue", "bi-jiankun", "qi-qiang", "wang-xiaochang"):
+                    team = "lab"
+                    dept_info = "实验室"
+                elif "平台" in content or fname in ("zhoujinhui",):
+                    team = "platform"
+                    dept_info = "平台"
+                elif "产品" in content or fname in ("chenxinglong",):
+                    team = "product"
+                    dept_info = "产品"
+                elif "项目" in content or fname in ("wang-gengwu",):
+                    team = "project"
+                    dept_info = "项目"
+                elif "外部" in content or fname in ("ning-yizhao", "wangrui", "xie-yanfei", "xu-zhuanli", "hedong", "wang-xun", "tan-jie"):
+                    team = "external"
+                    dept_info = "外部"
+                else:
+                    team = "ai"
+                    dept_info = "AI部门"
+
+                node = {
+                    "id": fname,
+                    "name": name,
+                    "type": "person",
+                    "role": "colleague",
+                    "team": team,
+                    "department": dept_info,
+                    "social_rank": social_rank,
+                    "wecom_id": wecom_id,
+                    "last_interaction": last_interaction,
+                    "next_action": next_action,
+                    "interaction_count": interaction_count,
+                    "has_interacted": bool(last_interaction),
+                }
+                nodes.append(node)
+                node_map[fname] = node
+
+                # 坦哥→此人边（管理/同事关系）
+                edge_weight = 2 if social_rank == "A" else (1 if social_rank == "B" else 0.5)
+                edges.append({"source": "tange", "target": fname, "type": "management", "weight": edge_weight})
+
+                # 苏格拉底→此人边（社交关系）
+                social_weight = interaction_count if interaction_count > 0 else (0.3 if social_rank != "C" else 0.1)
+                edges.append({"source": "socrates", "target": fname, "type": "social", "weight": social_weight})
+
+        # 团队信息附加
+        result = {
+            "nodes": nodes,
+            "edges": edges,
+            "teams": {k: v for k, v in team_map.items()},
+            "total_people": len([n for n in nodes if n["type"] == "person"]),
+            "total_agents": len([n for n in nodes if n["type"] == "agent"]),
+            "total_interacted": len([n for n in nodes if n.get("has_interacted")]),
+            "updated": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        }
+        return result
+
+    def _handle_social_entity(self, entity_name):
+        """Serve parsed entity wiki file for social detail panel."""
+        import yaml
+        import re as _re
+        entities_dir = Path.home() / "aiworkspace" / "aiknowledge" / "entities"
+        fpath = entities_dir / f"{entity_name}.md"
+        if not fpath.exists():
+            self._send_error(404, f"Entity not found: {entity_name}")
+            return
+
+        try:
+            raw = fpath.read_text(encoding="utf-8")
+            content = raw.lstrip("|\n\t ")
+        except Exception:
+            self._send_error(500, "Failed to read entity file")
+            return
+
+        # Parse YAML frontmatter
+        meta = {}
+        body = content
+        if content.startswith("---"):
+            parts = content.split("---", 2)
+            if len(parts) >= 3:
+                try:
+                    meta = yaml.safe_load(parts[1]) or {}
+                    if not isinstance(meta, dict):
+                        meta = {}
+                except Exception:
+                    meta = {}
+                body = parts[2].strip()
+
+        # Parse sections from body (## SectionName)
+        sections = {}
+        current_section = "_pre"
+        current_lines = []
+        for line in body.split("\n"):
+            m = _re.match(r"^##\s+(.+)$", line)
+            if m:
+                if current_lines:
+                    sections[current_section] = "\n".join(current_lines).strip()
+                current_section = m.group(1).strip()
+                current_lines = []
+            else:
+                current_lines.append(line)
+        if current_lines:
+            sections[current_section] = "\n".join(current_lines).strip()
+
+        # Build structured sections with just key-value pairs for 基本信息
+        basic_info = {}
+        if "基本信息" in sections:
+            for line in sections["基本信息"].split("\n"):
+                m = _re.match(r"-\s*\*\*(.+?)\*\*[：:]?\s*(.+)", line)
+                if m:
+                    basic_info[m.group(1).strip()] = m.group(2).strip()
+
+        result = {
+            "name": meta.get("title", entity_name),
+            "meta": {
+                k: (v.isoformat() if hasattr(v, 'isoformat') else v) for k, v in meta.items()
+                if k in ("social_rank", "wecom_id", "tags", "created", "updated", "interaction_count", "last_interaction", "next_action")
+            },
+            "basic_info": basic_info,
+            "sections": {k: v for k, v in sections.items() if k not in ("_pre",) and v},
+        }
+        self._json_response(result)
+
     def do_GET(self):
         clean_path = self.path.split("?")[0]
         if clean_path == "/api/data":
@@ -307,6 +528,11 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
             self._handle_analyze_completeness()
         elif clean_path == "/api/analyze/full":
             self._handle_analyze_full()
+        elif clean_path == "/api/social/graph":
+            self._json_response(self._build_social_graph())
+        elif clean_path.startswith("/api/social/entity/"):
+            entity_name = clean_path.split("/api/social/entity/")[1]
+            self._handle_social_entity(entity_name)
         elif clean_path == "/api/analyze/should-know-gaps":
             self._handle_should_know_gaps()
         elif clean_path == "/api/agents":

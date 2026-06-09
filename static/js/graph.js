@@ -877,8 +877,11 @@ function switchView(view) {
   document.getElementById('settingsDashboard').style.display = view === 'settings' ? 'block' : 'none';
   // Wiki库面板显隐
   document.getElementById('wikiDashboard').style.display = view === 'wiki' ? 'block' : 'none';
-  document.getElementById('graph').style.display = (view === 'insight' || view === 'settings' || view === 'wiki') ? 'none' : '';
-  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'insight' || view === 'settings' || view === 'wiki') ? 'none' : '');
+  // 社交图谱面板显隐
+  document.getElementById('socialDashboard').style.display = view === 'social' ? 'block' : 'none';
+  document.getElementById('tabSocial').classList.toggle('active', view === 'social');
+  document.getElementById('graph').style.display = (view === 'insight' || view === 'settings' || view === 'wiki' || view === 'social') ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'insight' || view === 'settings' || view === 'wiki' || view === 'social') ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
@@ -910,6 +913,11 @@ function switchView(view) {
     loadHealthData();
     _loadOverallDecayCurve();
     _loadCategoryDecayCurves();
+    return;
+  }
+
+  if (view === 'social') {
+    loadSocialGraph();
     return;
   }
 

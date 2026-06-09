@@ -830,6 +830,10 @@ function hideDetail() {
   d3.selectAll('.node-group').each(function(n) {
     d3.select(this).select('.node-label').style('opacity', null);
   });
+  // 社交面板也支持 Escape 关闭
+  if (typeof hideSocialDetail === 'function') {
+    hideSocialDetail();
+  }
 }
 
 // 加载数据并渲染图谱

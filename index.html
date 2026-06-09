@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SelfMind</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<link rel="stylesheet" href="/static/css/global.css?v=16">
-<link rel="stylesheet" href="/static/css/graph.css?v=16">
-<link rel="stylesheet" href="/static/css/health.css?v=16">
-<link rel="stylesheet" href="/static/css/sediment.css?v=16">
-  <link rel="stylesheet" href="/static/css/wiki.css?v=16">
-<link rel="stylesheet" href="/static/css/dna.css?v=16">
-<link rel="stylesheet" href="/static/css/roundtable.css?v=16">
+<link rel="stylesheet" href="/static/css/global.css?v=18">
+<link rel="stylesheet" href="/static/css/graph.css?v=18">
+<link rel="stylesheet" href="/static/css/health.css?v=18">
+<link rel="stylesheet" href="/static/css/sediment.css?v=18">
+  <link rel="stylesheet" href="/static/css/wiki.css?v=18">
+<link rel="stylesheet" href="/static/css/dna.css?v=18">
+<link rel="stylesheet" href="/static/css/roundtable.css?v=18">
 </head>
 <body>
 
@@ -42,6 +42,9 @@
       
       <button class="view-tab" id="tabSettings" onclick="switchToSettings()">
         <span class="tab-icon">⚙️</span>设置
+      </button>
+      <button class="view-tab" id="tabSocial" onclick="switchView('social')">
+        <span class="tab-icon">👥</span>社交图谱
       </button>
       <button class="view-tab" id="tabRoundTable" onclick="switchToRoundTable()">
         <span class="tab-icon">🪑</span>圆桌
@@ -364,6 +367,35 @@
   </div>
 </div>
 
+<!-- 社交图谱 Dashboard -->
+<div id="socialDashboard" style="display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow:hidden;">
+  <div class="social-header" style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px; background:#fff; border-bottom:1px solid #eef2f7; z-index:2; position:relative;">
+    <h2 style="margin:0; font-size:18px; font-weight:700; color:#2d3436;">👥 <span>社交图谱</span></h2>
+    <div class="social-toolbar" style="display:flex; gap:10px; align-items:center;">
+      <div class="social-stats" id="socialStats" style="font-size:12px; color:#999;"></div>
+      <button onclick="loadSocialGraph()" style="padding:6px 14px; border:1px solid #e0e0e0; border-radius:8px; background:#fff; cursor:pointer; font-size:13px; display:flex; align-items:center; gap:4px; box-shadow:0 1px 2px rgba(0,0,0,0.04);">🔄 刷新</button>
+    </div>
+  </div>
+  <!-- 图例 -->
+  <div class="social-legend" id="socialLegend" style="display:flex; gap:16px; padding:10px 24px; background:#fff; border-bottom:1px solid #eef2f7; font-size:12px; color:#666; flex-wrap:wrap;"></div>
+  <!-- 社交图谱 SVG 容器 -->
+  <div id="socialGraphContainer" style="flex:1; overflow:hidden; position:relative; height:calc(100vh - 140px); transition: margin-right 0.3s ease;">
+    <svg id="socialGraphSvg" width="100%" height="100%"></svg>
+  </div>
+  <!-- 节点详情 — 右侧固定面板 -->
+  <div class="social-detail-panel" id="socialDetailPanel" style="display:none; position:absolute; right:0; top:0; bottom:0; width:400px; background:#fff; box-shadow:-4px 0 20px rgba(0,0,0,0.08); z-index:10; border-left:1px solid #eef2f7; overflow-y:auto; padding:20px;">
+    <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid #eef2f7;">
+      <div class="social-detail-dot" id="socialDetailDot" style="width:14px; height:14px; border-radius:50%; flex-shrink:0; margin-top:2px;"></div>
+      <div style="flex:1; min-width:0;">
+        <div class="social-detail-name" id="socialDetailName" style="font-weight:600; font-size:16px; color:#2d3436;"></div>
+        <div class="social-detail-info" id="socialDetailInfo" style="font-size:12px; color:#888; margin-top:2px;"></div>
+      </div>
+      <button onclick="var p=document.getElementById('socialDetailPanel');var c=document.getElementById('socialGraphContainer');if(p){p.style.display='none'}if(c){c.style.marginRight='0'}" style="background:none; border:none; cursor:pointer; font-size:20px; color:#999; flex-shrink:0; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:6px; transition:all 0.15s;" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='none'">×</button>
+    </div>
+    <div class="social-detail-body" id="socialDetailBody" style="font-size:13px; color:#555; line-height:1.6;"></div>
+  </div>
+</div>
+
 <!-- 设置面板 -->
 <div id="settingsDashboard" style="display:none; position:fixed; top:80px; left:0; right:0; bottom:0; background:#f5f7fa; z-index:5; overflow-y:auto; padding:24px 30px 40px; font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
   <div class="settings-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
@@ -439,10 +471,10 @@
 </div>
 
 
-<script src="/static/js/app.js?v=16"></script>
-<script src="/static/js/graph.js?v=16"></script>
-<script src="/static/js/views.js?v=16"></script>
-  <script src="/static/js/decay_curve.js?v=16"></script>
+<script src="/static/js/app.js?v=18"></script>
+<script src="/static/js/graph.js?v=18"></script>
+<script src="/static/js/views.js?v=18"></script>
+  <script src="/static/js/decay_curve.js?v=18"></script>
 <!-- 底部状态栏 -->
 <div id="pollBar" class="poll-bar">
   <div class="poll-left">
@@ -457,11 +489,12 @@
 </div>
 
 
-<script src="/static/js/init.js?v=16"></script>
-<script src="/static/js/sediment.js?v=16"></script>
-<script src="/static/js/wiki.js?v=16"></script>
-<script src="/static/js/dna.js?v=16"></script>
-<script src="/static/js/roundtable.js?v=16"></script>
+<script src="/static/js/init.js?v=18"></script>
+<script src="/static/js/social.js?v=20"></script>
+<script src="/static/js/sediment.js?v=18"></script>
+<script src="/static/js/wiki.js?v=18"></script>
+<script src="/static/js/dna.js?v=18"></script>
+<script src="/static/js/roundtable.js?v=18"></script>
 
 
 
