@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Directories to scan inside the wiki root
-_SCAN_DIRS = {"entities", "concepts", "comparisons", "queries", "projects", "summaries", "promotion", "nous", "blackboard", "daily-reports", "raw"}
+_SCAN_DIRS = {"entities", "concepts", "comparisons", "queries", "projects", "summaries", "promotion", "nous", "blackboard", "daily-reports", "raw", "goals"}
 
 # Map parent directory name → page type fallback
 _DIR_TYPE_MAP = {
@@ -24,6 +24,7 @@ _DIR_TYPE_MAP = {
     "blackboard": "blackboard",
     "daily-reports": "daily-report",
     "raw": "raw",
+    "goals": "goal",
 }
 
 # Files at the wiki root to skip
@@ -174,7 +175,7 @@ def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
         })
 
     # Subdirectories
-    _ALL_DIRS = {"entities", "concepts", "comparisons", "queries", "summaries", "raw", "projects", "promotion", "nous", "blackboard", "daily-reports"}
+    _ALL_DIRS = {"entities", "concepts", "comparisons", "queries", "summaries", "raw", "projects", "promotion", "nous", "blackboard", "daily-reports", "goals"}
     for subdir_name in sorted(_ALL_DIRS):
         subdir = root / subdir_name
         if not subdir.is_dir():

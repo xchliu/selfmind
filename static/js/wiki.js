@@ -15,6 +15,7 @@ const WIKI_TYPE_CONFIG = {
   blackboard:  { icon: '📋', color: '#e17055', name: '黑板' },
   daily_report: { icon: '📊', color: '#55a3e8', name: '日报' },
   raw:         { icon: '📦', color: '#b2bec3', name: '原始素材' },
+  goal:        { icon: '🎯', color: '#10b981', name: '目标/计划' },
   uncategorized: { icon: '📄', color: '#78909c', name: '未分类' },
   page:        { icon: '📑', color: '#607d8b', name: '页面' },
 };
@@ -35,7 +36,7 @@ async function loadWikiPages() {
 }
 
 // 优先级分组：焦点区 vs 档案区
-const WIKI_FOCUS_TYPES = ['project', 'blackboard', 'query', 'comparison'];
+const WIKI_FOCUS_TYPES = ['project', 'blackboard', 'goal', 'query', 'comparison'];
 const WIKI_ARCHIVE_TYPES = ['entity', 'concept', 'daily_report', 'promotion', 'nous', 'manifesto', 'summary', 'raw', 'uncategorized', 'page', 'wiki_tag'];
 
 function renderWikiView(data) {

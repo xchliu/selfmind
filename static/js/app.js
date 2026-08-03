@@ -100,6 +100,7 @@ const WIKI_COLORS = {
   blackboard:  { name: '黑板',     icon: '📋', color: '#e17055' },
   daily_report: { name: '日报',    icon: '📊', color: '#55a3e8' },
   raw:         { name: '原始素材', icon: '📦', color: '#b2bec3' },
+  goal:        { name: '目标/计划', icon: '🎯', color: '#10b981' },
   wiki_tag:    { name: '标签',     icon: '🏷️', color: '#95a5a6' },
   uncategorized: { name: '未分类', icon: '📄', color: '#78909c' },
 };

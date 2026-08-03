@@ -54,7 +54,7 @@ function buildWikiFilterBar() {
   bar.appendChild(allChip);
 
   // Wiki 分类
-  const wikiFilterCats = ['entity', 'concept', 'comparison', 'query', 'summary', 'project', 'promotion', 'nous', 'manifesto', 'blackboard', 'daily_report', 'raw', 'wiki_tag'];
+  const wikiFilterCats = ['entity', 'concept', 'comparison', 'query', 'summary', 'project', 'promotion', 'nous', 'manifesto', 'blackboard', 'daily_report', 'raw', 'goal', 'wiki_tag'];
   wikiFilterCats.forEach(key => {
     const cat = WIKI_COLORS[key];
     if (!cat) return;
