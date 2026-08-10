@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="/static/css/health.css?v=18">
 <link rel="stylesheet" href="/static/css/sediment.css?v=18">
   <link rel="stylesheet" href="/static/css/wiki.css?v=18">
-<link rel="stylesheet" href="/static/css/dna.css?v=18">
-<link rel="stylesheet" href="/static/css/roundtable.css?v=18">
+  <link rel="stylesheet" href="/static/css/dna.css?v=18">
+  <link rel="stylesheet" href="/static/css/roundtable.css?v=18">
+  <link rel="stylesheet" href="/static/css/goals.css?v=20">
 </head>
 <body>
 
@@ -35,6 +36,9 @@
       </button>
       <button class="view-tab" id="tabWiki" onclick="switchView('wiki')">
         <span class="tab-icon">📖</span>Wiki库
+      </button>
+      <button class="view-tab" id="tabGoals" onclick="switchView('goals')">
+        <span class="tab-icon">🎯</span>目标
       </button>
       <button class="view-tab" id="tabInsight" onclick="switchView('insight')">
         <span class="tab-icon">💡</span>记忆洞察
@@ -217,6 +221,17 @@
     <div class="wiki-detail-meta" id="wikiDetailMeta"></div>
     <div class="wiki-detail-body" id="wikiDetailBody"></div>
   </div>
+</div>
+<!-- 目标/计划面板 -->
+<div id="goalsDashboard" style="display:none;">
+  <div class="goals-header">
+    <h2>🎯 <span>目标/计划</span></h2>
+    <div class="goals-toolbar">
+      <button onclick="loadGoalsView()">🔄 刷新</button>
+    </div>
+  </div>
+  <div class="goals-summary" id="goalsSummary"></div>
+  <div id="goalsList"></div>
 </div>
 <!-- 记忆洞察面板（2个子tab：生命周期 + 记忆管理） -->
 <div id="insightDashboard" style="display:none;">
@@ -493,6 +508,7 @@
 <script src="/static/js/social.js?v=20"></script>
 <script src="/static/js/sediment.js?v=18"></script>
 <script src="/static/js/wiki.js?v=19"></script>
+<script src="/static/js/goals.js?v=20"></script>
 <script src="/static/js/dna.js?v=18"></script>
 <script src="/static/js/roundtable.js?v=18"></script>
 

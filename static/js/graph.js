@@ -838,12 +838,14 @@ function switchToSettings() {
   // 更新 Tab 样式
   document.getElementById('tabMemory').classList.remove('active');
   document.getElementById('tabWiki').classList.remove('active');
+  document.getElementById('tabGoals').classList.remove('active');
   document.getElementById('tabInsight').classList.remove('active');
   document.getElementById('tabSettings').classList.add('active');
   
   // 隐藏其他视图元素
   document.getElementById('settingsDashboard').style.display = 'block';
   document.getElementById('insightDashboard').style.display = 'none';
+  document.getElementById('goalsDashboard').style.display = 'none';
   document.getElementById('graph').style.display = 'none';
   document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = 'none');
   if (document.getElementById('btnRefresh')) document.getElementById('btnRefresh').style.display = 'none';
@@ -869,6 +871,7 @@ function switchView(view) {
   // 更新 Tab 样式
   document.getElementById('tabMemory').classList.toggle('active', view === 'memory');
   document.getElementById('tabWiki').classList.toggle('active', view === 'wiki');
+  document.getElementById('tabGoals').classList.toggle('active', view === 'goals');
   document.getElementById('tabInsight').classList.toggle('active', view === 'insight');
 
   // 洞察面板显隐
@@ -877,17 +880,22 @@ function switchView(view) {
   document.getElementById('settingsDashboard').style.display = view === 'settings' ? 'block' : 'none';
   // Wiki库面板显隐
   document.getElementById('wikiDashboard').style.display = view === 'wiki' ? 'block' : 'none';
+  // 目标面板显隐
+  document.getElementById('goalsDashboard').style.display = view === 'goals' ? 'block' : 'none';
   // 社交图谱面板显隐
   document.getElementById('socialDashboard').style.display = view === 'social' ? 'block' : 'none';
   document.getElementById('tabSocial').classList.toggle('active', view === 'social');
-  document.getElementById('graph').style.display = (view === 'insight' || view === 'settings' || view === 'wiki' || view === 'social') ? 'none' : '';
-  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'insight' || view === 'settings' || view === 'wiki' || view === 'social') ? 'none' : '');
+  document.getElementById('graph').style.display = (view === 'insight' || view === 'settings' || view === 'wiki' || view === 'social' || view === 'goals') ? 'none' : '';
+  document.querySelectorAll('.filter-bar,.stats-panel,.timeline-ruler,.iq-panel,.health-filter-bar').forEach(el => el.style.display = (view === 'insight' || view === 'settings' || view === 'wiki' || view === 'social' || view === 'goals') ? 'none' : '');
 
   // 更新标题图标颜色
   const titleIcon = document.querySelector('.title-icon');
   if (view === 'wiki') {
     titleIcon.style.background = 'radial-gradient(circle, #3498db 0%, #3498db44 70%)';
     titleIcon.style.boxShadow = '0 0 15px #3498db44';
+  } else if (view === 'goals') {
+    titleIcon.style.background = 'radial-gradient(circle, #10b981 0%, #10b98144 70%)';
+    titleIcon.style.boxShadow = '0 0 15px #10b98144';
   } else {
     titleIcon.style.background = '';
     titleIcon.style.boxShadow = '';
@@ -895,7 +903,7 @@ function switchView(view) {
 
   // 切换刷新按钮文字
   const refreshBtn = document.getElementById('btnRefresh');
-  refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新Wiki' : view === 'insight' ? '刷新洞察' : '刷新记忆'}`;
+  refreshBtn.innerHTML = `<span class="btn-icon">🔄</span><span class="spinner"></span>${view === 'wiki' ? '刷新Wiki' : view === 'insight' ? '刷新洞察' : view === 'goals' ? '刷新目标' : '刷新记忆'}`;
   refreshBtn.style.display = (view === 'settings') ? 'none' : '';
 
   // 切换时间刻度线可见性（仅记忆视图显示）
@@ -918,6 +926,11 @@ function switchView(view) {
 
   if (view === 'social') {
     loadSocialGraph();
+    return;
+  }
+
+  if (view === 'goals') {
+    loadGoalsView();
     return;
   }
 

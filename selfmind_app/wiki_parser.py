@@ -52,6 +52,8 @@ def parse_frontmatter(content: str) -> dict:
         "type": "",
         "tags": [],
         "sources": [],
+        "status": "",
+        "target": "",
     }
 
     match = _FRONTMATTER_RE.match(content)
@@ -85,6 +87,10 @@ def parse_frontmatter(content: str) -> dict:
             result["tags"] = _parse_yaml_list(value, raw, "tags")
         elif key == "sources":
             result["sources"] = _parse_yaml_list(value, raw, "sources")
+        elif key == "status":
+            result["status"] = value.strip('"').strip("'")
+        elif key == "target":
+            result["target"] = value.strip('"').strip("'")
 
     return result
 
@@ -172,6 +178,8 @@ def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
             "content": body,
             "created": fm.get("created", ""),
             "updated": fm.get("updated", ""),
+            "status": fm.get("status", ""),
+            "target": fm.get("target", ""),
         })
 
     # Subdirectories
@@ -207,6 +215,8 @@ def scan_wiki_pages_flat(wiki_path: str) -> list[dict]:
                 "content": body,
                 "created": fm["created"],
                 "updated": fm["updated"],
+                "status": fm["status"],
+                "target": fm["target"],
             })
 
     return pages
