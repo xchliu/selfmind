@@ -10207,3 +10207,1443 @@
 2026-08-17 18:55:40.814 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
 2026-08-17 18:55:40.820 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
    [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:00:41.721 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 18:55:40.820503
+2026-08-17 19:00:41.726 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:00:41.733 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:00:41.739 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:05:42.741 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:00:41.739205
+2026-08-17 19:05:42.767 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:05:42.775 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:05:42.781 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:10:43.900 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:05:42.781281
+2026-08-17 19:10:43.929 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:10:43.936 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:10:43.942 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:15:44.982 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:10:43.942053
+2026-08-17 19:15:45.012 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:15:45.019 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:15:45.026 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:20:46.086 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:15:45.025548
+2026-08-17 19:20:46.118 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:20:46.126 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:20:46.132 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:25:47.188 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:20:46.131668
+2026-08-17 19:25:47.218 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:25:47.225 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:25:47.230 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:30:48.266 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:25:47.230490
+2026-08-17 19:30:48.297 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:30:48.304 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:30:48.310 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:35:49.321 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:30:48.310059
+2026-08-17 19:35:49.352 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:35:49.360 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:35:49.366 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:40:50.366 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:35:49.365900
+2026-08-17 19:40:50.372 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:40:50.379 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:40:50.385 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:45:51.415 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:40:50.384758
+2026-08-17 19:45:51.421 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:45:51.428 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:45:51.433 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:50:52.466 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:45:51.433569
+2026-08-17 19:50:52.472 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:50:52.479 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:50:52.485 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 19:55:53.425 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:50:52.484804
+2026-08-17 19:55:53.431 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 19:55:53.438 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 19:55:53.444 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:00:54.433 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 19:55:53.444008
+2026-08-17 20:00:54.439 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:00:54.446 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:00:54.452 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:05:55.471 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:00:54.452703
+2026-08-17 20:05:55.499 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:05:55.506 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:05:55.512 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:10:56.544 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:05:55.512422
+2026-08-17 20:10:56.573 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:10:56.582 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:10:56.588 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:15:57.568 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:10:56.587513
+2026-08-17 20:15:57.598 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:15:57.606 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:15:57.611 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:20:58.655 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:15:57.611395
+2026-08-17 20:20:58.690 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:20:58.698 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:20:58.704 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 49}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:25:59.660 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:20:58.703852
+2026-08-17 20:25:59.693 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:25:59.700 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:25:59.706 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:31:00.645 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:25:59.706162
+2026-08-17 20:31:00.652 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:31:00.659 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:31:00.665 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:36:01.683 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:31:00.665192
+2026-08-17 20:36:01.689 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:36:01.696 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:36:01.702 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:41:02.744 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:36:01.701782
+2026-08-17 20:41:02.750 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:41:02.757 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:41:02.763 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:46:03.795 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:41:02.762742
+2026-08-17 20:46:03.801 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:46:03.808 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:46:03.814 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:51:04.806 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:46:03.813806
+2026-08-17 20:51:04.812 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:51:04.819 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:51:04.824 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 20:56:05.800 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:51:04.824710
+2026-08-17 20:56:05.806 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 20:56:05.813 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 20:56:05.819 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:01:06.751 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 20:56:05.819239
+2026-08-17 21:01:06.781 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:01:06.789 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:01:06.795 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:06:07.790 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:01:06.794499
+2026-08-17 21:06:07.796 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:06:07.803 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:06:07.808 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:11:08.820 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:06:07.808521
+2026-08-17 21:11:08.850 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:11:08.857 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:11:08.863 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:16:09.826 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:11:08.863460
+2026-08-17 21:16:09.864 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:16:09.871 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:16:09.877 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 51}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:21:10.882 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:16:09.876985
+2026-08-17 21:21:10.888 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:21:10.895 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:21:10.900 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:26:11.987 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:21:10.900561
+2026-08-17 21:26:12.019 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:26:12.027 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:26:12.033 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:31:12.927 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:26:12.032695
+2026-08-17 21:31:12.957 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:31:12.964 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:31:12.970 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:36:14.025 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:31:12.970366
+2026-08-17 21:36:14.051 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:36:14.058 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:36:14.064 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:41:15.132 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:36:14.064417
+2026-08-17 21:41:15.153 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:41:15.161 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:41:15.166 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 34}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:46:16.205 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:41:15.166628
+2026-08-17 21:46:16.210 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:46:16.217 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:46:16.223 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:51:17.280 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:46:16.222963
+2026-08-17 21:51:17.286 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:51:17.293 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:51:17.298 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 21:56:18.355 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:51:17.298590
+2026-08-17 21:56:18.361 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 21:56:18.367 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 21:56:18.373 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:01:19.441 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 21:56:18.373230
+2026-08-17 22:01:19.471 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:01:19.478 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:01:19.484 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:06:20.507 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:01:19.484163
+2026-08-17 22:06:20.513 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:06:20.520 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:06:20.525 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:11:21.582 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:06:20.525764
+2026-08-17 22:11:21.609 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:11:21.616 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:11:21.623 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:16:22.648 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:11:21.623065
+2026-08-17 22:16:22.676 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:16:22.684 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:16:22.690 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:21:23.657 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:16:22.689903
+2026-08-17 22:21:23.662 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:21:23.669 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:21:23.675 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:26:24.677 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:21:23.675245
+2026-08-17 22:26:24.683 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:26:24.689 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:26:24.695 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:31:25.613 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:26:24.695251
+2026-08-17 22:31:25.640 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:31:25.647 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:31:25.653 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:36:26.693 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:31:25.652599
+2026-08-17 22:36:26.699 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:36:26.705 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:36:26.711 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:41:27.772 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:36:26.711453
+2026-08-17 22:41:27.805 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:41:27.813 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:41:27.819 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 47}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:46:28.871 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:41:27.818601
+2026-08-17 22:46:28.903 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:46:28.911 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:46:28.916 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:51:29.975 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:46:28.916746
+2026-08-17 22:51:29.981 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:51:29.987 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:51:29.993 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 22:56:30.987 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:51:29.993386
+2026-08-17 22:56:31.016 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 22:56:31.023 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 22:56:31.029 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:01:31.170 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 22:56:31.029243
+2026-08-17 23:01:31.175 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:01:31.181 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:01:31.187 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 16}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:06:31.326 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:01:31.187056
+2026-08-17 23:06:31.331 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:06:31.338 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:06:31.343 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 16}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:11:32.222 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:06:31.343476
+2026-08-17 23:11:32.228 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:11:32.236 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:11:32.241 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:16:32.902 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:11:32.241516
+2026-08-17 23:16:32.908 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:16:32.915 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:16:32.921 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:21:33.396 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:16:32.920770
+2026-08-17 23:21:33.402 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:21:33.409 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:21:33.415 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:26:34.288 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:21:33.414857
+2026-08-17 23:26:34.322 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:26:34.330 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:26:34.336 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 48}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:31:35.290 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:26:34.335883
+2026-08-17 23:31:35.317 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:31:35.324 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:31:35.331 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:36:36.303 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:31:35.330599
+2026-08-17 23:36:36.308 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:36:36.315 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:36:36.320 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:41:37.377 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:36:36.320746
+2026-08-17 23:41:37.408 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:41:37.416 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:41:37.422 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:46:38.480 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:41:37.421413
+2026-08-17 23:46:38.485 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:46:38.492 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:46:38.498 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:51:39.546 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:46:38.497920
+2026-08-17 23:51:39.552 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:51:39.559 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:51:39.564 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-17 23:56:40.632 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:51:39.564640
+2026-08-17 23:56:40.638 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-17 23:56:40.645 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-17 23:56:40.651 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:01:41.636 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-17 23:56:40.651249
+2026-08-18 00:01:41.668 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:01:41.676 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:01:41.682 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:06:42.681 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:01:41.682099
+2026-08-18 00:06:42.687 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:06:42.694 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:06:42.700 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:11:43.684 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:06:42.700381
+2026-08-18 00:11:43.690 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:11:43.697 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:11:43.703 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:16:44.663 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:11:43.703144
+2026-08-18 00:16:44.669 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:16:44.676 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:16:44.681 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:21:45.664 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:16:44.681427
+2026-08-18 00:21:45.670 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:21:45.677 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:21:45.683 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:26:46.701 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:21:45.683446
+2026-08-18 00:26:46.707 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:26:46.713 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:26:46.719 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:31:47.660 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:26:46.719278
+2026-08-18 00:31:47.665 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:31:47.672 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:31:47.678 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:36:48.634 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:31:47.678165
+2026-08-18 00:36:48.640 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:36:48.647 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:36:48.652 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:41:49.639 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:36:48.652739
+2026-08-18 00:41:49.644 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:41:49.651 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:41:49.657 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:46:50.686 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:41:49.657133
+2026-08-18 00:46:50.714 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:46:50.722 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:46:50.728 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:51:51.710 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:46:50.727531
+2026-08-18 00:51:51.716 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:51:51.722 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:51:51.728 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 00:56:52.720 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:51:51.728324
+2026-08-18 00:56:52.725 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 00:56:52.732 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 00:56:52.737 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:01:53.715 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 00:56:52.737746
+2026-08-18 01:01:53.746 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:01:53.753 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:01:53.759 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:06:54.777 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:01:53.758830
+2026-08-18 01:06:54.805 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:06:54.812 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:06:54.817 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:11:55.835 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:06:54.817396
+2026-08-18 01:11:55.863 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:11:55.871 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:11:55.877 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:16:56.929 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:11:55.876874
+2026-08-18 01:16:56.958 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:16:56.966 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:16:56.972 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:21:57.930 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:16:56.971696
+2026-08-18 01:21:57.935 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:21:57.942 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:21:57.948 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:26:58.918 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:21:57.947991
+2026-08-18 01:26:58.924 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:26:58.931 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:26:58.936 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:31:59.966 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:26:58.936620
+2026-08-18 01:31:59.971 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:31:59.978 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:31:59.984 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:37:01.046 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:31:59.984084
+2026-08-18 01:37:01.052 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:37:01.059 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:37:01.064 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:42:02.130 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:37:01.064531
+2026-08-18 01:42:02.165 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:42:02.173 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:42:02.179 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 48}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:47:03.224 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:42:02.178670
+2026-08-18 01:47:03.254 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:47:03.262 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:47:03.268 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:52:04.302 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:47:03.267966
+2026-08-18 01:52:04.308 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:52:04.314 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:52:04.320 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 01:57:05.325 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:52:04.320279
+2026-08-18 01:57:05.330 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 01:57:05.337 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 01:57:05.343 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:02:06.322 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 01:57:05.343489
+2026-08-18 02:02:06.348 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:02:06.355 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:02:06.361 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:07:07.234 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:02:06.361061
+2026-08-18 02:07:07.239 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:07:07.246 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:07:07.253 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:12:08.298 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:07:07.253180
+2026-08-18 02:12:08.304 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:12:08.311 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:12:08.316 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:17:09.346 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:12:08.316703
+2026-08-18 02:17:09.352 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:17:09.359 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:17:09.365 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:22:10.349 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:17:09.365302
+2026-08-18 02:22:10.354 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:22:10.361 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:22:10.367 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:27:11.352 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:22:10.366808
+2026-08-18 02:27:11.357 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:27:11.364 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:27:11.370 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:32:12.339 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:27:11.369871
+2026-08-18 02:32:12.370 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:32:12.378 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:32:12.384 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:37:13.352 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:32:12.384320
+2026-08-18 02:37:13.357 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:37:13.364 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:37:13.370 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:42:14.391 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:37:13.370199
+2026-08-18 02:42:14.425 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:42:14.433 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:42:14.439 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 47}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:47:15.411 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:42:14.438808
+2026-08-18 02:47:15.441 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:47:15.448 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:47:15.454 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:52:16.416 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:47:15.454443
+2026-08-18 02:52:16.422 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:52:16.428 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:52:16.434 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 02:57:17.510 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:52:16.434401
+2026-08-18 02:57:17.517 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 02:57:17.523 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 02:57:17.529 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:02:18.575 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 02:57:17.529383
+2026-08-18 03:02:18.581 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:02:18.587 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:02:18.593 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:07:19.553 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:02:18.593330
+2026-08-18 03:07:19.559 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:07:19.566 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:07:19.572 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:12:20.557 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:07:19.572081
+2026-08-18 03:12:20.587 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:12:20.596 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:12:20.602 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:17:21.655 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:12:20.601558
+2026-08-18 03:17:21.661 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:17:21.668 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:17:21.673 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:22:22.717 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:17:21.673617
+2026-08-18 03:22:22.722 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:22:22.729 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:22:22.735 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:27:23.678 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:22:22.734882
+2026-08-18 03:27:23.684 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:27:23.691 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:27:23.696 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:32:24.696 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:27:23.696432
+2026-08-18 03:32:24.701 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:32:24.708 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:32:24.714 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:37:25.726 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:32:24.714071
+2026-08-18 03:37:25.731 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:37:25.738 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:37:25.744 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:42:26.800 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:37:25.744229
+2026-08-18 03:42:26.806 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:42:26.813 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:42:26.819 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:47:27.934 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:42:26.818865
+2026-08-18 03:47:27.940 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:47:27.946 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:47:27.952 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:52:29.021 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:47:27.952348
+2026-08-18 03:52:29.027 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:52:29.034 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:52:29.040 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 03:57:30.116 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:52:29.040119
+2026-08-18 03:57:30.148 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 03:57:30.156 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 03:57:30.162 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:02:30.299 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 03:57:30.162200
+2026-08-18 04:02:30.304 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:02:30.311 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:02:30.317 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:07:30.459 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:02:30.317207
+2026-08-18 04:07:30.464 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:07:30.471 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:07:30.476 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:12:31.418 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:07:30.476457
+2026-08-18 04:12:31.424 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:12:31.431 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:12:31.437 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:17:31.833 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:12:31.436761
+2026-08-18 04:17:31.838 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:17:31.844 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:17:31.850 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:22:32.328 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:17:31.850296
+2026-08-18 04:22:32.333 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:22:32.340 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:22:32.346 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:27:32.658 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:22:32.345962
+2026-08-18 04:27:32.663 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:27:32.670 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:27:32.676 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:32:33.497 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:27:32.676180
+2026-08-18 04:32:33.501 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:32:33.508 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:32:33.514 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:37:34.575 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:32:33.514129
+2026-08-18 04:37:34.581 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:37:34.589 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:37:34.595 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:42:34.903 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:37:34.595091
+2026-08-18 04:42:34.908 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:42:34.915 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:42:34.920 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:47:35.828 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:42:34.920439
+2026-08-18 04:47:35.833 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:47:35.840 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:47:35.846 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:52:36.726 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:47:35.845968
+2026-08-18 04:52:36.758 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:52:36.766 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:52:36.772 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 04:57:37.784 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:52:36.771697
+2026-08-18 04:57:37.814 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 04:57:37.822 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 04:57:37.828 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:02:38.832 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 04:57:37.827673
+2026-08-18 05:02:38.865 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:02:38.872 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:02:38.878 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:07:39.923 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:02:38.878353
+2026-08-18 05:07:39.956 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:07:39.964 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:07:39.970 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:12:40.933 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:07:39.970011
+2026-08-18 05:12:40.964 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:12:40.971 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:12:40.978 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:17:41.888 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:12:40.977669
+2026-08-18 05:17:41.920 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:17:41.928 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:17:41.934 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:22:42.904 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:17:41.933459
+2026-08-18 05:22:42.936 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:22:42.944 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:22:42.950 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:27:43.916 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:22:42.949480
+2026-08-18 05:27:43.922 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:27:43.929 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:27:43.935 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:32:44.859 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:27:43.934769
+2026-08-18 05:32:44.865 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:32:44.872 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:32:44.878 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:37:45.874 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:32:44.878096
+2026-08-18 05:37:45.881 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:37:45.888 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:37:45.894 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:42:46.982 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:37:45.894168
+2026-08-18 05:42:46.988 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:42:46.994 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:42:47.000 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:47:48.104 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:42:47.000386
+2026-08-18 05:47:48.139 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:47:48.147 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:47:48.152 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 48}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:52:49.267 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:47:48.152508
+2026-08-18 05:52:49.297 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:52:49.304 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:52:49.310 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 05:57:50.384 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:52:49.310409
+2026-08-18 05:57:50.392 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 05:57:50.399 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 05:57:50.405 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:02:51.342 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 05:57:50.405222
+2026-08-18 06:02:51.370 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:02:51.377 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:02:51.384 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:07:52.287 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:02:51.383886
+2026-08-18 06:07:52.320 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:07:52.327 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:07:52.333 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:12:53.277 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:07:52.332911
+2026-08-18 06:12:53.283 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:12:53.290 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:12:53.296 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:17:54.244 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:12:53.296530
+2026-08-18 06:17:54.250 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:17:54.257 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:17:54.262 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:22:55.246 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:17:54.262702
+2026-08-18 06:22:55.277 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:22:55.285 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:22:55.291 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:27:56.241 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:22:55.291014
+2026-08-18 06:27:56.266 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:27:56.273 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:27:56.279 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 37}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:32:57.238 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:27:56.278963
+2026-08-18 06:32:57.266 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:32:57.274 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:32:57.280 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:37:58.266 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:32:57.279779
+2026-08-18 06:37:58.272 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:37:58.279 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:37:58.285 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:42:59.210 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:37:58.284845
+2026-08-18 06:42:59.216 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:42:59.223 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:42:59.228 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:48:00.130 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:42:59.228566
+2026-08-18 06:48:00.137 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:48:00.144 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:48:00.150 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:53:01.136 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:48:00.150296
+2026-08-18 06:53:01.167 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:53:01.174 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:53:01.180 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 06:58:02.196 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:53:01.180272
+2026-08-18 06:58:02.203 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 06:58:02.209 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 06:58:02.215 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:03:03.271 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 06:58:02.215315
+2026-08-18 07:03:03.300 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:03:03.307 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:03:03.313 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:08:04.410 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:03:03.313072
+2026-08-18 07:08:04.444 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:08:04.452 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:08:04.458 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 47}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:13:05.504 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:08:04.457621
+2026-08-18 07:13:05.534 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:13:05.541 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:13:05.547 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:18:06.564 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:13:05.546854
+2026-08-18 07:18:06.598 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:18:06.606 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:18:06.612 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 47}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:23:07.574 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:18:06.611805
+2026-08-18 07:23:07.605 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:23:07.613 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:23:07.619 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:28:08.693 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:23:07.618691
+2026-08-18 07:28:08.724 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:28:08.732 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:28:08.738 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:33:09.804 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:28:08.737586
+2026-08-18 07:33:09.834 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:33:09.841 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:33:09.847 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:38:10.813 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:33:09.846905
+2026-08-18 07:38:10.819 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:38:10.825 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:38:10.831 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:43:11.861 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:38:10.831369
+2026-08-18 07:43:11.867 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:43:11.876 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:43:11.882 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:48:12.921 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:43:11.881884
+2026-08-18 07:48:12.927 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:48:12.935 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:48:12.941 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:53:14.019 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:48:12.940851
+2026-08-18 07:53:14.049 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:53:14.056 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:53:14.062 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 07:58:15.111 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:53:14.062026
+2026-08-18 07:58:15.116 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 07:58:15.123 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 07:58:15.130 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:03:16.160 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 07:58:15.129977
+2026-08-18 08:03:16.188 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:03:16.195 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:03:16.201 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:08:17.349 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:03:16.201221
+2026-08-18 08:08:17.377 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:08:17.384 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:08:17.391 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:13:18.476 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:08:17.390565
+2026-08-18 08:13:18.505 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:13:18.513 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:13:18.519 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:18:19.474 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:13:18.518718
+2026-08-18 08:18:19.490 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:18:19.498 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:18:19.505 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 31}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:23:20.589 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:18:19.505314
+2026-08-18 08:23:20.620 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:23:20.628 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:23:20.634 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:28:21.689 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:23:20.634213
+2026-08-18 08:28:21.716 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:28:21.724 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:28:21.731 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:33:22.821 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:28:21.730638
+2026-08-18 08:33:22.827 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:33:22.834 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:33:22.840 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:38:23.808 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:33:22.840642
+2026-08-18 08:38:23.813 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:38:23.820 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:38:23.826 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:43:24.820 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:38:23.826082
+2026-08-18 08:43:24.847 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:43:24.856 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:43:24.863 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:48:25.794 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:43:24.862835
+2026-08-18 08:48:25.799 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:48:25.808 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:48:25.815 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:53:26.864 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:48:25.814704
+2026-08-18 08:53:26.869 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:53:26.877 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:53:26.884 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 272 active, 0 recalls, graph rebuilt
+2026-08-18 08:58:27.898 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:53:26.884607
+2026-08-18 08:58:27.903 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 08:58:27.910 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 08:58:27.916 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:03:28.878 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 08:58:27.916060
+2026-08-18 09:03:28.904 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:03:28.912 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:03:28.919 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:08:29.861 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:03:28.918691
+2026-08-18 09:08:29.888 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:08:29.895 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:08:29.901 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:13:30.855 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:08:29.900981
+2026-08-18 09:13:30.885 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:13:30.893 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:13:30.901 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:18:31.859 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:13:30.901044
+2026-08-18 09:18:31.864 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:18:31.871 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:18:31.878 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:23:32.885 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:18:31.877749
+2026-08-18 09:23:32.917 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:23:32.925 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:23:32.931 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:28:33.947 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:23:32.930662
+2026-08-18 09:28:33.952 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:28:33.960 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:28:33.966 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:33:35.220 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:28:33.966444
+2026-08-18 09:33:35.266 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:33:35.274 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:33:35.281 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 61}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:38:36.274 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:33:35.281014
+2026-08-18 09:38:36.299 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:38:36.306 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:38:36.314 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:43:37.248 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:38:36.313363
+2026-08-18 09:43:37.254 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:43:37.262 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:43:37.269 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:48:38.314 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:43:37.268811
+2026-08-18 09:48:38.341 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:48:38.349 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:48:38.356 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:53:39.217 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:48:38.356089
+2026-08-18 09:53:39.222 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:53:39.231 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:53:39.238 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 21}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 09:58:40.218 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:53:39.237630
+2026-08-18 09:58:40.241 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 09:58:40.249 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 09:58:40.256 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 37}
+   [Auto-sync] 273 active, 0 recalls, graph rebuilt
+2026-08-18 10:03:41.246 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 09:58:40.255685
+2026-08-18 10:03:41.279 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:03:41.288 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:03:41.296 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 49}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:08:42.289 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:03:41.295393
+2026-08-18 10:08:42.294 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:08:42.301 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:08:42.308 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:13:43.218 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:08:42.308134
+2026-08-18 10:13:43.224 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:13:43.231 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:13:43.238 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:18:44.168 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:13:43.238141
+2026-08-18 10:18:44.200 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:18:44.208 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:18:44.214 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:23:45.261 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:18:44.214214
+2026-08-18 10:23:45.288 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:23:45.296 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:23:45.304 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:28:46.211 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:23:45.303364
+2026-08-18 10:28:46.236 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:28:46.244 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:28:46.251 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:33:47.155 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:28:46.251273
+2026-08-18 10:33:47.161 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:33:47.169 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:33:47.177 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 21}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:38:48.121 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:33:47.177369
+2026-08-18 10:38:48.149 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:38:48.157 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:38:48.165 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:43:49.198 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:38:48.164713
+2026-08-18 10:43:49.203 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:43:49.210 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:43:49.217 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:48:50.265 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:43:49.217154
+2026-08-18 10:48:50.292 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:48:50.300 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:48:50.307 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:53:51.354 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:48:50.306430
+2026-08-18 10:53:51.382 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:53:51.390 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:53:51.397 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 10:58:52.451 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:53:51.396655
+2026-08-18 10:58:52.478 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 10:58:52.486 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 10:58:52.493 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:03:53.477 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 10:58:52.492845
+2026-08-18 11:03:53.501 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:03:53.509 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:03:53.516 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:08:54.589 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:03:53.516153
+2026-08-18 11:08:54.619 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:08:54.627 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:08:54.633 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:13:55.741 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:08:54.632871
+2026-08-18 11:13:55.768 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:13:55.775 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:13:55.782 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:18:56.820 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:13:55.782290
+2026-08-18 11:18:56.847 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:18:56.855 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:18:56.862 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:23:57.898 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:18:56.862174
+2026-08-18 11:23:57.925 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:23:57.933 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:23:57.941 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:28:58.824 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:23:57.940344
+2026-08-18 11:28:58.846 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:28:58.854 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:28:58.861 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 36}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:33:59.901 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:28:58.860840
+2026-08-18 11:33:59.927 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:33:59.934 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:33:59.942 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:39:00.820 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:33:59.941414
+2026-08-18 11:39:00.825 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:39:00.832 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:39:00.839 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:44:01.855 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:39:00.839503
+2026-08-18 11:44:01.880 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:44:01.888 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:44:01.895 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:49:02.024 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:44:01.894931
+2026-08-18 11:49:02.029 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:49:02.037 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:49:02.043 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:54:03.213 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:49:02.043340
+2026-08-18 11:54:03.245 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:54:03.252 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:54:03.259 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 11:59:04.469 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:54:03.258307
+2026-08-18 11:59:04.500 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 11:59:04.508 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 11:59:04.514 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:04:05.496 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 11:59:04.514110
+2026-08-18 12:04:05.526 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:04:05.534 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:04:05.540 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:09:06.650 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:04:05.540056
+2026-08-18 12:09:06.681 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:09:06.688 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:09:06.694 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:14:07.844 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:09:06.694127
+2026-08-18 12:14:07.875 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:14:07.883 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:14:07.889 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:19:08.901 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:14:07.889210
+2026-08-18 12:19:08.933 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:19:08.941 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:19:08.947 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:24:10.059 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:19:08.946594
+2026-08-18 12:24:10.090 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:24:10.099 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:24:10.105 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:29:11.199 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:24:10.104738
+2026-08-18 12:29:11.229 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:29:11.236 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:29:11.243 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:34:12.343 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:29:11.242688
+2026-08-18 12:34:12.374 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:34:12.382 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:34:12.389 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:39:13.671 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:34:12.388529
+2026-08-18 12:39:13.696 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:39:13.704 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:39:13.710 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:44:14.682 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:39:13.709580
+2026-08-18 12:44:14.713 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:44:14.721 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:44:14.727 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:49:15.784 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:44:14.726947
+2026-08-18 12:49:15.815 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:49:15.822 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:49:15.828 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:54:16.895 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:49:15.828466
+2026-08-18 12:54:16.901 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:54:16.908 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:54:16.914 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 12:59:17.948 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:54:16.914468
+2026-08-18 12:59:17.953 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 12:59:17.960 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 12:59:17.966 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:04:19.009 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 12:59:17.966425
+2026-08-18 13:04:19.015 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:04:19.022 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:04:19.028 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:09:20.169 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:04:19.028202
+2026-08-18 13:09:20.202 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:09:20.210 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:09:20.216 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 47}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:14:21.177 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:09:20.216224
+2026-08-18 13:14:21.182 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:14:21.189 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:14:21.194 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:19:22.305 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:14:21.194730
+2026-08-18 13:19:22.334 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:19:22.343 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:19:22.349 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:24:23.445 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:19:22.348625
+2026-08-18 13:24:23.451 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:24:23.458 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:24:23.463 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:29:24.353 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:24:23.463568
+2026-08-18 13:29:24.358 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:29:24.366 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:29:24.373 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:34:25.370 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:29:24.373185
+2026-08-18 13:34:25.397 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:34:25.404 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:34:25.411 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:39:26.390 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:34:25.411123
+2026-08-18 13:39:26.414 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:39:26.422 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:39:26.429 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:44:27.437 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:39:26.428863
+2026-08-18 13:44:27.463 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:44:27.471 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:44:27.478 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:49:28.544 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:44:27.478060
+2026-08-18 13:49:28.572 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:49:28.580 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:49:28.587 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:54:29.739 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:49:28.586669
+2026-08-18 13:54:29.767 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:54:29.775 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:54:29.783 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 13:59:30.887 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:54:29.782760
+2026-08-18 13:59:30.916 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 13:59:30.924 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 13:59:30.931 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 14:04:31.897 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 13:59:30.931265
+2026-08-18 14:04:31.922 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:04:31.930 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:04:31.937 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 14:09:32.954 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:04:31.936727
+2026-08-18 14:09:32.982 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:09:32.991 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:09:32.997 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 14:14:33.964 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:09:32.997220
+2026-08-18 14:14:33.990 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:14:33.997 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:14:34.005 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 276 active, 0 recalls, graph rebuilt
+2026-08-18 14:19:35.025 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:14:34.004378
+2026-08-18 14:19:35.053 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:19:35.061 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:19:35.068 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:24:36.125 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:19:35.067700
+2026-08-18 14:24:36.151 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:24:36.158 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:24:36.165 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:29:37.349 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:24:36.164948
+2026-08-18 14:29:37.377 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:29:37.385 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:29:37.392 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:34:38.433 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:29:37.391706
+2026-08-18 14:34:38.438 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:34:38.446 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:34:38.454 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:39:39.465 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:34:38.453935
+2026-08-18 14:39:39.471 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:39:39.478 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:39:39.485 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:44:40.570 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:39:39.485264
+2026-08-18 14:44:40.598 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:44:40.606 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:44:40.613 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 42}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:49:41.711 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:44:40.612820
+2026-08-18 14:49:41.743 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:49:41.751 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:49:41.757 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 45}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:54:42.822 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:49:41.757284
+2026-08-18 14:54:42.828 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:54:42.836 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:54:42.843 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 14:59:43.923 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:54:42.843278
+2026-08-18 14:59:43.930 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 14:59:43.936 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 14:59:43.942 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:04:45.049 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 14:59:43.942309
+2026-08-18 15:04:45.076 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:04:45.083 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:04:45.089 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:09:46.149 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:04:45.088996
+2026-08-18 15:09:46.176 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:09:46.183 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:09:46.189 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:14:47.225 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:09:46.189368
+2026-08-18 15:14:47.258 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:14:47.267 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:14:47.273 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 47}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:19:48.323 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:14:47.272808
+2026-08-18 15:19:48.352 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:19:48.359 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:19:48.365 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 41}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:24:49.387 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:19:48.364918
+2026-08-18 15:24:49.414 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:24:49.420 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:24:49.427 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 39}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:29:50.390 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:24:49.426461
+2026-08-18 15:29:50.397 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:29:50.404 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:29:50.410 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:34:51.346 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:29:50.409794
+2026-08-18 15:34:51.352 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:34:51.359 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:34:51.365 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:39:52.477 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:34:51.365171
+2026-08-18 15:39:52.508 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:39:52.515 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:39:52.521 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:44:53.559 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:39:52.520917
+2026-08-18 15:44:53.564 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:44:53.571 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:44:53.577 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:49:54.564 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:44:53.577093
+2026-08-18 15:49:54.569 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:49:54.576 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:49:54.581 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:54:55.690 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:49:54.581503
+2026-08-18 15:54:55.720 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:54:55.728 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:54:55.734 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 15:59:56.806 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:54:55.734009
+2026-08-18 15:59:56.812 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 15:59:56.819 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 15:59:56.824 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:04:57.950 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 15:59:56.824752
+2026-08-18 16:04:57.981 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:04:57.988 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:04:57.994 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:09:59.089 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:04:57.994226
+2026-08-18 16:09:59.118 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:09:59.126 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:09:59.132 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:15:00.199 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:09:59.131732
+2026-08-18 16:15:00.227 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:15:00.234 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:15:00.239 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:20:01.258 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:15:00.239766
+2026-08-18 16:20:01.263 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:20:01.270 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:20:01.276 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:25:02.323 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:20:01.276121
+2026-08-18 16:25:02.351 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:25:02.359 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:25:02.366 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 43}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:30:03.437 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:25:02.366197
+2026-08-18 16:30:03.466 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:30:03.474 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:30:03.481 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:35:04.486 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:30:03.480922
+2026-08-18 16:35:04.512 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:35:04.519 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:35:04.527 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:40:05.851 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:35:04.526520
+2026-08-18 16:40:05.885 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:40:05.893 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:40:05.900 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 49}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:45:06.037 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:40:05.900149
+2026-08-18 16:45:06.042 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:45:06.050 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:45:06.058 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:50:06.933 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:45:06.057970
+2026-08-18 16:50:06.939 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:50:06.946 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:50:06.952 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 16:55:07.938 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:50:06.952002
+2026-08-18 16:55:07.943 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 16:55:07.951 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 16:55:07.958 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 17:00:08.945 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 16:55:07.957803
+2026-08-18 17:00:08.950 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:00:08.957 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:00:08.964 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 17:05:10.005 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:00:08.963899
+2026-08-18 17:05:10.011 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:05:10.019 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:05:10.025 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 17:10:11.072 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:05:10.025607
+2026-08-18 17:10:11.077 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:10:11.084 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:10:11.091 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 17:15:12.014 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:10:11.091368
+2026-08-18 17:15:12.020 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:15:12.027 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:15:12.033 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 278 active, 0 recalls, graph rebuilt
+2026-08-18 17:20:12.988 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:15:12.032991
+2026-08-18 17:20:12.993 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:20:13.000 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:20:13.005 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 17}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 17:25:13.952 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:20:13.005577
+2026-08-18 17:25:13.957 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:25:13.964 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:25:13.970 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 18}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 17:30:14.924 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:25:13.970593
+2026-08-18 17:30:14.929 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:30:14.937 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:30:14.944 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 17:35:15.855 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:30:14.943729
+2026-08-18 17:35:15.881 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:35:15.890 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:35:15.899 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 17:40:16.780 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:35:15.897439
+2026-08-18 17:40:16.785 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:40:16.794 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:40:16.801 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 21}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 17:45:17.900 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:40:16.800874
+2026-08-18 17:45:17.905 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:45:17.913 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:45:17.919 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 17:50:18.942 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:45:17.919084
+2026-08-18 17:50:18.947 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:50:18.956 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:50:18.963 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 21}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 17:55:19.913 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:50:18.963015
+2026-08-18 17:55:19.919 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 17:55:19.927 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 17:55:19.933 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:00:20.968 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 17:55:19.932906
+2026-08-18 18:00:20.973 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:00:20.981 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:00:20.988 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:05:22.072 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:00:20.988188
+2026-08-18 18:05:22.104 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:05:22.112 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:05:22.119 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 46}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:10:23.056 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:05:22.119192
+2026-08-18 18:10:23.081 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:10:23.088 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:10:23.094 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 38}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:15:24.159 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:10:23.094359
+2026-08-18 18:15:24.187 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:15:24.197 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:15:24.204 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 44}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:20:25.196 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:15:24.203605
+2026-08-18 18:20:25.201 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:20:25.209 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:20:25.216 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:25:26.180 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:20:25.215848
+2026-08-18 18:25:26.185 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:25:26.194 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:25:26.200 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:30:27.227 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:25:26.199768
+2026-08-18 18:30:27.232 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:30:27.241 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:30:27.247 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:35:28.138 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:30:27.247182
+2026-08-18 18:35:28.143 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:35:28.151 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:35:28.158 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:40:29.211 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:35:28.158015
+2026-08-18 18:40:29.216 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:40:29.225 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:40:29.231 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 20}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:45:30.245 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:40:29.231160
+2026-08-18 18:45:30.251 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:45:30.259 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:45:30.267 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 21}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:50:31.275 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:45:30.266743
+2026-08-18 18:50:31.280 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:50:31.288 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:50:31.295 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 18:55:31.436 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:50:31.294950
+2026-08-18 18:55:31.441 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 18:55:31.449 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 18:55:31.455 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 19}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
+2026-08-18 19:00:32.569 | INFO     | selfmind_app.recall_capture.scanner:scan:66 - [RecallScanner] Starting scan since 2026-08-18 18:55:31.455573
+2026-08-18 19:00:32.594 | INFO     | selfmind_app.recall_capture.scanner:scan:73 - [RecallScanner] hermes: found 0 events
+2026-08-18 19:00:32.602 | INFO     | selfmind_app.recall_capture.scanner:scan:84 - [RecallScanner] Matched 0 entries from 0 events
+2026-08-18 19:00:32.609 | INFO     | selfmind_app.recall_capture.scanner:scan:103 - [RecallScanner] Scan complete: {'events_found': 0, 'entries_matched': 0, 'recalls_recorded': 0, 'adapters_scanned': 1, 'scan_duration_ms': 40}
+   [Auto-sync] 279 active, 0 recalls, graph rebuilt
