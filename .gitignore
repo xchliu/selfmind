@@ -28,6 +28,9 @@ config.json
 selfmind_data.db
 bench_results.json
 
+# Runtime logs (auto-generated, not source code)
+logs/
+
 # OS
 Thumbs.db
 Desktop.ini
