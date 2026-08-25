@@ -28,7 +28,7 @@ _DIR_TYPE_MAP = {
 }
 
 # Files at the wiki root to skip
-_SKIP_FILES = {"SCHEMA.md", "index.md", "log.md"}
+_SKIP_FILES = {"SCHEMA.md", "index.md", "INDEX.md", "log.md"}
 
 # Regex patterns
 _FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
