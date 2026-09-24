@@ -7,10 +7,10 @@
 | 序号 | 内容 | 状态 | 产出 |
 |------|------|------|------|
 || 1.1 | 元记忆原子定义 | done | wiki/selfmind/theory/meta-memory-atomic-definition.md |
-| 1.2 | 四种记忆类型差异性定义 | next | 待讨论：衰减速率是否不同？strength起点是否不同？ |
-| 1.3 | 关系（edge）原子形态 | next | 待讨论：类型、属性、强度 |
-| 1.4 | strength 计算模型 | next | 待讨论：多因子公式 |
-|| 1.5 | 修订能量景观论文 | planned | wiki/selfmind/theory/selfmind-theory-paper.md 需对齐原子定义 |
+| 1.2 | 四种记忆类型差异性定义 | done | aiknowledge/concepts/记忆类型差异性定义.md (2026-07-19) |
+| 1.3 | 关系（edge）原子形态 | done | aiknowledge/concepts/关系原子形态定义.md (2026-07-19) |
+| 1.4 | strength 计算模型 | done | aiknowledge/concepts/strength计算模型.md (2026-07-19) |
+| 1.5 | 修订能量景观论文 | planned | wiki/selfmind/theory/selfmind-theory-paper.md 需对齐原子定义 |
 
 ## Phase 2：数据结构设计
 
@@ -18,10 +18,10 @@
 
 | 序号 | 内容 | 状态 |
 |------|------|------|
-| 2.1 | 元记忆表设计（本质层+状态层） | planned |
-| 2.2 | 关系表设计（edge原子形态） | planned |
-| 2.3 | 去掉不属于原子的字段（置信度等） | planned |
-| 2.4 | 迁移方案：旧 entries → 新 schema | planned |
+| 2.1 | 元记忆表设计（本质层+状态层） | in-progress | docs/design/schema.md — 本质层+状态层已定义 |
+| 2.2 | 关系表设计（edge原子形态） | pending | edges 表框架已列，待 Phase 1.3 产出落地为字段 |
+| 2.3 | 去掉不属于原子的字段（置信度等） | planned | schema.md 已标注待删字段 |
+| 2.4 | 迁移方案：旧 entries → 新 schema | planned | 旧数据迁移策略待设计 |
 
 当前 entries 表的问题：
 - 置信度、认知层级等字段不属于记忆原子（原则三：Agent评价不属于记忆）
