@@ -1051,15 +1051,18 @@ class SelfMindHandler(StatsMixin, MutationsMixin, EnginesMixin, V1Mixin, SimpleH
         import json
         agents = [
             {"id": "socrates", "name": "苏格拉底", "port": 8642},
-            {"id": "aris",     "name": "小亚",     "port": 8643},
-            {"id": "plato",    "name": "柏拉图",   "port": 8645},
-            {"id": "grace",    "name": "Grace",    "port": 8644},
+            {"id": "aris",     "name": "小亚",     "port": 8642, "profile": "aris"},
+            {"id": "plato",    "name": "柏拉图",   "port": 8642, "profile": "plato"},
+            {"id": "grace",    "name": "Grace",    "port": 8642, "profile": "grace"},
             {"id": "gateway",  "name": "Gateway",  "port": 8000},
         ]
         results = {}
         for a in agents:
             try:
-                url = f"http://localhost:{a['port']}/health"
+                if "profile" in a:
+                    url = f"http://localhost:{a['port']}/p/{a['profile']}/health"
+                else:
+                    url = f"http://localhost:{a['port']}/health"
                 # Use curl with --noproxy to bypass system proxy for localhost
                 proc = subprocess.run(
                     ["curl", "-s", "--max-time", "3", "--noproxy", "*", url],
