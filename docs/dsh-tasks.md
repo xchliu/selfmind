@@ -77,3 +77,87 @@ selfmind_app/
 - SelfMind 研发计划：`aiknowledge/selfmind/REQUIREMENT.md`
 - SelfMind 项目追踪：`aiknowledge/selfmind/selfmind-development.md`
 - ProbeDB 需求文档（给 DSH）：`probedb/docs/selfmind-integration-requirements.md`
+
+---
+
+## 任务三：Phase 6 记忆生命周期管理 ← 新（2026-10-29）
+
+> 背景：坦哥与苏格拉底讨论衰减预警数据后，指出 SelfMind 当前只在做"存"——入库就完了。需要一个完整的存→理→提→跟四层生命周期。
+> 详细需求见 `aiknowledge/selfmind/REQUIREMENT.md` Phase 6。
+
+### 6.1 Schema 扩展（依赖 Phase 2）
+
+在 `meta_memories` 表中新增字段（与 Phase 2 新 schema 同步推进）：
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `entry_type` | TEXT | person/task/preference/project/open_issue/knowledge/skill |
+| `deadline` | TEXT(ISO date) | 截止日期，task/open_issue 必填 |
+| `priority` | TEXT | high/medium/low |
+| `owner` | TEXT | 关联人员 ID |
+| `lifecycle_status` | TEXT | active/in_progress/done/archived |
+
+### 6.2 入库自动分类
+
+`unified_store` 写入入口增加分类逻辑：
+- MEMORY.md 中 `[XX] open_userid=...` → `entry_type=person`
+- 含截止日/状态列 → `entry_type=task`
+- 含"偏好/风格/方式"关键词 → `entry_type=preference`
+- 含"已联系/待解决/失效/key 已" → `entry_type=open_issue`
+- Wiki 项目文档 → `entry_type=project`
+- 现有 `skill` 条目 → `entry_type=skill`
+
+### 6.3 按类型差异化衰减曲线
+
+替换当前统一的线性衰减，`forgetter.py` 改造为按 `entry_type` 分策略：
+
+| entry_type | 半衰期 | 到期行为 |
+|-----------|--------|---------|
+| person | 180d | 不自动过期 |
+| preference | 90d | 不自动过期，引用即重置到 1.0 |
+| project | 60d | 归档时标记 inactive |
+| task | 14d | 到期未闭环→自动升级→超时归档 |
+| open_issue | 7d | 定期追问直到显式关闭 |
+| knowledge | 90d | 不自动过期 |
+| skill | ∞ | 不衰减 |
+
+### 6.4 多通道 Recall 感知
+
+Recall 触发不再只走 API 查询一条路，新增：
+
+| 通道 | 实现方式 | 优先级 |
+|------|---------|--------|
+| Skill 加载 | `skill_view()` 调用时自动触发对应条目 recall | P0 |
+| 对话引用 | Hermes 侧检测对话中出现的记忆关键词，回调 SelfMind recall API | P0 |
+| 任务执行 | cron 执行引用某条记忆时触发 recall | P1 |
+| 关联激活 | 同一 owner 或同一 project 条目被 recall 时连带激活 | P1 |
+
+### 6.5 升级衰减预警 → 多场景提醒引擎
+
+在 Phase 5.4 基础上，从单一"decay < 0.3"升级为多场景：
+
+| 场景 | 触发条件 | 优先级 |
+|------|---------|--------|
+| 📅 截止日提醒 | task deadline 前 7d/3d/1d | P0 |
+| ⚠️ 异常提醒 | task 过 deadline 但 status 未更新 | P0 |
+| 🔗 关联提醒 | 对话提及某人时，自动关联该人的 open_issue | P0 |
+| 📉 衰减预警 | 按类型差异化阈值（person<0.15 / task<0.3 / open_issue<0.2） | P1 |
+| 🧠 冷知识提醒 | 人员档案超过 90d 未互动 | P1 |
+
+### 6.6 闭环追踪
+
+新增提醒状态机：`pending → delivered → acknowledged → resolved`
+- 提醒后 N 天无响应 → 升级提醒（参考 Phase 5 推送通道）
+- task 过期 + 用户确认"不管了" → `lifecycle_status=archived`
+- open_issue 的解决自动关联到对应 person 的 recall
+
+---
+
+## 验收标准（追加）
+
+8. Phase 6.1: `meta_memories` 表含全部新增字段，`unified_store` 读写正常
+9. Phase 6.2: 新入库条目自动打上 `entry_type`，现有条目支持回填
+10. Phase 6.3: `forgetter.py` 按类型分策略衰减，`cargo test` / `python -m pytest` 覆盖各类型
+11. Phase 6.4: Skill 加载 + 对话引用触发 recall，decay 值可观测回升
+12. Phase 6.5: 多场景提醒可配置化，至少完成截止日 + 异常 + 衰减三个场景
+13. Phase 6.6: 提醒状态机完整，`lifecycle_status` 流转可追溯
